@@ -1,0 +1,9 @@
+#!/bin/sh
+
+COMMIT_MSG_FILE=$1
+
+# Sprawdzenie, czy komunikat commita zaczyna się od "JF412010"
+if ! grep -q '^JF412010' "$COMMIT_MSG_FILE"; then
+    echo >&2 "Komunikat commita musi zaczynać się od 'JF412010'."
+    exit 1
+fi
