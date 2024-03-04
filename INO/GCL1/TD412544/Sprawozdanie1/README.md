@@ -18,9 +18,11 @@ Repozytorium sklonowałem poleceniem:
 git clone <link do repozytorium> [<folder docelowy>]
 ```
 ![Wykonanie polecenia](https://puu.sh/K2cK1/4fbf844ae1.png)
+
 Personal access token wygenerowałem w ustawieniach GitHuba w zakładce Developer settings.
 
 ![Wygenerowany token](https://puu.sh/K2cLC/223f6ee763.png)
+
 W moim przypadku Git nie poprosił mnie o access token prawdopodobnie ze względu na zcachowane dane. Spodziewałem się podobnego prompta:
 ```
 $ git clone https://github.com/USERNAME/REPO.git
@@ -35,6 +37,7 @@ Password: YOUR_PERSONAL_ACCESS_TOKEN
 Do utworzenia kluczy SSH użyłem polecenia ssh-keygen. Stworzyłem klucz szyfrowany algorytmem **ecdsa** oraz zabezpieczony hasłem klucz szyfrowany **ed25519**. Wygenerowane klucze zapisałem w folderze *.ssh* w katalogu domowym.
 
 ![Generowanie klucza](https://puu.sh/K2cMV/c7b45367e5.png)
+
 Składnia polecenia zgodnie z [dokumentacją GitHuba](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent):
 ```
 ssh-keygen -t <algorytm> -C <adres email>
@@ -130,3 +133,19 @@ Gdzie tekst alternatwny jest wyświetlany gdy nie można zlokalizować obrazu.
 Przykłady zrzutów ekranu można zaobserwować powyżej.
 
 ### 8. Wyślij zmiany do zdalnego źródła
+Na początku należy dodać zmieniane pliki do commita za pomocą:
+```
+git add <ścieżka>
+```
+Następnie wykonać commit zmian poleceniem:
+```
+git commit -m <message>
+```
+I na koniec wystarczy wysłać wszystkie zmiany do źródła stosująć polecenie:
+```
+git push
+```
+
+![wynik polecenia git push](https://puu.sh/K2d57/a12568b638.png)
+
+Po wykonaniu `git push` można znaleźć wprowadzone zmiany na GitHubie w swojej gałęzi.
