@@ -51,7 +51,7 @@ Następnie uruchomiłem ssh-agenta i dodałem klucz prywatny za pomocą poleceń
 eval "$(ssh-agent -s)"
 ssh-add <ścieżka do klucza>
 ```
-Dodanie klucza wiązało się z podaniem hasła podanego przy jego tworzeniu.
+Dodanie klucza wiązało się z podaniem hasła ustalonego przy jego tworzeniu.
 
 Na koniec sklonowałem repozytorium używając protokołu SSH poprzez wywołanie polecenia:
 ```

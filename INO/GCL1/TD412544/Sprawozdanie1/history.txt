@@ -1,0 +1,50 @@
+    1  sudo apt-get install git
+    2  git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+    3  ssh-keygen --help
+    4  ssh-keygen -t ed25519 -C "offtommie@gmail.com"
+    5  ssh-keygen -t ecdsa -C "offtommie@gmail.com"
+    6  rm -rf MDO2024_INO/
+    7  eval "$(ssh-agent -s)"
+    8  ssh-add .ssh/github_ullei_password
+    9  git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+   10  cd MDO2024_INO/
+   11  git branch
+   12  git branch --remotes
+   13  git checkout main
+   14  git checkout GCL1
+   15  git checkout TD412544
+   16  cd INO/GCL1/
+   17  mkdir TD412544
+   18  cd TD412544/
+   19  cp ../../../.git/hooks/commit-msg .
+   20  git add commit-msg 
+   21  git status
+   22  git commit -m "[TD412544] commit message githook"
+   23  git push
+   24  mkdir Sprawozdanie1
+   25  cd Sprawozdanie1/
+   26  touch README.md
+   27  vim README.md 
+   28  git add README.md
+   29  git status
+   30  git commit -m "sprawozdanie punkty 1-7"
+   31  git commit -m "[TD412544] sprawozdanie punkty 1-7"
+   32  git push
+   33  git status
+   34  git add .
+   35  git commit -m "[TD412544] sprawozdanie punkt 8"
+   36  git push
+   37  git status
+   38  git checkout GCL1
+   39  git merge TD412544
+   40  git branch
+   41  git log
+   42  git status
+   43  git push
+   44  git status
+   45  git checkout TD412544 
+   46  git status
+   47  git add .
+   48  git commit -m "[TD412544] sprawozdanie punkty 9-12"
+   49  git push
+   50  history > history.txt
