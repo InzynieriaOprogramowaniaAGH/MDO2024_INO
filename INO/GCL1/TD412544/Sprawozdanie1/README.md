@@ -4,7 +4,7 @@
 # Wprowadzenie, Git, Gałęzie, SSH
 Celem zadania było zapoznanie się z Gitem oraz SSH poprzez zklonowanie repozytorium za pomocą nowo utworzonych kluczy SSH, stworzenie własnej gałęzi i wysłanie nowych plików do źródła.
 
-Zadanie wykonałem na dystrybucji systemie Ubuntu Server, ze wzlędu na własną znajomość dystrybucji, wirtualizowanym w Hyper-V.
+Zadanie wykonałem na systemie Ubuntu Server (ze wzlędu na znajomość dystrybucji) wirtualizowanym w Hyper-V.
 # Zadania do wykonania
 ## 1. Zainstaluj klienta Git i obsługę kluczy SSH
 Do instalacji klienta Git użyłem polecenia: `sudo apt-get install git`
@@ -23,7 +23,7 @@ Personal access token wygenerowałem w ustawieniach GitHuba w zakładce Develope
 
 ![Wygenerowany token](https://puu.sh/K2cLC/223f6ee763.png)
 
-W moim przypadku Git nie poprosił mnie o access token prawdopodobnie ze względu na zcachowane dane. Spodziewałem się podobnego prompta:
+Git nie poprosił mnie o access token prawdopodobnie ze względu na zcachowane dane. Spodziewałem się poniższego prompta:
 ```
 $ git clone https://github.com/USERNAME/REPO.git
 Username: YOUR_USERNAME
@@ -53,12 +53,12 @@ ssh-add <ścieżka do klucza>
 ```
 Dodanie klucza wiązało się z podaniem hasła podanego przy jego tworzeniu.
 
-Na koniec skolonowałem repozytorium używając protokołu SSH poprzez wywołanie polecenia:
+Na koniec sklonowałem repozytorium używając protokołu SSH poprzez wywołanie polecenia:
 ```
 git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
 ```
 ## 4. Przełącz się na gałąź ```main```, a potem na gałąź swojej grupy (pilnuj gałęzi i katalogu!)
-Po wejściu do katalogu zawierającego sklonowane repozytorium można sprawdzić gałąź na której obecnie pracujemy za pomocą polecenia `git branch` pozostałe gałęzie można ujawnić używająć `git branch --remotes`
+Po wejściu do katalogu zawierającego sklonowane repozytorium, można sprawdzić gałąź, na której obecnie pracujemy, za pomocą polecenia `git branch`. Pozostałe gałęzie można ujawnić używająć `git branch --remotes`
 
 Do przełączania między gałęziami stosuje się polecenie: `git checkout <nazwa gałęzi>`
 
@@ -71,9 +71,14 @@ Poniżej można zauważyć dostępne gałęzie, w tym gałęzie grup GCL1 oraz G
 
 ![Przełączanie między gałęziami](https://puu.sh/K2cRU/bc0817d694.png)
 ## 5. Utwórz gałąź o nazwie "inicjały & nr indeksu" np. ```KD232144```. Miej na uwadze, że odgałęziasz się od brancha grupy!
-Utworzenie gałęzi również odbywa się poprzez polecenie `git checkout` tylko tym razem z parametrem `-b`. Tworzy ono na nową gałąź i przełącza na nią użytkownika.
+Tworzenie gałęzi również odbywa się poprzez polecenie `git checkout` tylko tym razem z parametrem `-b`. Tworzy ono na nową gałąź i przełącza na nią użytkownika.
 ```
 git checkout -b TD412544
+```
+Alternatywnie można wykonać sekwencję poleceń:
+```
+git branch TD412544
+git checkout TD412544
 ```
 ## 6. Rozpocznij pracę na nowej gałęzi
 ### 1. W katalogu właściwym dla grupy utwórz nowy katalog, także o nazwie "inicjały & nr indeksu" np. ```KD232144```
@@ -86,7 +91,7 @@ Git hooka napisałem w bashu bazując na pliku `commit-msg.sample`. Wykorzystał
 
 ![Zawartość Git hooka](https://puu.sh/K2cVZ/58ba74b548.png)
 
-W przypadku w którym hook `commit-msg` zwróci wartość różną od 0, commit finalnie nie zostanie przepuszczony, a wyświetlana wiadomość poinformuje użytkownika co powinien zmienić. 
+W przypadku w którym hook `commit-msg` zwróci wartość różną od 0, commit nie zostanie przepuszczony, a wyświetlana wiadomość poinformuje użytkownika co powinien zmienić. 
 
 Skrypt przyjmuje ścieżkę do tymczasowego pliku z wiadomością jako parametr, co pozwala na sprawne odczytanie wiadomości i zwrócenie błędu gdy jest nieodpowiednia.
 ### 3. Dodaj ten skrypt do stworzonego wcześniej katalogu.
@@ -128,7 +133,7 @@ W plikach markdown można w łatwy sposób dodać zrzuty ekranu za pomocą skła
 ```
 ![teskt alternatwny](ścieżka do pliku)
 ```
-Gdzie tekst alternatwny jest wyświetlany gdy nie można zlokalizować obrazu.
+Tekst alternatwny jest wyświetlany gdy nie można zlokalizować obrazu.
 
 Przykłady zrzutów ekranu można zaobserwować powyżej.
 
@@ -141,11 +146,36 @@ Następnie wykonać commit zmian poleceniem:
 ```
 git commit -m <message>
 ```
-I na koniec wystarczy wysłać wszystkie zmiany do źródła stosująć polecenie:
+Na koniec wystarczy wysłać wszystkie zmiany do źródła stosująć polecenie:
 ```
 git push
 ```
 
 ![wynik polecenia git push](https://puu.sh/K2d57/a12568b638.png)
 
-Po wykonaniu `git push` można znaleźć wprowadzone zmiany na GitHubie w swojej gałęzi.
+Po wykonaniu `git push` można znaleźć wprowadzone zmiany na GitHubie w swojej gałęzi. Zrzut ekranu prezentuje również działąnie napisanego githooka.
+
+### 9. Spróbuj wciągnąć swoją gałąź do gałęzi grupowej
+Złączenie gałęzi odbywa się poprzez wykonanie polecenia `git merge` w gałęzi docelowej. Należy przełączyć się na gałąź grupy GCL1 i wywołać merge z własną gałęzią.
+```
+git checkout GCL1
+git merge TD412544
+```
+![Wynik polecenia git merge, jest (hehe) git](https://puu.sh/K2d98/846c61e8c5.png)
+
+Na zrzucie ekranu można zauważyć, że merge przeszedł bez żadnych konfliktów. Pozostaje przepchnąć gałąź do repozytorium za pomocą:
+```
+git push
+```
+![Wynik polecenia git push - błąd, branch protection](https://puu.sh/K2d9a/71f02b1391.png)
+
+Na zrzucie widać błąd spowodowany ochroną gałęzi - ograniczeniami przed nieporządanym złączeniem gałęzi. Należy złożyć pull request do akceptacji.
+
+### 10. Zaktualizuj sprawozdanie i zrzuty o ten krok i wyślij aktualizację do zdalnego źródła (na swojej gałęzi)
+Aktualizację wykonuję sekwencją poleceń
+```
+git commit
+git push
+```
+### 11. ~~Wystaw Pull Request do gałęzi grupowej~~
+### 12. ~~Zgłoś zadanie (Teams assignment - jeżeli dostępne)~~
