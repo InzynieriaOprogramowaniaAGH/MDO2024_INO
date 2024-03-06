@@ -72,6 +72,33 @@ W celu wysłania moich plików do repozytorium przedmiotowego, należało najpie
 
 Następnie należało zapisać zmiany w lokalnym repozytorium za pomocą polecenia **git commit -m "Sprawozdanie cz. 1"**. Opcja *-m* pozwala na dodanie komunikatu zatwierdzenia bez konieczności otwierania edytora tekstu. 
 
+![alt text](image-6.png)
+
+Widać, że git-hook zadziałał, ponieważ widzimy, że dodało do wiadomości *MP412902* oraz, że udało się zapisać zmiany w plikach roboczych.
+
+Następnie należy wysłać zapisane zmiany do repozytorium. W tym celu należy użyć polecenia **git push**. Aczkolwiek, ponieważ nasze lokalne repozytorium nie wie, który lokalny branch ma śledzić brancha z repozytorium przedmiotu należało uformułować komendę w następujący sposób:
+
+![alt text](image-7.png)
+
+Opcja *--set-upstream* ustawia śledzenie zdalnej gałęzi z poziomu naszej gałęzi roboczej.
+
+Używając **git branch -vv** możemy zobaczyć na jakim etapie każdy branch jest, oraz co śledzi.
+![alt text](image-8.png)
+
+#### 8. Wciągnięcie zmian do gałęzi grupowej
+Z poziomu GitHub'a tworzy się *pull request*, czyli prośbę o włączenie swoich zmian do repozytorium. 
+
+Należy wybrać gałęzie: do której chcemy włączyć nasze zmiany oraz gałąź, gdzie te zmiany nastąpiły.
+![alt text](image-9.png)
+
+Ukończony pull request wygląda następująco:
+![alt text](image-10.png)
+
+Zawiera on informacje o wszystkich commitach, które nastąpiły dotychczas.
+
+### Lab 2
+
+
 
 
 
