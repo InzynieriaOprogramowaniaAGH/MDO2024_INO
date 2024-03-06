@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Pobierz commit message
+commit_msg_file=$1
+commit_msg=$(cat $commit_msg_file)
+
+# Wzorzec do sprawdzenia
+pattern="MP 412902"
+
+# Sprawdź, czy commit message zaczyna się od wzorca
+if ! echo "$commit_msg" | grep -q "^$pattern"; then
+    echo "Error: Commit message musi zaczynać się od '$pattern'"
+    exit 1
+fi
+
+# W przypadku sukcesu, wyjdź z kodem 0
+exit 0
