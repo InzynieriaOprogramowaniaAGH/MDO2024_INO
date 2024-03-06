@@ -49,10 +49,30 @@ Również tutaj połączyłem się do swojej maszyny wirtualnej przez środowisk
 #### 4. Przełącz się na gałąź main, a potem na gałąź swojej grupy 
 
 Do przełączania się pomiędzy gałęziami stosujemy polecenie **git checkout**. 
+Opcja **-b** przy tym poleceniu powoduje utworzenie nowej gałęzi.
+![git checkout](image-4.png)
 
+#### 5. Utwórz gałąź o nazwie inicjały & nr indeksu
+Utworzyłem swojego brancha tak jak w poprzednim kroku i na nim pracowałem.
 
-Korzystając z polecenia git branch możemy zobaczyć jakie gałęzie istnieją.
+Korzystając z polecenia git branch możemy zobaczyć jakie gałęzie istnieją. Branch na zielono to jest obecna gałąź, na której pracujemy.
 ![alt text](image-3.png)
+
+#### 6. Napisz Git hooka - skrypt weryfikujący, że każdy Twój "commit message" zaczyna się od "MP412902".
+
+Git hooks - skrypty wykonywane automatycznie przez Git w określonych punktach w procesie pracy z repozytorium. 
+W naszym przypadku, należało zastosować hook **commit-msg**, który urachamiany jest w momencie wprowadzenia przez użytkownika wiadomości do commita. 
+
+![commit-msg](image-5.png)
+
+Skrypt ten sprawdza, czy mój commit message zaczyna się od MP 412902. Jeżeli nie, to dodaje do początku commit message [MP 412902]. Kopia skryptu została zapisana w moim katalogu *MP412902*, a wersja, która faktycznie jest aktywowana musiała być umieszczona w folderze **.git/hooks**. 
+
+#### 7. Dodanie zmian i wysłanie do zdalnego źródła
+W celu wysłania moich plików do repozytorium przedmiotowego, należało najpierw dodać zmiany plików roboczych do obszaru staging za pomocą polecenia **git add .**. Kropka oznacza dodanie wszystkich zmienionych plików do następnego commita. 
+
+Następnie należało zapisać zmiany w lokalnym repozytorium za pomocą polecenia **git commit -m "Sprawozdanie cz. 1"**. Opcja *-m* pozwala na dodanie komunikatu zatwierdzenia bez konieczności otwierania edytora tekstu. 
+
+
 
 
 
