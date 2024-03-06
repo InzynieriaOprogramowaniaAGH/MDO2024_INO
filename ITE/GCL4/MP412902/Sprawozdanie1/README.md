@@ -49,7 +49,7 @@ Również tutaj połączyłem się do swojej maszyny wirtualnej przez środowisk
 #### 4. Przełącz się na gałąź main, a potem na gałąź swojej grupy 
 
 Do przełączania się pomiędzy gałęziami stosujemy polecenie **git checkout**. 
- 
+
 
 Korzystając z polecenia git branch możemy zobaczyć jakie gałęzie istnieją.
 ![alt text](image-3.png)
