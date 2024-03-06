@@ -2,7 +2,7 @@
 ## Marcin Pigoń
 ## ITE gr. 4
 
-### Cel: Zapoznanie się z podstawowymi działaniami w Git oraz podstawową konteneryzacją korzystając z Dockera.
+### Cel: Zapoznanie się z podstawowymi działaniami w Git oraz  konteneryzacją korzystając z Dockera.
 
 ### Lab 1
 
@@ -39,6 +39,7 @@ Klucz publiczny pozwala połączyć się z maszyną w bezpieczny sposób.
 Klucz prywatny nigdy nie powinien być udostępniany.
 
 Wstawiono ten klucz publiczny w GitHub w zakładce **SSH and GPG keys**
+
 ![github ssh](image-2.png)
 
 Sklonowano repozytorium, teraz przy wykorzystaniu połączenia SSH:
@@ -49,6 +50,7 @@ Również tutaj połączyłem się do swojej maszyny wirtualnej przez środowisk
 #### 4. Przełącz się na gałąź main, a potem na gałąź swojej grupy 
 
 Do przełączania się pomiędzy gałęziami stosujemy polecenie **git checkout**. 
+
 Opcja **-b** przy tym poleceniu powoduje utworzenie nowej gałęzi.
 ![git checkout](image-4.png)
 
@@ -56,6 +58,7 @@ Opcja **-b** przy tym poleceniu powoduje utworzenie nowej gałęzi.
 Utworzyłem swojego brancha tak jak w poprzednim kroku i na nim pracowałem.
 
 Korzystając z polecenia git branch możemy zobaczyć jakie gałęzie istnieją. Branch na zielono to jest obecna gałąź, na której pracujemy.
+
 ![alt text](image-3.png)
 
 #### 6. Napisz Git hooka - skrypt weryfikujący, że każdy Twój "commit message" zaczyna się od "MP412902".
@@ -89,17 +92,87 @@ Używając **git branch -vv** możemy zobaczyć na jakim etapie każdy branch je
 Z poziomu GitHub'a tworzy się *pull request*, czyli prośbę o włączenie swoich zmian do repozytorium. 
 
 Należy wybrać gałęzie: do której chcemy włączyć nasze zmiany oraz gałąź, gdzie te zmiany nastąpiły.
+
 ![alt text](image-9.png)
 
 Ukończony pull request wygląda następująco:
+
 ![alt text](image-10.png)
 
 Zawiera on informacje o wszystkich commitach, które nastąpiły dotychczas.
 
 ### Lab 2
 
+#### 1. Zainstalowanie Dockera w systemie linuksowym
 
+Tak jak w poprzednim laboratorium, zainstalowano Dockera korzystając z sudo dnf install: 
 
+![alt text](image-11.png)
 
+Sprawdzenie, czy poprawnie zainstalowano program:
 
+![alt text](docker-active(1).png)
+
+#### 2. Rejestracja w Docker Hub
+#### 3. Pobranie obrazów
+
+Obrazy to szablony zawierające wszystkie potrzebne zależności i konfiguracje potrzebne do uruchomienia kontenera z aplikacją.
+Należało pobrać cztery obrazy: *hello-world, busybox, fedora, mysql*.
+Obrazy pobiera się poprzez Dockera - stosując komendę **docker pull**:
+
+![alt text](2.docker-pull-hello-world.png)
+
+Warto zauważyć, że należy użyć *sudo* przy pobieraniu pakietów, gdyż Docker potrzebuje uprwanień do ich zainstalowania.
+
+W ten sposób pobrano wszystkie obrazy. 
+
+Można sprawdzić wszystkie pobrane obrazy przez komendę **docker images**:
+
+![alt text](3.docker-images.png)
+
+#### 4. Uruchomienie kontener z obrazu *busybox*
+
+Polecenie **docker run** służy do uruchomienia nowego kontenera z podanym obrazem. 
+
+![alt text](4.odpalenie-busybox.png)
+
+Stosując opcję **--tty** podpinamy obecny terminal do kontenera.
+
+Można również odpalić kontener w tle i później się do niego podłączyć. W tym celu stosujemy opcję **-d** (detached) oraz podając mu komendę co ma robić na początku, żeby się nie wyłączył bezpośrednio po jego odpaleniu. Nadałem kontenerowi nazwę używając **--name**. 
+Przy wykorzystaniu **docker ps** można zobaczyć wszystkie aktywne kontenery, a z opcją **-a**, nawet wyłączone kontenery wraz z aktywnymi.
+
+![alt text](image-12.png)
+
+Łączę się do włączonego kontenera poprzez **docker exec** z opcją **-it** (interactive).
+
+![alt text](image-13.png)
+
+Sprawdzenie wersji busybox wewnątrz kontenera:
+
+![alt text](image-14.png)
+
+Po wyjściu z shella *exitem*, kontener nie zostaje zamknięty i nadal działa.
+
+Zakończenie działania kontenera możemy osiągnąć używając **stop** lub **kill**, gdzie *stop* pozwala kontenerowi na zakończenie zadań i posprzątaniu po sobie, a *kill* nie czeka na zatrzymanie działania kontenera i po prostu go zatrzymuje.
+
+![alt text](image-15.png)
+
+#### 5. Uruchomienie "system w kontenerze" (Fedora)
+Uruchomiono kontener interaktywnie, a następnie sprawdzono działanie procesu o ID1 w kontenerze. Okazało się jednak, że obraz Fedory w kontenerze nie zawierał komendy *ps*, więc po jej wgraniu: 
+
+![alt text](image-16.png)
+
+Sprawdzamy działanie PID1:
+
+![alt text](image-17.png)
+
+Procesy Dockera na hoście (*ps auxft* w terminalu hosta):
+
+![alt text](image-19.png)
+
+Widzimy, że proces 24493 u hosta to jest PID1 w kontenerze. Oznacza to, że root wewnątrz kontenera jest ten sam co root hosta. 
+
+#### 6. Dockerfile
+
+Dockerfile to plik, który zawiera zestaw instrukcji do tworzenia obrazów z odpowiednimi zależnościami wgranymi. Pozwala to ułatwić działanie kontenerów i ich łatwe przenoszenie na inne maszyny, ponieważ jeden skrypt pozwala nam zbudować to samo środowisko. 
 
