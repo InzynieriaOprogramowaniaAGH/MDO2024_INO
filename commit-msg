@@ -24,5 +24,5 @@ commit_msg=$(cat "$commit_msg_file")
 if [[ ! $commit_msg =~ ^AO412201 ]]; then
     echo "Błąd: Wiadomość commita musi zaczynać się od 'AO412201'" 
 else 
-    echo "Uzytkownik istnieje"
+    echo "Commit message zaczyna się od 'AO412201"
 fi
