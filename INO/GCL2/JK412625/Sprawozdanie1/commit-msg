@@ -3,7 +3,7 @@ import sys
 
 COMMIT_MSG = "[JK412625]"
 
-def check_format(commit_msg: str):
+def check_format(commit_msg: str) -> bool:
     return True if commit_msg.startswith(COMMIT_MSG) else False
 
 
@@ -16,5 +16,5 @@ def read_commit_msg_file(filename: str) -> str:
 if __name__ == "__main__":
     commit_msg = read_commit_msg_file(sys.argv[1])
     if not check_format(commit_msg):
-        raise AssertionError(f"\nThe commit message should start with {COMMIT_MSG}\n" \
-                             f"not {commit_msg[:11]}")
+        raise Exception(f"\nThe commit message should start with {COMMIT_MSG}\n" \
+                             f"not: '{commit_msg[:11]}'")
