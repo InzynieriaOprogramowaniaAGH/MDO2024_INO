@@ -230,4 +230,20 @@ możemy sprawdzić, czy nasza gałąź została stworzona i zmieniona:
   ![Wysyłanie zmian3](./screenshots/Krok6_6.png)
   
 - #### Spróbuj wciągnąć swoją gałąź do gałęzi grupowej
+
+Próbe wciągnięcia mojej gałęzi do gałęzi grupowej zacząłem od zmiany gałęzi na gałąź grupy:
+
+    git branch GCL1
+
+Moja gałąź została wciągnięta, jednak, aby wysłać te zmiany do lokalnego źródła za pomocą *git push* dostaję komunikat o braku uprawnień. Taka zmiany musi być dodawana poprzez *pull request*. Dzięki temu moje zmiany mogą być zwerfyikowane i dopiero wtedy połączone.
+
+Wygląda to następująco:
+![Laczenie galezi](./screenshots/Krok6_7.png)
+
 - #### Zaktualizuj sprawozdanie i zrzuty o ten krok i wyślij aktualizację do zdalnego źródła (na swojej gałęzi)
+
+Ostatnia aktualizacja polegała na dodaniu zmian i wysłaniu ich do źródła znanymi już komendami:
+
+    git add ./
+    git commit -m "JF412010 raport update"
+    git push
