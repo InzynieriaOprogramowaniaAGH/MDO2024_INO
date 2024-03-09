@@ -233,9 +233,13 @@ możemy sprawdzić, czy nasza gałąź została stworzona i zmieniona:
 
 Próbe wciągnięcia mojej gałęzi do gałęzi grupowej zacząłem od zmiany gałęzi na gałąź grupy:
 
-    git branch GCL1
+    git checkout GCL1
 
-Moja gałąź została wciągnięta, jednak, aby wysłać te zmiany do lokalnego źródła za pomocą *git push* dostaję komunikat o braku uprawnień. Taka zmiany musi być dodawana poprzez *pull request*. Dzięki temu moje zmiany mogą być zwerfyikowane i dopiero wtedy połączone.
+Potwierdzenie:
+
+![Laczenie galezi2](./screenshots/Krok6_8.png)
+
+Moja gałąź została wciągnięta, jednak, nie mogę wysłać tych zmian do lokalnego źródła za pomocą *git push*. Dostaję komunikat o braku uprawnień. Taka zmiana musi być dodawana poprzez *pull request*. Dzięki temu to co przesyłam może być zwerfyikowane i dopiero wtedy połączone.
 
 Wygląda to następująco:
 ![Laczenie galezi](./screenshots/Krok6_7.png)
