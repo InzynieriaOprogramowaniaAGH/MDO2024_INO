@@ -8,7 +8,7 @@ Naszym celem jest sprawdzenie czy śrowodowisko jest dobrze przygotowane, zaznaj
 
 ## Wykonane kroki
 ### 1. Zainstalowanie klienta Git i obsługi kluczy SSH.
-Wykonanie tego kroku było automatyczne bez większej ingerencji z mojej strony. Wraz ze stawianiem i instalowaniem serwera Ubuntu na wirtualnej maszynie zaznaczyłem opcję uwzględniającą pobrnaie OpenSSH podczas instalacji. Git w Linuxie zainstalowany jest automatycznie. Jednak, aby sprawdzić czy wszystko jest w porządku uruchomiłem komendę:
+Wykonanie tego kroku było automatyczne bez większej ingerencji z mojej strony. Wraz ze stawianiem i instalowaniem serwera Ubuntu na wirtualnej maszynie zaznaczyłem opcję uwzględniającą pobranie OpenSSH podczas instalacji. Git w Linuxie zainstalowany jest automatycznie. Jednak, aby sprawdzić czy wszystko jest w porządku uruchomiłem komendę:
 
     git --version && ssh -V
 
@@ -39,7 +39,7 @@ Potwierdzenie sklonowania repozytorium:
 ### 3. Sklonowanie repozytorium za pomocą utworzonego klucza SSH.
 
 - #### Utworzenie dwóch klucze SSH (jeden z hasłem).
-  Klucze SSH pozwolą nam na szybsze przygotowywanie stanowiska pracy. Nie będziemy musieli podawać loginu i tokenu za każdym razem, przu każdej komendzie. Generujemy je za pomocą:
+  Klucze SSH pozwolą nam na szybsze przygotowywanie stanowiska pracy. Nie będziemy musieli podawać loginu i tokenu za każdym razem, przy każdej komendzie. Generujemy je za pomocą:
 
       ssh-keygen
 
@@ -78,7 +78,7 @@ Potwierdzenie sklonowania repozytorium:
   ![Klucze w folderze](./screenshots/Krok3_1_3.png)
 
 - #### Skonfigurowanie klucza SSH jako metodę dostępu do GitHuba.
-  Aby jednak skonfigurować klucz, aby nie był on bezużytyczeny dodałem go do konta GitHub. Dzięki temu wszystkie działania związne z moim kontem nie będą musiały być osobno uwierzytelnianie. Wszystko będzie wykonywane automatycznie. 
+  Aby skonfigurować klucz, by nie był on bezużytyczeny dodałem go do konta GitHub. Dzięki temu wszystkie działania związne z moim kontem nie będą musiały być osobno uwierzytelnianie. Wszystko będzie wykonywane automatycznie. 
 
   Do konta dodaje się klucz publiczny. Jego zawartość możemy wyświetlić w konsoli poprzez:
 
@@ -147,7 +147,7 @@ możemy sprawdzić, czy nasza gałąź została stworzona i zmieniona:
 - #### Napisanie Git hook'a oraz jego poprawne umiejscowienie. 
   **Git hook**, który stworzyłem to skrypt weryfikujący, każdy mój "commit message". Sprawdza, czy zaczyna się on od moich inicjałów i numeru indeksu, czyli: "JF412010" 
   
-  Korzystając z przykładowych githook'ów w folderze ".git/hooks", stwierdziłem, że najlepszym rodzajem do takiej weryfikacji będzie hook **commit-msg**. Służyny on do takie sprawdzania.
+  Korzystając z przykładowych githook'ów w folderze ".git/hooks", stwierdziłem, że najlepszym rodzajem do takiej weryfikacji będzie hook **commit-msg**. Służyny on właśnie do takiego sprawdzania.
 
   Skrypt odrazu tworze we wcześniej stworzonym katalogu. Jego nazwa to *'commit-msg'* według podanego wzoru. 
 
@@ -156,7 +156,7 @@ możemy sprawdzić, czy nasza gałąź została stworzona i zmieniona:
 
       COMMIT_MSG_FILE=$1
 
-  Potem jest to już zwykły *if* w którym używam funkcji **grep**, czyli narzędzie służące do wyszukiwania. Użyłem do niego opcji **"-q"**. Zwraca ona 0, w przypadku gdy znaleziony zostanie szukany wzorzec. 
+  Potem jest to już zwykły *if* w którym używam funkcji **grep**. Jest to narzędzie służące do wyszukiwania. Użyłem do niego opcji **"-q"**. Zwraca ona 0, w przypadku gdy znaleziony zostanie szukany wzorzec. 
 
   Wzorzec natomiast jest w postaci:
 
@@ -164,7 +164,7 @@ możemy sprawdzić, czy nasza gałąź została stworzona i zmieniona:
 
   Sprawdza czy na początku commita znajdują się moje inicjały oraz numer indeksu. W regex'ie symbol **"^"** oznacza, że wzorzec musi znaleźć się na początku linii czy napisu. 
   
-  Aby hook działał, skopiowałem go do właściwego miejsca, czyli folderu *".git/hooks"*. Dzięku temu uruchamia się za każdym razem kiedy robię commita.
+  Aby hook działał, skopiowałem go do właściwego miejsca, czyli folderu *".git/hooks"*. Dzięki temu uruchamia się za każdym razem kiedy robię commita.
 
   Zrzut ekranu potwierdzający działanie hooka:
 
@@ -191,11 +191,43 @@ możemy sprawdzić, czy nasza gałąź została stworzona i zmieniona:
   
   Sprawodzanie zostanie tworzone w formacie "Markdown" w pliku o nazwie **README.md**, ale w odpowiednim katalogu. Będzie to katalog o nazwie **"Sprawozdanie1"** w folderze **"JF412010"**.
 
+  Ułożenie folderów oraz potwierdzenie stworzonego sprawozdania:
+
+  ![Sprawozdanie w folderze](./screenshots/Krok6_3.png)
+
 - #### Dodawanie zrzutów ekranu.
   
+  Zrzuty ekranu będą dodawane jako zdjęcia *inline*. Zdjęcia w tej postaci tworzone są poprzez 
+
+      !["Opis zdjęcia"]("Ścieżka do zdjęcia")
+
+  Aby zdjęcia były dostępne wszędzie muszą także znajdować się w tym katalogu i być przesyłane wraz ze sprawozdaniem. Dlatego stworzyłem folder **"screenshots"**. Znajdują się w nich wszystkie zrzuty ekranu zawarte w tym sprawozdanie. Ścieżka do nich jest w postaci:
+
+      "./screenshots/<nazwa zdjęcia>"
+  
+  Przykłady tych zdjęć można znaleźć powyżej w sprawozdaniu.
+
 - #### Wysyłanie zmian do zdalnego źródła.
   
-  
+  Wysyłanie zmian do zdalnego źródła odbywa się za pomocą komend:
+
+      git add
+      git commit
+      git push
+
+  Pierwszą z nich dodajemy nasze zmiany, czyli na przykład nowe pliki, czy też zmienione. Po ich dodaniu możemy stworzyć "commit", który opisuje po krótce co zostało dodane/zmienione. Po stworzeniu commita bądź commitów możemy wykonać push, czyli wypchać zmiany do źródła. Oznacza to, że przesyłamy zmiany z lokalnego urządzenia/serwera do zdalnego repozyterium w GitHubie.
+
+  W wykonywaniu przesyłania przydatna jest komenda:
+
+      git status
+
+  Mówi nam ona co zostało zmienione bądź dodane i co musimy dodać komendą *add*.
+
+  Przykładowe przesłanie:
+
+  ![Wysyłanie zmian1](./screenshots/Krok6_4.png)
+  ![Wysyłanie zmian2](./screenshots/Krok6_5.png)
+  ![Wysyłanie zmian3](./screenshots/Krok6_6.png)
   
 - #### Spróbuj wciągnąć swoją gałąź do gałęzi grupowej
 - #### Zaktualizuj sprawozdanie i zrzuty o ten krok i wyślij aktualizację do zdalnego źródła (na swojej gałęzi)
