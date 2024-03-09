@@ -1,0 +1,11 @@
+#!/bin/bash
+
+commit_msg_file = $1
+commit_msg = $(cat "$commit_msg_file")
+
+msg = "[KR409759]"
+
+if ! grep -qE "^$msg" <<< "$commit_msgg"; then
+	echo "Komunikat commita powinien zaczynac sie od [KR409759]"
+	exit 1
+fi 
