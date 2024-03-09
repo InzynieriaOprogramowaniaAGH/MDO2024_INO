@@ -2,7 +2,7 @@
 
 msg=$(cut -d " " -f1 $1)
 
-if [ $msg != "[KR409759] =" ]; then
+if [ $msg != "[KR409759]" ]; then
 	echo "Komunikat commita powinien zaczynac sie od [KR409759]"
 	exit 1
 fi 
