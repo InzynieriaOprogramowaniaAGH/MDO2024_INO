@@ -1,2 +1,243 @@
-#Sprawozdanie 1
-#Sprawozdanie 1
+## Sprawozdanie 1
+
+Aleksandra Banak
+
+Numer Indeksu: 413227
+
+Inżynieria Obliczeniowa
+
+
+### Cel projektu
+
+Celem projektu jest wprowadzenie do GitHuba - zapoznanie czym jest i jak działa repozytorium (zarówno lokalne jak i zdalne), nauka podstawowych komend do obsługi GitHuba, przydatnych również do modyfikacji plików tworzonych na własnych gałęziach.
+
+Po poprawnym zrealizowaniu tematu ze zrozumieniem można z łatwością klonować repozytoria poprzez protokoły HTTPS i SSH, łączyć się do nich za pomocą specjalnie i włąsnoręcznie wygenerowanych kluczy dostępu oraz uaktualniać wszystkie edycje wykonane zdalnie u siebie na repozytorium lokalne, gdzie każdy uczestnik ma dostęp.
+
+### Przebieg projektu
+
+#### 1. Instalacja klienta Git i obsługę kluczy SSH
+
+Podczas instalowania Ubuntu na maszynę wirtualną, zaznaczyłam polecenie umożliwiające pobranie OpenSSH automatycznie. Po uruchomieniu serwera sprawdziłam, czy wszystko zostało poprawnie zainstalowane. Po zastosowaniu komendy powinna wyświetlać się bieżąca wersja Gita.
+
+SS1
+
+Bardzo podobnie wygląda sytuacja z obsługą kluczy SSH. Wybierając wcześniej opcje instalacji OpenSSH, nie powinno być żadnego problemu z obsługą kluczy. W rzeczy samej jest to część SSH.
+
+SS2
+
+#### 2. Klonowanie repozytorium za pomocą protokołu HTTPS i personal access token
+
+Do sklonowania repozytorium poprzez HTTPS wykorzystałam komendę:
+
+```
+git clone link_https_do_repozytorium
+```
+
+Całe repozytorium jest pobierane, w związku z czym możemy już na nim wykonywać wszelakie modyfikacje zdalnie.
+
+SS3
+
+HTTPS jest prostsze w ustawieniu i bardziej powszechne, używa szyfrowania SSL/TLS, jednak wymaga podawania nazwy użytkownika i hasła/tokena przy każdej operacji, takiej jak fetch, pull czy push.
+
+W ramach ćwiczeń utworzyłam również na swoim koncie token, który wykorzystałam do osobnego sklonowania repozytorium. Taki token można wygenerować wchodząc w ustawienia, następnie w *Developer settings -> Personal access tokens -> Fine-grained tokens*. Należy tam wygenerować specjalny osobisty token i przy jego użyciu ponownie wykorzystać git clone.
+
+```
+ git clone https://wygenerowany_token@dalsza_czesc_linku_skopiowanego_z_githuba
+```
+
+Poniżej przedstawiam zastosowanie tej komendy przeze mnie (korzystałam z innego serwera, jednak jest to i tak moje konto):
+
+SS4
+
+#### 3. Klonowanie repoyztorium za pomocą protokołu SSH
+
+*Utwórz dwa klucze SSH, inne niż RSA, w tym co najmniej jeden zabezpieczony hasłem*
+
+  Klucze SSH zapewniają solidny sposób uzyskiwania dostępu do zdalnych serwerów bez konieczności podawania hasła, dzięki wykorzystaniu dwóch połączonych ze sobą komponentów - klucza publicznego i odpowiadającego mu prywatnego odpowiednika.
+
+  W celu utworzenia nowego klucza należy zastosować polecenie:
+
+  ```
+  ssh-keygen -t typ_klucza -C "twoj@email.com"
+  ```
+
+  *-t* określa typ klucza, np. *ed25519, ecdsa*
+
+  *-C* umożliwia dodanie komentarza do klucza podczas jego użycia do uwierzytelniania
+
+  Wybrałam klucze *ed25519* oraz *ecdsa*.
+
+  Klucze *ed25519* są krótsze niż klucze RSA przy zachowaniu podobnego poziomu bezpieczeństwa. Są zalecane przez wielu ekspertów kryptografii ze względu na swoją wydajność i bezpieczeństwo.
+
+  Klucze *ecdsa* są stosowane w wielu systemach kryptograficznych, w tym w protokole SSL/TLS do uwierzytelniania serwerów i klientów. Ich bezpieczeństwo zależy od wyboru odpowiedniej krzywej eliptycznej oraz rozmiaru klucza.
+
+  W załączniku widać, w jaki sposób przebiega ich generowanie:
+
+  SS5
+
+  SS6
+
+
+*Skonfiguruj klucz SSH jako metodę dostępu do GitHuba*
+
+  Należy dodać utworzony klucz do konta na GitHub. Umożliwia to edytowanie repozytorium bez ciągłego uwierzytelniania operacji hasłem, tak jak to miało miejsce podczas korzystania z protokołu HTTPS.
+
+  Aby dodać klucz, należy wejść ponownie w ustawienia swojego konta i wybrać *SSH and GPS keys*, a następnie przekopiować zawartość klucza w wyznaczone okienko. Należy pamiętać, że klucz musi byc publiczny, inaczej nie będzie można go dodać.
+
+  SS7
+ 
+  SS8
+ 
+*Sklonuj repozytorium z wykorzystaniem protokołu SSH*
+ 
+  Jeśli wszystko poszło poprawnie, sklonowanie repozytorium należy wykonać ponownie komendą
+ 
+  ```
+  git clone link_ssh_do_repozytorium
+  ```
+ 
+
+Przedstawiam efekt końcowy na poniższym zdjęciu:
+
+SS9
+
+#### 4. Utworzenie i przełączenie się na swoją indywidualną gałąź: AB413227
+
+Klonując repozytorium automatycznie jesteśmy na gałęzi o nazwie *main*. Aby przełączyć się na utworzoną już wcześniej inną gałąź należy zastosować polecenie:
+
+```
+git checkout NAZWA_GALEZI
+```
+
+Bardzo podobnie postępujemy przy tworzeniu gałęzi. Wystarczy dodać opcję *-b*. Przy utworzeniu nowej gałęzi użytkownik od razu przedostaje się na nią za pomocą jednej i tej samej komendy:
+
+```
+git checkout -b NAZWA_NOWEJ_GALEZI
+```
+
+W celu utworzenia swojej indywidualnej gałęzi musiałam dostać się najpierw na gałąź grupy, również za pomocą powyższej komendy. Bardzo przydała się również funkcja umożliwiająca sprawdzenie, na jakiej gałęzi obecnie jesteśmy:
+
+```
+git branch
+```
+
+W załączniku poniżej przedstawiam procedurę przełączenia się na swoją gałąź nazwaną AB413227 - są to moje inicjały i numer indeksu.
+
+SS10
+
+#### 5. Git hook
+
+Korzystając z githook'ów dostępnych w folderze *.git/hooks*, napisałam swój własny skrypt, który sprawdza poprawność *commit message* przed wykonaniem funkcji *commit*. Forma mojego git hook'a jest najbardziej zbliżona do treści *commit-msg.sample*.
+
+Utworzyłam w swoim katalogu *AB413227* plik o nazwe *commit-msg*, następnie przekopiowałam go w miejsce, gdzie będzie on aktywny na każdym poziomie, a nie tylko w moim folderze. Jest to folder *.git/hooks*, tam gdzie pozostałe, automatycznie utworzone git hook'i.
+
+SS11
+
+Dodałam również potrzebne uprawnienia:
+
+```
+chmod +x commit-msg
+```
+
+Polecenie *chmod* zmienia prawa dostępu do pliku. Polecenia *+x* sprawia, że plik może być wykonywalny - faktycznie będzie wykonywał napisany skrypt.
+
+SS12
+
+Mój git hook porównuje napisaną wiadomość podczas użycia funkcji *commit* z wzorcem, który w moim przypadku jest inicjałem i indeksem legitymacji. Jeśli początek wiadomości nie zaczyna się od określonego w ten sposób wzorca, na ekranie wyskakuje wiadomość o błędzie. Jeśli jednak forma wiadomości jest poprawna, *commit* zostaje wywołąny poprawnie.
+
+Efekt uruchomienia git hook'a prezentuję poniżej:
+
+SS13
+
+SS14
+
+Poniżej załączam pełną treść skryptu.
+
+SS15
+
+#### 6. Sprawozdanie
+
+Sprawozdanie w formacie markdown zostało utworzone jako plik w osobnym katalogu *AB413227*.
+
+SS16
+
+Zrzuty ekranu będą dodawane jako zdjęcia *inline*. Utworzyłam dodatkowy folder o nazwie *ss*, gdzie znajdują się jedynie wykorzystywane do sprawozdań zdjęcia. Zdjęcia tworzą się przy użyciu zapisu:
+
+```
+!["opis_zdjecia"]("sciezka_do_zdjecia")
+```
+
+U mnie ta ścieżka będzie miała wzór:
+
+```
+./ss/<nazwa zdjęcia>
+```
+
+Kiedy już wszystko zostało wykonane według instrukcji nadszedł czas na przesłanie wszystkich dokonanych zmian do zdalnego repozytorium. Będą potrzebne 3 komendy:
+
+```
+git add
+```
+
+Polecenie *git add* służy do przenoszenia zmodyfikowanych plików do obszaru roboczego w celu zatwierdzenia. Znanych jest kilka podstawowych opcji:
+
+ git add nazwa_pliku – aby dodać określony plik
+ 
+ git add * – umieszcza wszystkie, czyli nowe, zmodyfikowane i usunięte pliki
+ 
+ git add . - przygotowuje tylko nowe i zmodyfikowane pliki, z wyłączeniem plików usuniętych
+ 
+
+Bardzo pomocna jest dodatkowo komenda:
+
+```
+git status
+```
+
+Dzięki niej można sprawdzić, co zostało do tej pory zmodyfikowane.
+
+SS17
+
+Aby udostępnić plik online, trzeba „wypchnąć” zmiany na swoich lokalnych plikach by zsynchronizować je ze zdalnym repozytorium.
+
+```
+git commit
+```
+
+Polecenie *git commit* przenosi zmiany z obszaru roboczego do lokalnego repozytorium. Za każdym razem należy podać krótką wiadomość wyjaśniającą wprowadzone zmiany.
+
+Na koniec polecenie *git push* przenosi zmiany z lokalnego do zdalnego repozytorium. W ten sposób wprowadzone zmiany zostaną opublikowane i udostępnione zdalnie.
+
+Można konkretnie ustalić, do której gałęzi wysłać zmiany jedną komendą:
+
+```
+git push origin 'nazwa_galezi'
+```
+
+SS18
+
+#### 7. Wciągnięcie swojej gałęzi do gałęzi grupowej GCL01
+
+Początkowo trzeba ponownie przełączyć się na gałąź grupy GCL1 komendą:
+
+```
+git checkout GCL1
+```
+
+W tym momencie gałąź jest już wciągnięta, jednak tą zmianę widzi tylko użytkownik zdalnego repozytorium. Aby udostępnić ten status do lokalnego repozytorium wymagane jest jeszcze zastosowanie komendy:
+
+```
+git pull request
+```
+
+Pull request jest żądaniem o sprawdzenie oraz zatwierdzenie zmian wprowadzonych przez programistę do istniejącego repozytorium kodu. Głównym celem *pull request* jest umożliwienie innym członkom zespołu przeglądnięcie proponowanych zmian, dostarczenie informacji zwrotnej oraz ewentualne zatwierdzenie lub odrzucenie tych zmian.
+
+#### 8. Aktualizacja zdalnego repozytorium
+
+Ostatnia aktualizacja polegała na dodaniu zmian i wysłaniu ich do źródła z zastosowaniem poznanych już wcześniej komend:
+
+```
+git add .
+git commit -m
+git push
+```
