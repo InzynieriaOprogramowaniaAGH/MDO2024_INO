@@ -21,7 +21,7 @@
 
 a=$(grep -v '^#' $1 | grep -v '^$')
 if echo "$a" | grep -q "^AO412201"; then
-    echo "commit message zaczyna sie od JL410322"
+    echo "commit message zaczyna sie od AO412201"
 else
-    echo "commit message nie zaczyna sie od JL410322"
+    echo "commit message nie zaczyna sie od AO412201"
 fi
