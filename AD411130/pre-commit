@@ -5,6 +5,6 @@ commit_msg=$(cat "$1")
 initials="AD411130" 
 
 if ! echo "$commit_msg" | grep -q "^$initials"; then
-    echo "Commit message must start with your initials and index number!" >&2
+    echo "Commit message must start with your initials and index number" >&2
     exit 1
 fi
