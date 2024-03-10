@@ -19,11 +19,11 @@ Po poprawnym zrealizowaniu tematu ze zrozumieniem można z łatwością klonowa�
 
 Podczas instalowania Ubuntu na maszynę wirtualną, zaznaczyłam polecenie umożliwiające pobranie OpenSSH automatycznie. Po uruchomieniu serwera sprawdziłam, czy wszystko zostało poprawnie zainstalowane. Po zastosowaniu komendy powinna wyświetlać się bieżąca wersja Gita.
 
-SS1
+![ ](./ss/spr1_ss1.png)
 
 Bardzo podobnie wygląda sytuacja z obsługą kluczy SSH. Wybierając wcześniej opcje instalacji OpenSSH, nie powinno być żadnego problemu z obsługą kluczy. W rzeczy samej jest to część SSH.
 
-SS2
+![ ](./ss/spr1_ss2.png)
 
 #### 2. Klonowanie repozytorium za pomocą protokołu HTTPS i personal access token
 
@@ -35,7 +35,7 @@ git clone link_https_do_repozytorium
 
 Całe repozytorium jest pobierane, w związku z czym możemy już na nim wykonywać wszelakie modyfikacje zdalnie.
 
-SS3
+![ ](./ss/spr1_ss3.png)
 
 HTTPS jest prostsze w ustawieniu i bardziej powszechne, używa szyfrowania SSL/TLS, jednak wymaga podawania nazwy użytkownika i hasła/tokena przy każdej operacji, takiej jak fetch, pull czy push.
 
@@ -47,11 +47,11 @@ W ramach ćwiczeń utworzyłam również na swoim koncie token, który wykorzyst
 
 Poniżej przedstawiam zastosowanie tej komendy przeze mnie (korzystałam z innego serwera, jednak jest to i tak moje konto):
 
-SS4
+![ ](./ss/spr1_ss4.png)
 
 #### 3. Klonowanie repoyztorium za pomocą protokołu SSH
 
-*Utwórz dwa klucze SSH, inne niż RSA, w tym co najmniej jeden zabezpieczony hasłem*
+- *Utwórz dwa klucze SSH, inne niż RSA, w tym co najmniej jeden zabezpieczony hasłem*
 
   Klucze SSH zapewniają solidny sposób uzyskiwania dostępu do zdalnych serwerów bez konieczności podawania hasła, dzięki wykorzystaniu dwóch połączonych ze sobą komponentów - klucza publicznego i odpowiadającego mu prywatnego odpowiednika.
 
@@ -73,22 +73,22 @@ SS4
 
   W załączniku widać, w jaki sposób przebiega ich generowanie:
 
-  SS5
+  ![ ](./ss/spr1_ss5.png)
 
-  SS6
+  ![ ](./ss/spr1_ss6.png)
 
 
-*Skonfiguruj klucz SSH jako metodę dostępu do GitHuba*
+- *Skonfiguruj klucz SSH jako metodę dostępu do GitHuba*
 
   Należy dodać utworzony klucz do konta na GitHub. Umożliwia to edytowanie repozytorium bez ciągłego uwierzytelniania operacji hasłem, tak jak to miało miejsce podczas korzystania z protokołu HTTPS.
 
   Aby dodać klucz, należy wejść ponownie w ustawienia swojego konta i wybrać *SSH and GPS keys*, a następnie przekopiować zawartość klucza w wyznaczone okienko. Należy pamiętać, że klucz musi byc publiczny, inaczej nie będzie można go dodać.
 
-  SS7
+  ![ ](./ss/spr1_ss7.png)
  
-  SS8
+  ![ ](./ss/spr1_ss8.png)
  
-*Sklonuj repozytorium z wykorzystaniem protokołu SSH*
+- *Sklonuj repozytorium z wykorzystaniem protokołu SSH*
  
   Jeśli wszystko poszło poprawnie, sklonowanie repozytorium należy wykonać ponownie komendą
  
@@ -99,7 +99,7 @@ SS4
 
 Przedstawiam efekt końcowy na poniższym zdjęciu:
 
-SS9
+![ ](./ss/spr1_ss9.png)
 
 #### 4. Utworzenie i przełączenie się na swoją indywidualną gałąź: AB413227
 
@@ -123,7 +123,7 @@ git branch
 
 W załączniku poniżej przedstawiam procedurę przełączenia się na swoją gałąź nazwaną AB413227 - są to moje inicjały i numer indeksu.
 
-SS10
+![ ](./ss/spr1_ss10.png)
 
 #### 5. Git hook
 
@@ -131,7 +131,7 @@ Korzystając z githook'ów dostępnych w folderze *.git/hooks*, napisałam swój
 
 Utworzyłam w swoim katalogu *AB413227* plik o nazwe *commit-msg*, następnie przekopiowałam go w miejsce, gdzie będzie on aktywny na każdym poziomie, a nie tylko w moim folderze. Jest to folder *.git/hooks*, tam gdzie pozostałe, automatycznie utworzone git hook'i.
 
-SS11
+![ ](./ss/spr1_ss11.png)
 
 Dodałam również potrzebne uprawnienia:
 
@@ -141,25 +141,25 @@ chmod +x commit-msg
 
 Polecenie *chmod* zmienia prawa dostępu do pliku. Polecenia *+x* sprawia, że plik może być wykonywalny - faktycznie będzie wykonywał napisany skrypt.
 
-SS12
+![ ](./ss/spr1_ss12.png)
 
 Mój git hook porównuje napisaną wiadomość podczas użycia funkcji *commit* z wzorcem, który w moim przypadku jest inicjałem i indeksem legitymacji. Jeśli początek wiadomości nie zaczyna się od określonego w ten sposób wzorca, na ekranie wyskakuje wiadomość o błędzie. Jeśli jednak forma wiadomości jest poprawna, *commit* zostaje wywołąny poprawnie.
 
 Efekt uruchomienia git hook'a prezentuję poniżej:
 
-SS13
+![ ](./ss/spr1_ss13.png)
 
-SS14
+![ ](./ss/spr1_ss14.png)
 
 Poniżej załączam pełną treść skryptu.
 
-SS15
+![ ](./ss/spr1_ss15.png)
 
 #### 6. Sprawozdanie
 
 Sprawozdanie w formacie markdown zostało utworzone jako plik w osobnym katalogu *AB413227*.
 
-SS16
+![ ](./ss/spr1_ss16.png)
 
 Zrzuty ekranu będą dodawane jako zdjęcia *inline*. Utworzyłam dodatkowy folder o nazwie *ss*, gdzie znajdują się jedynie wykorzystywane do sprawozdań zdjęcia. Zdjęcia tworzą się przy użyciu zapisu:
 
@@ -196,7 +196,7 @@ git status
 
 Dzięki niej można sprawdzić, co zostało do tej pory zmodyfikowane.
 
-SS17
+![ ](./ss/spr1_ss17.png)
 
 Aby udostępnić plik online, trzeba „wypchnąć” zmiany na swoich lokalnych plikach by zsynchronizować je ze zdalnym repozytorium.
 
@@ -214,7 +214,7 @@ Można konkretnie ustalić, do której gałęzi wysłać zmiany jedną komendą:
 git push origin 'nazwa_galezi'
 ```
 
-SS18
+![ ](./ss/spr1_ss18.png)
 
 #### 7. Wciągnięcie swojej gałęzi do gałęzi grupowej GCL01
 
