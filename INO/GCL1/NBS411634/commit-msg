@@ -1,6 +1,5 @@
 !/bin/sh
 
-
 #Skrypt weryfikujacy, czy kazdy "commit message" zaczyna sie od "NBS411634"
 
 if ! grep -q '^NBS411634' "$1"; then
