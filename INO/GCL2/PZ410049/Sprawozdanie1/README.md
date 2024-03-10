@@ -176,6 +176,24 @@ Końcowym etapem jest wysłanie wszystkich zatwierdzonych commitów z repozytori
 
     git push
 
+![git-push](screenshots/20.png)
+
+#### Próbujemy wciągnać swoją gałąź do gąłęzi grupowej
+
+W tym celu przechodze na galąź naszej grupy za pomocą komendy: 
+
+    git checkout GCL2
+
+Następnie używam komendy:
+
+    git push
+
+![git-push](screenshots/21.png)
+
+Ostatnim etapem jest zaktualizowanie sprawozdania o ten krok i wysłanie aktualizacji do zdalnego źródła za pomocą: 
+
+
+
 
 
 
