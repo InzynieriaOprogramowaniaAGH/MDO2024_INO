@@ -1,7 +1,6 @@
 # Przedmowa
 Do wykonania ustalonych zadań najpierw stworzyłem wirtualną maszynę z użyciem [Oracle VM VirtualBox](https://www.virtualbox.org/wiki/Downloads) oraz systemu [Ubuntu](https://ubuntu.com/download) w wersji 22.04.3 LTS. 
 
-
 Instalację systemu przedstawia [poradnik](https://cs.pwr.edu.pl/kobylanski/dydaktyka/resources/instalacjaUbuntu.pdf) lecz możliwe są alternatywne metody.
 
 W celu lepszej pracy ustawiłem większa liczbę pamięci RAM (4GB), oraz kartę sieciową na tryb bridged aby mogła korzystać z interfejsu sieciowego mojej domowej sieci LAN.
@@ -40,14 +39,15 @@ Zaś obsługa kluczy jest możliwa dzięki wcześniej zainstalowanemu pakietowi 
 ssh-keygen 
 ```
 
-## 2.	Klonowanie repozytorium przedmiotowego za pomocą HTTPS.
+## General info
+## 2.	Klonowanie repozytorium przedmiotowego za pomocą HTTPS
 Do tego należy z GitHuba przedmiotu skopiować link do repozytorium
 
 ```bash
 git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git
 ```
 
-## 3.	Zapewnienie sobie dostępu do repozytorium jako uczestnik i sklonowanie za pomocą utworzonego klucza SSH.
+## 3.	Zapewnienie dostępu do repozytorium jako uczestnik i sklonowanie za pomocą utworzonego klucza SSH.
 Generowanie  klucza z szyfrowaniem innym niż domyślne RSA, np.```ED25519``` zgodnie z zaleceniami dokumentacji GitHub’a dotyczącej generowania kluczy SSH bez hasła.
 
 ```bash
@@ -60,6 +60,7 @@ Następnie zawartość pliku id_ed25519.pub, czyli klucz prywatny należy przeko
 ![ ](./img/4.png)
 
 ![ ](./img/5.png)
+
 To samo należy zrobić z innym szyfrowaniem ```ecdsa``` tylko tym razem należy zastosować hasło
  
 ![ ](./img/6.png)
@@ -130,7 +131,7 @@ Całą stworzoną strukturę można sprawdzić poprzez ```tree```.
 ![ ](./img/9.png)
 
 
-Dodaje się wszystkie zmiany do "indexu", aby Git mógł je uwzględnić przy zatwierdzaniu commit'a, po czym robimy commit, możliwe jest sprawdzenie przed tyms tatusu poprzez ```git status```.
+Dodaje się wszystkie zmiany do "indexu", aby Git mógł je uwzględnić przy zatwierdzaniu commit'a, po czym robimy commit, możliwe jest sprawdzenie przed tym statusu poprzez ```git status```.
 ```bash
 git add .
 git commit
@@ -144,10 +145,11 @@ git push
 
 Po przejściu do gałęzi grupy wciągamy do niej swoje zmiany
 ```bash
-git checkout GCL2
-git push
+git push origin JL410322:GCL2
 ```
 
-![ ](./img/11.png)
+![ ](./img/12.png)
+
+Prawdopodobnie z powodu problemów z dostępu do gałęzi niemożliwe jest wciągnięcie do niej brancha
 
 Na sam koniec dokonujemy ponownie commita po dodaniu zaktualizowanego sprawozdania i zrzutów ekranu.
