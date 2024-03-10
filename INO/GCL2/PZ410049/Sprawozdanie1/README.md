@@ -192,6 +192,11 @@ Następnie używam komendy:
 
 Ostatnim etapem jest zaktualizowanie sprawozdania o ten krok i wysłanie aktualizacji do zdalnego źródła za pomocą: 
 
+    git add
+
+    git commit
+    
+    git push
 
 
 
