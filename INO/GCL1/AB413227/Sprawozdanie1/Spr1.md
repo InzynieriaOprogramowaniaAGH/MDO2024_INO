@@ -1,4 +1,4 @@
-# Sprawozdanie 1
+# Sprawozdanie 1
 
 Aleksandra Banak
 
@@ -223,13 +223,14 @@ Początkowo trzeba ponownie przełączyć się na gałąź grupy GCL1 komendą:
 ```
 git checkout GCL1
 ```
+![ ](./ss/spr1_ss19.png)
 
 W tym momencie gałąź jest już wciągnięta, jednak tą zmianę widzi tylko użytkownik zdalnego repozytorium. Aby udostępnić ten status do lokalnego repozytorium wymagane jest jeszcze zastosowanie komendy:
 
 ```
 git push
 ```
-
+![ ](./ss/spr1_ss20.png)
 
 #### 8. Aktualizacja zdalnego repozytorium
 
