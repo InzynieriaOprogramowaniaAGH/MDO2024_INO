@@ -40,7 +40,8 @@ Potrzebujemy jeszcze odpowiednio wygenerowanego tokenu.
 Robimy to w ustawieniach konta na Githubie -> Developer settings -> Personal access tokens
 Teraz, abyśmy mogli sklonować repozytorium musimy jeszcze potwierdzić naszą tożsamość poprzez zapisanie naszych danych:
 
-```git config --global user.email "dmaciej@student.agh.edu.pl"```
+```git config --global user.email "dmaciej@student.agh.edu.pl"\n```
+
 ```git config --global user.name "dmaciej409926"```
 
 Klonujemy nasze repozytorium korzystając z wcześniej skopiowanego linku:
@@ -155,6 +156,7 @@ Prawidłowy commit:
 W naszym katalogu tworzymy katalog przeznaczony na sprawozdanie, a w nim katalog na screenshoty potrzebne do sprawozdania:
 
 ```mkdir Spr_1```
+
 ```mkdir SS```
 
 I teraz w katalogu Spr_1 dodajemy sprawozdanie w formacie "Markdown":
