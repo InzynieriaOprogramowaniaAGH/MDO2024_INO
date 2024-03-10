@@ -18,11 +18,10 @@
 # This example catches duplicate Signed-off-by lines.
 
 
-commit_msg_file=$1
-commit_msg=$(cat "$commit_msg_file")
 
-if [[ ! $commit_msg =~ ^AO412201 ]]; then
-    echo "Błąd: Wiadomość commita musi zaczynać się od 'AO412201'" 
-else 
-    echo "Commit message zaczyna się od 'AO412201"
+a=$(grep -v '^#' $1 | grep -v '^$')
+if echo "$a" | grep -q "^AO412201"; then
+    echo "commit message zaczyna sie od JL410322"
+else
+    echo "commit message nie zaczyna sie od JL410322"
 fi
