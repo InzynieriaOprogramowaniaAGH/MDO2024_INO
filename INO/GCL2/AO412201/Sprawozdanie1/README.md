@@ -15,7 +15,6 @@ ifconfig
 - instalacja kluenta Git za pomocą komendy: apt-get install git
 - sprawdzenie czy Git został poprawnie zainstalowany komendą: git --version
 - wygenerowanie kluczy ssh komentą: ssh-keygen
-- umieszczenie wygenerowanych kluczy na swoim koncie GitHub: Access -> SSH and GPG keys -> New SSH key
 
 
 2. Sklonowanie repozytorium przedmiotowego za pomocą HTTPS i personal access token
@@ -27,12 +26,16 @@ ifconfig
 - użycie komendy: ssh-keygen -t ed25519 -C "your_email@example.com"
 - podanie pliku, w którym ma być zapisany klucz, ENTER gdy miejsce zapisu ma być domyślne
 - w przypadku wcześniejszego utworzenia klucza pojawi się pytanie o nadpisaniu klucza
-- // ss //
+![ ](./img/2.png)
+- wyświetlenie klucza komendą: cat miejsce_gdzie_został_zapisany_klucz
+- umieszczenie wygenerowanego klucza na swoim koncie GitHub: Access -> SSH and GPG keys -> New SSH key
+ ![ ](./img/1.png)
 - analogicznie utworzyć klucz zabezpieczony hasłem: ssh-keygen -t ecdsa-sk -C "twój_email@example.com"
 - pobranie repozytorium z wykorzystaniem protokołu SSH: git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
 
 4. Przełączenie na gałąź main, a następnie na gałąź grupy
 - użycie komendy: git branch, która wyświetla listy gałęzi w repozytorium
+ ![ ](./img/3.png)
 
 5. utworzenie własnej gałęzi komendą: git branch nazwa_gałęzi (inicjały&nr indeksu)
 - przełączanie się na wybraną gałęź: git switch -c nowa_gałąź (w przypadku tylko dwóch gałęzi wystarczy samo 
@@ -41,7 +44,10 @@ polecenie git_switch)
 6. Praca na nowej gałęzi
 - utworzenie pustego pustego pliku: touch INO/GCL2/AO412201/Sprawozdanie1/README.md
 - napisanie Git hooka, który weryfikuje czy "commit message" zaczyna się od "twoje inicjały & nr indexu", można wzorować się z przykładowych githook'ów używając polecenia .git/hooks
+ ![ ](./img/4.png)
 - nadanie uprawnień poprzez komendę: chmod +x .git/hooks/commit-msg 
 - plik można edydotować za pomocą komendy nano: nano .git/hooks/commit-msg
 - dodanie skrytpu do stworzonego wcześniej katalogu: cp .git/hooks/commit-msg INO/GCL2/AO412201/Sprawozdanie1/
-
+- zrzuty ekranu są umieszczane jako inline: 
+    " ![ ](./img/.png) "
+- wysłane do zdalnego źródła
