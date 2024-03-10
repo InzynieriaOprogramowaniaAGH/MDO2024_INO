@@ -1,8 +1,13 @@
-!/bin/sh
+#!/bin/bash
 
-COMMIT_MSG_FILE=$1
+BRANCH_NAME=$(git symbolic-ref --short HEAD 2>/dev/null)
 
-if ! grep -q 'MK412502' "$COMMIT_MSG_FILE"; then
-    echo >&2 "Commit message musi zaczynac sie od Inicjalow i indeksu"
-    exit 1
+if [ "$BRANCH_NAME" == "MK412502" ]; then
+    COMMIT_MSG_FILE=$1
+    while read -r line; do
+        if [[ ! $line =~ ^MK412502 ]]; then
+            echo "Błąd: Twój commit message musi zaczynać się od 'MK412502'."
+            exit 1
+        fi
+    done < "$COMMIT_MSG_FILE"
 fi
