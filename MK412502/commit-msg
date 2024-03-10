@@ -1,0 +1,8 @@
+!/bin/sh
+
+COMMIT_MSG_FILE=$1
+
+if ! grep -q 'MK412502' "$COMMIT_MSG_FILE"; then
+    echo >&2 "Commit message musi zaczynac sie od Inicjalow i indeksu"
+    exit 1
+fi
