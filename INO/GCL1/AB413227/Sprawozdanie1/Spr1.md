@@ -1,4 +1,4 @@
-# Sprawozdanie 1
+##  Sprawozdanie 1
 
 Aleksandra Banak
 
@@ -230,6 +230,7 @@ W tym momencie gałąź jest już wciągnięta, jednak tą zmianę widzi tylko u
 ```
 git push
 ```
+
 ![ ](./ss/spr1_ss20.png)
 
 #### 8. Aktualizacja zdalnego repozytorium
