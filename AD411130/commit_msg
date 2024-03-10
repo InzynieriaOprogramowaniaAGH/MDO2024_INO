@@ -3,6 +3,6 @@
 COMMIT_MSG_FILE=$1
 
 if ! grep -q '^AD411130' "$COMMIT_MSG_FILE"; then
-    echo "bledna nazwa commitu. zacznij od AD411130'." 1>&2
+    echo "bledna nazwa commitu. zacznij od AD411130!'." 1>&2
     exit 1
 fi
