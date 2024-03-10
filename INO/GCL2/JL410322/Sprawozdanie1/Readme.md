@@ -125,8 +125,29 @@ cp .git/hooks/commit-msg INO/GCL2/JL410322/Sprawozdanie1/
          
 Zrzuty ekranu należy dodawać do katalogu ze sprawozdaniem (w podfolderze img), po czym należy je dodawać do sprawozdania w formacie ```![opis](ścieżka do zdjęcia)```
 
+Całą stworzoną strukturę można sprawdzić poprzez ```tree```.
 
 ![ ]("./img/9.png")
 
 
+Dodaje się wszystkie zmiany do "indexu", aby Git mógł je uwzględnić przy zatwierdzaniu commit'a, po czym robimy commit, możliwe jest sprawdzenie przed tyms tatusu poprzez ```git status```.
+```bash
+git add .
+git commit
+```
+Po czym następuje wysłanie zmian do zdalnego źródła, czyli do GitHub'a.
+```bash
+git push
+```
+
 ![ ]("./img/10.png")
+
+Po przejściu do gałęzi grupy wciągamy do niej swoje zmiany
+```bash
+git checkout GCL2
+git push
+```
+
+![ ]("./img/11.png")
+
+Na sam koniec dokonujemy ponownie commita po dodaniu zaktualizowanego sprawozdania i zrzutów ekranu.
