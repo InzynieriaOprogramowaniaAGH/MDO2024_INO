@@ -21,7 +21,7 @@ ifconfig
 ```
  
 W celu uniknięcia problemów z instalacjami i uprawnień na maszynie w większości używam konta root’a.
-![ ]("./img/1.png")
+![ ](./img/1.png)
 
 ## 1.	Instalacja klienta Git i obsługi kluczy SSH
 W celu dalszego używania oprogramowania Git należy je wpierw zainstalować za pomocą polecenia
@@ -32,7 +32,7 @@ Poprawną instalację można potwierdzić poprzez ```git –version```
 
 W prawidłowym przypadku wypisze wersję git’a która jest obecna w systemie, podobnie można robić z kolejnymi programami i pakietami.
 
-![ ]("./img/2.png")
+![ ](./img/2.png)
  
 Zaś obsługa kluczy jest możliwa dzięki wcześniej zainstalowanemu pakietowi openssh-client, dlatego teraz jest możliwa generacja komendą 
 
@@ -53,16 +53,16 @@ Generowanie  klucza z szyfrowaniem innym niż domyślne RSA, np.```ED25519``` zg
 ```bash
 ssh-keygen -t ed25519 -C "########@###.#"
 ```
-![ ]("./img/3.png")
+![ ](./img/3.png)
  
 Następnie zawartość pliku id_ed25519.pub, czyli klucz prywatny należy przekopiować do konta GitHub
  
-![ ]("./img/4.png")
+![ ](./img/4.png)
 
-![ ]("./img/5.png")
+![ ](./img/5.png)
 To samo należy zrobić z innym szyfrowaniem ```ecdsa``` tylko tym razem należy zastosować hasło
  
-![ ]("./img/6.png")
+![ ](./img/6.png)
  
 Pobranie repozytorium za pomocą SSH 
 ```bash
@@ -73,7 +73,7 @@ git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
 ```bash
 git branch --all 
 ```
-![ ]("./img/7.png")
+![ ](./img/7.png)
  
 ## 5.	Utworzenie gałęzi o nazwie JL410322.
 
@@ -103,7 +103,7 @@ chmod +x .git/hooks/commit-msg
 ```
 Taki plik od razu znajduje się w lokalizacji pozwalającej na jego wykonanie, a nazwa zapewnia że będzie wykonywany podczas wykonywania commit’a.
 Plik można zedytować za pomocą nano, bądź innego edytora tekstu np. vim.
-![ ]("./img/8.png")
+![ ](./img/8.png)
 
 ```bash
 nano .git/hooks/commit-msg
@@ -127,7 +127,7 @@ Zrzuty ekranu należy dodawać do katalogu ze sprawozdaniem (w podfolderze img),
 
 Całą stworzoną strukturę można sprawdzić poprzez ```tree```.
 
-![ ]("./img/9.png")
+![ ](./img/9.png)
 
 
 Dodaje się wszystkie zmiany do "indexu", aby Git mógł je uwzględnić przy zatwierdzaniu commit'a, po czym robimy commit, możliwe jest sprawdzenie przed tyms tatusu poprzez ```git status```.
@@ -140,7 +140,7 @@ Po czym następuje wysłanie zmian do zdalnego źródła, czyli do GitHub'a.
 git push
 ```
 
-![ ]("./img/10.png")
+![ ](./img/10.png)
 
 Po przejściu do gałęzi grupy wciągamy do niej swoje zmiany
 ```bash
@@ -148,6 +148,6 @@ git checkout GCL2
 git push
 ```
 
-![ ]("./img/11.png")
+![ ](./img/11.png)
 
 Na sam koniec dokonujemy ponownie commita po dodaniu zaktualizowanego sprawozdania i zrzutów ekranu.
