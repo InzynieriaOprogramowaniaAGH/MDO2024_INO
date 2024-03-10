@@ -39,5 +39,9 @@ ifconfig
 polecenie git_switch)
 
 6. Praca na nowej gałęzi
-- 
+- utworzenie pustego pustego pliku: touch INO/GCL2/AO412201/Sprawozdanie1/README.md
+- napisanie Git hooka, który weryfikuje czy "commit message" zaczyna się od "twoje inicjały & nr indexu", można wzorować się z przykładowych githook'ów używając polecenia .git/hooks
+- nadanie uprawnień poprzez komendę: chmod +x .git/hooks/commit-msg 
+- plik można edydotować za pomocą komendy nano: nano .git/hooks/commit-msg
+- dodanie skrytpu do stworzonego wcześniej katalogu: cp .git/hooks/commit-msg INO/GCL2/AO412201/Sprawozdanie1/
 
