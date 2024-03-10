@@ -1,0 +1,8 @@
+#!/bin/sh
+
+COMMIT_MSG_FILE=$1
+
+if ! grep -q '^AP412695' "$COMMIT_MSG_FILE"; then
+	echo >&2 "Commit musi zaczynac sie od AP412695"
+	exit 1
+fi
