@@ -152,8 +152,30 @@ W moim przypadku ścieżka ta wyglada następująco:
 
 #### W tym kroku wysyłamy zmiany do zdalnego źródła
 
+Na tym etapie pomocna jest komenda: 
+
+    git status
+
+Służy ona do wyświetlania informacji na temat stanu repozytorium. 
+
+![git-status](screenshots/17.png)
+
 W tym celu na początku dodaje pliki do obszaru stage. Jest to pośredni etap, gdzie możemy przygotować nasze zmiany przed zatwierdzeniem ich za pomocą commita. Realizuje to za pomocą polecenia: 
+
     git add 
+
+![git-add](screenshots/18.png)
+
+Następnie tworzę nowy commit z zatwierdzonymi zmianami w obszarze stage. Do tego służy komenda: 
+
+    git commit
+
+![git-commit](screenshots/19.png)
+
+Końcowym etapem jest wysłanie wszystkich zatwierdzonych commitów z repozytorium lokalnego do repozytorium zdalnego przy użyciu komendy: 
+
+    git push
+
 
 
 
