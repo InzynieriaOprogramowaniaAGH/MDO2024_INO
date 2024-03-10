@@ -1,0 +1,140 @@
+    1  ifconfig
+    2  ipconfig
+    3  ifconfig
+    4  apt install net-tools
+    5  apt-get install git-all
+    6  ifconfig
+    7  history
+    8  ls -l
+    9  history
+   10  rm -r 1*
+   11  apt-get install git version
+   12  git version
+   13  ssh-keygen
+   14  ls /root/.ssh/i
+   15  ls /root/.ssh/
+   16  nano /root/.ssh/id_ed25519.pub 
+   17  cat /root/.ssh/id_ed25519.pub 
+   18  apt install git
+   19  ssh-keygen -t ed25519 -C "kublit02@gmail.com"
+   20  ssh-keygen 
+   21  ssh-keygen -t -C "kublit02@gmail.com"
+   22  ssh-keygen -C "kublit02@gmail.com"
+   23  ls -l
+   24  cd ..
+   25  mkdir copy
+   26  cd Dev_Ops/
+   27  ls -l
+   28  rm - r1*
+   29  rm - r *
+   30  cat /root/.ssh/id_ed25519.pub 
+   31  git checkout -b GCL2
+   32  cd MDO2024_INO/
+   33  git checkout -b GCL2
+   34  git brances
+   35  git branches
+   36  git branch
+   37  git branch -d checkout
+   38  git branch -d GCL2
+   39  git branch JL410322/
+   40  git branch JL410322
+   41  git switch JL410322
+   42  git branch -d GCL2
+   43  git branch
+   44  git checkout
+   45  gis branch
+   46  git branch
+   47  git checkout main
+   48  git branch JL410322
+   49  git branch --all
+   50  ls -l
+   51  git switch JL410322
+   52  ls -l
+   53  cp * ../../temp
+   54  cp * ../../temp -p
+   55  mkdir ../temp
+   56  cp * ../temp
+   57  cp * ../temp -r
+   58  cd ..
+   59  cd temp/
+   60  ls -l
+   61  cd ..
+   62  cd MDO2024_INO/
+   63  git branch -d JL410322
+   64  git push origin --delete JL410322
+   65  git branch --all
+   66  ls -l
+   67  git branch --all
+   68  git checkout GCL2
+   69  git branch
+   70  ssh -v
+   71  ssh
+   72  ssh --version
+   73  clea
+   74  clear
+   75  git branchj
+   76  git branch
+   77  git switch JL410322
+   78  git branch
+   79  mkdir INO/GCL2/JL410322
+   80  mkdir INO/GCL2/JL410322 -r
+   81  mkdir INO/GCL2/JL410322 -d
+   82  mkdir INO/GCL2/JL410322 -p
+   83  ls -l
+   84  cd /INO/GCL2
+   85  cd INO/GCL2/JL410322/
+   86  cd ..
+   87  .git/hooks/
+   88  nano .git/hooks/commit-msg
+   89  gedit .git/hooks/commit-msg
+   90  nano .git/hooks/commit-msg
+   91  cp .git/hooks/commit-msg INO/GCL2/JL410322/
+   92  rm -r 1
+   93  ls INO/GCL2/JL410322/
+   94  touch INO/GCL2/JL410322/Sprawozdanie1/Readme.md
+   95  touch INO/GCL2/JL410322/Sprawozdanie1/Readme.md -p
+   96  touch INO/GCL2/JL410322/Sprawozdanie1/Readme.md -r
+   97  touch INO/GCL2/JL410322/Sprawozdanie1/Readme.md -d
+   98  mkdir INO/GCL2/JL410322/Sprawozdanie1/Readme.md 
+   99  mkdir INO/GCL2/JL410322/Sprawozdanie1/
+  100  touch INO/GCL2/JL410322/Sprawozdanie1/Readme.md -d
+  101  touch INO/GCL2/JL410322/Sprawozdanie1/Readme.md 
+  102  ls -l
+  103  cd INO/GCL2/JL410322/
+  104  ls -l
+  105  cd Sprawozdanie1/
+  106  ls -l
+  107  rm -r INO/GCL2/JL410322/com
+  108  cd ..
+  109  rm -r INO/GCL2/JL410322/commit-msg 
+  110  cp .git/hooks/commit-msg INO/GCL2/JL410322/Sprawozdanie1/
+  111  cd INO/GCL2/JL410322/Sprawozdanie1/
+  112  ls -l
+  113  chmod 666 Readme.md 
+  114  ifconfig
+  115  mkdir img
+  116  cd ..
+  117  tree
+  118  apt install tree
+  119  tree
+  120  ls-l
+  121  ls -l
+  122  rmdir -r JL410322/
+  123  rmdir  JL410322/
+  124  rm -r  JL410322/
+  125  ls -l
+  126  rm commit-msg 
+  127  tree
+  128  ssh-keygen -t ecdsa
+  129  git --version
+  130  ssh --version
+  131  ssh -V
+  132  git --version
+  133  ssh -V
+  134  clear
+  135  git branch --all
+  136  git clear
+  137  clear
+  138  ifconfig
+  139  tree
+  140  history > INO/GCL2/JL410322/Sprawozdanie1/history.txt
