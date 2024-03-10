@@ -9,7 +9,7 @@ Maciej Dziura*
 **1. Zainstalowanie klienta Git i obsługi kluczy SSH**
 Aby zainstalować klienta Git i obsługę kluczy korzystamy z menedżera pakietów APT (Advanced Package Tool), który jest wbudowany w system Ubuntu. Aktualizujemy listę dostępnych pakietów, wykonując następujące polecenie:
 
-> sudo apt update
+```sudo apt update```
 
 Po zakończeniu aktualizacji instalujemy klienta Git, wpisując:
 
@@ -171,7 +171,7 @@ Dodajemy zrzuty ekranu jako zdjęcia - inline. Używamy w tym celu :
 
 W naszym przypadku ścieżka będzie w postaci:
 
-> ![ ](./SS/nazwa_zdjęcia)
+> ![ ]("./SS/nazwa_zdjęcia")
 
 - Wysyłamy zmiany do zdalnego źródła
 Do wysłania zmian wykorzystujemy 3 komendy:
