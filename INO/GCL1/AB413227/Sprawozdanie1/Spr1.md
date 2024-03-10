@@ -1,4 +1,4 @@
-## Sprawozdanie 1
+##  Sprawozdanie 1
 
 Aleksandra Banak
 
@@ -223,14 +223,15 @@ Początkowo trzeba ponownie przełączyć się na gałąź grupy GCL1 komendą:
 ```
 git checkout GCL1
 ```
+![ ](./ss/spr1_ss19.png)
 
 W tym momencie gałąź jest już wciągnięta, jednak tą zmianę widzi tylko użytkownik zdalnego repozytorium. Aby udostępnić ten status do lokalnego repozytorium wymagane jest jeszcze zastosowanie komendy:
 
 ```
-git pull request
+git push
 ```
 
-Pull request jest żądaniem o sprawdzenie oraz zatwierdzenie zmian wprowadzonych przez programistę do istniejącego repozytorium kodu. Głównym celem *pull request* jest umożliwienie innym członkom zespołu przeglądnięcie proponowanych zmian, dostarczenie informacji zwrotnej oraz ewentualne zatwierdzenie lub odrzucenie tych zmian.
+![ ](./ss/spr1_ss20.png)
 
 #### 8. Aktualizacja zdalnego repozytorium
 
