@@ -109,8 +109,8 @@ git push
 - podjęcie próby wciągnięcia swojej gałęzi do gałęzi grupowej:
   a) użycie komendy
   ```bash
- git push origin AO412201:GCL2
- ```
+   git push origin AO412201:GCL2
+   ```
 b) otrzymanie następującego błędu
  ![ ](./img/7.png)
 
