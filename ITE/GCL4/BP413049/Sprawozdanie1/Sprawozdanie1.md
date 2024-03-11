@@ -15,3 +15,7 @@
 ![ss7](../Sprawozdanie%201ss/Zrzut%20ekranu%202024-03-11%20031133.png)
 
 ![ss8](../Sprawozdanie%201ss/Zrzut%20ekranu%202024-03-11%20031517.png)
+
+![ss9](../Sprawozdanie%201ss/Zrzut%20ekranu%202024-03-11%20234028.png)
+
+![ss10](../Sprawozdanie%201ss/Zrzut%20ekranu%202024-03-11%20234118.png)
