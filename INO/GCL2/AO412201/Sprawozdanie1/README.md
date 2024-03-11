@@ -112,7 +112,8 @@ git push
    git push origin AO412201:GCL2
    ```
 - otrzymanie następującego błędu
- ![ ](./img/7.png)
+  
+   ![ ](./img/7.png)
 
 
 
