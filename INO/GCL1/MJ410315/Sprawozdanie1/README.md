@@ -135,6 +135,7 @@ git push
 
 Zaaplikowany proces aktualizacji:  
 <img src="images/Zrzut ekranu 2024-03-11 143938.png">
+
 <img src="images/Zrzut ekranu 2024-03-11 144058.png">
 
 ### 6. Spróbuj wciągnąć swoją gałąź do gałęzi grupowej
