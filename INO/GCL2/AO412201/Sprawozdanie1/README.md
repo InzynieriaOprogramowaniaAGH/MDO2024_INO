@@ -53,3 +53,9 @@ polecenie git_switch)
     " ![ ](./img/.png) "
 - wysłane do zdalnego źródła następującymi komendami
 ![ ](./img/5.png)
+
+- podjęcie próby wciągnięcia swojej gałęzi do gałęzi grupowej: a) użycie komendy
+
+ git push origin AO412201:GCL2
+
+otrzymanie następującego błędu 
