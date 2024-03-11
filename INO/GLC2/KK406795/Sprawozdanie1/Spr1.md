@@ -144,8 +144,10 @@ Komenda git push przesyła lokalne commity do zdalnego repozytorium Git, aktuali
 
 ![Screen12](./screen/screen%20push.png)
 
-* Następnie podjęto próbę` wciągnięcia swojej gałęzi do gałęzi grupowej:
+* Następnie podjęto próbę wciągnięcia swojej gałęzi do gałęzi grupowej:
+
 Za pomocą git checkout przełączono się na gałąź GCL2.
+
 Do wciągnięcia zastosowano komendę:
 ```bash
 git push origin KK406795:GCL2
