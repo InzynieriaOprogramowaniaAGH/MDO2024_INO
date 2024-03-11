@@ -28,14 +28,15 @@ Dzięki tokenowi możliwe jest sklonowanie repozytorium za pomocą komendy:
 ```bash
 git clone https://username:personal_access_token@github.com/user/repo.git
 ```
-Sklonowania repozytorium za pomocą HTTPS dokonano komendą:
+Natomiast do sklonowania repozytorium za pomocą HTTPS służy polecenie:
 ```bash
 git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git
 ```
 ### 3. Klonowanie repozytorium za pomocą protokołu SSH.
 * pracę rozpoczęto od zapoznania się z dokumentacją,
 * następnie utworzono dwa klucze SSH (ecdsa oraz ED25519), w tym co najmniej jeden zabezpieczony hasłem:
-  klucz zabezpieczony hasłem wygenerowano za pomoca komendy:
+  
+ klucz zabezpieczony hasłem wygenerowano za pomocą komendy:
   
 ```bash
 ssh-keygen -t ecdsa -C "kubajewska@student.agh.edu.pl"
@@ -100,7 +101,7 @@ Zmodyfikowano plik o nazwie "commit-msg.sample" znajdujący się w folderze ".gi
   
 ![Screen8](./screen/screen%208.png)
 
-* treść githooka można odczytać poprzez komendę
+* treść githooka można odczytać poprzez komendę:
 ```bash
 nano .git/hooks/commit-msg
 ```
@@ -117,7 +118,7 @@ git commit -m "KK406795 commit"
   
 ![Screen11](./screen/screen%2011.png)
 
-* Utworzono katalog o nazwie screen, gdzie zdodano zrzuty ekranu wpisywanych poleceń.
+* Utworzono katalog o nazwie screen, gdzie dodano zrzuty ekranu wpisywanych poleceń.
 * Zrzuty ekranu dodano (jako inline) poprzez polecenie:
 ```bash
 ![Nazwa](./screen/nazwa_pliku.png)
