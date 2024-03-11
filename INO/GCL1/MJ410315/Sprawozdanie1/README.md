@@ -132,3 +132,40 @@ git add
 git commit
 git push
 ```  
+
+Zaaplikowany proces aktualizacji:  
+<img src="images/Zrzut ekranu 2024-03-11 143938.png">
+<img src="images/Zrzut ekranu 2024-03-11 144058.png">
+
+### 6. Spróbuj wciągnąć swoją gałąź do gałęzi grupowej
+
+Najpierw zaktualizowałem zdalne repozytorium z lokalnym:
+<img src="images/Zrzut ekranu 2024-03-11 144333.png">
+
+Następnie należało przejść na gałąź grupową  
+```
+git checkout GCL1
+```
+Oraz wykonać jakieś zmiany. Możliwe jest także utworzenie merge ze swoją gałęzią co jest wykonalne poprzez komendę:  
+```
+git merge MJ410315
+```
+Następnie robimy commit i push poprzez komendy:
+```
+git add .
+git commit -m "MJ410315 - Trying to push to GCL1"
+git push origin GCL1
+```
+<img src="images/Zrzut ekranu 2024-03-11 151217.png">
+
+Gałąź została zmergowana natomiast zabezpieczenia nie pozwoliły na bezpośrednie wypchnięcie na gałąź GCL1. Należy takie zmiany wykonywać poprzez *pull request* który ze strony githuba jest możliwy do wykonania wraz z możliwością weryfikacji, a następnie ostatecznego połączenia.
+
+### 7. Zaktualizowanie sprawozdania
+
+Należało zaktualizować i wysłać wszystkie zmiany na zdalne repozytorium na swoją gałąź:
+
+```
+git add .
+git commit -m "MJ410315 - update"
+git push
+```
