@@ -1,0 +1,8 @@
+# #!/bin/bash
+# # Plik: .git/hooks/commit-msg
+porto=JR412219
+if $(grep -q ^$porto $1); then
+  exit 0
+fi
+  echo "Message nie zaczyna się od $porto"
+  exit 1
