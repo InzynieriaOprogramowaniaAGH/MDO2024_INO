@@ -3,6 +3,12 @@
 ---
 ## Jakub Rejek 412219
 
+### Przedmowa
+Chciałem z góry przeprosić za jakość zrzutów ekranu które dołaczyłem do sprawozdania. Powstały one na podstawie nagrania które wykonywałem w trakcie wykonywania ćwiczenia jako formy szkolenia.
+
+
+Nagranie uległo silnej kompresji czegow wynikiem jest obniżona jakość materiału.
+
 ### 1. Zainstaluj klienta Git i obsługę kluczy SSH
 
 Przed rozpoczeceim zajęć przygotowałem maszynę wirtualną z obrazu Fedory 39. 
@@ -26,8 +32,11 @@ Wszedłem na GitHub i poz zalogowaniu się na swoje konto przeszedłem do:
 >
 Tam odnalazłem stronę pozwalającą na wygenerowanie tokenu uwierzytelnijącego.
 
+![TokenForm](../Resources/Lab1/SS_Lab1_Token.png)
 
 Nadałem tokenowi nazwe oraz uprawnienia tak by przysżłość mojego konta na GitHub nie była zagrożona i by upewnić się w tym przekonaniu ustawiłem termin wygaśnięcia klucza na dwa dni. Ten klucz posłużył jedynie do realizacji ćwiczenia a w dalszych krokach będę korzystał z kluczy SSH.
+
+![Token](../Resources/Lab1/SS_DO1_T.png)
 > UWAGA : Gdyby git nie wyrazuił się jasno by klucz nie przepadł musi zostać zapisany w bezpiecznym miejcu (schowek wystarczy) zanim przeładuje się stronę. Można też jej nie przeładowywać. Efekt ten sam. Gdy strona zostanie przeładowana nie ma możliwości ponownego wyświetlenia tokenu. Stracony token należy usunąć i wygenerować ponownie.
 
 By zakończyć ten krok wystarczyło sklonować repozytorium przedmiotowe poniższym poleceniem:
@@ -42,12 +51,12 @@ W miejscu "Linka do repozytorium" należy wstawić link HTTPS kopijąc go ze str
 > Pojwił sie jednak problem. Repozytorium przedmiotowe przydzielone dla naszej grupy laboratoryjnej jest publiczne co sprawiło że nie zostąłem odpytany o token po jego skopiowaniu.
 
 By zdemonstrować działanie tokenu skopiowałem repozytorium prywatne: **MDO2024_S**
-
+![HTTPSPASS](../Resources/Lab1/SS_DO1_HTTPSRepoClone.png)
 
 Dzięki życzliwości VSC prośba o podanie loginu i hasła została wyświetlona w popup-ie. W miejsce loginu nalezy podać login GitHub a w miejscu hasła wygenerowany token.
 
 Po podaniu tokenu, zakłądając, że jest on poprawny, repozytrium powinno zostać skopiowane.
-
+![HTTPSScsClone](../Resources/Lab1/SS_DO1_HTTPSCloneSCS.png)
 
 ### 3. Upewnij się w kwestii dostępu do repozytorium jako uczestnik i sklonuj je za pomocą utworzonego klucza SSH, zapoznaj się z dokumentacją.
 
@@ -63,10 +72,12 @@ Puste hasło:
 ```bash
 ssh-keygen -t ed25519 -b 4096 -N '' -f ~/.ssh/passless-gh
 ```
+![Passless](../Resources/Lab1/SS_DO1_Passless.png)
 Ustalone hasło:
 ```bash
 ssh-keygen -t ed25519 -b 4096 -N 'pass' -f ~/.ssh/passed-gh
 ```
+![Passed](../Resources/Lab1/SS_DO1_Passed.png)
 > Klucz z hasłem będzie, **każdorazowo**, wymagał podania hasła by móc dokonać weryfikacji tożsamości z jego pomocą.
 
 W miejscu wslazanym przy generowaniu klucza powinny się znajdowac dwie pary kluczy. W każdej parze znajdujes się klucz publiczny z rozszerzeniem "*pub" oraz prywatny nie posiadający rozszerzenia.
@@ -82,7 +93,10 @@ Przechodzimy do:
 Nadajemy nazwę dla klucza by łątwiej było go zweryfikować jeżeli będziemy chcieli autoryzowac kilka maszyn.
 
 W polu klucza przeklejamy zawartość pliku z kluczem publicznym
+![KeyAddForm](../Resources/Lab1/SS_DO1_ADDSSHGit.png)
 >Musimy pamiętać, że w przypadku kluczy kryptograficznych musimy zachować 100% zgodność. Nie możemy przez przypadek usunąć lub dodać znaku.
+
+![Key](../Resources/Lab1/SS_DO1_KeyGit.png)
 ##### Maszyna
 Po stornie VM-a przechodzimy do pliku konfiguracyjnego SSH: ~/.ssh/config.
 Dzięki podpięciu plików z maszyny do VSC na hoście mogłem otworzyć go prosto w edytorze.
@@ -107,6 +121,7 @@ By potwierdzić działąnie kluczy oraz poprawność konfiguracji pozostało sko
 ```bash
 git clone git@github:InzynieriaOprogramowaniaAGH/MDO2024_INO.git ./SSHRepo
 ```
+![TerminalCloneSSH](../Resources/Lab1/SS_DO1_GitCloneSSH.png)
 ### 4. Przełącz się na gałąź main, a potem na gałąź swojej grupy (pilnuj gałęzi i katalogu!)
 Po skopiowaniu repozytoriuim git powinien ustawić HEAD, czyli punkt na osi repozytorium w którym znajduje się obecnie, na ostatni commit gałęzi main(lub innej gałęzi ustawionej na główną).
 
@@ -116,18 +131,24 @@ Z tej pozycji możemy skorzystać z polecenia checkout by przepiąć się na wyb
 git checkout GCL4
 ```
 Po wykonaniu powyższego polecenia HEAD powinien wskazywać na punkt w którym znajduje się najnowszy commit brancha grupy(w moim przypadku GCL4).
-
+![CheckoutGroup](../Resources/Lab1/SS_DO1_Checkout.png)
 #### 4.1 Utwórz gałąź o nazwie "inicjały & nr indeksu" np. KD232144. Miej na uwadze, że odgałęziasz się od brancha grupy!
 By utworzyć nową gałąź możemy skorzystać z polecenia branch lub wykonać checkout z parametrem **"b"** 
 ```bash
 git checkout -b JR412219
 ```
 W ten sposób możemy utworzyć gałąź z punktu na gałęzi w którym stoimy jednocześnie przepinając HEAD w miejsce owej(nowej) gałęzi.
+
+
+![CheckoutBranch](../Resources/Lab1/SS_DO1_CheckoutBranch.png)
 > Należy pamiętać, że jeżeli mieliśmy jakieś pliki, które nie zostały z commitowane do repo, zostaną one nadpisane przez pliki z obecnie wskazywanej przez HEAD gałęzi.
 #### 4.2 Rozpocznij pracę na nowej gałęzi
 - W katalogu właściwym dla grupy utwórz nowy katalog, także o nazwie "inicjały & nr indeksu" np. KD232144.
 
+![Explorer](../Resources/Lab1/SS_DO1_DevopsFiles.png)
+ 
  W przypadku VSC wystarczyło dodać nowy katalog w eksplorerze plików. W tym katalogu znajdą się pliki z których będę korzystał w trakcie laboratorium oraz moje sprawozdania.
+
 - Napisz Git hooka - skrypt weryfikujący, że każdy Twój "commit message" zaczyna się od "twoje inicjały & nr indexu". (Przykładowe githook'i są w .git/hooks).
 
 Z pośród wielu hooków, które znajdują się w katalogu .git/hooks tym, który wybrałem był commit-msg. Jego zawartośc wywoływana jest w momecie nadania wiadomości do tworzonego commita.
@@ -154,6 +175,8 @@ cp <source> <dest>
 ```
 Wyślij zmiany do zdalnego źródła
 
-
 #### 5. Spróbuj wciągnąć swoją gałąź do gałęzi grupowej
-Zaktualizuj sprawozdanie i zrzuty o ten krok i wyślij aktualizację do zdalnego źródła (na swojej gałęzi)
+Dokonałem merge gałęzi roboczej do gałęzi grupy w repo lokalnym:
+
+
+![Merge5.0](../Resources/Lab1/SS_DO1_Merge.png)
