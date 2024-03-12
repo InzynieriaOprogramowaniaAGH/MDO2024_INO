@@ -42,6 +42,7 @@ $ git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
 
 ![ss4](../Sprawozdanie%201ss/Zrzut%20ekranu%202024-03-11%20015450.png)
 
+---
 ### 3. Visual Studio Code do pracy nad projektem
 
 - Instalacja wtyczki Remote SSH w Visual Studio Code
@@ -55,6 +56,7 @@ $ ifconfig
 
 ![ss6](../Sprawozdanie%201ss/Zrzut%20ekranu%202024-03-11%20021334.png)
 
+---
 ### 4. Przełączenie na gałąź main, następnie na gałąź swojej grupy
 
 - Wyświetlenie listy gałęzi w repozytorium
@@ -80,6 +82,7 @@ $ mkdir -p
 ```
 Opcja -p tworzy wszystkie katalogi nadrzędne, które nie istnieją.
 
+---
 ### 5. Utworzenie git hooka - skryptu weryfikującego
 
 - Przejście do katalogu z hookami Git
@@ -101,6 +104,7 @@ $ nano commit-msg
 ```
 $ chmod +x commit-msg
 ```
+---
 ### 6. Wysyłanie zmian do zdalnego źródła
 
 - Wyświetlanie informacji o aktualnym stanie repozytorium
