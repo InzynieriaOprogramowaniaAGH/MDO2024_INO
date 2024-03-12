@@ -153,5 +153,7 @@ Przy pomocy poniższego polecenia przekopiowałem plik do katalogu roboczego:
 cp <source> <dest>
 ```
 Wyślij zmiany do zdalnego źródła
-Spróbuj wciągnąć swoją gałąź do gałęzi grupowej
+
+
+#### 5. Spróbuj wciągnąć swoją gałąź do gałęzi grupowej
 Zaktualizuj sprawozdanie i zrzuty o ten krok i wyślij aktualizację do zdalnego źródła (na swojej gałęzi)
