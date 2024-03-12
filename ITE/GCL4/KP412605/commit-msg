@@ -6,7 +6,7 @@ NUMER_INDEXU="412605"
 COMMIT_MSG_FILE=$1
 COMMIT_MSG=$(cat $COMMIT_MSG_FILE)
 
-EXPECTED_PREFIX="$INICJALY & $NUMER_INDEXU"
+EXPECTED_PREFIX="$INICJALY $NUMER_INDEXU"
 if [[ "$COMMIT_MSG" != "$EXPECTED_PREFIX"* ]]; then
     echo "Błąd: Każdy commit message musi zaczynać się od 'twoje inicjały & nr indexu'."
     exit 1
