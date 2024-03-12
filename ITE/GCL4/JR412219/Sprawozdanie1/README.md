@@ -167,6 +167,7 @@ fi
 
 Ze względu na to, że hook był pisany w folderze hooks na bazie wersji sample nie musiałem go przemieszczać w celu jego uruchomienia.
 
+![Hook](../Resources/Lab1/SS_DO1_HOOKS.png)
 
 - Dodaj ten skrypt do stworzonego wcześniej katalogu.
 Przy pomocy poniższego polecenia przekopiowałem plik do katalogu roboczego:
