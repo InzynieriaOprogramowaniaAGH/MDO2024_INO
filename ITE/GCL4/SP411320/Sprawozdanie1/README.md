@@ -211,10 +211,57 @@ Na szczęście ze względu na sposób działąnia repozytoriów git, modyfikacje
 ![Self-reference](img/self-reference.png)
 ![Wypchnięcie sprawozdania do tego momentu](img/vfedora-git-push-report.png)
 
-## 7 Wystawienie Pull Requesta do gałęzi grupowej
+---
+# Git, Docker
+Stanisław Pigoń
 
-Aby utworzyć PR w zdalnym repo możemy użyć zarówno interface'u na stronie GitHub'a, jak i wykorzystać narzędzie `gh` pozwalające na zarządzanie również zdalnymi rep
+## 1. Instalacja Docker w systemie labolatoryjnym
+W systemie Fedora Server 39.0 instalacja pakietów odbywa się za pośrednictwem narzędzia `dnf`. W przeciwieństwie do rozwiązań takich jak `apt` w systemach Debian, instalacja Docker'a sprowadza się do wpisania pojedynczej komendy `dnf -y install docker` - nie ma potrzeby pobierania dodatkowych skryptów konfiguracyjnych czy dodawania repozytoriów do managera pakietów
+
+![Instalacja dockera w systemie Fedora](img/dnf-install-docker.png)
+
+## 2. Rejestracja w [Docker Hub](https://hub.docker.com/)
+![Rejestracja w DockerHub](img/dockerhub-register.png)
+> Rejestracja w DockerHub sprowadza się do wypełnienia formularza rejestracyjnego jak na każdej innej stronie, natomiast możliwe jest również skorzystanie z logowania z użyciem konta GitHub, co znacznie przyśpiesza proces tworzenia konta
+
+![DockerHub](img/dockerhub.png)
+> DockerHub jest jednym z większych repozytoriów obrazów kontenerów. Na stonie startowej wyświetlane są sugerowane kontenery, podzielone na katogorie, takie jak **AI&ML**, **Bazy danych**, czy **Backend**. Każdy z sugerowanych obrazów definiuje kontener przygotowany do uruchomienia aplikacji w danej technologii, ale może stanowić również bazę pod nowy obraz tworzony pod potrzeby programisty
+
+## 3. Pobranie obrazów `hello-world`, `busybox`, `ubuntu`, `fedora` i `mysql`
+Aby zaciągnąć obraz kontenera z zewnętrznego repozytorium, wykorzystujemy polecenie `docker pull <nazwa_obrazu>`. W domyśle docker pobiera obrazy z repozytorium **DockerHub**, natomiast nic nie stoi na przeszkodzie, aby skonfigurować narzędzie do pracy z innym serwisem, czy nawet własnym rozwiązaniem.
+
+![Pobranie podanych obrazów](img/docker-pulls.png)
+
+## 4. Uruchomienie kontenera `busy-box`
+Aby uruchomić kontener pochodzący od wybranego obrazu, wykorzystujemy polecenie `docker run [opcje] <obraz>`. Jeżeli docker nie znajdzie wskazanego obrazu, przed uruchomieniem kontenera spróbuje pobrać jego obraz z domyślnego repozytorium zdalnego.
+
+Kontenery możemy również tworzyć za pomocą polecenia `docker create [opcje] <obraz>`
+
+![Uruchomienie kontenera `busybox`](img/docker-run-bb.png)
+
+## 5. Uruchomienie *systemu w kontenerze* (Fedora)
+![instalacja ps, aktualizacja, ps -p 1 i wyjście z kontenera Fedora](img/docker-fedora.png)
+
+## 6. Utworzenie pliku `Dockerfile` w oparciu o obraz wybranego systemu
+```dockerfile
+FROM fedora
+WORKDIR /root
+RUN dnf -qy install git
+```
+
+![Zbudowanie i uruchomienie kontenera](img/docker-git-fedora.png)
+
+## 7. Wyświetlenie uruchomionych kontenerów i ich wyczyszczenie
+
+![Wyświetlenie uruchomionych kontenerów i ich wyczyszczenie](img/docker-container-prune.png)
+
+## 8. Wyczyszczenie obrazów
+
+![Wyczyszczenie nieużywanych obrazów](img/docker-image-prune.png)
+
+## 9. Dodanie utworzonego `Dockerfile`a do folderu `Sprawozdanie1` w repozytorium
+
+## 10. Wystawienie *Pull Request'a* do gałęzi grupowej jako zgłoszenie wykonanego zadania
 
 ![TLDR gh](img/vfedora-tldr-gh.png)
-![Wykorzystanie gh do utworzenia PRa](img/vfedora-gh-pr-create.png)
-> Ze względu na niemożliwość zamieszczenia w sprawozdaniu wyników działania komendy do utworzenia pull-requesta tak, aby jej wyniki znalazły się w tym pull-requeście, autor w tym miejscu zdecydował się na niezamieszczenie kolejnych etapów pracy z repozytorium w sprawozdaniu dla tego ćwiczenia, ze względu na potencjalne zapętlenie ciągłego tworzenia kolejnych commitów ze zrzutami ekranu dla poprezdnich działań
+`gh pr create -B GCL4 -H SP411320 -t 'SP411320: Git-Docker'`
