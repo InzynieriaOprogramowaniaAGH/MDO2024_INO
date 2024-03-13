@@ -94,6 +94,8 @@ sudo systemctl start docker
 ```
 Aby sprawdzić czy został uruchomiony możemy skorzystać z opcji `systemctl status docker`
 
+*Jeśli docker nie działa bez uprawnień sudo, a chcemy z niego korzystać na koncie użytkownika możemy dodać nową grupę `docker`, oraz dodać do niej wybranego użytkownika, zgodnie z [instrukcją](https://docs.docker.com/engine/install/linux-postinstall/)*
+
 Jeśli docker działa poprawnie możemy pobrać obrazy z [DockerHub](https://hub.docker.com/), za pomocą polecenia:
 ```
 docker pull node:lts-bullseye-slim
@@ -126,8 +128,8 @@ docker ps -a
 
 Kolejnym etapem jest sprawdzenie procesu o `PID 1` wewnątrz kontenera z systemem `Fedora`, oraz procesy dockera na maszynie hosta. W tym celu wykonujemy poniższe kroki:
 
-- uruchamiamy kontener z fedorą za pomocą: `sudo docker run -it fedora`
-- aby użyć polecenia `ps` musimy je pobrać (nie ma go domyślnie w tym obrazie): `sudo dnf install procps -y`
+- uruchamiamy kontener z fedorą za pomocą: `docker run -it fedora`
+- aby użyć polecenia `ps` musimy je pobrać (nie ma go domyślnie w tym obrazie): `dnf install procps -y`
 - sprawdzamy procesy w kontenerze za pomocą: `ps`
 - sprawdzamy procesy hosta za pomocą: `ps auxft`
 
@@ -135,6 +137,23 @@ Kolejnym etapem jest sprawdzenie procesu o `PID 1` wewnątrz kontenera z systeme
   <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/64956354/485637bf-34d5-4c1d-8901-ce3e9ee4e6b9" />
 </p>
 <p align="center"><i><b>Proces /bin/bash w kontenerze o PID 1, to proces /bin/bash utworzony przez dockerd z uprawnieniami root'a jako 12419</b></i></p>
+
+# Dockerfile
+
+Aby zbudować kontener z niestandardowych obrazów tworzymy dockerfile'a. Podstawą do jego utworzenia będzie obraz `Ubuntu:22.04`. Do niego będziemy dodawać w kolejnych warstwach (docker buduje kontenery w oparciu o Linux-owy Union File System, który umożliwia nakładanie wartw systemów plików, tworząc jeden końcowy jako wynikowy wszystkich warstw) aktualizację apt-get oraz w tej samej warstwie (dobrą praktyką jest utrzymywanie jak najmniejszej ilości wartw np. poprzez łączenie komend) pobieramy git'a i openssh-client (jeśli chcemy pobrać repozytorium na githubie poprzez ssh). Na końcu klonujemy repozytorium i ustawiamy komendę która będzie uruchomiona wraz z utworzeniem obrazu (jako PID 1 w kontenerze) na `/bin/bash`. Poniżej przykład takiego dockerfile:
+```dockerfile
+FROM ubuntu:22.04
+
+WORKDIR usr/src/app
+
+RUN apt-get update && apt-get install -y git
+
+USER my_ubuntu
+
+RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+
+CMD ["/bin/bash"]
+```
 
 
 
