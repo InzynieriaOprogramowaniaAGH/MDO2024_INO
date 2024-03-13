@@ -4,7 +4,7 @@ Pierwsze sprawozdanie dotyczy konfiguracji środowiska, które składa się z wy
 
 # Przygotowanie środowiska 
 
-Pierwszym krokiem w przygotowaniu środowiska było wybranie wirtualizatora. Ze względu na wcześniejsze doświadczenia i umiejętność posługiwania się `VirtualBox`, wybór padł na to narzędzie. Dodatkowym argumentem przemawiającym za tym wyborem (w porównaniu do `WSL`) jest możliwość tworzenia migawek, które umożliwiają "zabezpieczanie" wykonanych do tej pory kroków realizacji ćwiczeń. Wybrany system operacyjny to najnowsza wersja systemu Linux - `Fedora 39`. Dzięki swojej popularności, system ten posiada obszerną bazę informacji na temat rozwiązywania problemów oraz jest stale wspierany przez autorów. Dane mojej maszyny przedstawiam na poniższym zrzucie ekranu:
+Pierwszym krokiem w przygotowaniu środowiska było wybranie wirtualizatora. Ze względu na wcześniejsze doświadczenia i umiejętność posługiwania się `VirtualBox`, wybór padł na to narzędzie. Dodatkowym argumentem przemawiającym za tym wyborem (w porównaniu do `WSL`) jest możliwość tworzenia migawek, które umożliwiają "zabezpieczanie" wykonanych do tej pory kroków realizacji ćwiczeń. Wybrany system operacyjny to najnowsza wersja dystrybucji Fedora Linux - `Fedora 39`. Dzięki swojej popularności, system ten posiada obszerną bazę informacji na temat rozwiązywania problemów oraz jest stale wspierany przez autorów. Dane mojej maszyny przedstawiam na poniższym zrzucie ekranu:
 
 <p align="center">
   <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/64956354/86422cae-aac5-4c75-a5e5-5fc21f8e2ae0" />
@@ -26,7 +26,7 @@ W celu sklonowania repozytorium musimy zainstalować na swojej maszynie system k
 - aktualizujemy menager'a pakietów `dnf` za pomocą polecenia `sudo dnf update`
 - pobieramy system kontroli wersji: `sudo dnf install git`
 
-Teraz możemy sklonować zdalne repozytorium. Zanim to zrobimy generujemy swój [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens), którego użyjemy do autentykacji swojego konta na GitHubie zamiast podawania hasła. Następnie udajemy się na stronę repozytorium i wybieramy odpowiedni `url` do klonowania za pomocą `HTTPS`. W oknie terminala maszyny wirtualnej wykonujemy polecenie `git clone git@github.com:kacperpap/Metody_numeryczne.git` oraz zamiast hasła do konta podajemy wygenerowany token.
+Teraz możemy sklonować zdalne repozytorium. Zanim to zrobimy generujemy swój [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens), którego użyjemy do autentykacji swojego konta na GitHubie zamiast podawania hasła. Następnie udajemy się na stronę repozytorium i wybieramy odpowiedni `url` do klonowania za pomocą `HTTPS`. W oknie terminala maszyny wirtualnej wykonujemy polecenie `git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git` oraz zamiast hasła do konta podajemy wygenerowany token.
 
 **Klonowanie za pomocą klusza SSH-RSA oraz klucza SSH-ED25519 zabezpieczonego hasłem**
 Klucze generujemy za pomocą narzędzia `ssh-keygen`. Po wygenerowaniu, publiczny klucz umieszczamy w zakładce `SSH keys` w ustawieniach naszego konta na github'ie.
@@ -38,7 +38,7 @@ Klucze generujemy za pomocą narzędzia `ssh-keygen`. Po wygenerowaniu, publiczn
   ```
   gdzie `-t` to wybór typu klucza, `-f` ścieżka (analogiczna do poprzeniej tylko jawnie podana), `-N` hasło do zabezpieczenia kluczy. Pozostałe kroki wykonujemy analogicznie do poprzedniego punktu.
 
-  **UWAGA, jeśli dodaliśym klucz SSH-RSA i sklonowaliśmy repozytorium, klucz ten jest automatycznie wykorzystywany przy każdej kolejej próbie klonowania, aby to zmienić należy dodać plik `~/.ssh/config`:**
+  **UWAGA, jeśli dodaliśym klucz SSH-RSA i sklonowaliśmy repozytorium, klucz ten jest automatycznie wykorzystywany przy każdej kolejnej próbie klonowania, aby to zmienić należy dodać plik `~/.ssh/config`:**
 
    ```
    Host github.com
@@ -48,17 +48,17 @@ Klucze generujemy za pomocą narzędzia `ssh-keygen`. Po wygenerowaniu, publiczn
    Plik ten umożliwi wykorzystanie jako domyślnego klucza, naszego nowego klucza SSH-ED25519 zabezpieczonego hasłem. Teraz przy próbie klonowania repozytorium zostaniemu poproszeni o podanie hasła, czyli osiągniemy docelowy efekt.
 
 
-  # Praca na nowej gałęzi
+# Praca na nowej gałęzi
 
-  Po sklonowaniu repozytorium przełączamy się na odpowiednią gałąź, która będzie naszym miejscem pracy. To z niej następnie będziemy dokonywać `Pull Request` aby dodać naszy zmiany do głównego brancha grupy.
-  Aby przełączyć się pomiędzy gałęziami używamy polecenia `git checkout <branch_name>`, natomiast dla sprawdzenia na jakiej gałęzi obecnie jesteśmy: `git branch`. Te dwie proste komeny pozwalają nam nawigować po repozytorium. Po   
-  przełączeniu się na odpowienią gałąź, tworzymy własną: `git checkout -b <branch_name>`, oraz dodajemy tam zgodnie z opisem intrukcji własne katalogi i plik ze sprawozdaniem:
-  ```
-  git checkout -b KP412085
-  mkdir -p KP412085/Sprawozdanie1
-  cd KP412085/Sprawozdanie1/
-  echo "# Sprawozdanie 1" >> ./README.md
-  ```
+Po sklonowaniu repozytorium przełączamy się na odpowiednią gałąź, która będzie naszym miejscem pracy. To z niej następnie będziemy dokonywać `Pull Request` aby dodać nasze zmiany do głównego brancha grupy.
+Aby przełączyć się pomiędzy gałęziami używamy polecenia `git checkout <branch_name>`, natomiast dla sprawdzenia na jakiej gałęzi obecnie jesteśmy: `git branch`. Te dwie proste komeny pozwalają nam nawigować po repozytorium.
+Po przełączeniu się na odpowienią gałąź, tworzymy własną: `git checkout -b <branch_name>`, oraz dodajemy tam zgodnie z opisem intrukcji własne katalogi i plik ze sprawozdaniem:
+```
+git checkout -b KP412085
+mkdir -p KP412085/Sprawozdanie1
+cd KP412085/Sprawozdanie1/
+echo "# Sprawozdanie 1" >> ./README.md
+ ```
 
 # Git hooks
 Zanim zatwierdzimy nasze zmiany w repozytorium - `commit`, dodajemy `git hook'a`, który przez wykonaniem tej operacji będzie sprawdzał czy zawraliśmy na początku wiadomści commita odpowiedni identyfikator ( w moim przypadku `[KP412085]`). Aby to zrobić modyfikujemy plik `~/.git/hooks/commit-msg.sample` w następujący sposób:
@@ -71,7 +71,7 @@ if [ "$(echo "$COMMIT_MSG" | cut -c 1-10)" != "[KP412085]" ]; then
   echo "[KP412085] $COMMIT_MSG" > $COMMIT_MSG_FILE
 fi
 ```
-Skrypt ten realizuje wcześniej opisane zadanie. Aby umożliwić jego działanie zmieniemay jego nazwę, usuwając z niej `.sample`. Teraz podczas każdego commita, skrytp ten zostanie automatycznie uruchomiony.
+Skrypt ten realizuje wcześniej opisane zadanie. Aby umożliwić jego działanie zmieniamy jego nazwę, usuwając z niej `.sample`. Teraz podczas każdego commita, skrytp ten zostanie automatycznie uruchomiony.
 
 # Pull Request
 
@@ -140,13 +140,14 @@ Kolejnym etapem jest sprawdzenie procesu o `PID 1` wewnątrz kontenera z systeme
 
 # Dockerfile
 
-Aby zbudować kontener z niestandardowych obrazów tworzymy dockerfile'a. Podstawą do jego utworzenia będzie obraz `Ubuntu:22.04`. Do niego będziemy dodawać w kolejnych warstwach (docker buduje kontenery w oparciu o Linux-owy Union File System, który umożliwia nakładanie wartw systemów plików, tworząc jeden końcowy jako wynikowy wszystkich warstw) aktualizację apt-get oraz w tej samej warstwie (dobrą praktyką jest utrzymywanie jak najmniejszej ilości wartw np. poprzez łączenie komend) pobieramy git'a i openssh-client (jeśli chcemy pobrać repozytorium na githubie poprzez ssh). Na końcu klonujemy repozytorium i ustawiamy komendę która będzie uruchomiona wraz z utworzeniem obrazu (jako PID 1 w kontenerze) na `/bin/bash`. Poniżej przykład takiego dockerfile:
+Aby zbudować kontener z niestandardowych obrazów tworzymy dockerfile'a. Podstawą do jego utworzenia będzie obraz `Ubuntu:22.04`. Do niego będziemy dodawać w kolejnych warstwach (docker buduje kontenery w oparciu o Linux-owy Union File System, który umożliwia nakładanie wartw systemów plików, tworząc jeden końcowy jako wynikowy wszystkich warstw) aktualizację apt-get oraz w tej samej warstwie (dobrą praktyką jest utrzymywanie jak najmniejszej ilości warstw np. poprzez łączenie komend) pobieramy git'a i openssh-client (jeśli chcemy pobrać repozytorium na githubie poprzez ssh). Dodajemy również nowego użytkownika oraz zmieniamy uprawnienia katalogu w którym wywołujemy CMD. Umożliwia to częściowe zabezpiecznie, przed wykonywaniem poleceń jako root. Na końcu klonujemy repozytorium i ustawiamy komendę która będzie uruchomiona wraz z utworzeniem obrazu (jako PID 1 w kontenerze) na `/bin/bash`. Poniżej przykład takiego dockerfile:
 ```dockerfile
 FROM ubuntu:22.04
 
 WORKDIR usr/src/app
 
-RUN apt-get update && apt-get install -y git
+RUN apt-get update && apt-get install -y git \
+    && useradd -ms /bin/bash my_ubuntu && chown -R my_ubuntu:my_ubuntu /usr/src/app
 
 USER my_ubuntu
 
@@ -154,6 +155,20 @@ RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git
 
 CMD ["/bin/bash"]
 ```
+
+Obraz ten budujemy za pomocą polecenia:
+```
+docker build -t <image_name> /path/to/dockerfile
+```
+Po uruchomieniu w trybie interaktywnym kontenera na podstawie stworzonego obrazu sprawdzamy za pomocą `ls` czy znajduje się tam sklonowane repozytorium. Poniższy screen w górnej części pokazuje terminal z kontenera, natomiast z dolnej części terminal hosta z informacją o uruchomionym kontenerze
+
+<p align="center">
+  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/64956354/7ff97b0f-063d-4070-8a8e-f295082b313e" />
+</p>
+
+Aby wyczyścić niepotrzebne obrazy korzystamy z polecenia `docker image rm <image_id/image_name>`
+
+
 
 
 
