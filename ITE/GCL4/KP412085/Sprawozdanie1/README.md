@@ -13,7 +13,14 @@ Pierwszym krokiem w przygotowaniu środowiska było wybranie wirtualizatora. Ze 
 
 ***Jak widać na załączonym zdjęciu, typ wirtualizacji ustawiony jest na parawirtualizację KVM. Jest to związane z systemem gospodarza `Windows 11`, który uruchamia swoje jądro w trybie wirtualizacji. Może to ograniczać wydajność utworzonej maszyny. Rozwiązaniem tego problemu może być wyłączenie hypervisor'a Windows, ale z powodu braku zauważalnego spowolnienia, ten krok nie został wykonany.***
 
-# Instalacji git i klonowanie repozytorium
+Aby połączyć się z maszyną wirtualną poprzez usługę `Remote-SSH` w `VS Code`, pobieramy odpowiednie rozszerzenie i modyfikujemy plik `.ssh/config` dodając nowego hosta:
+```
+Host <host IP>
+  HostName <host IP>
+  User <username>
+```
+
+# Instalacja git i klonowanie repozytorium
 
 W celu sklonowania repozytorium musimy zainstalować na swojej maszynie system kontroli wersji `git`. W tym celu wykonujemy następujące kroki:
 - aktualizujemy menager'a pakietów `dnf` za pomocą polecenia `sudo dnf update`
@@ -53,8 +60,8 @@ Klucze generujemy za pomocą narzędzia `ssh-keygen`. Po wygenerowaniu, publiczn
   echo "# Sprawozdanie 1" >> ./README.md
   ```
 
-  # Git hooks
-  Zanim zatwierdzimy nasze zmiany w repozytorium - `commit`, dodajemy `git hook'a`, który przez wykonaniem tej operacji będzie sprawdzał czy zawraliśmy na początku wiadomści commita odpowiedni identyfikator ( w moim przypadku `[KP412085]`). Aby to zrobić modyfikujemy plik `~/.git/hooks/commit-msg.sample` w następujący sposób:
+# Git hooks
+Zanim zatwierdzimy nasze zmiany w repozytorium - `commit`, dodajemy `git hook'a`, który przez wykonaniem tej operacji będzie sprawdzał czy zawraliśmy na początku wiadomści commita odpowiedni identyfikator ( w moim przypadku `[KP412085]`). Aby to zrobić modyfikujemy plik `~/.git/hooks/commit-msg.sample` w następujący sposób:
 
 ```bash
 COMMIT_MSG_FILE=$1
