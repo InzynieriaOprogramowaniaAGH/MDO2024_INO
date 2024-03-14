@@ -8,7 +8,7 @@ SSH natomiast, Secure Shell, to protokół do bezpiecznego przesyłania komand p
 Wykorzystuje TCP/IP, oraz dwa klucze - publiczny i prywatny. Za pomocą klucza publicznego drugie urządzenie ustanawia połączenie bazując na komplementarnym kluczu prywatnym. Ostatecznie jest konieczna autoryzacja przez login i hasło.
 
 Założeniem laboratoriów było rozpocząć pracę na skolonowanym repozytorium zajęć poprzez utworzenie gałęzi, stworzenie git hooka i zaktualizowanie obecnej gałęzi.
-## Wykonanie
+### Wykonanie
 Mając gotową maszynę wirtualną, system `ubuntu` od początku posiadał klienta `git` i obsługę kluczy SSH, dlatego krok 1 został wykonany.
 
 ### 1. Sklonowanie repozytorium przedmiotowego za pomocą HTTPS  
@@ -170,3 +170,216 @@ git add .
 git commit -m "MJ410315 - update"
 git push
 ```
+## Git, Docker
+
+Docker to narzędzie pozwalające na dostarczanie platformy lub środowiska jako produkt w zwirtualizowanej postaci. Pozwala na automatyczne wdrażanie aplikacji w postaci kontenerów, co pozwala na wydajną pracę w różnych środowiskach w izolacji.
+
+### Wykonanie
+
+### 1. Zainstaluj Docker w systemie linuxowym
+Pobranie dockera na maszynie wyrtualnej jest zależne od systemu. W moim przypadku jest to ubuntu. Ubuntu podczas instalacji pozwala opcjonalnie pobrać wybrane narzędzia. Ja wybrałem tą opcję instalacji, jednakże jeśli chciałbym pobrać to poprzez konsolę, odbywałoby się to poprzez wykonanie [instrukcji na oficjalnej stronie dockera](https://docs.docker.com/engine/install/ubuntu/).
+
+### 2. Zarejestruj się w Docker Hub i zapoznaj z sugerowanymi obrazami
+
+Rejestracja nie jest konieczna aby przeglądać obrazy.
+
+### 3. Pobierz obrazy `hello-world`, `busybox`, `ubuntu` lub `fedora`, `mysql`
+
+Obrazy można zarówno pobierać komendą:
+```sh
+docker pull <obraz>
+```
+<img src="images/Zrzut ekranu 2024-03-11 175850.png">
+
+
+Jak i je po prostu uruchomić komendą:
+```sh
+docker run <obraz>
+```
+<img src="images/Zrzut ekranu 2024-03-11 175625.png">
+
+Pozostałe pobrane obrazy:
+
+<img src="images/Zrzut ekranu 2024-03-14 204238.png">
+
+### 4. Uruchom kontener z obrazu busybox
+
+Jak zostało wcześniej wspomniane, jeśli obraz nie istnieje, można go pobrać automatycznie poprzez uruchomienie:
+
+```sh
+docker run busybox
+```
+Busybox to kombinacja minimalnych wersji wielu popularnych usług używanych przez systemy UNIX. Można to nazwać niezwykle uproszczonymi funkcjonalnościami systemu UNIXowego.
+
+<img src="images/Zrzut ekranu 2024-03-11 175918.png">
+
+Sam uruchomiony kontener Busybox wyłączy się natychmiast, ze względu na to że działa jak system operacyjny - czeka na operacje. Jeśli ich nie będzie, samoistnie się wyłączy.
+
+Przydatne okazuje się w takiej sytuacji interaktywne uruchomienie:
+```
+docker run -i busybox
+```
+<img src="images/Zrzut ekranu 2024-03-13 113044.png">
+
+Poprzez komendę
+
+```sh
+cat --help
+```
+można zauważyć w jakiej wersji busyboxa jesteśmy, natomiast komendą
+```sh
+uname -a
+```
+uzyskujemy informacje o systemie operacyjnym.
+
+### 5. Uruchom "system w kontenerze" (czyli kontener z obrazu `fedora` lub `ubuntu`)
+
+Pobrałem fedorę, ponieważ system ubuntu mam już zainstalowany na systemie operacyjnym. Na pierwszy rzut oka dystrybucje nie różnią się znacznie, natomiast istotnym jest na pewno `package manager`. W ubuntu takowym jest `APT - Advanced Packaging Tool`, natomiast fedora ma `DNF - Dandified YUM`.
+
+Uruchomienie odbywa się tak samo - w trybie interaktywnym - ponieważ system natychmiast się wyłączy:
+```sh
+docker run -ti fedora
+```
+Opcja `-t` pozwala dodatkowo utworzyć pseudo-TTY, czyli TeleTypewriter - nazwa przed wpisywaną komendą.
+
+Poniższą komendą jesteśmy w stanie wyświetlić aktualne procesy jakie się odbywają wewnątrz kontenera (niezbędne było zainstalowanie biblioteki `procps`).
+```sh
+ps
+```
+
+<img src="images/Zrzut ekranu 2024-03-13 114702.png">
+
+Na hoście procesy przedstawiają się następująco:
+
+<img src="images/Zrzut ekranu 2024-03-13 114820.png">
+
+Widać, że uruchomione są `bash` w jednym terminalu, oraz `ps`. Widać także, że `docker ps` ma uruchomiony kontener z obrazem `fedory`.
+
+Komenda
+```sh
+dnf upgrade
+```
+Pozwala na aktualizacje obecnych zależności, programów i usług.
+
+<img src="images/Zrzut ekranu 2024-03-13 115000.png">
+
+Poniżej widać, że zostały zaktualizowane poprawnie:
+<img src="images/Zrzut ekranu 2024-03-13 115025.png">
+
+Ostatecznie wyjście wykonuje się komendą
+```sh
+exit
+```
+
+<img src="images/Zrzut ekranu 2024-03-13 115052.png">
+
+### 6. Stwórz własnoręcznie, zbuduj i uruchom prosty plik `Dockerfile` bazujący na wybranym systemie i sklonyj nasze repo.
+
+Pierwszym zadaniem było stworzenie samego pliku Dockerfile:
+```sh
+touch Dockerfile
+code Dockerfile # wybrany edytor
+```
+
+<img src="images/Zrzut ekranu 2024-03-13 115246.png">
+
+Plik zawiera następujący kod:
+
+<img src="images/Zrzut ekranu 2024-03-13 120420.png">
+
+```dockerfile
+FROM fedora
+
+RUN dnf -y update && \
+    dnf -y install git
+
+WORKDIR /repo
+
+RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+
+ENTRYPOINT ["/bin/bash"]
+```
+
+Ponownie, systemem który wybrałem jest fedora ze względu na to, że na wirtualnej maszynie pracuję na ubuntu. Kod ten bierze jako bazę obraz fedory, następnie każe wykonać komendy: aktualizacja zależności, zapewnienie zainstalowania `git`. opcja `-y` sprawia że nie trzeba potwierdzać instalacji. Ostatecznie odbywa się klonowanie a następnie ustalamy komendę jaka ma być wykonana podczas uruchomienia, w tym przypadku `bash`.
+
+Następnie, należało zbudować obraz na podstawie pliku Dockerfile komendą:
+```sh
+docker build -t custom-build .
+```
+
+<img src="images/Zrzut ekranu 2024-03-13 120515.png">
+
+Jak można zauważyć poniżej, obraz został zbudowany pomyślnie:
+
+<img src="images/Zrzut ekranu 2024-03-13 120553.png">
+
+#### Weryfikacja
+
+Aby można było zweryfikować czy repozytorium zostało sklonowane (a tym samym sprawdzając czy git został zainstalowany) użyłem komendy:
+```sh
+docker run -i custom-build
+```
+
+<img src="images/Zrzut ekranu 2024-03-13 120835.png">
+
+Jak widać, `README.md` repozytorium jest poprawnie skopiowane.
+
+### 7. Pokaż uruchomione (!= "działające") kontenery, wyczyść je.
+
+Działające kontenery można wypisać komendą
+```sh
+docker ps
+```
+
+<img src="images/Zrzut ekranu 2024-03-13 121203.png">
+
+W przypadku chęci zatrzymania wszystkich działających kontenerów można to zrobić tak jak poniżej:
+
+```sh
+docker stop $(docker ps -a -q)
+```
+Komenda ta zatrzymuje wszystkie uruchomione kontenery
+<img src="images/Zrzut ekranu 2024-03-13 121826.png">
+
+W przypadku wylistowania wszystkich działających kontenerów można użyć komendy:
+```sh
+docker ps -a
+```
+
+Następnie usunięcie wszystkich kontenerów wykonuje się komendą podobną jak do zatrzymania wszystkich:
+```sh
+docker rm $(docker ps -a -q)
+```
+
+<img src="images/Zrzut ekranu 2024-03-13 122219.png">
+
+Jak widać, nie ma już żadnych kontenerów.
+
+### 8. Wyczyść obrazy
+
+Czyszczenie obrazów wykorzystuję sub-komendę `rmi`, a do czyszczenia wszystkich wykorzystam podobną konwencję jak wcześniej:
+```sh
+docker rmi $(docker images -a -q)
+```
+
+<img src="images/Zrzut ekranu 2024-03-13 122344.png">
+
+### 9. Dodaj stworzone pliki `Dockerfile` do folderu swojego `Sprawozdanie1` w repozytorium
+
+<img src="images/Zrzut ekranu 2024-03-13 122437.png">
+
+Ostatecznie stworzyłem `Dockerfile` ale w niewłaściwym miejscu dlatego należało go przenieść.
+
+Obecnie struktura mojego folderu wygląda następująco:
+
+```sh
+/GCL1/MJ410315
+├── Sprawozdanie1 # folder sprawozdania nr 1
+|  ├── images
+|  |  ├── Zrzut ekranu ... .png # zrzuty ekranu do sprawozdania
+|  |  └── ...
+|  ├── Dockerfile # utworzony Dockerfile
+|  └── README.md # Treść sprawozdania
+└── commit-msg # git hook
+
+``` 
