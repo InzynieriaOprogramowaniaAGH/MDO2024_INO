@@ -247,6 +247,8 @@ Kontenery możemy również tworzyć za pomocą polecenia `docker create [opcje]
 FROM fedora
 WORKDIR /root
 RUN dnf -qy install git
+RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO repo
+CMD [ "bash" ]
 ```
 
 ![Zbudowanie i uruchomienie kontenera](img/docker-git-fedora.png)
@@ -260,6 +262,8 @@ RUN dnf -qy install git
 ![Wyczyszczenie nieużywanych obrazów](img/docker-image-prune.png)
 
 ## 9. Dodanie utworzonego `Dockerfile`a do folderu `Sprawozdanie1` w repozytorium
+
+![Dodanie Dockerfile do repo](img/git-add-dockerfile.png)
 
 ## 10. Wystawienie *Pull Request'a* do gałęzi grupowej jako zgłoszenie wykonanego zadania
 
