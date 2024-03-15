@@ -56,6 +56,7 @@ ssh-keygen -t ecdsa -b 256 -C "your_email@example.com"
 ```
 
 Utworzony klucz: 
+
 ![](ss/2.png)
 
 Dodanie klucza do SSH agenta:
@@ -66,6 +67,7 @@ Uruchomienie agenta jeśli wystepuje 'Could not open a connection to your authen
 ```bash
 eval $(ssh-agent)
 ```
+
 ![](ss/3.png)
  
  Aby dodać klucz do konta na Githubie należy przejść:
@@ -81,7 +83,7 @@ Klonowanie repo poprzez SSH:
 git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
 ```
  
-## Komendy Git
+## Komendy Git z zajęć
 
 - Lista wszystkich gałęzi, zarówno lokalnych, jak i zdalnych.
 ```bash
@@ -148,7 +150,207 @@ Stworzyłam dwa git hooki, jeden walidujący komunikat commita(musi zaczynać si
 
 
 **commit-msg**
+
 ![](ss/4.png)
 
 **pre-push**
+
 ![](ss/5.png)
+
+
+
+# Docker
+
+**Docker to narzędzie do konteneryzacji, umożliwia pakowanie, dostarczanie i uruchamianie aplikacji w izolowanych środowiskach zwanych kontenerami.**
+
+Konteneryzacja polega na pakowaniu aplikacji i wszystkich zależności w kontener który można łatwo uruchamiać na róznych platformach. Kontenery są izolowane od siebie i od hosta, co oznacza że każdy działa w swoim własnym środowisku, niezależnie od innych kontenerów.
+
+Kontener zawiera wszystkie składniki potrzebne do uruchomienia aplikacji, włącznie z kodem źródłowym, zależnościami, bibliotekami systemowymi i środowiskiem wykonawczym. Kontenery są oparte na obrazach Docker'a, które są szablonami zawierającymi wszystkie wymagane elementy do uruchomienia aplikacji. Obrazy Docker'a są tworzone za pomocą plików konfiguracyjnych Dockerfile, które określają kroki potrzebne do zbudowania obrazu.
+
+> Official Docker:  [docker-docs](https://docs.docker.com/get-docker/)
+
+## Docker komendy z zajęć
+
+**Tworzenie nowego kontenera**
+
+
+- Nowy obraz
+```bash
+	docker run IMAGE
+```
+-  Zmiana nazwy obrazu
+```bash
+	docker tag IMAGE_ID nowa_nazwa_obrazu:tag
+```
+-  Mapowanie portów kontenera i uruchomienie obrazu
+```bash
+	docker run -p HOSTPORT:CONTAINERPORT IMAGE
+```
+**Zarządzanie kontenerami**
+
+- Wyświetlanie uruchomionych kontenerów(opcja '-a' wyświetla WSZYSTKIE kontenery)
+```bash
+	docker ps
+```
+- Usuwanie kontenera
+```bash
+	docker rm CONTAINER
+```
+ - Zatrzymywanie kontenera
+ ```bash
+	docker stop CONTAINER
+```
+ - Uruchamianie kontenera
+ ```bash
+	docker start CONTAINER
+```
+
+**Zarządzanie obrazami**
+- Pobieranie obrazu
+```bash
+	docker pull IMAGE[:TAG]
+```
+-  Usuwanie obrazu
+```bash
+	docker rmi IMAGE
+```
+ - Wyświetlanie obrazów
+ ```bash
+	docker images
+```
+ -  Budowanie obrazu na podstawie pliku Dockerfile
+ ```bash
+	docker build DIRECTORY
+```
+ DIRECTORY - ścieżka do pliku Dockerfile
+**Rozwiązywanie problemów i informacje**
+
+-Wyświetlanie logów
+```bash
+	docker logs CONTAINER
+```
+-   Wyświetlanie procesów
+```bash
+	docker top CONTAINER
+```
+ - Wyświetlanie zmapowanych portów
+ ```bash
+	docker port CONTAINER
+```
+
+
+## Pobranie obrazów i ich uruchomienie
+
+Aby pobrać obrazy używamy docker pull, ażeby wyświetlić docker images. Moje pobrane obrazy:
+
+![](ss/6.png)
+
+Aby je uruchomić uzywamy komendy docker run. Aby uruchomić obraz taki jak 'busybox' interaktywnie  dodajemy opcję '-i'.  Aby wywołać numer wersji używamy komendy:
+ ```bash
+	uname -a
+```
+
+![](ss/7.png)
+
+**Uruchomienie systemu w kontenerze**
+
+System, który wybieram to fedora, ponieważ pracuje na ubuntu. 
+
+Uruchamiamy poleceniem:
+ ```bash
+	docker run -it --name my-fedora fedora
+```
+Opcja '-i' umozliwia interaktywny tryb, a '-t' tworzy pseudoterminal.
+
+![](ss/10.png)
+
+Aby zaktualizować pakiety należy użyć :
+ ```bash
+	dnf update
+```
+
+![](ss/8.png)
+
+PID1 w kontenerze odpowiada za inicjalizację i zarządzanie wszystkimi innymi procesami wewnątrz kontenera. Aby zaprezentować 'PID1' w kontenerze fedora używamy komendy(przed musimy zainstalować bibliotekę procps):
+
+ ```bash
+	ps
+```
+
+
+![](ss/9.png)
+
+Procesy na hoście: 
+
+![](ss/11.png)
+
+
+Jak widać procesy w kontenerze zaczynaja się od 'basha' co pokazuje jak izolowany jest system fedory w kontenerze. Powłoka 'bash' jest procesem inicjalizacyjnym dla tego kontenera. 
+ Kontenery Docker są oparte na mechanizmach izolacji jądra systemu Linux, takich jak przestrzenie nazw i grupy kontrolne. Przestrzenie nazw(namespaces) izolują globalne zasoby systemowe, dzięki temu uzyskujemy wrażenie, że każdy kontener działa w swoim własnym odseparowanym środowisku. Grupy kontrolne (cgroups) kontrolują zuzycie zasobów CPU, pamięć, dysk itp.
+
+Procesy w kontenerze widzą tylko zasoby dostępne wewnątrz tego kontenera i są ograniczone przez zasady izolacji nałożone przez Docker Engine lub inny silnik kontenerów.
+
+
+
+Aby wyjść z kontenera wystarczy wpisać 'exit'.
+
+## Tworzenie Dockerfile
+Przy tworzeniu kierujemy się [dobrymi praktykami](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/).
+
+
+  ```bash
+FROM fedora:latest
+	
+RUN dnf install -y git
+
+RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+
+WORKDIR /repos
+
+CMD ["/bin/bash"]
+```
+
+- **FROM fedora:latest**
+ określa, że obraz będzie buowany na bazie najnowszego obrazu Fedory.
+ 
+ - **RUN dnf install -y git**
+  instalacja Gita wewnatrz kontenera, flaga '-y' oznacza automatyczne potwierdzenie pytań związanych z instalacja.
+  
+  - **RUN git clone**
+  klonowanie repozytorium
+  
+  - **WORKDIR /repos**
+   ustawia katalog roboczy w kontenerze na '/repos', co oznacza, że kolejne operacje na plikach bedą wykonywane w tym katalogu
+  
+  - **CMD ["/bin/bash"]**
+   to poleceniedefiniuje domyslną komendę jaka zostanie uruchomiona po uruchomieniu kontenera, w tym wypadku będzie dostepny wiersz poleceń 'bash'.
+
+![](ss/12.png)
+
+Zmiana nazwy i wyświetlenie:
+
+![](ss/13.png)
+
+Zbudowanie obrazu w trybie interaktywnym i pokazanie naszego repo: 
+
+![](ss/14.png)
+
+Pokazanie uruchomionych kontenerów i WSZYTSKICH kontenerów w podanej kolejności:
+
+![](ss/15.png)
+
+Zatrzymanie działających kontenerów i usunięcie ich.
+
+ ```bash
+	docker stop $(docker ps -aq)
+	docker rm $(docker ps -aq)
+	
+```
+
+Usuwanie obrazów:
+
+ ```bash
+	 docker rmi $(docker images -aq)
+```
+
+![](ss/16.png)
