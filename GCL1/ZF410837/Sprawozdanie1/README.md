@@ -14,7 +14,7 @@ Sprawdzenie czy mamy już domyslne zainstalowanego Git klienta i openSSH:
 ssh -V
 git --version
 ```
-![](1)
+![](ss/1.png)
 
 Instalacja klienta Git i SSH w systemie **ubuntu** przebiega w następujący sposób: 
 
@@ -56,7 +56,7 @@ ssh-keygen -t ecdsa -b 256 -C "your_email@example.com"
 ```
 
 Utworzony klucz: 
-![](2)
+![](ss/2.png)
 
 Dodanie klucza do SSH agenta:
 ```bash
@@ -66,7 +66,7 @@ Uruchomienie agenta jeśli wystepuje 'Could not open a connection to your authen
 ```bash
 eval $(ssh-agent)
 ```
-![](3)
+![](ss/3.png)
  
  Aby dodać klucz do konta na Githubie należy przejść:
  
@@ -148,7 +148,7 @@ Stworzyłam dwa git hooki, jeden walidujący komunikat commita(musi zaczynać si
 
 
 **commit-msg**
-![](4)
+![](ss/4.png)
 
 **pre-push**
-![](5)
+![](ss/5.png)
