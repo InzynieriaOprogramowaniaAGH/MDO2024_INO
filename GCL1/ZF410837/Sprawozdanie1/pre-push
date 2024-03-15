@@ -1,0 +1,13 @@
+#!/bin/bash
+
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+
+start_string="ZF410837"
+
+if [[ ! "$current_branch" =~ ^"$start_string" ]]; then
+    echo "pre-push: ERROR! Current branch must start with $start_string."
+    exit 1
+fi
+
+exit 0
