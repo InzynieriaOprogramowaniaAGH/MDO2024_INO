@@ -1,0 +1,8 @@
+#!/bin/bash
+
+COMMIT_MSG_FILE=$1
+
+if ! grep -q '^SK412907' "$COMMIT_MSG_FILE"; then
+    echo >&2 "Brak 'SK412907'na poczatku commita."
+    exit 1
+fi
