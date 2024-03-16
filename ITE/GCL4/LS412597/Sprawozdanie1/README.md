@@ -152,3 +152,31 @@ cp commit-msg ~/MDO2024_INO/.git/hooks
 ```
 
 > Ścieżka docelowa może się różnić, w zależności od tego gdzie zapisane jest repozytorium.
+
+- Spróbuj wciągnąć swoją gałąź do gałęzi grupowej
+
+Po przeniesieniu się na gałąź roboczą grupy przy pomocy polecenia:
+
+```bash
+git checkout GCL4
+```
+
+Możemy spróbować przenieść swoje zmiany na gałęzi do gałęzi roboczej przy pomocy polecenia:
+
+```bash
+git merge LS412597 -m "LS412597 merge"
+```
+
+> Do polecenia dodaję automatycznie message, ponieważ przy zrobieniu merga tworzony jest automatycznie commit, który wymaga podania commit messega
+
+![test git hooka](Images/Zdj6.3.png)
+
+- Zaktualizuj sprawozdanie i wyślij aktualizację do zdalnego źródła
+
+Przy pomocy polecenia:
+
+```bash
+git push
+```
+
+możemy wszystkie nasze zacommitowane zmiany przesłać do zdalnego źródła.
