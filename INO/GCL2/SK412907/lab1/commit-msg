@@ -1,4 +1,4 @@
-#!/bin/bash
+#ORYGINAŁ ZNAJDUJE SIĘ W folderze .git/hooks
 
 COMMIT_MSG_FILE=$1
 
