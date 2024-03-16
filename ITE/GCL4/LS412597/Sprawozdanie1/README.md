@@ -123,4 +123,10 @@ Przez wykorzystanie programu VSC czynnośc ta jest prosta, wystarczy utworzyć k
 
 - Napisz Git hooka - skrypt weryfikujący, że każdy Twój "commit message" zaczyna się od "twoje inicjały & nr indexu".
 
-Bazująć na przykładowych Git hookach znajdujących się w ścieżce .git/hooks/ tworzymy nowy plik.
+Bazująć na przykładowych Git hookach znajdujących się w ścieżce `commit-msg.sample` .git/hooks/ tworzymy nowy plik. Do sprawdzania zawartości commit message wykorzystuję własny regex, który wymaga, aby wiadomość zaczynała się od `LS412597`.
+
+![git hook](Images/Zdj6.2.png)
+
+Jak widać na poniższym zdjęciu hook działa prawidłowo.
+
+![test git hooka](Images/Zdj6.3.png)
