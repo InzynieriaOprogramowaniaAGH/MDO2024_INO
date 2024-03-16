@@ -130,6 +130,18 @@ Zapis '^SK412907' sprawdza czy na początku commit'a znajduje się odpowiedni za
 
 ### 6. Commit przeprowadzonych zmian
 
-Sprawdzamy czy wykonany przez nas hooke działa poprawnie
+Sprawdzamy czy wykonany przez nas hooke działa poprawnie:
 
-### 7. Instalacja Docker'a
+![Test hooke'a](./screeny/testhooke.png)
+
+Jak widać operacja nie doszła do skutku i pojawiła nam się informacja o błędzie.
+
+Poprawnie wykonany commit:
+
+![Poprawny commit](./screeny/commit.png)
+
+### 7. Próba wciągnięcia swojej gałęzi do gałęzi grupowej GCL2
+
+Aby wciągnąć swoją gałąź do gałęzi nadrzędnej (grupowej) należy najpierw przenieść się na tą gałąź:
+
+    git checkout GCL2
