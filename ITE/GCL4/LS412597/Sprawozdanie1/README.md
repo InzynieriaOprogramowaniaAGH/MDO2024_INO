@@ -180,3 +180,20 @@ git push
 ```
 
 możemy wszystkie nasze zacommitowane zmiany przesłać do zdalnego źródła.
+
+> Przed zrobieniem push'a warto sprawdzić czy wszystkie zmiany zostały zacommitowane, dokonać tego możemy przez polecenie:
+>
+> ```bash
+> git status
+> ```
+>
+> Jeśli jakieś zmiany nie zostały zcommitowane, musimy je dodać, a następnie zrobić commita:
+>
+> ```bash
+> git add .
+> git commit -m "<commit message>"
+> ```
+>
+> Powyżesze kroki są wykonywane zawsze przed zrobieniem `git push`
+>
+> > Przy `git add` musimy podać jakie rzeczy powinno nam dodać, znajdując się w głównym katalogu repozytorium można użyc po prostu ., która doda wszystkie wprowadzone zmiany, można również określać konkretne pliki, które chcemy dodać przez wypisanie ich po spacji.
