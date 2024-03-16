@@ -11,5 +11,4 @@ Otrzymane klucze powiązałam z moim kontem na Githubie. Po zalogowaniu na https
 
 Dzięki powiązaniu konta, maszyna wirtualna uzyskała dostęp do GitHuba. Umożliwiło to sklonowanie repozytorium przedmiotu za pomocą komendy: git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git. 
 
-Powiązanie GitHuba z maszyną wirtualną za pomocą SSH ma wiele korzyści:
 
