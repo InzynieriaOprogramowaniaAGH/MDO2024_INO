@@ -123,4 +123,4 @@ Przez wykorzystanie programu VSC czynnośc ta jest prosta, wystarczy utworzyć k
 
 - Napisz Git hooka - skrypt weryfikujący, że każdy Twój "commit message" zaczyna się od "twoje inicjały & nr indexu".
 
-Bazująć na przykładowych Git hookach znajdujących się w ścieżce .git/hooks/ tworzymy nowy plik
+Bazująć na przykładowych Git hookach znajdujących się w ścieżce .git/hooks/ tworzymy nowy plik..
