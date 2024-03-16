@@ -49,6 +49,8 @@ skopiowałam klucz publiczny i dodałam go do mojego konta na platformie Github,
 
 ![](./screeny/ss4)
 
+
+![](./screeny/ss_klucze.png)
 4. Przełączyłam się na gałąź main oraz gałąź grupy - GCL2. Wywołałam polecenie:
 ```
 git branch
