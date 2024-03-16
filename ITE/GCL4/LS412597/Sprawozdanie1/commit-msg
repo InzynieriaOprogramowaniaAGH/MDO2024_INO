@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Regex
+regex="^LS412597.*"
+
+# Pobieranie commit message
+commit_msg=$(cat "$1")
+
+# Sprawdzenie commit message 
+if [[ ! $commit_msg =~ $regex ]]; then
+    echo "Błąd: Commit message nie zaczyna się od LS412597!"
+    exit 1
+fi

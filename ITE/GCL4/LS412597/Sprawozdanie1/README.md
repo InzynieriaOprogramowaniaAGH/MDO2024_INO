@@ -125,8 +125,30 @@ Przez wykorzystanie programu VSC czynnośc ta jest prosta, wystarczy utworzyć k
 
 Bazująć na przykładowych Git hookach znajdujących się w ścieżce `commit-msg.sample` .git/hooks/ tworzymy nowy plik. Do sprawdzania zawartości commit message wykorzystuję własny regex, który wymaga, aby wiadomość zaczynała się od `LS412597`.
 
-![git hook](Images/Zdj6.2.png)
+```bash
+#!/bin/bash
+
+# Regex
+regex="^LS412597.*"
+
+# Pobieranie commit message
+commit_msg=$(cat "$1")
+
+# Sprawdzenie commit message
+if [[ ! $commit_msg =~ $regex ]]; then
+    echo "Błąd: Commit message nie zaczyna się od LS412597!"
+    exit 1
+fi
+```
 
 Jak widać na poniższym zdjęciu hook działa prawidłowo.
 
-![test git hooka](Images/Zdj6.3.png)
+![test git hooka](Images/Zdj6.2.png)
+
+Teraz możemy nasz utwrzony plik przenieść do lokalizacji `.git/hooks/` przy pomocy polecenia:
+
+```bash
+cp commit-msg ~/MDO2024_INO/.git/hooks
+```
+
+> Ścieżka docelowa może się różnić, w zależności od tego gdzie zapisane jest repozytorium.
