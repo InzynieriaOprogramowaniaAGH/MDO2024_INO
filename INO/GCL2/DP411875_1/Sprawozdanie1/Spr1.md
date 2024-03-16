@@ -45,12 +45,14 @@ Klonowanie za pomocą HTTPS jest prostszym sposobem, jednak przy każdym pobiera
 ```
 cat ./.ssh/id_rsa.pub
 ```
-skopiowałam klucz publiczny i dodałam go do mojego konta na platformie Github, wchodząc w ustawienia. Plik "id_rsa.pub" zawierał klucz publiczny SSH. Pozwalało to na modyfikację repozytorium bez uwierzytelniania hasłem. Następnie sklonowałam repozytorium przedmiotu z wykorzystaniem protokołu SSH. 
+skopiowałam klucz publiczny i dodałam go do mojego konta na platformie Github, wchodząc w ustawienia. 
+
+![](./screeny/ss_klucze.png)
+
+Plik "id_rsa.pub" zawierał klucz publiczny SSH. Pozwalało to na modyfikację repozytorium bez uwierzytelniania hasłem. Następnie sklonowałam repozytorium przedmiotu z wykorzystaniem protokołu SSH. 
 
 ![](./screeny/ss4)
 
-
-![](./screeny/ss_klucze.png)
 4. Przełączyłam się na gałąź main oraz gałąź grupy - GCL2. Wywołałam polecenie:
 ```
 git branch
@@ -74,7 +76,7 @@ Wyglądało to następująco:
 
 ![](./screeny/ss7)
 
-6. Rozpoczęłam pracę na nowej gałęzi. W katalogu grupy GCL2 utworzyłam katalog z inicjałami i numerem indeksu oraz "Sprawozdanie1". 
+6. Rozpoczęłam pracę na nowej gałęzi. W katalogu grupy GCL2 utworzyłam katalog z inicjałami i numerem indeksu oraz "Sprawozdanie1". Napisałam git hooke'a, czyli skrypt weryfikujący, że każdy "commit message" zaczynał się od inicjałów i numeru indeksu. Bazowałam się na przykładach zawartych w folderze .git i podfolderze hooks.
 
 
 
