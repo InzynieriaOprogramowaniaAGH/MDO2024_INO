@@ -1,4 +1,4 @@
-Maciej Dziura*
+*Maciej Dziura*
 *IO 409926*
 
 **CEL PROJEKTU**
