@@ -81,5 +81,9 @@ Treść githooke'a wyglądała następująco:
 
 ![](./screeny/hooke.png)
 
+Przy każdym commicie pojawiał się komunikat, w zależności, czy dany commit zaczynał się od: "DP411875_1". Jeśli tak, wyświetlał się komunikat: "Jest ok". W przeciwnym razie: "Błąd: Commit nie zaczyna się od 'DP411875_1'."
+Dokonałam sprawdzenia poprawności tego działania.
+
+![](./screeny/spr.png)
 
 
