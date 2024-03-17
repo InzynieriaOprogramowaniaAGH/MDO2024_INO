@@ -186,15 +186,15 @@ docker pull mysql
 ```
 ## 4. Uruchomienie kontenera z obrazu ```busybox```
 
-'''bash
+```bash
 docker run -it busybox
-'''
+```
 
 Wywołanie numeru wersji uruchomienego kontenera
 
-'''bash
+```bash
 uname -a
-'''
+```
 
 ![ ](./img/20.png)
 
@@ -202,31 +202,31 @@ uname -a
 
 Wypisanie ```PID1``` w kontenerze
 
-'''bash
+```bash
 ps -p 1
-'''
+```
 
 ![ ](./img/21.png)
 
 Wypisanie procesów dockera na hoście
 
-'''bash
+```bash
 ps aux | grep docker
-'''
+```
 
 ![ ](./img/22.png)
 
 Aktualizacja pakietów
 
-'''bash
+```bash
 apt-get update && apt-get upgrade -y
-'''
+```
 
 Wyjście z kontenera
 
-'''bash
+```bash
 exit
-'''
+```
 
 ## 6. Własnoręczne stworzenie, zbudowanie i uruchomienie pliku ```Dockerfile``` bazującego na systemie ```ubuntu```
 
@@ -235,9 +235,9 @@ Instalacja git'a w kontenerze i klonowanie repozytorium
 
 Tworzenie kontenera na podstawie pliku 
 
-'''bash
+```bash
 docker build -t my_ubuntu
-'''
+```
 
 ![ ](./img/26.png)
 
@@ -247,24 +247,24 @@ Sprawdzenie poprawności skopiowanego repozytorium
 
 ## 7. Pokazanie uruchomionych kontenerów oraz wyczyszczenie ich.
 
-'''bash
+```bash
 docker ps -a
-'''
+```
 
 ![ ](./img/28.png)
 
 
-'''bash
+```bash
 docker container prune
-'''
+```
 
 ![ ](./img/29.png)
 
 ## 8. Czyszczenie obrazów
 
-'''bash
+```bash
 docker image prune -a
-'''
+```
 
 ![ ](./img/30.png)
 
@@ -459,15 +459,15 @@ docker pull mysql
 ```
 ## 4. Uruchomienie kontenera z obrazu ```busybox```
 
-'''bash
+```bash
 docker run -it busybox
-'''
+```
 
 Wywołanie numeru wersji uruchomienego kontenera
 
-'''bash
+```bash
 uname -a
-'''
+```
 
 ![ ](./img/20.png)
 
@@ -475,31 +475,31 @@ uname -a
 
 Wypisanie ```PID1``` w kontenerze
 
-'''bash
+```bash
 ps -p 1
-'''
+```
 
 ![ ](./img/21.png)
 
 Wypisanie procesów dockera na hoście
 
-'''bash
+```bash
 ps aux | grep docker
-'''
+```
 
 ![ ](./img/22.png)
 
 Aktualizacja pakietów
 
-'''bash
+```bash
 apt-get update && apt-get upgrade -y
-'''
+```
 
 Wyjście z kontenera
 
-'''bash
+```bash
 exit
-'''
+```
 
 ## 6. Własnoręczne stworzenie, zbudowanie i uruchomienie pliku ```Dockerfile``` bazującego na systemie ```ubuntu```
 
@@ -508,9 +508,9 @@ Instalacja git'a w kontenerze i klonowanie repozytorium
 
 Tworzenie kontenera na podstawie pliku 
 
-'''bash
+```bash
 docker build -t my_ubuntu
-'''
+```
 
 ![ ](./img/26.png)
 
@@ -520,24 +520,24 @@ Sprawdzenie poprawności skopiowanego repozytorium
 
 ## 7. Pokazanie uruchomionych kontenerów oraz wyczyszczenie ich.
 
-'''bash
+```bash
 docker ps -a
-'''
+```
 
 ![ ](./img/28.png)
 
 
-'''bash
+```bash
 docker container prune
-'''
+```
 
 ![ ](./img/29.png)
 
 ## 8. Czyszczenie obrazów
 
-'''bash
+```bash
 docker image prune -a
-'''
+```
 
 ![ ](./img/30.png)
 
