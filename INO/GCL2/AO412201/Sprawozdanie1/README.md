@@ -115,5 +115,111 @@ git push
   
    ![ ](./img/7.png)
 
+  # GIT DOCKER
+  ## 1. Zainstalowanie dockera w środowisku Linux'owym
+  
+```bash
+  sudo snap install docker
+```
+ ![ ](./img/8.png)
 
+  - sprawdzenie zainstalowanej wersji
+```bash
+  docker -- version
+```
+ ![ ](./img/9.png)
+
+## 2. Zarejestrowanie się na stronie Docker Hub 
+``` bash
+  https://hub.docker.com/
+```
+   ![ ](./img/10.png)
+
+ - zalogowanie się do dockera również w terminalu
+``` bash
+  docker login
+```
+- uruchomienie kontenera z obrazem Fedora
+   ![ ](./img/11.png)
+- wyświetlenie listy działających kontenerów
+``` bash
+ docker ps
+```
+   ![ ](./img/12.png)
+## 3. Pobranie obrazów hello-world, busybox, ubuntu, fedora, mysql  
+  - pobranie obrazów
+``` bash
+  docker pull busybox
+  docker pull hello-world
+  docker pull ubuntu
+  docker pull mysql
+```
+   ![ ](./img/13.png)
+
+   - wyświetlenie pobranych obrazów
+  ``` bash
+   docker image ls
+  ```
+  ![ ](./img/14.png)
+
+## 4. Uruchomienie konteneru z obrazu busybox
+- uruchomienie kontenera na podstawie obrazu BusyBox oraz wyświetlenie listy działających kontenerów
+   ``` bash
+   docker run busybox
+   docker ps
+  ```
+ ![ ](./img/15.png)
+
+ - wyświelenie wszytkich kontenerów
+   ``` bash
+   docker ps -a
+  ```
+ ![ ](./img/16.png)
+
+- uruchomienie kontenera z obrazu ubuntu
+    ![ ](./img/17.png)
+  "-it" powoduje, że kontener jest uruchamiany w trybie interaktywnym.
+  - wywołanie numeru wersji wewnątrz kontenera BusyBox
+  ``` bash
+    busybox | head -1
+  ```
+  - opuszczenie kontenera BusyBox
+    ``` bash
+    exit
+    ```
+  - wyświetlenie wszytskich kontenerów
+  ``` bash
+    docker ps -a
+  ```
+  ![ ](./img/18.png)
+
+ 
+  ## 5. Uruchomienie systemu w kontenerze
+
+  - podłączenie się do kontenera interaktywnie i wywołanie numeru wersji
+``` bash
+  docker exec -it <CONTAINER_ID> bin/bash
+```
+gdzie: 
+    aktualizacja pakietów
+    ``` bash
+    apt update && apt upgrade -y
+    ``` 
+    wyjście z kontenera
+    ``` bash
+    exit
+    ``` 
+Napotkane błędy
+ ![ ](./img/19.png)
+
+ Rozwiązaniem było uruchomienie zatrzymanego kontenera
+ 
+  ![ ](./img/20.png)
+
+Poprawnie działająca komenda
+  ![ ](./img/21.png)
+  
+  ## 6. Stworzenie oraz uruchomienie prostego pliku Dockerfile
+  - Podczas tworzenia pliku wzorowano się na wzorze: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
+  - stworzony Dockerfile
 
