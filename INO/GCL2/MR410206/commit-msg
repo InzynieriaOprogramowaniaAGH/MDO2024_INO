@@ -1,4 +1,4 @@
-!/bin/sh
+#!/bin/sh
 
 # Sprawdzenie czy commit zaczyna się od inicjału
 if ! grep -q '^MR410206' "$1"; then
