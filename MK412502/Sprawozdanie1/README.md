@@ -296,7 +296,7 @@ Liste obrazów dockera wypisuje komenda:
 
 Aby je usunąc stosujemy komendę podobną do usuwania kontenerów:
 
-  sudo docker rmi $(sudo docker images -a -q)
+    sudo docker rmi $(sudo docker images -a -q)
 
 Efekt:
 
