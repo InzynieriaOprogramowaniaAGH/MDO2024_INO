@@ -138,7 +138,6 @@ def main():
 
 if __name__ == "__main__":
 	main()
-
 ```
 
 Napisany skrypt skopiowałem do katalogu `.git/hooks` bez rozszerzenia .sample 
@@ -147,6 +146,18 @@ Napisany skrypt skopiowałem do katalogu `.git/hooks` bez rozszerzenia .sample
     <img src="screenshots/ss_12.png" width="700"/>
 </div>
 
+<br>
+
+*Utworzony git hook działa poprawnie*
+
 <div align="center">
     <img src="screenshots/ss_13.png" width="700"/>
+</div>
+
+<div align="center">
+    <img src="screenshots/ss_14.png" width="700"/>
+</div>
+
+<div align="center">
+    <img src="screenshots/ss_15.png" width="700"/>
 </div>
