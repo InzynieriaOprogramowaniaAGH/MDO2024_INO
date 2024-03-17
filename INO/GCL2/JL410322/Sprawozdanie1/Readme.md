@@ -504,6 +504,7 @@ exit
 ## 6. Własnoręczne stworzenie, zbudowanie i uruchomienie pliku ```Dockerfile``` bazującego na systemie ```ubuntu```
 
 Instalacja git'a w kontenerze i klonowanie repozytorium
+
 ![ ](./img/25.png)
 
 Tworzenie kontenera na podstawie pliku 
