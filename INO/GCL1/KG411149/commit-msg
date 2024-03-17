@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 
-commit_msg_file=$1
+COMMIT_MSG_FILE=$1
 
-if !grep -q '^KG411149' "commit_msg_file"; then
-    echo "Błąd: Komunikat commita musi zaczynać się od KG 411149"
+if ! grep -q '^KG411149' "COMMIT_MSG_FILE"; then
+    echo "Błąd: Komunikat commita musi zaczynać się od KG411149"
     exit 1
 fi
