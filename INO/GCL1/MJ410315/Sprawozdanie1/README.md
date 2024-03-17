@@ -17,7 +17,7 @@ Konieczne było pobranie repozytorium za pomocą protokołu HTTPS, które jest o
 Aby poprawnie móc zweryfikować tożsamość należało podać odpowiednie dane poprzez:
 
 ```
-git config --global user.email "m.jurzak18@gmail.com"
+git config --global user.email "m.jurzak1@gmail.com"
 git config --global user.name "michaljurzak1"
 ```
 
@@ -173,6 +173,8 @@ git push
 ## Git, Docker
 
 Docker to narzędzie pozwalające na dostarczanie platformy lub środowiska jako produkt w zwirtualizowanej postaci. Pozwala na automatyczne wdrażanie aplikacji w postaci kontenerów, co pozwala na wydajną pracę w różnych środowiskach w izolacji.
+
+W tym zadaniu zapoznamy się z podstawowymi pojęciami związanymi z dockerem takimi jak obrazy, kontenery i komendy pozwalające na tworzenie i/lub uruchamianie orazów i kontenerów.
 
 ### Wykonanie
 
@@ -383,3 +385,7 @@ Obecnie struktura mojego folderu wygląda następująco:
 └── commit-msg # git hook
 
 ``` 
+
+# Podsumowanie
+
+W tych laboratoriach nauczyliśmy się podstawowej obsługi narzędzi git, ssh oraz docker. Te narzędzia są niezwykle przydatne a niektóre wręcz niezbędne w funkcjonowaniu nowoczesnego systemu wdrażania aplikacji.
