@@ -142,7 +142,7 @@ Wciągnięcie do gałęzi grupowej polegało na zmergowaniu gałęzi osobistej d
 ![](zrzuty_ekranu_docker/install_docker.png)
 
 ## Rejestracja w Docker Hub
-![](zrzuty_ekranu_docker/image.png)
+![](zrzuty_ekranu_docker/dockerhub.png)
 
 ## Pobranie obrazów z instrukcji
 ![](zrzuty_ekranu_docker/install_busybox_emptyimages.png)
