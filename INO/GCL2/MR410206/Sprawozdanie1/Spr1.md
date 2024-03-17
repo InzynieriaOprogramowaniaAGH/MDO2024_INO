@@ -11,22 +11,22 @@ Pierwszym krokiem było zainstalowanie Ubuntu na maszynie wirtualnej, podczas in
 git --version
 ```
 Po wpisaniu tej komendy powinna się wyświetlić aktualna wersja Gita.
-![](./Screeny/1.1.1.png) 
+![](../Screeny/1.1.1.png) 
 Sytuacja dotycząca zarządzania kluczami SSH jest bardzo podobna. Jeśli wcześniej zdecydowaliśmy się na instalację OpenSSH, nie powinniśmy napotkać żadnych problemów z obsługą kluczy. W końcu stanowi to element protokołu SSH.
-![](./Screeny/1.1.1.png)
+![](../Screeny/1.1.2.png)
 ### 2. Klonowanie repozytorium za pomocą protokołu HTTPS i personal access token
 Aby prawidłowo skopiować repozytorium za pomocą protokołu HTTPS wykorzystano poniższą komendę. 
 ```
 git clone link_https_do_repozytorium
 ```
 Polenie w terminalu wyglądało następująco:
-![](./Screeny/1.2.1.png)
+![](../Screeny/1.2.1.png)
 Kolejnym krokiem tego zadanie było utworzneie na swoim koncie token, który wykorzystano do osobnego sklonowania repozytorium. Token został utworzony w utawieniach a następnie w ścieżce Developer settings -> Personal access tokens -> Fine-grained tokens. 
 ```
 git clone https://wygenerowany_token@dalsza_czesc_linku_skopiowanego_z_githuba
 ```
 Przy pomocy powyższego polecenia wykonano klonowanie repozytorium. Poniższy screen przedstawia wykonanie tego klonowania.
-![](./Screeny/1.2.2.png)
+![](../Screeny/1.2.2.png)
 ### 3. Klonowanie repozytorium za pomocą protokołu SSH
 Kolejnym zadanie polegało na utworzeniu klucza SSH. W celu utworzenia go użyto nastepyjącego polcenia.
 ```
@@ -37,11 +37,11 @@ Następnie użyto poniższego polecenia w celu wyświetlenia zawartości publicz
 cat ./.ssh/id_rsa.pub
 ```
 Poniższy screen przedstawia wykonane zadanie.
-![](./Screeny/1.3.1.png)
-Nastepnie klucz publiczny został skopiowany i dodany do konta na Githubie
-![](./Screeny/1.3.2.png)
+![](../Screeny/1.3.1.png)
+Następnie klucz publiczny został skopiowany i dodany do konta na Githubie
+![](../Screeny/1.3.2.png)
 Plik "id_rsa.pub" miał w sobie zapisany publiczny klucz SSH, co umożliwiało zmiany w repozytorium bez potrzeby autoryzacji za pomocą hasła. Zostało to wykonane za pomocą poniższego polecenia.
-![](./Screeny/1.3.3.png)
+![](../Screeny/1.3.3.png)
 ### 4. Utworzenie i przełączenie się na swoją indywidualną gałąź
 Moja osobista gałąź będzie miała nazwę MR410206. Przy klonowaniu repozytorium automatycznie znajdujemy się na gałęzi "main". W celu przełączenia się na inną gałąź użyłem poniższego polecenia.
 ```
@@ -52,19 +52,20 @@ Aby utworzyć nową gałąź wystarczy dodać opcje -b. Przy tworzeniu nowej ga�
 git branch
 ```
 Poniżej znajduje się screen z wykonania nowej gałęzi. 
-![](./Screeny/1.4.1.png)
+![](../Screeny/1.4.1.png)
 ### 5. Utworzenie Git hook
 W tym zadaniu należało utworzyć własny skrypt, który sprawdza poprawność commit message przed wykonaniem funkcji commit. W celu wykonania tego podpunktu wzorowałem się na git hook'u z folderu .git/hooks.
 Na początku został utworzony plik o nazwie commit-msg we wcześniej utworzonym katalogu MR410206 oraz przekopiowano go w miejsca gdzie będzie on aktywowany na każdym poziomie, nie tylko w moim folderze. Czyli został on przekopiowany do folderu .git/hooks. Poniższy screen przedstawia opisane kroki.
-![](./Screeny/1.5.1.png)
+![](../Screeny/1.5.1.png)
 Za pomoca poniższego polecenia zostały dodane odpowiednie uprawnienia.
 ```
 chmod +x commit-msg
 ```
-![](./Screeny/1.5.2.png)
-![](./Screeny/1.5.4.png)
+![](../Screeny/1.5.2.png)
+Powyższy screen przedstawia wykonanie komendy "chmod".
+![](../Screeny/1.5.4.png)
 Utworzony Git hook analizuje treść wiadomości wprowadzonej podczas wykonywania commita, porównując ją do wzoru składającego się z moich inicjałów i numeru legitymacji czyli MR410206. W przypadku, gdy treść wiadomości nie zgadza się z tym schematem, pojawia się komunikat o błędzie. Natomiast, jeżeli wiadomość spełnia wymagania formatu, commit jest realizowany bez problemów. Poniższy screen przedstawia efekty uruchomienia git hook'a.
-![](./Screeny/1.5.3.png)
+![](../Screeny/1.5.3.png)
 ### 6. Napisanie sprawozdania
 Sprawozdanie wykonano w formacie markdown, a umieszczono je w katalogu MR410206. Zrzuty ekranu będą dodawane jako zdjęcia inline. Zdjęcia tworzą się przy użyciu zapisu.
 ```
@@ -90,5 +91,44 @@ Polecenie to przenosi zmiany z obszaru roboczego do lokalnego repozytorium.
 ```
 git push origin "nazwa_gałęzi"
 ```
-![](./MR410206/Screeny/1.6.3.png)
+![](../Screeny/1.6.3.png)
 Ta komenda przenosi zmiany z lokalnego do zdalnego repozytorium, w ten sposób zmiany zostaną opublikowane i udostępnione. Dzięki powyższemu poleceniu można wysłać zniany  na konkretną gałąź.
+# Część druga Docker
+### 1. Instalacja Docker w systemie linuksowym
+Zadanie polegało na zainstalowaniu Dockera, zostało to wykonane przy pomocy poniższej komendy.
+```
+sudo zypper install docker
+```
+Następnie została uruchomiona instalacja przy pomocy poniższego polecenia.
+```
+sudo apt install docker.io
+```
+Poniższa komenda służy do wyświetlenia aktualnego statusu usługi Docker.
+```
+cudo systemctl status docker
+```
+Poniższy screen przedstawia działanie komendy systemctl status docker, dzięki czemu możemy wnioskować że Docker został dobrze zainstalowany.
+![](../Screeny/2.1.1.png)
+### 2. Rejestracja w systemie Docker Hub
+Kolejnym zadaniem było zalogowanie się do systemu Docker Hub, który jest największą społecznością i repozytorium, gdzie 
+można przechowywać obrazy Dockera.
+![](../Screeny/2.2.1.png)
+### 3. Pobranie obrazów
+Następne zadanie polegało na pobraniu obrazów hello-world, busybox, ubuntu, mysql. Zostałoto wykonane przy pomocy poniższej komendy.
+```
+docker pull <nazwa_obrazu>
+```
+Poniższe screeny przedstawiają ściągnięcie podanych obrazów.
+![](../Screeny/2.3.1.png)
+![](../Screeny/2.3.2.png)
+![](../Screeny/2.3.3.png)
+### 4. Uruchomienie kontenera z obrazu busybox
+Ogólną komendą do uruchamiania obrazu jest poniższe polecenie.
+```
+docker run <nazwa_obrazu>
+```
+Poniższa komenda udowadnia, że kontener został uruchomiony. Funkcja --all pozwala zobaczyć wszystkie kontenery działające i niedziałające.
+```
+docker container list --all
+```
+![](../Screeny/2.4.1.png)
