@@ -90,5 +90,5 @@ Polecenie to przenosi zmiany z obszaru roboczego do lokalnego repozytorium.
 ```
 git push origin "nazwa_gałęzi"
 ```
-![](./Screeny/1.6.3.png)
+![](./MR410206/Screeny/1.6.3.png)
 Ta komenda przenosi zmiany z lokalnego do zdalnego repozytorium, w ten sposób zmiany zostaną opublikowane i udostępnione. Dzięki powyższemu poleceniu można wysłać zniany  na konkretną gałąź.
