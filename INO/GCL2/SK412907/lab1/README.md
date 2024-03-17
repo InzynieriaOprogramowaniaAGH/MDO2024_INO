@@ -145,3 +145,145 @@ Poprawnie wykonany commit:
 Aby wciągnąć swoją gałąź do gałęzi nadrzędnej (grupowej) należy najpierw przenieść się na tą gałąź:
 
     git checkout GCL2
+
+
+
+
+### 8. Zainstalowanie Docker'a
+
+Docker'a instalujemy za pomocą komendy:
+
+    sudo apt install docker
+
+Następnie, aby usprawnić operowanie nim dodałem go do grupy, w której znajduje się aktualnie używane przeze mnie konto użytkownika. Użyłem do tego komend:
+
+    sudo groupadd docker
+    sudo gpasswd -a $USER docker
+    newgrp docker
+
+### 9. Pobieranie obrazów
+
+Następnie pobrałem ze strony Docker'a obrazy: hello-world, busybox, ubuntu i mysql. Przed przystąpieniem do tej czynności zarejestrowałem się na stronie Docker'a i przeczytałem informacje dotyczące powyższych obrazów. Pobieranie następuje po podaniu komendy:
+
+    docker pull nazwa_obrazu
+
+Czyli w moim przypadku:
+
+    docker pull hello-world
+    docker pull busybox
+    docker pull ubuntu
+    docker pull mysql
+
+![Pull hello-world](./screeny/pull_helloworld.png)
+
+Pobrane obrazy można sprawdzić poprzez użycie komendy 
+
+    docker images
+
+![Docker images](./screeny/images.png)
+
+### 10. Uruchamianie kontenerów
+
+Kontenery uruchamiane są przy pomocy komendy:
+
+    docker run nazwa_kontenera
+
+Wedle instrukcji należało uruchomić kontener busybox. Można to zrobić na dwa sposoby:
+
+1. Podstawowy sposób, który od razu kończy działanie uruchamianego kontenera:
+
+    docker run busybox
+
+![Run busybox](./screeny/run_busybox.png)
+
+Uruchomienie busybox'a w taki sposób nie wyświetla nic na ekranie jednak przy pomocy komendy:
+
+    docker container list --all
+
+![Container list](./screeny/container_list.png)
+
+możemy zauważyć, że busybox zakończył swoje działanie.
+
+2. Uruchomienie interaktywnie dopisując -it:
+
+    docker run -it busybox
+
+Uruchamianie interaktywne pozwala nam na poruszanie się wewnątrz kontenera. Do wywołania numeru wersji busybox'a używamy komendy (po odpaleniu busybox'a interaktywnie):
+
+    cat --help
+
+![Run busybox -it](./screeny/runit_busybox.png)
+
+Z kontenera wychodzimy za pomocą:
+
+    exit
+
+Następnie mieliśmy uruchomić "system w kontenerze". W moim przypadku jest to wcześniej pobrane ubuntu. Dla tego etapu uruchomiłem drugi terminal, aby monitorować działanie tego kontenera. Uruchomiłem kontener ubuntu:
+
+    docker run -it ubuntu
+
+![Run ubuntu -it](./screeny/run_ubuntu.png)
+
+Widok z drugiego terminala po uruchomieniu:
+
+![Container ubuntu](./screeny/container_ubuntu.png)
+
+Kolejnym punktem było pokazanie PID1 i zaprezentowanie procesów dockera na hoscie. Do tego wykorzystamy funkcję:
+
+    ps -aux
+
+Poszykiwany przez nas element znajduje się pod numerem procesu 1:
+
+![ps -aux](./screeny/ps_aux.png)
+
+Do sprawdzenia procesów na hoscie wywołujemy listę działąjących kontenerów. Z niej wybieramy ID interesującego nas kontenera i przy pomocy komendy:
+
+    docker top ID_kontenera
+
+otrzymujemy listę procesów.
+
+![Procesy](./screeny/procesy.png)
+
+Następnie przeszliśmy do zaaktualizowania pakietów. Dokonujemy tego poprzez wpisanie komend:
+
+    apt update
+
+![Apt update](./screeny/apt_update.png)
+
+która pokazuje nam możliwe aktalizacje. Potem wpisujemy:
+
+    apt upgrade
+
+![Apt upgrade](./screeny/apt_upgrade.png)
+
+i potwiedzamy chęć aktualizacji pakietów.
+
+Na koniec wychodzimy z kontenera przy pomocy:
+
+    exit
+
+### 11. Tworzenie pliku Dockerfile
+
+Następnym krokiem naszego laboratorium było stworzenie pliku Dockerfile bazującym na wybranyn systemie, który ma sklonować nasze repoztyorium. W moim przypadku będzie to również ubuntu. Przed przystąpieniem do jakichkolwiek działań informacje o dobrych praktykach z linku umieszczonego w opisie zadania.
+
+Na początku naszego pliku umieszczamy zapis:
+
+    FROM ubuntu:latest
+
+który sprawia, że wykorzystujemy ostatnią wersję ubuntu.
+
+Następnie aktualizujemy pakiety i zapwniamy, aby obraz miał git'a. W tym celu dodajemy komendę:
+
+     RUN apt-get update && apt-get install -y git ssh
+
+
+
+### 12. Czyszczenie kontenerów i obrazów
+
+Wykonywane jest poprzez komendę:
+
+    docker rmi $(docker images -a -q)
+
+### 13. Wystawienie Pull Request'a
+
+Pull request'a wykonałem po wykonananiu wszystkich wymaganych kroków. Przy tej operacji ważne jest, aby jako gałąź, do której wystawiamy zapytanie wybrać gałąź swojej grupy.
