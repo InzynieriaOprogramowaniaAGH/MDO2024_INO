@@ -132,3 +132,69 @@ Później commit mógł się odbyć bez przeszkód. Globalna konfiguracja przesz
 Wciągnięcie do gałęzi grupowej polegało na zmergowaniu gałęzi osobistej do gałęzi grupowej z poziomu tej grupowej.
 
 ![](zrzuty_ekranu/image.png)
+
+---
+
+---
+
+## Instalacja Dockera w systemie linuksowym
+
+![](zrzuty_ekranu_docker/install_docker.png)
+
+## Rejestracja w Docker Hub
+![](zrzuty_ekranu_docker/image.png)
+
+## Pobranie obrazów z instrukcji
+![](zrzuty_ekranu_docker/install_busybox_emptyimages.png)
+
+![](zrzuty_ekranu_docker/install_ubuntu_mysql.png)
+
+![](zrzuty_ekranu_docker/all_images.png)
+
+## Uruchomienie kontenera z obrazu busybox
+
+![](zrzuty_ekranu_docker/run_busybox_empty.png)
+
+![](zrzuty_ekranu_docker/run_busybox.png)
+
+![](zrzuty_ekranu_docker/version_busybox.png)
+
+## Uruchomienie kontenera z obrazu ubuntu
+
+![](zrzuty_ekranu_docker/run_ubuntu_it.png)
+
+![](zrzuty_ekranu_docker/check_status_container.png)
+
+![](zrzuty_ekranu_docker/another_method_ps.png)
+
+![](zrzuty_ekranu_docker/update.png)
+
+![](zrzuty_ekranu_docker/upgrade1.png)
+
+![](zrzuty_ekranu_docker/upgrade2.png)
+
+![](zrzuty_ekranu_docker/wyjscie_z_ubuntu1.png)
+
+## Stworzenie prostego pliku Dockerfile
+
+![](zrzuty_ekranu_docker/Dockerfile.png)
+
+![](zrzuty_ekranu_docker/docker_build.png)
+
+![](zrzuty_ekranu_docker/docker_images_after.png)
+
+![](zrzuty_ekranu_docker/interaktywny_image.png)
+
+![](zrzuty_ekranu_docker/git_contener.png)
+
+## Czyszczenie kontenerów i obrazów 
+
+![](zrzuty_ekranu_docker/ps-a.png)
+
+![](zrzuty_ekranu_docker/remove_containers.png)
+
+![](zrzuty_ekranu_docker/remove_images.png)
+
+## Dodanie Dockerfile do folderu ze sprawozdaniem
+
+![](zrzuty_ekranu_docker/image.png)
