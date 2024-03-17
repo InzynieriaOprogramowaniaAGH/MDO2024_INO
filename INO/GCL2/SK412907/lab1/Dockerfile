@@ -1,5 +1,4 @@
-
-FROM ubuntu:latest
+FROM ubuntu
 
 RUN apt-get update && apt-get install -y git ssh
 ARG SSH_PRIVATE_KEY

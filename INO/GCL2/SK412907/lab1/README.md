@@ -146,8 +146,7 @@ Aby wciągnąć swoją gałąź do gałęzi nadrzędnej (grupowej) należy najpi
 
     git checkout GCL2
 
-
-
+???
 
 ### 8. Zainstalowanie Docker'a
 
@@ -264,26 +263,7 @@ Na koniec wychodzimy z kontenera przy pomocy:
 
 ### 11. Tworzenie pliku Dockerfile
 
-Następnym krokiem naszego laboratorium było stworzenie pliku Dockerfile bazującym na wybranyn systemie, który ma sklonować nasze repoztyorium. W moim przypadku będzie to również ubuntu. Przed przystąpieniem do jakichkolwiek działań informacje o dobrych praktykach z linku umieszczonego w opisie zadania.
-
-Na początku naszego pliku umieszczamy zapis:
-
-    FROM ubuntu:latest
-
-który sprawia, że wykorzystujemy ostatnią wersję ubuntu.
-
-Następnie aktualizujemy pakiety i zapwniamy, aby obraz miał git'a. W tym celu dodajemy komendę:
-
-     RUN apt-get update && apt-get install -y git ssh
-
-
-
 ### 12. Czyszczenie kontenerów i obrazów
-
-Wykonywane jest poprzez komendę:
-
-    docker rmi $(docker images -a -q)
 
 ### 13. Wystawienie Pull Request'a
 
-Pull request'a wykonałem po wykonananiu wszystkich wymaganych kroków. Przy tej operacji ważne jest, aby jako gałąź, do której wystawiamy zapytanie wybrać gałąź swojej grupy.
