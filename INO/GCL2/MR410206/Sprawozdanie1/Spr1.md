@@ -11,7 +11,7 @@ Pierwszym krokiem było zainstalowanie Ubuntu na maszynie wirtualnej, podczas in
 git --version
 ```
 Po wpisaniu tej komendy powinna się wyświetlić aktualna wersja Gita.
-![](./Screeny/1.1.1.png)
+![](./Screeny/1.1.1.png) 
 Sytuacja dotycząca zarządzania kluczami SSH jest bardzo podobna. Jeśli wcześniej zdecydowaliśmy się na instalację OpenSSH, nie powinniśmy napotkać żadnych problemów z obsługą kluczy. W końcu stanowi to element protokołu SSH.
 ![](./Screeny/1.1.1.png)
 ### 2. Klonowanie repozytorium za pomocą protokołu HTTPS i personal access token
