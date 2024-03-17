@@ -8,7 +8,7 @@ Naszym celem jest sprawdzenie czy śrowodowisko jest dobrze przygotowane, zaznaj
 Podczas projektu wykonałem klonowanie repozytorium dwoma sposobami, konfiguracje kluczy ssh na swoim koncie github i serwerze ubuntu. Stworzyłem także gałąź na której będę pracować na tych zajęciach, odpowiedni folder oraz nauczyłem się używać wszystkich potrzebnych komend związanych z gitem.
 Stworzyłem także sprawozdanie, w którym opisuje kroki swojego postępowania i aktualizowałem je na bieżąco.
 
-Nauczyłem się co to jest docker, do czego służy oraz co to są obrazy. Pobierałem potrzebne obrazy, uruchamiałem je i wykonywałem w nich odpowiednie polecenia. Stworzyłem także własny plik Dockerfile, który uwzględnia tworzenie systemu ubuntu z odrazu sklonowanym repozytorium przedmiotu. Na samym końcu nauczyłem się czyścić obrazy oraz uruchomione kontenery.
+Nauczyłem się co to jest docker, do czego służy oraz co to są obrazy. Pobierałem potrzebne obrazy, uruchamiałem je i wykonywałem w nich odpowiednie polecenia. Stworzyłem także własny plik Dockerfile, który uwzględnia tworzenie systemu ubuntu z od razu sklonowanym repozytorium przedmiotu. Na samym końcu nauczyłem się czyścić obrazy oraz uruchomione kontenery.
 
 ## Wykonane kroki z zajęć 1
 ### 1. Zainstalowanie klienta Git i obsługi kluczy SSH.
@@ -326,7 +326,7 @@ Pierwsze uruchomienie kontenera z obrazu **busybox** wykonałem poprzez:
 
     ![Dzialanie busybox](./screenshots/Z2_K4_1.png)
 
-- #### Podłączenie **interaktywne** do kontenera do konktenera oraz wywyłąnie numeru wersji.
+- #### Podłączenie **interaktywne** do kontenera oraz wywołanie numeru wersji.
 
     Podłączenie interaktywne do kontenera pozwala nam wykonywać w nim komendy, podczas gdy kontere jest w stanie **running**, czyli kiedy działa.
 
@@ -432,7 +432,7 @@ Zaczyna się on więc od:
 
         RUN apt-get update && apt-get install -y git ssh
 
-    Kolejnym krokiem będzie pobranie argumentu, który będzie dodawać podczas budowania projektu. Będzie to prywatny klucz, dzięki któremu sklonujemy nasze repozytorium.
+    Kolejnym krokiem będzie pobranie argumentu, który będziemy dodawać podczas budowania projektu. Będzie to prywatny klucz, dzięki któremu sklonujemy nasze repozytorium.
 
         ARG SSH_PRIVATE_KEY
 
