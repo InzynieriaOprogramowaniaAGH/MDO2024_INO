@@ -11,22 +11,22 @@ Pierwszym krokiem było zainstalowanie Ubuntu na maszynie wirtualnej, podczas in
 git --version
 ```
 Po wpisaniu tej komendy powinna się wyświetlić aktualna wersja Gita.
-<scren>
+![](./Screeny/1.1.1.png)
 Sytuacja dotycząca zarządzania kluczami SSH jest bardzo podobna. Jeśli wcześniej zdecydowaliśmy się na instalację OpenSSH, nie powinniśmy napotkać żadnych problemów z obsługą kluczy. W końcu stanowi to element protokołu SSH.
-<screen>
+![](./Screeny/1.1.1.png)
 ### 2. Klonowanie repozytorium za pomocą protokołu HTTPS i personal access token
 Aby prawidłowo skopiować repozytorium za pomocą protokołu HTTPS wykorzystano poniższą komendę. 
 ```
 git clone link_https_do_repozytorium
 ```
 Polenie w terminalu wyglądało następująco:
-<screen>
+![](./Screeny/1.2.1.png)
 Kolejnym krokiem tego zadanie było utworzneie na swoim koncie token, który wykorzystano do osobnego sklonowania repozytorium. Token został utworzony w utawieniach a następnie w ścieżce Developer settings -> Personal access tokens -> Fine-grained tokens. 
 ```
 git clone https://wygenerowany_token@dalsza_czesc_linku_skopiowanego_z_githuba
 ```
 Przy pomocy powyższego polecenia wykonano klonowanie repozytorium. Poniższy screen przedstawia wykonanie tego klonowania.
-<screen>
+![](./Screeny/1.2.2.png)
 ### 3. Klonowanie repozytorium za pomocą protokołu SSH
 Kolejnym zadanie polegało na utworzeniu klucza SSH. W celu utworzenia go użyto nastepyjącego polcenia.
 ```
@@ -37,11 +37,11 @@ Następnie użyto poniższego polecenia w celu wyświetlenia zawartości publicz
 cat ./.ssh/id_rsa.pub
 ```
 Poniższy screen przedstawia wykonane zadanie.
-<screen>
+![](./Screeny/1.3.1.png)
 Nastepnie klucz publiczny został skopiowany i dodany do konta na Githubie
-<screen>
+![](./Screeny/1.3.2.png)
 Plik "id_rsa.pub" miał w sobie zapisany publiczny klucz SSH, co umożliwiało zmiany w repozytorium bez potrzeby autoryzacji za pomocą hasła. Zostało to wykonane za pomocą poniższego polecenia.
-<screen>
+![](./Screeny/1.3.3.png)
 ### 4. Utworzenie i przełączenie się na swoją indywidualną gałąź
 Moja osobista gałąź będzie miała nazwę MR410206. Przy klonowaniu repozytorium automatycznie znajdujemy się na gałęzi "main". W celu przełączenia się na inną gałąź użyłem poniższego polecenia.
 ```
@@ -52,18 +52,19 @@ Aby utworzyć nową gałąź wystarczy dodać opcje -b. Przy tworzeniu nowej ga�
 git branch
 ```
 Poniżej znajduje się screen z wykonania nowej gałęzi. 
-<screen>
+![](./Screeny/1.4.1.png)
 ### 5. Utworzenie Git hook
 W tym zadaniu należało utworzyć własny skrypt, który sprawdza poprawność commit message przed wykonaniem funkcji commit. W celu wykonania tego podpunktu wzorowałem się na git hook'u z folderu .git/hooks.
 Na początku został utworzony plik o nazwie commit-msg we wcześniej utworzonym katalogu MR410206 oraz przekopiowano go w miejsca gdzie będzie on aktywowany na każdym poziomie, nie tylko w moim folderze. Czyli został on przekopiowany do folderu .git/hooks. Poniższy screen przedstawia opisane kroki.
-<screen>
+![](./Screeny/1.5.1.png)
 Za pomoca poniższego polecenia zostały dodane odpowiednie uprawnienia.
 ```
 chmod +x commit-msg
 ```
-<screen_skryptu>
+![](./Screeny/1.5.2.png)
+![](./Screeny/1.5.4.png)
 Utworzony Git hook analizuje treść wiadomości wprowadzonej podczas wykonywania commita, porównując ją do wzoru składającego się z moich inicjałów i numeru legitymacji czyli MR410206. W przypadku, gdy treść wiadomości nie zgadza się z tym schematem, pojawia się komunikat o błędzie. Natomiast, jeżeli wiadomość spełnia wymagania formatu, commit jest realizowany bez problemów. Poniższy screen przedstawia efekty uruchomienia git hook'a.
-<screen>
+![](./Screeny/1.5.3.png)
 ### 6. Napisanie sprawozdania
 Sprawozdanie wykonano w formacie markdown, a umieszczono je w katalogu MR410206. Zrzuty ekranu będą dodawane jako zdjęcia inline. Zdjęcia tworzą się przy użyciu zapisu.
 ```
@@ -89,4 +90,5 @@ Polecenie to przenosi zmiany z obszaru roboczego do lokalnego repozytorium.
 ```
 git push origin "nazwa_gałęzi"
 ```
+![](./Screeny/1.6.3.png)
 Ta komenda przenosi zmiany z lokalnego do zdalnego repozytorium, w ten sposób zmiany zostaną opublikowane i udostępnione. Dzięki powyższemu poleceniu można wysłać zniany  na konkretną gałąź.
