@@ -237,7 +237,8 @@ git push
 
 #### 8. Aktualizacja zdalnego repozytorium
 
-Ostatnia aktualizacja polegała na dodaniu zmian i wysłaniu ich do źródła z zastosowaniem poznanych już wcześniej komend:
+Początkowo miałam problem z aktualizacją, ponieważ repozytoria zdalne i lokalne nie zgadzały się ze względu na treść (np. w jednym repozytorium były zdjęcia, a w drugich nie). Aby znów korzystać ze wspólnej zawartości obu repozytoriów, zastosowałam komendę *git merge*. 
+Dzięki temu każda kolejna aktualizacja polegała na dodaniu zmian i wysłaniu ich do źródła z zastosowaniem poznanych już wcześniej komend:
 
 ```
 git add .
@@ -317,9 +318,19 @@ Wszystkie pobrane obrazy można sprawdzic poprzez *docker images*. Na ekranie mo
 
 #### 4. Uruchomienie kontenera z obrazu *busybox*
 
-####
+*Efekt uruchomienia kontenera*
+
+Znana już komenda *docker run* oraz wykorzystanie:
+
+```
+docker container list --all
+```
+
+udowadnia, że kontener został uruchomiony, jednak teraz jest już nieaktywny. Funkcja *--all* pozwala zobaczyć wszystkie kontenery - te działające i nie.
 
 ![ ](./ss/docker_ss4.png)
+
+*Interaktywne podłączenie się do kontenera* 
 
 Wykorzystałam tutaj interaktywne uruchomienie obrazu:
 
@@ -401,7 +412,7 @@ Powyższy plik napisałam kierując się dobrymi praktykami:
 
 **WORKDIR /repo** ustawia katalog roboczy na `/repo`. Wszystkie późniejsze polecenia będą wykonywane w tym katalogu.
 
-**CMD ["/bin/bash"]** ustawia domyślne polecenie dla kontenera na `/bin/bash`. Jeśli nie zostanie podane inne polecenie w linii poleceń przy uruchamianiu kontenera, kontener automatycznie uruchomi interaktywny terminal Bash.
+**ENTRYPOINT ["/bin/bash"]** ustawia domyślne polecenie dla kontenera na `/bin/bash`. Jeśli nie zostanie podane inne polecenie w linii poleceń przy uruchamianiu kontenera, kontener automatycznie uruchomi interaktywny terminal Bash.
 
 Budowanie obrazu na podstawie pliku Dockerfile:
 
@@ -466,6 +477,6 @@ Ja wykorzystałam funkcje:
 
 #### 9. Pull Request do gałęzi grupowej jako zgłoszenie wykonania zadania
 
-Po wykonaniu wszystkich poleceń w obu instrukacjach zdalnie, zaktualizowałam swoją gałąź z lokalnym repozytorium.
+Po wykonaniu wszystkich poleceń w obu instrukacjach zdalnie, zaktualizowałam swoją gałąź z lokalnym repozytorium. Sprawozdanie napisałam w programie MarkText - jest tam opcja zapisania pliku w formacie Markdown, co bardzo ułatwiło mi sprawę. 
 
 *Pull request* jest żądaniem o sprawdzenie oraz zatwierdzenie zmian wprowadzonych przez programistę do istniejącego repozytorium kodu. Głównym celem *pull requestu* jest umożliwienie innym członkom zespołu przeglądnięcie proponowanych zmian, dostarczenie informacji zwrotnej oraz ewentualne zatwierdzenie lub odrzucenie tych zmian.
