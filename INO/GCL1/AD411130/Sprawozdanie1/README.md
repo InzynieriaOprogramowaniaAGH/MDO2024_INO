@@ -51,7 +51,7 @@ Klucz pierwszy bez zabezpieczenia:
 
 3. Wklejamy dostępny klucz z pliku podanego w linii poleceń do GitHub'owej zakładki z kluczami SSH i zatwierdzamy.
 
-![](zrzuty_ekranu/obsługa_kluczy.png)
+![](zrzuty_ekranu/obsluga_kluczy.png)
 
 W tym momencie bez problemu możemy klonować repozytorium za pomocą kodu GitHub dedykowanego dla połączeń SSH.
 
@@ -98,7 +98,7 @@ W tym celu kopiujemy utworzony commit_msg do wspomnianego folderu oraz używamy 
 
 Pozytywny skutek nadania uprawnień w prosty sposób można wyświetlić na pasku plików, gdzie przy pliku wykonywalnym widnieje znak '$'. Plik jest również w folderze przez nas stworzonym. 
 
-![](zrzuty_ekranu/exec_file.png)
+![](zrzuty_ekranu/exec_file_commitmsg.png)
 
 Testowanie działania skryptu poprzez próbę zacommitowania bez inicjałów i z inicjałami.
 Obserwujemy poprawne wyświetlenie błędu w trakcie próby commitu bez inicjałów.
