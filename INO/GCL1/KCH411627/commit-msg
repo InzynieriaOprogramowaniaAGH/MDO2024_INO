@@ -1,0 +1,19 @@
+#!/bin/python3
+
+import sys
+
+def main():
+	with open(sys.argv[1], 'r') as file:
+		lines = file.readlines()
+		first_line = lines[0]
+		first_word = first_line.split(" ")[0].strip('\n')
+		
+		if first_word != "KCH411627":
+			print("Commit should start with: KCH411627")
+			sys.exit(1)
+
+	sys.exit(0)
+
+if __name__ == "__main__":
+	main()
+
