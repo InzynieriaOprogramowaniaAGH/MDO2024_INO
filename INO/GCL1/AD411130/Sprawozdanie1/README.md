@@ -1,8 +1,14 @@
 # Sprawozdanie nr 1
 ---
-## Cel ćwiczenia: Wprowadzenie do środowiska Git. Połączenie z serwerem na wirtualnej maszynie Ubuntu, umiejętność posługiwania się podstawowymi poleceniami Git: branch, commit, add, checkout, itp., poprawne rozumienie struktury gałęzi i posługiwanie się nimi w trakcie laboratorium. Należy zrozumieć ideę kluczy SSH i potrafić je generować.
----
+## Cel ćwiczenia:
+ ## 1 część: Wprowadzenie do środowiska Git. Połączenie z serwerem na wirtualnej maszynie Ubuntu, umiejętność posługiwania się podstawowymi poleceniami Git: branch, commit, add, checkout, itp., poprawne rozumienie struktury gałęzi i posługiwanie się nimi w trakcie laboratorium. Należy zrozumieć ideę kluczy SSH i potrafić je generować.
+ 
+ ## 2 część:
 
+---
+## Streszczenie laboratorium:
+
+---
 ## Przygotowanie środowiska pracy i obsługa kluczy SSH
 Utworzyłem serwer na systemie operacyjnym Ubuntu (Linux) w wersji konsolowej, aby móc się z nim łączyć za pomocą protokołu ssh na przykład w Visual Studio Code na mojej lokalnej maszynie. Taki zabieg pozwala na korzystanie z otwartego środowiska Linuxowego, który sprzyja zarządzaniu serwerem, jest elastyczny, a przede wszystkim postawiony od zera - w sposób przejrzysty widzimy wtedy kolejne zależności i ułatwiamy sobie pracę na zajęciach. 
 
@@ -69,25 +75,56 @@ Teraz tworzymy swoją własną gałąź, aby móc spokojnie pracować w swoim ka
 
 ![](zrzuty_ekranu/new_branch1.png)
 
-Teraz chcemy aby nasza gałąź była dostępna publicznie w repozytorium. W tym celu należy użyć instrukcji 'push origin'. Po tym zobaczymy że pojawił się komunikat o dostępności naszej gałęzi na GitHubie.
+Teraz chcemy aby nasza gałąź była dostępna publicznie w repozytorium. W tym celu należy użyć instrukcji 'push origin'. Po tym zobaczymy że pojawił się komunikat o dostępności naszej gałęzi na zdalnym repozytorium GitHub.
 
 ![](zrzuty_ekranu/push_newbranch1.png)
 
 ## Własny katalog roboczy
 Teraz tworzymy własny katalog roboczy zważając abyśmy znajdowali się na właściwym branchu. 
+
 ![](zrzuty_ekranu/.git_dirs.png)
 ## Własny Git Hooke
+Git Hooke's to skrypty wywoływane przez Git za każdym razem kiedy wystąpi jakieś konkretne zdarzenie. Najczęściej pełni funkcję zabezpieczenia przed błędami lub pomocy w trakcie pewnego momentu w przepływie zmian.
+
+Git Hooke's dzielimy na te po stronie klienta i serwera. W przypadku weryfikacji czy nazwa commita została napisana w poprawny sposób ( została poprzedzona konkretnymi znakami) właściwym rodzajem skryptu będzie 'commit-msg' po stronie klienta, który zmodyfikowałem w odpowiedni sposób.  
+Poleceniem 'grep' wyszukujemy w pewnym ciągu znaków tych znaków których poszukujemy. Jeżeli ich nie ma to wypisujemy na ekran odpowiedni komunikat, że nazwa commitu jest błędna.
 
 ![](zrzuty_ekranu/commit_msg1.png)
-![](zrzuty_ekranu/precommit_zle.png)
-![](zrzuty_ekranu/exec_file.png)
+
+Skrypt powinien być umieszczony w folderze git/hooks oraz posiadać uprawnienia typu 'executive'.
+W tym celu kopiujemy utworzony commit_msg do wspomnianego folderu oraz używamy instrukcji 'chmod u+x' aby nadać uprawnienia do wykonywania się skryptu.
+
 ![](zrzuty_ekranu/chmod_cp_commit_correct.png)
+
+Pozytywny skutek nadania uprawnień w prosty sposób można wyświetlić na pasku plików, gdzie przy pliku wykonywalnym widnieje znak '$'. Plik jest również w folderze przez nas stworzonym. 
+
+![](zrzuty_ekranu/exec_file.png)
+
+Testowanie działania skryptu poprzez próbę zacommitowania bez inicjałów i z inicjałami.
+Obserwujemy poprawne wyświetlenie błędu w trakcie próby commitu bez inicjałów.
+
 ![](zrzuty_ekranu/commit_bez_inicjalow.png)
+
 ## Plik ze sprawozdaniem
+Budujemy sprawozdanie poprzez utworzenie folderu 'Sprawozdanie1'.
+
 ![](zrzuty_ekranu/dir_sprawozdanie.png)
 ## Zrzuty ekranu
+Zrzuty ekranu zostały odpowiednio dodane do osobnego folderu tak, żeby w zdalnym repozytorium były dostępne. Bezpośrednio nie da się przesyłać zdjęć do pliku Markdown sprawozdania, dlatego jednym ze sposobów jest wstawianie linków do zdjęć z innego folderu.
+
 ## Wysyłanie zmian do źródła
+
+Błędem jaki napotkałem podczas commitowania (nie uwzględniając Git Hooke, który dodałem później) był brak identyfikacji mojego e-maila.
+
 ![](zrzuty_ekranu/blad_email.png)
+
+W celu naprawienia błędu skonfigurowałem globalnie zmienną user.email oraz user.name tak, aby Git zapamiętał moje dane. 
+
 ![](zrzuty_ekranu/email.png)
+
+Później commit mógł się odbyć bez przeszkód. Globalna konfiguracja przeszła poprawnie.
+
 ![](zrzuty_ekranu/commit_po_email.png)
+
+
 ## Wciągnięcie do gałęzi grupowej
