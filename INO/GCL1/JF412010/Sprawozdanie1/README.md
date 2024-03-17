@@ -511,3 +511,6 @@ Swój stworzony plik Dockerfile od razu stworzyłem w folderze Sprawozdanie1, ta
 ### 10. Wystawienie Pull Request do gałęzi grupowej.
 
 Pull Request wykonałem po przesłaniu wszystkich zmian do lokalnego źródła. Skończyłem także sprawozdanie. Zrobiłem go za pomocą strony githuba. Ważne, aby wybrać gałąź do której wystawiamy nasze zapytanie na gałąź grupy, a nie gałąź główną.
+
+Potwierdzenie Pull Requesta:
+![Pull Request](././screenshots/Z2_K10_1.png)
