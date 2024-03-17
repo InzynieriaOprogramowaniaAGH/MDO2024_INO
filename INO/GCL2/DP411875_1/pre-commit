@@ -1,7 +1,0 @@
-#!/bin/sh
-if ! grep -q '^DP411875_1' "$1"; then
-    echo "Błąd: Commit nie zaczyna się od 'DP411875_1'."
-    exit 1
-fi
-echo "Jest ok"
-
