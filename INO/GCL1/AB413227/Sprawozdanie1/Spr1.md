@@ -11,9 +11,11 @@ Inżynieria Obliczeniowa
 
 Celem projektu jest wprowadzenie do GitHuba - zapoznanie czym jest i jak działa repozytorium (zarówno lokalne jak i zdalne), nauka podstawowych komend do obsługi GitHuba, przydatnych również do modyfikacji plików tworzonych na własnych gałęziach.
 
-Po poprawnym zrealizowaniu tematu ze zrozumieniem można z łatwością klonować repozytoria poprzez protokoły HTTPS i SSH, łączyć się do nich za pomocą specjalnie i włąsnoręcznie wygenerowanych kluczy dostępu oraz uaktualniać wszystkie edycje wykonane zdalnie u siebie na repozytorium lokalne, gdzie każdy uczestnik ma dostęp.
+Po poprawnym zrealizowaniu tematu ze zrozumieniem można z łatwością klonować repozytoria poprzez protokoły HTTPS i SSH, łączyć się do nich za pomocą specjalnie i włąsnoręcznie wygenerowanych kluczy dostępu oraz uaktualniać wszystkie edycje wykonane zdalnie u siebie na repozytorium lokalne, gdzie każdy uczestnik ma dostęp. Drugie zajęcia pozwoliły podszkolić się w podstawowych komendach używanych przy korzystaniu z Docker'a. Po wykonaniu instrukcji ze zrozumieniem, z łatwością można już uruchamiać, zatrzymywać czy usuwać kontenery. Znajomość użytych poleceń zostanie wykorzystana do przyszłych laboratoriów, dzięki czemu na pewno będzie dużo prościej zrozumieć, co tak naprawdę zostało wykonane. 
 
 ### Przebieg projektu
+
+### Wprowadzenie, Git, Gałęzie, SSH
 
 #### 1. Instalacja klienta Git i obsługę kluczy SSH
 
@@ -242,3 +244,228 @@ git add .
 git commit -m
 git push
 ```
+
+### Git, Docker
+
+#### 1. Instalacja Docker w systemie linuksowym
+
+Po pobraniu Dockera należy uruchomić system:
+
+```
+sudo systemctl start docker
+```
+
+Następnie w celu sprawdzenia, czy Docker faktycznie jest uruchomiony, należy wpisać:
+
+```
+sudo systemctl status docker
+```
+
+W moim przypadku musiałam dodatkowo dodać nową grupę i wybranego użytkownika. W przeciwnym razie demon nie był poprawnie uruchomiony, przez co nie można nawet pobrać obrazu.
+
+Utworzenie grupy *docker*:
+
+```
+sudo groupadd docker
+```
+
+Dodanie użytkownika do grupy *docker*:
+
+```
+sudo usermod -aG docker $USER
+```
+
+Aktywacja zmienionych grup:
+
+```
+newgrp docker
+```
+
+Ponowne sprawdzenie, czy Docker działa poprawnie, np. poprzez próbę pobrania i uruchomienia obrazu:
+
+```
+docker run hello-world
+```
+
+![ ](./ss/docker_ss2.png)
+
+#### 2. Rejestracja w systemie Docker Hub
+
+Docker Hub to największa społeczność i repozytorium, gdzie można przechowywać obrazy Dockera. Pozwala na udostępnianie, pobieranie oraz korzystanie z obrazów. Konto miałam utworzone już wcześniej, poniżej znajduje się mój profil.
+
+![ ](./ss/docker_ss1.png)
+
+#### 3. Pobranie obrazów
+
+Należało pobrać kilka obrazów wymienionych w instrukcji. Tą operację można wykonać na dwa spoosby.
+
+```
+docker pull <nazwa_obrazu>
+```
+
+Powyższa komenda jedynie pobiera wskazany obraz.
+
+Można jednak od razu uruchomić obraz po jego pobraniu. Umożliwia to polecenie:
+
+```
+docker run <nazwa_obrazu>
+```
+
+Wszystkie pobrane obrazy można sprawdzic poprzez *docker images*. Na ekranie można odczytać rozmiar oraz ID każdego z obrazów.
+
+![ ](./ss/docker_ss3.png)
+
+#### 4. Uruchomienie kontenera z obrazu *busybox*
+
+####
+
+![ ](./ss/docker_ss4.png)
+
+Wykorzystałam tutaj interaktywne uruchomienie obrazu:
+
+```
+docker run -i nazwa_obrazu
+```
+
+*-i* pozwala na interakcję z kontenerem poprzez standardowe wejście. W praktyce oznacza to, że można wprowadzić dane do kontenera z naszej konsoli.
+
+Przydatne komendy używane w konsoli:
+
+*uname -a* wyświetla informacje o systemie operacyjnym i sprzęcie.
+
+![ ](./ss/docker_ss5.png)
+
+#### 5. Uruchomienie "systemu w kontenerze" *fedora*
+
+Uruchomienie systemu wykonałam poprzez komendę:
+
+```
+docker run -it nazwa_obrazu
+```
+
+*-it* jest skrótem do *--interactive --tty*. Przy użyciu tej komendy utworzona zostaje sesja terminala pozwalająca użytkownikowi na interakcję z kontenerem.
+
+*interactive* odpowiada za przekierowanie terminala z kontenera na terminal użytkownika, użytkownik może wprowadzać dane i otrzymywać odpowiedzi w czasie rzeczywistym
+
+*tty* przekierowuje dane wejściowe i wyjściowe między kontenerem a hostem, umożliwiając interaktywne sesje
+
+Po przejściu do terminala należy zacząć od zainstalowania biblioteki *procps*. Jest to zestaw narzędzi w systemach opartych na jądrze Linux, które służą do monitorowania i zarządzania procesami.
+
+![ ](./ss/docker_ss6.png)
+
+*ps* wyświetla działające w tym czasie procesy, gdzie dodatkowo można odczytać PID, czyli identyfikator procesu
+
+*ps -aux*  wyświetla listę wszystkich procesów działających na systemie, wraz z dodatkowymi szczegółami, takimi jak użytkownik właściciel, zużycie zasobów
+
+![ ](./ss/docker_ss7.png)
+
+*dnf upgrade* aktualizuje pakiety
+
+![ ](./ss/docker_ss8.png)
+
+*exit* wyjście z terminala, po wylistowaniu procesów, ich status powinien być ustawiony na *Exited*
+
+![ ](./ss/docker_ss9.png)
+
+#### 6. Utworzenie pliku Dockerfile i klonowanie repozytorium
+
+Plik Dockerfile utworzyłam i zmodyfikowałam poprzez komendy:
+
+```
+touch Dockerfile
+nano Dockerfile
+```
+
+Pełna wersja mojego pliku znajduje się w folderze Sprawozdanie1, w osobnym pliku o nazwie *Dockerfile*.
+
+```
+FROM fedora
+
+RUN dnf -y update && \
+    dnf -y install git
+
+WORKDIR /repo
+
+RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+
+ENTRYPOINT ["/bin/bash"]
+```
+
+Powyższy plik napisałam kierując się dobrymi praktykami:
+
+**FROM fedora** określa obraz bazowy użyty do zbudowania nowego obrazu, u mnie jest to obraz *fedora*
+
+**RUN dnf -y update && \ dnf install -y git** aktualizacja pakietów i instalacja git'a
+
+**RUN git clone** klonuje repozytorium
+
+**WORKDIR /repo** ustawia katalog roboczy na `/repo`. Wszystkie późniejsze polecenia będą wykonywane w tym katalogu.
+
+**CMD ["/bin/bash"]** ustawia domyślne polecenie dla kontenera na `/bin/bash`. Jeśli nie zostanie podane inne polecenie w linii poleceń przy uruchamianiu kontenera, kontener automatycznie uruchomi interaktywny terminal Bash.
+
+Budowanie obrazu na podstawie pliku Dockerfile:
+
+```
+docker build -t nazwa_pliku .
+```
+
+Potwierdzenie utworzenia mojego pliku:
+
+![ ](./ss/docker_ss10.png)
+
+Przejścia do sklonowanego repozytorium dokonałam poprzez interaktywne uruchomienie pliku.
+
+![ ](./ss/docker_ss11.png)
+
+#### 7. Uruchomione ( != "działające" ) kontenery i ich czyszczenie
+
+W celu znalezienia wszystkich (nawet tych kontenerów, które nie działąją) należy wykorzystać komendę:
+
+```
+docker ps -a
+```
+
+Zatrzymanie kontenerów odbywa się przy użyciu komendy:
+
+```
+docker stop $(odpowiednie_argumenty)
+```
+
+Usuwanie jest dokonywane poprzez:
+
+```
+docker rm $(odpowiednie_argumenty)
+```
+
+W obu przypadkach wybrałam argumenty:
+
+*-a* wyświetlenie listy wszystkich kontenerów
+
+*-q* wyświetlenie identyfikatorów obrazów
+
+Poniżej przedstawiam zastosowanie tych komend u mnie i efekt końcowy:
+
+![ ](./ss/docker_ss12.png)
+
+![ ](./ss/docker_ss13.png)
+
+#### 8. Czyszczenie obrazów
+Czyszczenie obrazów wykonuje się bardzo podobnie jak czyszczenie kontenerów, poprzez funkcję *rmi*
+
+```
+docker rmi $(odpowiednie_argumenty)
+```
+
+Ja wykorzystałam funkcje:
+
+*-a* wyświetla listę wszystkich obrazów
+
+*-q* zostają wyświetlone tylko identyfikatory obrazów, a nie ich pełne informacje
+
+![ ](./ss/docker_ss14.png)
+
+#### 9. Pull Request do gałęzi grupowej jako zgłoszenie wykonania zadania
+
+Po wykonaniu wszystkich poleceń w obu instrukacjach zdalnie, zaktualizowałam swoją gałąź z lokalnym repozytorium.
+
+*Pull request* jest żądaniem o sprawdzenie oraz zatwierdzenie zmian wprowadzonych przez programistę do istniejącego repozytorium kodu. Głównym celem *pull requestu* jest umożliwienie innym członkom zespołu przeglądnięcie proponowanych zmian, dostarczenie informacji zwrotnej oraz ewentualne zatwierdzenie lub odrzucenie tych zmian.
