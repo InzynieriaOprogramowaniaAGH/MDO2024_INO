@@ -186,9 +186,7 @@ W tym celu przechodze na galąź naszej grupy za pomocą komendy:
 
 Następnie używam komendy:
 
-    git push
 
-![git-push](screenshots/21.png)
 
 Ostatnim etapem jest zaktualizowanie sprawozdania o ten krok i wysłanie aktualizacji do zdalnego źródła za pomocą: 
 
