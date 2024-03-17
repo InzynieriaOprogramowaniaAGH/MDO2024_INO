@@ -184,9 +184,19 @@ W tym celu przechodze na galąź naszej grupy za pomocą komendy:
 
     git checkout GCL2
 
+![git-checkout](screenshots/22.png)
+
 Następnie używam komendy:
 
+    git merge PZ410049
 
+![git-merge](screenshots/23.png)
+
+Dzięki tej komendzie zmiany z gałęzi PZ410049 zostają wciągnięte do gałęzi grupy, lecz ze względu na to, że nie posiadam odpowiednich uprawnień nie mogę przesłać zmian do repozytorium poprzez 'git push'. Zamiast tego musiałbym użyć mechanizmu 'pull request'. Jest to prośba o zaakceptowanie wprowadzonych zmian poprzez przeglądnięcie ich i zatwierdzenie przez odpowiednią osobę. Jest to mechanizm, który pomaga uniknąć ewentualnych błędów. 
+
+Zastosowanie komendy 'git merge' i informacja o błędzie:
+
+![git-push](screenshots/24.png)
 
 Ostatnim etapem jest zaktualizowanie sprawozdania o ten krok i wysłanie aktualizacji do zdalnego źródła za pomocą: 
 
