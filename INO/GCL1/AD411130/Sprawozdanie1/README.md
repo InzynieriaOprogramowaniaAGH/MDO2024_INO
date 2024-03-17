@@ -128,3 +128,7 @@ Później commit mógł się odbyć bez przeszkód. Globalna konfiguracja przesz
 
 
 ## Wciągnięcie do gałęzi grupowej
+
+Wciągnięcie do gałęzi grupowej polegało na zmergowaniu gałęzi osobistej do gałęzi grupowej z poziomu tej grupowej.
+
+![](zrzuty_ekranu/image.png)
