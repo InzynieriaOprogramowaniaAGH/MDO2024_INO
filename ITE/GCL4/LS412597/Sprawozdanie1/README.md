@@ -197,3 +197,246 @@ możemy wszystkie nasze zacommitowane zmiany przesłać do zdalnego źródła.
 > Powyżesze kroki są wykonywane zawsze przed zrobieniem `git push`
 >
 > > Przy `git add` musimy podać jakie rzeczy powinno nam dodać, znajdując się w głównym katalogu repozytorium można użyc po prostu ., która doda wszystkie wprowadzone zmiany, można również określać konkretne pliki, które chcemy dodać przez wypisanie ich po spacji.
+
+# Zajęcia 02 - Git, Docker
+
+---
+
+### 1. Zainstaluj Docker w systemie linuksowym
+
+Aby pobrać Docker na systemie Fedora musimy tylko wykorzystać polecenie:
+
+```bash
+sudo dnf install docker
+```
+
+Po pobraniu możemy sprawdzić czy Docker został na pewno pobrany przez polecenie:
+
+```bash
+docker --version
+```
+
+![Sprwadzenie pobrania dockera](Images/Zdj7.png)
+
+Dla wygodniejszej pracy warto dodać użytkownika do grupy `docker` przez co nie będziemy musieli za każdym razem używać sudo przed komendami dockera. Dokonać tego możemy przy poomocy poleceń:
+
+```bash
+sudo groupadd docker
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+> Przed rozpoczęciem pracy z dockerem warto sprawdzić czy jest on uruchomiony i jeśli nie to uruchomić go.
+> Sprawdzenie statusu dockera:
+>
+> ```bash
+> sudo systemctl status docker
+> ```
+>
+> Uruchomienie dockera w przypadku, gdy jest nieaktywny:
+>
+> ```bash
+> sudo systemctl start docker
+> ```
+>
+> Automatyczne uruchamianie dockera przy starcie systemu:
+>
+> ```bash
+> sudo systemctl enable docker
+> ```
+
+### 2. Zarejestruj się w Docker Hub i zapoznaj z sugerowanymi obrazami
+
+Teraz, gdy mamy pobranego dockera możemy zarejestrować się na stronie Docker Hub, aby móc przeglądać różne dostępne obrazy.
+
+![Rejestracja na docker hub](Images/Zdj8.png)
+
+> Przy rejestracji możemy wybrać różne metody, ja wybrałem rejestrację przez konto GitHub.
+
+### 3. Pobierz obrazy hello-world, busybox, ubuntu lub fedora, mysql
+
+Gdy nasz docker już jest aktywny możemy pobrać obrazy, które będziemy później wykorzystywać, do pobrania obrazu wykorzystujemy polecenie:
+
+```bash
+docker pull <nazwa_obrazu>
+```
+
+Gdy już pobierzemy wszystkie obrazy jakie potrzebujemy, możemy sprawdzić listę wszystkich obrazów przy pomocy polecenia:
+
+```bash
+docker images
+```
+
+![Obrazy](Images/Zdj9.png)
+
+### 4. Uruchom kontener z obrazu busybox
+
+- Pokaż efekt uruchomienia kontenera
+
+Do uruchomienia kontenera wykorzystujemy polecenie:
+
+```bash
+docker run <nazwa_obrazu>
+```
+
+W przypadku busybox nie zobaczymy żadnego efektu w konsoli, ponieważ nie podaliśmy żadnej komendy do wykonania wewnątrz kontenera. Jednak, aby przekonać się, że konterer został uruchomiony możemy wykorzystać polecenie:
+
+```bash
+docker ps -a
+```
+
+> `-a` wyświetli pełną listę koneretów, nawet tych, które zostały zamknięte niedawno.
+
+![Uruchomienie kontenera](Images/Zdj10.png)
+
+Jak widać 4 minuty temu został utworzony oraz zamknięty kontener z obrazu BusyBox, co świadczy o tym, że kontener został uruchomiony.
+
+- Podłącz się do kontenera interaktywnie i wywołaj numer wersji
+
+Przy uruchomieniu obrazu możemy dodatkowo dodać opcję `-it`, która uruchomi konterer w trybie interaktywnym.
+
+```bash
+docker run -it <nazwa_obrazu>
+```
+
+![Uruchomienie kontenera w trybie interaktywnym](Images/Zdj11.png)
+
+Jak widać zmienił się znak zachęty, co świadczy o tym, że teraz nasz terminal jest terminalem wewnątrz kontenera.
+
+Dodatkowo dzięki poleceniu `busybox --help` możemy odczytać jaka jest to wersja obrazu, w tym przypadku posiadamy wersję 1.36.1.
+
+> Po zakończeniu pracy w trybie interaktywnym możemy wyjść z kontenera przy pomocy polecenia `exit`
+
+### 5. Uruchom "system w kontenerze"
+
+Jak widać we wcześniejszym zrzucie ekranu jednym z obrazów, które pobrałem jest `Fedora`.
+
+W celu zaprezentowania systemu w kontenerze oraz pracy na nim uruchamiamy go w trybie interaktywnym.
+
+- Zaprezentuj PID1 w kontenerze i procesy dockera na hoście
+
+Jak można zobaczyć poniżej uruchomiłem obraz oraz chciałem sprawdzić listę procesów, jednak okazało się, że narzędzie ps nie zostało dodane do obrazu, co trzeba zrobić ręcznie.
+
+![Uruchomienie kontenera](Images/Zdj12.png)
+
+W tym celu używamy polecenia:
+
+```bash
+dnf install procps -y
+```
+
+Po zainstalowaniu możemy sprawdzić wszystkie procesy, a w tym przypadku sprawdzamy proces od ID 1
+
+![Procesy na kontenerze](Images/Zdj13.png)
+
+Aby wyświetlić procesy docker na hoście możemy wykorzystać polecenie:
+
+```bash
+docker top <container_ID>
+```
+
+W tym przypadku w miejsce container_ID wstawiamy ID kontenera, którego procesy chcemy wyświetlić.
+![Procesy dockera na hoście](Images/Zdj14.png)
+
+- Zaktualizuj pakiety
+
+Do zaktualizowania pakietów w systemie fedora wykorzystujemy polecenie:
+
+```bash
+sudo dnf update
+```
+
+![Update pakietów](Images/Zdj15.png)
+
+Następnie zostaniemy zapytani czy chcemy kontynuować wybierając odpowiednią opcję [Y/N].
+Po potwierdzeniu wszystkie pakiety zostaną zaktualizowane.
+
+### 6. Stwórz własnoręcznie, zbuduj i uruchom prosty plik Dockerfile bazujący na wybranym systemie i sklonuj nasze repo
+
+Tworzymy plik Dockerfile (może być to wykonane w terminalu przy pomocy polecenia `touch` lub z poziomu VSC).
+
+Jako zawartość pliku wpisujemy:
+
+```Dockerfile
+FROM fedora:latest
+WORKDIR /app
+RUN dnf -y update && \
+    dnf -y install git
+RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+ENTRYPOINT ["/bin/bash"]
+```
+
+`FROM` definiuje bazowy obraz, na którym będziemy budować nasz obraz Docker. Przez dodanie `:latest` będziemy zawsze pobierali najnowszą wersję obrazu.
+
+`WORKDIR` ustawia katalog roboczy dla wszystkich kolejnych instrukcji z Dockerfile
+
+`RUN` wykonuje dane polecenie, w tym przypadku najpierw robimy aktualizację pakietów, a następnie pobieramy git'a na nasz obraz. W dalszej części klonujemy repozytorium przedmiotu.
+
+`ENTRYPOINT` określa polecenie, któe zostanie uruchomione jako punkt wejścia dla kontenera, w tym przypadku będzie to uruchomienie w trybie interaktwynym.
+
+Po napisaniu naszego Dockerfila musimy zbudować obraz na jego podstawie, wykonujemy to przy pomocy polecenia:
+
+```bash
+docker build -t <nazwa_obrazu> .
+```
+
+![Budowa dockerfila](Images/Zdj16.1.png)
+![Budowa dockerfila](Images/Zdj16.2.png)
+
+Jak widać wszystkie kroki wpisane w Dockerfila wykonywane są kolejno po sobie. Teraz możemy sprawdzić czy nasz obraz istnieje oraz zweryfikować czy jego zawartość jest prawidłowa.
+
+![Lista obrazów](Images/Zdj17.png)
+
+Nasz obraz pojawił się w spisie wszystkich obrazów, teraz uruchimimy go i sprawdzymy jego zawartość.
+
+![Lista obrazów](Images/Zdj18.png)
+
+Jak widać w obrazie został pobrany git oraz sklonowane zostało repozytorium przedmiotu.
+
+### 7. Pokaż uruchomione ( != "działające" ) kontenery, wyczyść je.
+
+Aby sprawdzić jakie kontenery zostały uruchomione, ale nie działające obecnie, możemy wykorzystać polecenie:
+
+```bash
+docker ps -a -f status=exited
+```
+
+Do wyczyszczeenia kontenerów możemy użyć polecenia:
+
+```bash
+docker rm
+```
+
+Jednak ważne jest określenie, które kontenery mają zostać usunięte, możemy to zrobić dodająć argument:
+
+```bash
+docker rm $(docker ps -a -f status=exited -q)
+```
+
+![Lista obrazów](Images/Zdj19.1.png)
+![Lista obrazów](Images/Zdj19.2.png)
+
+Jak widać lista uruchomionych kontenerów jest spora, a po wykonaniu powyższego polecenia jest już pusta, czyli wszystkie kontenery, które zostały uruchomione zostały usunięte.
+
+![Lista obrazów](Images/Zdj19.3.png)
+
+Co ważne, cały czas działający kontener z obrazem_testowym nie został usunięty.
+
+### 8. Wyczyść obrazy
+
+Aby wyświetlić wszystkie obrazy dockera możemy wykonać polecenie:
+
+```bash
+docker images -a
+```
+
+Teraz, aby wyczyścić je użyjemy polecenia:
+
+```bash
+docker rmi $(docker images -a -q)
+```
+
+![Lista obrazów](Images/Zdj20.png)
+![Lista obrazów](Images/Zdj20.1.png)
+
+Jak widać wszystkie obrazy zostały usunięte z naszego dockera.
