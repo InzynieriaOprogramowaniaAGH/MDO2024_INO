@@ -140,6 +140,73 @@ git push
    sudo apt install docker.io
    ```
 
-   Włączyłam
+   Włączyłam Dockera jako usługę systemową stosując:
+   ```
+   sudo systemctl enable docker
+   ```
 
-3. Zarejestrowałam się 
+   Aby sprawdzić bieżący status wykonywałam polecenie:
+   ```
+   sudo systemctl status docker
+   ```
+
+   /////zdj
+   
+
+2. Zarejestrowałam się w Docker Hub, czyli w rejestrze zawierającym katalogi obrazów kontenerów.
+3. Pobrałam kolejno obrazy: hello-world, busybox, ubuntu lub fedora, mysql.
+   Zastosowałam do tego polecenie:
+   ```
+   sudo docker pull hello-world
+   ```
+   Analogicznie zmieniałam nazwy obrazów przy pobieraniu.
+
+4. Uruchomiłam kontener z obrazu busybox stosując polecenie:
+   ```
+   sudo docker run busybox
+   ```
+   Nic się jednak nie pojawiło, ponieważ należało uruchomić ten kontener interaktywnie przy użyciu opcji -i.
+   Opcja ta pozwalała na interakcję z terminalem oraz na wykonywanie poleceń i przekazywanie danych do i z kontenera.
+
+   Podłączyłam się do kontenera interaktywnie i wywołałam numer wersji. Wywołałam:
+   ```
+   uname -a
+   ```
+   Pozwoliło to na wyświetlenie danych o systemie operacyjnym, w tym numeru wersji.
+
+   /////zdj
+   
+5. Uruchomiłam system w kontenerze - kontener z obrazu ubuntu. Zrobiłam to również interaktywnie stosując opcję -it. Dodanie 't'           powodowało, że kontener miał swój własny terminal, co było przydatne do obsługi wejścia i wyjścia wewnątrz kontenerów.
+
+    Wewnątrz kontenera wywołałam polecenie:
+   ```
+   ps
+   ```
+   
+   Wyświetlała ona informacje o procesach w systemie.
+
+   /////zdj
+
+   Wywołałam również polecenie:
+   ```
+   top
+   ```
+   W porównaniu do 'ps' było to narzędzie do interaktywmego monitorowania procesów. Wyświetlone zostało również obciążenie CPU, zużycie    pamięci, czas działania systemu itd.
+
+
+   /////zdjecie
+
+   Zaktualizowałam pakiety, przy użyciu:
+   ```
+   apt update
+   ```
+
+   Aby wyjść z kontenera użyłam:
+   ```
+   exit
+   ```
+
+   Ctrl + D również zadziałało do wyjścia z kontenera.
+   
+
+7. Następnie utworzyłam własny plik Dockerfile. 
