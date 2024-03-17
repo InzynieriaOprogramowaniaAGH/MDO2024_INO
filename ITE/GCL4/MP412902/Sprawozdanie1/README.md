@@ -176,3 +176,63 @@ Widzimy, że proces 24493 u hosta to jest PID1 w kontenerze. Oznacza to, że roo
 
 Dockerfile to plik, który zawiera zestaw instrukcji do tworzenia obrazów z odpowiednimi zależnościami wgranymi. Pozwala to ułatwić działanie kontenerów i ich łatwe przenoszenie na inne maszyny, ponieważ jeden skrypt pozwala nam zbudować to samo środowisko. 
 
+Podczas próby zbudowania obrazu z Dockerfilem napotkałem na błąd:
+
+![alt text](image-20.png)
+
+Problem z GPG key. 
+
+Po głębszym zastanowieniu się nad błędem, który wyglądał następująco:
+
+![alt text](image-21.png)
+
+Doszedłem do wniosku, że maszyna wirtualna, na której pracuję nigdy nie była wyłączona - data na maszynie wirtualnej była z dnia jej utworzenia *06.03.2024*. Certifykat potrzebny do aktualizacji dnf oraz pobrania git'a potrzebował signature z przyszłości (15.03.2024) w stosunku do maszyny, stąd ten błąd. Po zmianie daty systemu na aktualną oraz instalacji *chrony* (program, który synchronizuje zegar systemowy w sposób bezpieczny z zegarami serwerów) udało się aktualizować dnf oraz pobrać git'a. 
+
+**Dockerfile**
+Przygotowałem prosty plik, który 
+- Bazuje na najnowszym obrazie fedory (*FROM fedora:latest*)
+- Aktualizuje dnf oraz pobiera git (*dnf update, dnf install git*)
+- Klonuje repozytorium przedmiotu (*git clone*)
+- Ustawia katalog roboczy (*WORKDIR*)
+- Daje komendę początkową dla kontenera (*CMD*)
+
+![alt text](image-26.png)
+
+Następnie obraz możemy zbudować używając polecenia **docker build -t [nazwa_obrazu] [ścieżka_do_dockerfile]**. 
+
+Ponieważ znajduję się w katalogu z Dockerfilem, moje polecenie wygląda następująco:
+
+![alt text](image-23.png)
+
+Sprawdzam obrazy mojego dockera, żeby zobaczyć czy udało się stworzyć mój obraz *mdo2024*:
+
+![alt text](image-24.png)
+
+Jak widać, obraz mdo2024 powstał i można uruchomić aplikacje na jego podstawie. Również można zauważyć obrazy z "none" - powstały one podczas błędu GPG z niepoprawnym czasem systemu, więc je usuwam korzystając z polecenia **docker rmi [id_obrazu]**, żeby nie marnowały miejsca na dysku.
+
+Uruchamiam kontener z utworzonego obrazu w trybie interaktywnym i sprawdzam czy udało się sklonować repozytorium.
+
+![alt text](image-25.png)
+
+Widzimy, że istnieje katalog MDO2024_INO i reszta zawartości, co oznacza, że repozytorium zostało poprawnie sklonowane.
+
+Mogę zobaczyć uruchomione kontenery przy użyciu **docker ps -a**
+
+![alt text](image-27.png)
+
+Widać utworzony kontener *intelligent_wilbur*.
+
+Usuwam kontener przy użyciu **docker rm [nazwa]**, ale można również usunąć za pomocą **docker rm [id]**. 
+
+### Wnioski 
+
+- Git jest kluczowym narzędziem przy większych projektach, gdyż pozwala na rozwijanie programu przez wiele drużyn na osobnych gałęziach. 
+
+- Klucze SSH pozwalają na bezpieczne połączenie się do git.
+
+- Dockera umożliwia łatwe tworzenie, uruchamianie i zarządzanie kontenerami, co przekłada się na elastyczność i niezależność aplikacji od środowiska, a także ułatwia proces wdrażania aplikacji.
+
+- Dockerfile umożliwia standaryzację procesu budowy obrazów kontenerów, co przyspiesza wdrażanie aplikacji i zapewnia spójność środowiska pracy.
+
+- Problemy związane z błędem GPG key pokazują, jak istotne jest odpowiednie skonfigurowanie środowiska pracy, w tym synchronizacja zegara systemowego, co może mieć wpływ na działanie różnych narzędzi i procesów.
+

@@ -1,9 +1,9 @@
-FROM fedora:36
-
-RUN dnf install -y git
+FROM fedora:latest
 
 WORKDIR /app
 
+RUN dnf -y update && dnf -y install git && dnf clean all
+
 RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git
 
-CMD ["git", "status"]
+CMD ["bash"]
