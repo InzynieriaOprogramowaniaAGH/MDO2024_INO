@@ -209,4 +209,30 @@ git push
    Ctrl + D również zadziałało do wyjścia z kontenera.
    
 
-7. Następnie utworzyłam własny plik Dockerfile. 
+6. Następnie utworzyłam własny plik Dockerfile. Treść znajduje się poniżej:
+
+   ////zdj pliku
+
+   Pierwsza linijka: FROM ubuntu:latest - określa obraz, który był użyty do utworzenia nowego obrazu. Jest to najnowsza wersja Ubuntu.
+   Kolejno linijka: WORKDIR /repozytorium - powoduje, że wszystkie kolejne instrukcje będą wykonywane w katalogu 'repozytorium'.
+   RUN apt-get update && apt-get install -y git - aktualizuje listy pakietów oraz instaluje gita.
+   RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git - wykonuje  klonowanie repozytorium Git.
+   ENTRYPOINT ["/bin/bash"] -  po uruchomieniu kontenera otworzony zostaje terminal Bash.
+
+7. Pokazałam uruchomione, niedziałające kontenery. Użyłam do tego polecenia:
+   ```
+    sudo docker ps -a -f status=exited
+   ```
+   Opcja -f status=exited pozwalała na ograniczenie wyników do kontenerów które miały status exited - niedziałających.
+
+   Wyczyściłam niedziałające kontenery.
+   ```
+   sudo docker container rm -f $(sudo docker ps -a -q -f status=exited)
+   ```
+   Polecenie rm powodowało usunięcie kontenerów, a opcje: -f - wymuszenie usunięcia, -q - zwrócenie tylko identyfikatorów, -a -            wypisanie wszystkich.
+
+8. Usunięcie obrazów było analogiczne, jednak zamiast używać polecenia "rm" użyłam "rmi".
+
+   ////zdjecie
+
+   
