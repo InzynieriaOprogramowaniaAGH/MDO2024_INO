@@ -335,3 +335,21 @@ newgrp docker
 Po zastosowaniu tego mogłem juz usunąć niedziałające kontenery: 
 
 ![usuwanie niedziałających konternerów](./zrzuty_ekranu/34.jpg)
+
+#### Czyszczenie obrazów 
+Aby wyświelić obrazy użyłem polecenia :
+```
+docker images -a
+```
+aby je usunąć użyłem polecenia: 
+```
+docker rmi $(docker images -a -q)
+```
+Po usunięciu sprawdziłem czy wykonało sie ono poprawnie: 
+
+![usuwanie obrazów](./zrzuty_ekranu/35.jpg)
+
+#### Dodanie pliku Docekerfile dp folderu Sprawozdanie1
+Plik Dockerfile był utworzony w folderze Sprawozdanie1 wiece nie musiałem go tam dodawać
+
+#### Wystawianie Pull Requesta
