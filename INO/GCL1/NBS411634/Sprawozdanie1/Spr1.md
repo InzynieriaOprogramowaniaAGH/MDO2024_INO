@@ -1,9 +1,11 @@
 # Sprawozdanie 1
 Natalia Borysowska-Ślęczka, IO
 
-## Cel projektu
-
 ## Streszczenie projektu
+
+W pierwszym laboratorium zainstalowano klienta Git, obsługę kluczy SSH, sklonowano repozytorium, przetestowano klonowanie za pomocą HTTPS i klucza SSH, przełączono się na gałęzie, utworzono własną gałąź, pracowano na niej oraz wysłano zmiany do zdalnego źródła. 
+
+W drugim laboratorium zainstalowano Dockera, zarejestrowano się na Docker Hub, pobrano obrazy hello-world, busybox, ubuntu i fedora, uruchomiono kontenery, pokazano PID1 w kontenerze i procesy Dockera na hoście, stworzono własny plik Dockerfile, zbudowano obraz oraz przetestowano go, wyświetlono uruchomione kontenery oraz wykonano czyszczenie obrazów. Na koniec dodano stworzony plik Dockerfile do folderu swojego Sprawozdanie1 w repozytorium i wystawiono Pull Request do gałęzi grupowej jako zgłoszenie wykonanego zadania.
 
 ## Wykonane kroki - laboratorium nr 1
 
@@ -224,6 +226,7 @@ Zaktualizowane sprawozdanie i zrzuty ekranu wysłam (będąc na swojej gałęzi)
 ```git commit```
 
 ```git push```
+
 
 
 ## Wykonane kroki - laboratorium nr 2
