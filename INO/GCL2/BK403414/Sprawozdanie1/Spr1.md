@@ -91,7 +91,7 @@ git checkout -b nazwa
 
 Żeby sprawdzić czy repozytorium jest ustawione na odpowiedniej gałęxi wpisałam polecenie ```git branch``` 
 
-![](../screeny/branch.png)
+![](./screeny/branch.png)
 
 #### 6. Rozpoczęcie pracy na nowej gałęzi
 
@@ -100,7 +100,7 @@ Stworzylam katalog pod nazwą Sprawozdanie1, a następnie napisałam git hook, s
 
 Najpierw weszłam do katalogu .git/hooks gdzie utworzylam skrypt o nazwie commit-msg dokładnie tak jak zostało to  napisane w commit-msg.sample, od razu nadałam mu również uprawnienie komendą ```chmod +x commit-msg```
 
-![](../screeny/skrypt.png)
+![](./screeny/skrypt.png)
 
 Zapisałam i dodałam zmiany: 
 
@@ -112,7 +112,7 @@ git add commit-msg
 
 Sprawdziłam czy program zwróci błąd jeżeli nie podam mojego inicjału i numeru albumu: 
 
-![](../screeny/blad.png)
+![](./screeny/blad.png)
 
 
 #### 7. Wykonanie sprawozdania
@@ -127,33 +127,33 @@ kopiowałam Screeny poprzez protokół  ```sftp```
 Po utworzeniu zmian dodałam sprawozdanie do commita używając polecenia: ```git add```
 oraz sprawdziłam wszystkie zmiany dzięki: ```git status``` 
 
-![](../screeny/dodaniescreenow.png)
+![](./screeny/dodaniescreenow.png)
 
 stworzylam commita z wiadomosią: ```git commit -m "zmiany" ```
 
 Sprawdziłam czy wszystkie zmiany zostaly dodane 
 
-![](../screeny/status.png)
+![](./screeny/status.png)
 
 wyslanie zmian na zdalne źródło: ```git push```
 
-![](../screeny/gitpush.png)
+![](./screeny/gitpush.png)
 
 pobranie zmian ze zdalnego źródła: ```git pull origin```, zaktualizowalam lokalne repozytorium za pomoca polecenia git pull nastepnie zmienilam galąź na gałąź mojej grupy i dokonałam merge gałęzi grupowej z moją gałęzią przy pomocy git merge. 
 
 
 
-![](../screeny/gitpull.png)
+![](./screeny/gitpull.png)
 
 Na koniec sprawdziłam stan lokalnego repozytorium przy pomocy ``` git log``` 
 
 
-![](../screeny/gitlog.png)
+![](./screeny/gitlog.png)
 
 Następnie spróbowałam wypchnąć zmiany na zdalne repozytorium jednak nie mogłam tego zrobić z uwagi na zabezpieczenia tej gałęzi 
 
 
-![](../screeny/gitpushgcl2.png)
+![](./screeny/gitpushgcl2.png)
 
 
 
@@ -184,20 +184,20 @@ duso systemctl enable docker
 
 #### 2. Rejestracja w Docker Hub
 
-![](../screeny/docklog.png)
+![](./screeny/docklog.png)
 
 #### 3. Pobranie obrazów
 Pobrałam obrazy hello-world, busybox, ubuntu oraz mysql używając komendy: 
 ```
 sudo docker pull nazwa
 ```
-![](../screeny/hello.png)
+![](./screeny/hello.png)
 
 
-![](../screeny/busy.png)
+![](./screeny/busy.png)
 
 
-![](../screeny/sql.png)
+![](./screeny/sql.png)
 
 
 #### 4. Uruchomienie kontenera z obrazu busybox
@@ -215,7 +215,7 @@ sudo docker container list --all
 ```
 
 
-![](../screeny/run1.png)
+![](./screeny/run1.png)
 
 Aby uruchomić kontener tak aby działał w tle należy dodać flagi 
 ```-d``` ta flaga sprawia że kontener jest uruchamiany w tle, ```-t``` ta zapobiega zamknięciu się dockiera.
@@ -223,12 +223,12 @@ Aby uruchomić kontener tak aby działał w tle należy dodać flagi
 Dokonałam sprawdzenia przez komende ```sudo docker ps```
 
 
-![](../screeny/flagi.png)
+![](./screeny/flagi.png)
 
 Podłączyłam się do kontenera interaktywnie dzięki komendzie ```sudo docker exec -ti [numerkontenera] sh``` oraz aby uzyskac numer wersji wisałam ```cat --help```
 
 
-![](../screeny/aktywne.png)
+![](./screeny/aktywne.png)
 
 #### 5. Uruchomienie "systemu w kontenerze" ubuntu
 
@@ -241,14 +241,14 @@ Jako pierwsze wprowadziłam komende, która pokazuje aktywne procesy na systemie
 ps
 ``` 
  
-![](../screeny/ubuntups.png)
+![](./screeny/ubuntups.png)
 
 Drugim poleceniem zaktualizowałam posiadane pakiety:
 ```
 apt-get update
 ```
  
-![](../screeny/ubuntuapt.png)
+![](./screeny/ubuntuapt.png)
 
 zakończyłam pracę terminala komendą ``` exit ```
 
@@ -256,7 +256,7 @@ zakończyłam pracę terminala komendą ``` exit ```
 
 W moim katalogu utworzyłam plik Dockerfile. Przygotowany przeze mnie plik miał posłużyć do utworzenia obrazu bazującego na ubuntu. Kontener po uruchomieniu będzie aktualizował swoje pakiety po czym zainstaluje gita, ustawi nazwę użytkownika i email po czym sklonuje repozytorium przdmiotowe.
 
-![](../screeny/visualDocker.png)
+![](./screeny/visualDocker.png)
 
 Zainstalowałam narzędzie do budowania obrazów przy pomocy dwóch poleceń: 
 ```
@@ -264,7 +264,7 @@ sudo apt-get install docker-buildx
 sudo docker buildx install
 ```
 
-![](../screeny/buildx.png)
+![](./screeny/buildx.png)
 
 Zbudowałam obraz kontenera przy pomocy komendy: 
 ```
@@ -273,31 +273,31 @@ sudo docker build -t test-git .
 
 Podczas budowania pojawił się błąd podczas instalacji pakietu git.
 
-![](../screeny/blad2.png)
+![](./screeny/blad2.png)
 
 Okazało się że przed instalacją gita muszę zainstalować pakiet curl. 
 Dokonałam zmian w Dokerfilu dodając instalację curl i flagę ``` -y ``` która sprawia że akceptowane są automatycznie zapytania podczas instalacji
 
-![](../screeny/dockerObraz.png)
+![](./screeny/dockerObraz.png)
 
 
-![](../screeny/budowaObrazu.png)
+![](./screeny/budowaObrazu.png)
 
 Uruchomiłam maszynę w trybie interaktywnym aby sprawdzić czy repozytorium zostało sklonowane poprawnie.
 
-![](../screeny/sprawdzenieObrazu.png)
+![](./screeny/sprawdzenieObrazu.png)
 
 #### 7. Pokazanie uruchomionego (!-"działające") kontenery i wyczyszczenie ich
 
 
-![](../screeny/ps.png)
+![](./screeny/ps.png)
 
 Aby zatrzymać dzuałające kontenery użyłam komendy 
 ```
 sudo docker stop [id kontenera]
 ```
 
-![](../screeny/stop.png)
+![](./screeny/stop.png)
 
 #### 8. Wyczyszczenie obrazu 
 
@@ -311,11 +311,11 @@ Następnie, po usunięciu kontenera usunęłam obraz:
 sudo docker rmi test-git
 ```
 
-![](../screeny/rmi.png)
+![](./screeny/rmi.png)
 
 #### 9. Dodanie stworzonego pliku 
 
-![](../screeny/mv.png)
+![](./screeny/mv.png)
 
 #### 10. Pull Request
 
