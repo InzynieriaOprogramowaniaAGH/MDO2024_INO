@@ -55,10 +55,12 @@ ssh-add ścieżka/do/klucza
 ![dodawanie kluczy do agenta](./zrzuty_ekranu/6.jpg)
 
 Następnie skopiowałem zawartość kluczy publicznych do schowka:
+
 ![kopiowanie zawartosci kluczy](./zrzuty_ekranu/7.jpg)
 
- i dodałem je do ustawień konta na Githubie wchodząc w: **Settings/SSH and GPG keys** tam klikając w przycisk **New SSH key** i wklejając zawartość kluczy:
- ![dodawanie kluczy na Githubie](./zrzuty_ekranu/8.jpg)
+i dodałem je do ustawień konta na Githubie wchodząc w: **Settings/SSH and GPG keys** tam klikając w przycisk **New SSH key** i wklejając zawartość kluczy:
+
+![dodawanie kluczy na Githubie](./zrzuty_ekranu/8.jpg)
 
 Po wykonaniu tych kroków mogłem już sklonować repozytorium za pomocą klucza SSH, używając polecenia:
 ```
@@ -80,5 +82,6 @@ aby utworzyć i przełączyć się na nową gałąź należy użyć polecenia:
 ```
 git checkout -b nazwa_nowej_gałęzi
 ```
-korzystając z tych poleceń przełączyłem się na gałąź **main** a potem na gałąź mojej grupy czyli **GCL1** i  tam utworzyłem swoją gałąź o nazwie **KG411149**
+korzystając z tych poleceń przełączyłem się na gałąź **main** a potem na gałąź mojej grupy czyli **GCL1** i  tam utworzyłem swoją gałąź o nazwie **KG411149**:
+
 ![operacje na gałęziach](./zrzuty_ekranu/10.jpg)
