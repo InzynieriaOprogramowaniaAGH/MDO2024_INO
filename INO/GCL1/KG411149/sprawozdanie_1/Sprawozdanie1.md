@@ -80,3 +80,5 @@ aby utworzyć i przełączyć się na nową gałąź należy użyć polecenia:
 ```
 git checkout -b nazwa_nowej_gałęzi
 ```
+korzystając z tych poleceń przełączyłem się na gałąź **main** a potem na gałąź mojej grupy czyli **GCL1** i  tam utworzyłem swoją gałąź o nazwie **KG411149**
+![operacje na gałęziach](./zrzuty_ekranu/10.jpg)
