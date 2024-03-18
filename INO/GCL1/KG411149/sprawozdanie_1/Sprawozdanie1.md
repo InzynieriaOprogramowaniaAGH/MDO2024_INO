@@ -70,6 +70,7 @@ git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
 
 ### Poruszanie się po gałęziach
 
+Gałęzie w systemie kontoli wersji Git umożliwiają tworzenie niezależnych ścieżek rozwoju w projekcie, przez co wiele osób może pracować nad różnymi funkcjonalnościami równocześnie, bez wpływania na główną linię rozwoju.
 Aby sprawdzić na jakiej gałęzi aktualnie się znajdujemy możemy użyć polecenia:
 ```
 git branch
