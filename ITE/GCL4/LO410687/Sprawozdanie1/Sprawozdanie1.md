@@ -116,6 +116,10 @@ Załączam również dodatkowo przypadek wykonania commit'a niezgodnie z hook'ie
 
 ![failcommit](failcommit.png)
 
+Aby zidentyfikować commitującego stosujemy polecenie `git config --global user.name "imie" oraz git config --global user.email "email"`, gdzie --global oznacza flagę, która określa konfigurację globalnie stosowaną dla konta użytkownika 
+
+![gitconfig](gitconfig.png)
+
 Aby dodać nasze zmiany na zdalne repozytorium używamy polecenia `git push`, lecz w celu ustalenia, który branch ze zdalnego repozytorium ma być śledzony przez gałąź lokalną, polecenie uzupełniono: `git push --set-upstream origin LO410687` Po użyciu tej flagi, Git zapamięta, że lokalna gałąź LO410687 jest powiązana z gałęzią zdalną o tej samej nazwie na serwerze origin.
 
 #### Spróbuj wciągnąć swoją gałąź do gałęzi grupowej
