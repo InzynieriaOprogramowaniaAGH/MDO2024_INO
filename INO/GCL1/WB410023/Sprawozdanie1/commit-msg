@@ -1,0 +1,8 @@
+#!/bin/bash
+commit=`cat $1`
+echo "COMMIT-MESSAGE:"$commit
+if [[ ! "$commit" =~ ^WB410023* ]] 
+then
+    echo "Error: commit ma się zaczynac od 'WB410023'"
+    exit 1
+fi
