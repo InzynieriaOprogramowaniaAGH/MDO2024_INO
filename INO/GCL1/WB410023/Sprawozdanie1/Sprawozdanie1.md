@@ -245,7 +245,7 @@ Zalogowanie się do Docker przez terminal:
 ```bash
 docker login
 ```
-![20](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie1/images/2png)
+![20](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie1/images/2.png)
 
 ### 3. Pobrałam  obrazy: hello-world, busybox, fedora oraz mysql.
 
