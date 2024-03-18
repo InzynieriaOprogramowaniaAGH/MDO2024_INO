@@ -151,7 +151,7 @@ git push
    sudo systemctl status docker
    ```
 
-   /////zdj
+   ![](./screeny/1systemctl.png)
    
 
 2. Zarejestrowałam się w Docker Hub, czyli w rejestrze zawierającym katalogi obrazów kontenerów.
@@ -162,7 +162,9 @@ git push
    ```
    Analogicznie zmieniałam nazwy obrazów przy pobieraniu.
 
-4. Uruchomiłam kontener z obrazu busybox stosując polecenie:
+   ![](./screeny/1dockerpull.png)
+
+5. Uruchomiłam kontener z obrazu busybox stosując polecenie:
    ```
    sudo docker run busybox
    ```
@@ -175,9 +177,9 @@ git push
    ```
    Pozwoliło to na wyświetlenie danych o systemie operacyjnym, w tym numeru wersji.
 
-   /////zdj
+   ![](./screeny/1dockerrun.png)
    
-5. Uruchomiłam system w kontenerze - kontener z obrazu ubuntu. Zrobiłam to również interaktywnie stosując opcję -it. Dodanie 't'           powodowało, że kontener miał swój własny terminal, co było przydatne do obsługi wejścia i wyjścia wewnątrz kontenerów.
+6. Uruchomiłam system w kontenerze - kontener z obrazu ubuntu. Zrobiłam to również interaktywnie stosując opcję -it. Dodanie 't'           powodowało, że kontener miał swój własny terminal, co było przydatne do obsługi wejścia i wyjścia wewnątrz kontenerów.
 
     Wewnątrz kontenera wywołałam polecenie:
    ```
@@ -186,8 +188,6 @@ git push
    
    Wyświetlała ona informacje o procesach w systemie.
 
-   /////zdj
-
    Wywołałam również polecenie:
    ```
    top
@@ -195,7 +195,7 @@ git push
    W porównaniu do 'ps' było to narzędzie do interaktywmego monitorowania procesów. Wyświetlone zostało również obciążenie CPU, zużycie    pamięci, czas działania systemu itd.
 
 
-   /////zdjecie
+   ![](./screeny/1top.png)
 
    Zaktualizowałam pakiety, przy użyciu:
    ```
@@ -207,24 +207,36 @@ git push
    exit
    ```
 
+   ![](./screeny/1exit.png)
+
    Ctrl + D również zadziałało do wyjścia z kontenera.
    
 
-6. Następnie utworzyłam własny plik Dockerfile. Treść znajduje się poniżej:
-
-   ////zdj pliku
-
+7. Następnie utworzyłam własny plik Dockerfile, który został umieszczony w katalogu Sprawozdanie1.
+   Treść: 
    Pierwsza linijka: FROM ubuntu:latest - określa obraz, który był użyty do utworzenia nowego obrazu. Jest to najnowsza wersja Ubuntu.
    Kolejno linijka: WORKDIR /repozytorium - powoduje, że wszystkie kolejne instrukcje będą wykonywane w katalogu 'repozytorium'.
    RUN apt-get update && apt-get install -y git - aktualizuje listy pakietów oraz instaluje gita.
    RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git - wykonuje  klonowanie repozytorium Git.
    ENTRYPOINT ["/bin/bash"] -  po uruchomieniu kontenera otworzony zostaje terminal Bash.
 
-7. Pokazałam uruchomione, niedziałające kontenery. Użyłam do tego polecenia:
+   Dokonałam budowania:
+   
+   ![](./screeny/1build.png)
+
+   ![](./screeny/1images.png)
+   
+   Kolejno uruchomiłam w trybie interaktywnym i potwierdziłam obecność repozytorium.
+
+   ![](./screeny/1run.png)
+   
+8. Pokazałam uruchomione, niedziałające kontenery. Użyłam do tego polecenia:
    ```
     sudo docker ps -a -f status=exited
    ```
    Opcja -f status=exited pozwalała na ograniczenie wyników do kontenerów które miały status exited - niedziałających.
+
+   ![](./screeny/1exited.png)
 
    Wyczyściłam niedziałające kontenery.
    ```
@@ -232,8 +244,11 @@ git push
    ```
    Polecenie rm powodowało usunięcie kontenerów, a opcje: -f - wymuszenie usunięcia, -q - zwrócenie tylko identyfikatorów, -a -            wypisanie wszystkich.
 
-8. Usunięcie obrazów było analogiczne, jednak zamiast używać polecenia "rm" użyłam "rmi".
+    ![](./screeny/1rm.png)
 
-   ////zdjecie
+9. Usunięcie obrazów było analogiczne, jednak zamiast używać polecenia "rm" użyłam "rmi".
+
+   ![](./screeny/1rmi.png)
+   
 
    
