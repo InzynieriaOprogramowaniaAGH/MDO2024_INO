@@ -326,4 +326,12 @@ Aby usunąć niedziałające konternery użyłem polecenia:
 ```
 sudo docker rm $(docker ps -a -f status=exited -q)
 ```
-asdasd
+Jednak w tym miejscu napotkałem się na problem z którym wcześniej sobie radziłem za pomocą dopisywania **sudo** przed poleceniem do dockera, teraz przy usówaniu nie miałem wystarczających uprawnień. Dodałem dockera do grupy, oraz konto użytkownika systemu poleceniami: 
+```
+sudo groupadd docker
+sudo gpasswd -a krygliw docker
+newgrp docker
+```
+Po zastosowaniu tego mogłem juz usunąć niedziałające kontenery: 
+
+![usuwanie niedziałających konternerów](./zrzuty_ekranu/34.jpg)
