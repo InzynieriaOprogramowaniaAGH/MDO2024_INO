@@ -3,6 +3,7 @@
 Do zrealizowania zadania wykorzystałam VirtualBox, który już wcześniej miałam zainstalowany na moim urządzeniu. Wystąpił mały problem z połączeniem się przez ssh ale po zmianie NAT na mostkowaną kartę sieciową połączyłam się. 
 
 Sprawdzenie wersji git i openSSH:
+
 ![](screeny/1.png)
 
 ### Klonowanie repozytorium
@@ -10,7 +11,9 @@ W pierwszym kroku sklonowałam repozytorium z Githuba za pomocą personal access
 W tym celu weszłam w zakładkę `Settings/Developer settings/Personal access tokens` i klinęłam "Generate new token"
 
 Fragment wygenerowanego tokenu:
+
 ![](screeny/2.png)
+
 Następnie sklonowałam repozytorium przy użyciu polecenia:
 ```
 git remote set-url origin https://username:token@github.com/username/repository.git
@@ -90,9 +93,11 @@ exit 0
 ```
 
 Działanie hooka po wprowadzeniu błędnej nazwy commita:
+
 ![](screeny/8.png)
 
 Działanie hooka po poprawnym wprowadzeniu nazwy:
+
 ![](screeny/9.png)
 
 Wypchałam plik zawierający treść hooka na zdalne repozytorium za pomocą polecenia:
@@ -115,9 +120,11 @@ Kontenery w Dockerze wykorzystują technologię izolacji na poziomie systemu ope
 ### Instalacja Dockera
 
 Zainstalowałam niezbędne pakiety, aby móc korzystać z repozytorium HTTPS, następnie dodałam oficjalny klucz GPG Dockera, kolejnym poleceniem dodałam  repozytorium Dockera do systemu Ubuntu. W ostatnim kroku zaktualizowałam listę pakietów i zainstalowałam Dockera:
+
 ![](screeny/10.png)
 
 Sprawdziłam czy Docker został prawidłowo zainstalowany:
+
 ![](screeny/11.png)
 
 ### Obrazy 
@@ -137,6 +144,7 @@ docker pull <nazwa_obrazu>
 docker login
 ```
 Przykładowy wydruk terminala po ściągnięciu obrazów:
+
 ![](screeny/12.png)
 
 Uruchomienie kontenera z obrazu następuje po użyciu polecenia:
@@ -148,11 +156,13 @@ Aby wyświetlić wszystkie obrazy, używamy polecenia:
 docker images
 ```
 Zrzut ekranu moich obrazów:
+
 ![](screeny/15.png)
 
 Uruchomienie kontenera z obrazu `busybox`:
 
 ![](screeny/13.png)
+
 Wykorzystanie parametru `-it` umożliwia połączenie się do kontenera interaktywnie.
 
 Odczytałam numer wersji jądra Linux za pomocą polecenia:
@@ -177,6 +187,7 @@ Aby wyświetlić inforamcję o procesie PID 1, który jest zwykle pierwszym proc
 ps
 ```
 ![](screeny/17.png)
+
 Aby móc zobaczyć wszystkie procesy na hoście, wyszłam z kontenera i użyłam polecenia:
 ```
 ps auxft
@@ -198,6 +209,7 @@ Następnie zaktualizowałam pakiety poleceniem:
 dnf update
 ```
 Zaktualizowane pakiety:
+
 ![](screeny/18.png)
 
 ### Dockerfile 
@@ -234,9 +246,11 @@ sudo docker build .
 ![](screeny/20.png)
 
 Sprawdziłam czy obraz się zbudował:
+
 ![](screeny/21.png)
 
 Jak widać obraz poprawnie się zbudował. Zmieniłam jego nazwę za pomocą polecenia:
+
 ![](screeny/22.png)
 
 Sprawdziłam czy nazwa poprawnie się zmieniła i uruchomiłam kontener w trybie interaktywnym używając:
