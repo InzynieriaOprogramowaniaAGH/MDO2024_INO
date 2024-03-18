@@ -184,9 +184,9 @@ git push
     busybox | head -1
   ```
   - opuszczenie kontenera BusyBox
-    ``` bash
-    exit
-    ```
+  ``` bash
+  exit
+  ```
   - wyświetlenie wszytskich kontenerów
   ``` bash
     docker ps -a
@@ -197,9 +197,9 @@ git push
   ## 5. Uruchomienie systemu w kontenerze
 
   - podłączenie się do kontenera interaktywnie i wywołanie numeru wersji
-``` bash
+  ``` bash
   docker exec -it <CONTAINER_ID> bin/bash
-```
+  ```
 gdzie: 
     aktualizacja pakietów
     ``` bash
@@ -209,6 +209,7 @@ gdzie:
     ``` bash
     exit
     ``` 
+
 Napotkane błędy
  ![ ](./img/19.png)
 
@@ -222,4 +223,53 @@ Poprawnie działająca komenda
   ## 6. Stworzenie oraz uruchomienie prostego pliku Dockerfile
   - Podczas tworzenia pliku wzorowano się na wzorze: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
   - stworzony Dockerfile
+  ![ ](./img/22.png)
+  - stworzenie obrazu w trybie imperatywnym o nazwie dockerfile
+  ``` bash
+  docker build -t dockerfile .
+   ```
+  ![ ](./img/23.png)
+
+  - po wyświetleniu wszytskich obrazów, można zauważyć, że znajduje się w nich utworzony wcześniej nasz obraz
+  ![ ](./img/24.png)
+
+## 7. Ukazanie uruchomionych kontenerów oraz ich wyczyszczenie
+  ![ ](./img/25.png)
+
+  - wyczyszczenie uruchomionych kontenerów, gdzie CONTAINER_ID wpisywałam pierwsze 3 symbole CONTAINER ID
+  ``` bash
+  docker rm <CONTAINER_ID>
+  ``` 
+## 8. Wyczyszczenie obrazów
+  - wyczyszczenie obrazów
+  ``` bash
+  docker rmi <CONTAINER_ID>
+  ```
+gdzie w CONTAINER_ID wpisywałam pierwsze 3 symbole od których zaczyna się IMAGE ID
+
+- napotkanie błędu przy usunięciu jednego obrazu, który mówi, że istnieje kontener który jest na nim oparty
+   ![ ](./img/26.png)
+- w tym celu należy użyć poniższej komendy, która wymusza usnięcie kontenera
+  ``` bash
+  docker rmi -f ca2
+  ```
+  ![ ](./img/27.png)
+
+## 9. Dodanie stworzonych plików Dockerfile do folderu Sprawozdanie1
+  ![ ](./img/28.png)
+
+## 10. Wystawienie pull request do gałęzi grupowej
+
+- pushowanie zmian
+  ``` bash
+  git add .
+  git commit -m 
+  git push
+  ```
+
+  ![ ](./img/30.png)
+
+- napotkane błędy
+  ![ ](./img/29.png)
+
 
