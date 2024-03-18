@@ -1,10 +1,10 @@
 # Sprawozdanie 1
-## Łukasz Oprych nr albumu 410687
+## Łukasz Oprych nr albumu 410687 Informatyka Techniczna
 
 ## Lab1
 Celem pierwszych zajęć było zapoznanie się z system kontroli wersji **Git** oraz platformą **Github**.
 
-Ćwiczenie wykonano na maszynie wirtualnej Fedora wersja 39 przy użyciu Hyper-V, komunikowano się z nią przy użyciu SSH oraz Visual Studio Code z zainstalowaną wtyczką Remote Explorer - SSH. 
+Ćwiczenie wykonano na maszynie wirtualnej Fedora wersja 39 przy użyciu wirtualizacji Hyper-V, komunikowano się z nią przy użyciu SSH oraz Visual Studio Code z zainstalowaną wtyczką Remote - SSH. 
 
 ### 1. Zainstaluj klienta Git oraz obsługę kluczy ssh
 Pierwszym krokiem, który należy wykonać jest zainstalowanie klienta git.
@@ -24,7 +24,9 @@ Następnie uruchamiamy usługę ssh komendami
 ### 2. Sklonuj repozytorium przedmiotowe za pomocą HTTPS i personal access token
 Po wykonaniu powyższych instrukcji, aby bezpiecznie sklonować repozytorium przedmiotowe trzeba wykonać następujące kroki: 
 
-Należy utworzyć [**personal access token**](https://github.com/settings/tokens) w serwisie github. Nie należy go nigdzie udostępniać, lecz zachować w bezpiecznym, prywatnym miejscu.
+Należy utworzyć [**personal access token**](https://github.com/settings/tokens) w serwisie github, w zakładce **scopes** wybieramy opcję **repo** dodatkowo wybieramy pożądaną **expiration date**. Nie należy go nigdzie udostępniać, lecz zachować w bezpiecznym, prywatnym miejscu.
+
+![tokencfg](tokenconfig.png)
 
 ![pat gh](patgh.png)
 
@@ -93,12 +95,12 @@ if [[ ! $commit_msg =~ ^LO410687.*$ ]]; then
 fi
 echo "Correct commit"
 ```
-Owy **hook** pozwala weryfikować za pomocą warunku czy **commit** rozpoczyna się od inicjałów i numeru albumu. Jeżeli warunek nie jest spełniony zwraca komunikat m.in., że wiadomość commita musi rozpoczynać się od inicjałów i numeru albumu.
+Owy **hook** pozwala weryfikować za pomocą warunku czy **commit** rozpoczyna się od inicjałów i numeru albumu. Jeżeli warunek nie jest spełniony zwraca komunikat m.in., że wiadomość commita musi rozpoczynać się od inicjałów i numeru albumu, w przeciwnym wypadku commit przechodzi i otrzymujemy wiadomość zwrotną **"Correct commit"**
 
 Po stworzeniu hook'a zmieniamy jego nazwę na commit-msg za pomocą polecenia
 `mv commit-msg.sample commit-msg`.
 
-Następnie za pomocą polecenia `sudo chmod +x commit-msg` nadajemy uprawnienia do wykonywania (execute), aby hook mógł zostać poprawnie wykoonanie.
+Następnie za pomocą polecenia `sudo chmod +x commit-msg` nadajemy uprawnienia do wykonywania (execute), aby hook mógł zostać poprawnie wykonanie.
 
 Następnie kopiujemy go do naszego indywidualnego katalogu stworzonego pod laboratoria za pomocą komendy `cp ../../MDO2024_INO/ITE/GCL4/LO410687`.
 
@@ -110,6 +112,10 @@ Wykonujemy commita przy użyciu komendy `git commit -m "LO410687"`, przy okazji 
 
 ![gitcommit](gitcommit.png)
 
+Załączam również dodatkowo przypadek wykonania commit'a niezgodnie z hook'iem
+
+![failcommit](failcommit.png)
+
 Aby dodać nasze zmiany na zdalne repozytorium używamy polecenia `git push`, lecz w celu ustalenia, który branch ze zdalnego repozytorium ma być śledzony przez gałąź lokalną, polecenie uzupełniono: `git push --set-upstream origin LO410687` Po użyciu tej flagi, Git zapamięta, że lokalna gałąź LO410687 jest powiązana z gałęzią zdalną o tej samej nazwie na serwerze origin.
 
 #### Spróbuj wciągnąć swoją gałąź do gałęzi grupowej
@@ -120,6 +126,21 @@ W celu wciągnięcia gałęzi do gałęzi grupowej przełączamy się na gałą�
 
 ![ss](ss.png)
 
+### Wystaw Pull Request do gałęzi grupowej jako zgłoszenie wykonanego zadania.
+
+Po dokonaniu **commit'a** oraz **push'a** należy przejść do naszego zdalnego laboratoryjnego repozytorium znajdującym się na platformie Github. Przechodzimy w nim do zakładki **Pull requests**, a następnie rozpoczynamy pull requesta przyciskiem **New pull request**.
+
+![pr1](pr1.png)
+
+Następnie przy opcji **Comparing changes** wybieramy jako base GCL4, czyli naszą gałąź laboratoryjną, jako compare naszą gałąź w moim przypadku LO410687
+
+![pr2](pr2.png)
+
+Pull request wygląda w sposób następujący, możemy go skomentować, zamknąć opcją *close pull request* i możemy czekać na review :) :
+
+![pr3](pr3.png)
+
+![pr4](pr4.png)
 
 ## Lab2 
 Celem drugich zajęć było zapoznanie się z narzędziem **Docker** oraz tworzeniem **Dockerfile**.
@@ -144,9 +165,10 @@ Następnie pobieramy podane w poleceniu obrazu za pomocą komendy `sudo docker p
 
 ![dockerstart](dockerstart.png)
 
-Jak widać na poniższym screenshot'cie uzyłem polecenia `sudo docker run hello-world`, gdy jeszcze nie pobrałem obrazu **hello-world** jak widać system nie mógł go znaleźć, więc sam pobrał obraz z rejestru domyslnych obrazów w Docker Hub.
+Jak widać na powyższym screenshot'cie uzyłem polecenia `sudo docker run hello-world`, gdy jeszcze nie pobrałem obrazu **hello-world** jak widać system nie mógł go znaleźć, więc sam pobrał obraz z rejestru domyslnych obrazów w Docker Hub.
 
 Pobrane obrazy można zobaczyć dzięki poleceniu `sudo docker images`
+
 ![dockerimages](dockerimages.png)
 
 ### Uruchom kontener z obrazu `busybox`
@@ -158,8 +180,6 @@ Następnie zgodnie z poleceniem uruchomiono obraz busybox za pomocą komendy `su
 ### Uruchom "system w kontenerze".
 Następnie zgodnie z poleceniem uruchomiono "system Fedora w kontenerze" za pomocą polecenia `sudo docker run -it --rm fedora`
 
-![sysincont](sysincont.png)
-
 Następnie w celu zaprezentowania PID1 w kontenerze, możemy użyć polecenia ps, lecz w obrazie Fedory nie ma domyślnie preinstalowanej usługi ps, więc za pomocą polecenia `dnf install procps -y` doinstalujemy sobie ową usługę, -y odpowiada za automatyczne potwierdzanie kolejnych kroków instalacji bez odpowiadania ręcznego na pytanie **y/N?**.
 
 ![procps](procps.png)
@@ -170,7 +190,7 @@ Prezentacja PID1 kontenerze za pomocą komendy `ps`, oraz procesy dockera na ho�
 
 ![dockerpshost](dockerpshost.png)
 
-Następnie zgodnie z poleceniem aktualizujemy pakiety poleceniem `dnf update` i wychodzimy z maszyny poleceniem `exit`. 
+Następnie zgodnie z poleceniem aktualizujemy pakiety poleceniem `dnf update` i wychodzimy z kontenera poleceniem `exit`. 
 
 *Niezgodność numerów hostów poniżej wynika z wykonania ponownie tych samych kroków ćwiczenia w różnych odstępach czasowych*
 
@@ -186,7 +206,7 @@ Należy również zadbać o posiadanie przez utworzony obraz git'a oraz ma zosta
 
 Dodatkowo ustawiłem katalog roboczy za pomocą `WORKDIR` na `/workspace` oraz początkowe polecenie dla kontenera po stworzeniu obrazu `CMD [bash]`.
 
-Plik utworzyć można (lecz nie trzeba) w naszym prywatnym katalogu, w moim przypadku to katalog GCL4/LO410687/Sprawozdanie1.
+Plik utworzyć można (lecz nie trzeba) w naszym prywatnym katalogu, w moim przypadku to katalog GCL4/LO410687/Sprawozdanie1, w innym wypadku po stworzeniu Dockerfile'a powinniśmy skopiować plik do katalogu ze sprawozdaniem, możemy to dokonać poleceniem `cp lokalizacja_pliku lokalizacja docelowa`
 
 ```Dockerfile
 FROM fedora:latest
@@ -214,7 +234,7 @@ Następnie przy pomocy  polecenia `sudo docker ps -a` na hoście pokazujemy uruc
 
 ![hostps2](hostps2.png)
 
-Zgodnie z poleceniem usuwamy czyścimy kontenery komendą `sudo docker rm -f <id_kontenera>`
+Zgodnie z poleceniem czyścimy kontenery komendą `sudo docker rm -f <id_kontenera>`
 
 ![cleancont](cleancont.png)
 
