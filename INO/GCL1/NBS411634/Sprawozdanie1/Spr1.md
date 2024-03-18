@@ -141,5 +141,13 @@ Aby kontrolować wprowadzone zmiany warto używać:
 Przykład:
 ![](./ss/ss_17.png)
 
-*Spróbuj wciągnąć swoją gałąź do gałęzi grupowej
+Wciągnięcie naszej gałęzi do gałęzi grupowej zczniemy od przejścia na gałęź grupy poleceniem:
+```git checkout GCL1```
+Następnie:
+```git push```
+aby przesłać nasze lokalne zmiany do zdalnego repozytorium (pozwala to na przykład na synchronizacje naszych zmian z resztą zespołu)
+Na koniec:
+```git merge NBS411634```
+spowoduje złączenie zmian z gałęzi NBS411634 do bieżącej gałęzi GCL1 (umożliwia to np. zespołowi pracę nad wspólnym kodem)
+
 *Zaktualizuj sprawozdanie i zrzuty o ten krok i wyślij aktualizację do zdalnego źródła (na swojej gałęzi)
