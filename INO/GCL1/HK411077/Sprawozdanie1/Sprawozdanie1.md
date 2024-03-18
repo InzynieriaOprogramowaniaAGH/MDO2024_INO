@@ -177,3 +177,88 @@ Całość wysłania zmian do zdalnego źródła wygląda tak:
 ![Git add i commit](images/git_add.png)
 ![Git push](images/git_push.png)
 
+W celu wyciągnięcia mojej gałęzi na gałąź grupową przełączyłem się na gałąź grupy:
+
+```git checkout GCL1```
+
+A następnie użyłem polecenia:
+
+```git merge HK411077```
+
+Wynik był następujący:
+
+![Git merge](images/git_merge.png)
+
+Gałąź została wyciągnieta, jednak nie mam możliwości wysłania tych zmian, gdyż nie posiadam wymaganych uprawnień. Taka zmiana może być jednak dodana przy pomocy pull request.
+
+Wyrzucony błąd wygląda tak:
+
+![Błąd git push](images/git_push_error.png)
+
+## Wstęp - Git, Docker
+
+Celem laboratorium nr 2 było zainstalowanie Docker'a na systemie Linux, rejestracji w Docker Hub, pobrania i uruchomienia różnych obrazów, stworzenie, zbudowanie i uchomienie własnego obrazu Docker zawierającego Git oraz sklonowane repozytorium projektu.
+
+### Instalacja Docker'a w systemie linuksowym
+
+Instalacja Docker'a jest pierwszym krokiem do stworzenia izolowanego środowiska do pracy. Docker umożliwia uruchamianie aplikacji w kontenerach, co zapewnia spółność środowiska między różnymi maszynami.
+
+Do zainstalowania Docker'a użyłem polecenia:
+
+```sudo apt install docker.io```
+
+W celu włączenia usługi Docker podczas każdorazowego uruchamiania systemu użyłem komendy:
+
+```sudo systemctl status docker```
+
+Aby sprawdzić, czy Docker na pewno się zainstalował, użyłem polecenia `docker` z następującym rezultatem:
+
+![docker](images/docker.png)
+
+## Zarejestruj się w Docker Hub i zapoznaj z sugerowanymi obrazami
+
+Dokonałem rejestracji w Docker Hub przy użyciu GitHub'a i przejrzałem dokumentację obrazów z dalszej części.
+
+## Pobierz obrazy hello-world, busybox, ubuntu lub fedora, mysql
+
+Obraz **hello-world** jest standardowym narzędziem do demonstracji i testowania podstawowej funkcjonalności Docker'a. Obraz pobrany został za pomocą polecenia: `sudo docker pull hello-world`.
+
+*BusyBox* zapewnia zestaw narzędzi UNIX w jednym lekkim pliku wykonywalnym i jest często używany do tworzenia lekkich kontenerów do zadań takich jak debugowanie, testowanie i automatyzacja. Pobrałem go poleceniem: `sudo docker pull busybox`.
+
+Jako, że korzystam z systemu operacyjnego Ubuntu Server, to pobrałem na niego obraz systemu **Fedora**. Obraz taki jak ten symuluje pełne środowisko systemowe. Pobrałem go za pomocą polecenie `sudo docker pull fedora`.
+
+Ostatnim pobranym przeze mnie obrazem jest obraz **MySQL** umożliwiający szybkie uruchomienie bazy danych MySQL w kontenerze. Polecenie do pobrania: `sudo docker pull mysql`.
+
+W celu sprawdzenia czy obrazy na pewno się pobrały użyłem polecenia:
+
+`sudo docker images`
+
+Pobrane obrazy:
+
+![Docker obrazy](images/obrazy.png)
+
+## Uruchomienie kontenera z obrazu BusyBox
+
+Uruchomienie kontenera **BusyBox** można dokonać za pomocą polecenia
+
+```sudo docker run busybox```
+
+Po użyciu tej komendy kontener BusyBox automatycznie wyłączy się natychmiast po włączeniu. Działa to tak ze względu na system który czeka na operacje i jeśli ich nie ma, to samoistnie wyłącza kontener.
+
+Żeby temu zapobiec należy uruchomić kontener interaktywnie dodając opcję **-i** przy uruchamianiu:
+
+```sudo docker run -i busybox```
+
+W celu sprawdzenia wersji **BusyBox'a** należy wpisać polecenie:
+
+```cat --help```
+
+Wersja BusyBox'a:
+
+![BusyBox](images/busybox.png)
+
+Żeby wyjść z kontenera, użyłem polecenia:
+
+```exit```
+
+## Uruchomienie "systemu w kontenerze" (obraz fedory)
