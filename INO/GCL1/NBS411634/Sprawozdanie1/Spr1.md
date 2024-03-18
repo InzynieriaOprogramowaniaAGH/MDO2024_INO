@@ -5,7 +5,7 @@ Natalia Borysowska-Ślęczka, IO
 
 ## Streszczenie projektu
 
-## Wykonane kroki
+## Wykonane kroki - laboratorium nr 1
 
 ### 1. Instalacja klienta Git i obsługę kluczy SSH
 
@@ -185,21 +185,15 @@ Do sprawozdania zrzuty ekranu dodajemy (jako inline), po przez:
 Aby przekazać zmiany do zdalnego repozytorium, wykonujemy trzy główne kroki:
 * dodanie zmian
 
-```git add```
-
-dodajemy nowe/zmodyfikowane pliki do kolejki oczekujących na zatwierdzenie
+```git add``` - dodajemy nowe/zmodyfikowane pliki do kolejki oczekujących na zatwierdzenie
 
 * zatwierdzenie zmian
 
-```git commit```
-
-opisuje dodane lub zmienione elementy
+```git commit``` - opisuje dodane lub zmienione elementy
 
 * przesłanie zmian
 
-```git push```
-
-przesyłamy zatwierdzone zmiany z lokalnego urządzeni do repozytorium zdalnego
+```git push``` - przesyłamy zatwierdzone zmiany z lokalnego urządzeni do repozytorium zdalnego
 
 Aby kontrolować wprowadzone zmiany warto używać:
 
@@ -226,6 +220,252 @@ Na koniec:
 spowoduje złączenie zmian z gałęzi NBS411634 do bieżącej gałęzi GCL1 (umożliwia to np. zespołowi pracę nad wspólnym kodem)
 
 Zaktualizowane sprawozdanie i zrzuty ekranu wysłam (będąc na swojej gałęzi):
+
 ```git add .```
+
 ```git commit```
+
 ```git push```
+
+
+## Wykonane kroki - laboratorium nr 2
+
+### 1. Instalacja Dockers w systemie linuksowym
+
+Po zaaktualizowaniu pakietów APT możemy przejść do instalacji Dockera:
+```sudo apt update```
+
+![](./ss_Docker/d_1.png)
+
+Instalujemy niezbędne pakiety i narzędzia, takie jak apt-transport-https, ca-certificates, curl oraz software-properties-common, które umożliwiają bezpieczne pobieranie i zarządzanie pakietami na systemie Ubuntu przez protokół HTTPS.
+
+![](./ss_Docker/d_2.png)
+
+Dodajemy klucz GPG:
+
+```curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -```
+
+Tą komendą pobieramy klucz publiczny z repozytorium Docker'a i dodajemy go do systemu Ubuntu, co umożliwia uwierzytelnienie i pobieranie pakietów z tego repozytorium za pomocą menedżera pakietów apt.
+
+![](./ss_Docker/d_3.png)
+
+Następnie dodajemy nowe repozytorium Docker'a do systemu Ubuntu:
+
+```sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"```
+
+![](./ss_Docker/d_4.png)
+
+Przechodzimy do instalacji poleceniem:
+
+```sudo apt install docker-ce```
+
+System Ubuntu automatycznie pobiera najnowszą dostępną wersję pakietu Docker CE z repozytorium, instaluje go i konfiguruje do użycia. 
+
+![](./ss_Docker/d_5.png)
+
+Aby sprawdzić poprawność instalacji warto wykorzystać komendę:
+
+```sudo systemctl status docker```
+
+![](./ss_Docker/d_6.png)
+
+Dodanie użytkownika ("nati") do grypu ("docker") daje możliwość wykonywania poleceń związanych z Dockerem bez konieczności posiadania uprawnień administratora, dlatego warto wykorzystać tą komendę:
+
+```sudo usermod -aG docker nati```
+
+
+### 2. Rejestracja w Docker Hub
+
+Wchodzimy na stronę DockerHub i klikamy przycisk SignUp (znajdujący się w prawym górnym rogu). Postępujemy zgodnie z wyświetlającymi się komunikatami. Po potwierdzeniu swojego konta na mailu możemy przejść do pracy.
+
+![](./ss_Docker/d_7.png)
+
+Logujemy się do sowjego konta na Dockerze, wpisując w terminalu polecenie:
+
+```docker login```
+
+![](./ss_Docker/d_8.png)
+
+### 3. Pobranie obrazów hello-world, busybox, ubuntu lub fedora, mysql
+
+Obrazy pobieramy komendą:
+
+```docker pull <nazwa_obrazu>```
+
+Zatem u nas po kolei należy wprowadzić w terminalu:
+
+```docker pull hello-world```
+
+```docker pull busybox```
+
+```docker pull mysql```
+
+```docker pull fedora``` - wybrałam fedorę, gdyż mój system jest dystrybucją *Ubuntu*
+
+Pobrane obrazy można wyświetlić poleceniem:
+
+```docker images```
+
+![](./ss_Docker/d_10.png)
+
+### 4. Uruchomienie kontenera z obrazu busybox
+
+* Efekt uruchomienia kontenera
+
+Uruchamiamy nowy kontener Docker z obrazem BusyBox, który będzie działał w tle (demon) i będzie miał nazwę "busybox-container".
+
+```docker run -d --name busybox-container busybox```
+
+gdzie:
+
+    *docker run* - komenda do uruchamiania nowego kontenera na podstawie obrazu
+
+    *-d* - opcja, która oznacza tryb działania w tle (demon)
+
+    *--name busybox-container* - nadaje kontenerowi nazwę *"busybox-container"*
+
+    *busybox* - nazwa obrazu, na podstawie którego zostanie uruchomiony kontener
+
+![](./ss_Docker/d_11.png)
+
+Kontener nie dostał żadnego zadania do wykonania, zatem zakończył od razu swoje działanie:
+
+![](./ss_Docker/d_12.png)
+
+
+* Podłącz się do kontenera interaktywnie i wywołaj numer wersji
+
+Aby uruchomić kontener interaktywnie użyjemy polecenia:
+
+```docker run -it busybox```
+
+Komenda uruchamia nowy kontener Docker z obrazem BusyBox i otwiera interaktywną sesję w jego terminalu, pozwalając użytkownikowi na bezpośrednie komunikowanie się z kontenerem.
+
+![](./ss_Docker/d_13.png)
+
+Otworzył nam się terminal, do którego możemy wprowadzać polecenia.
+
+W celu sprawdzenia numeru wersji użyjemy:
+
+```busybox | grep "BusyBox"``` - polecenie należy wprowadzić w terminalu kontenera
+
+![](./ss_Docker/d_14.png)
+
+Odczytujemy wersję: *BusyBox v1.36.1* 
+
+Komendą: ```exit``` wychodzimy z kontenera.
+
+### 5. Uruchomienie "systemu w kontenerze" (czyli kontener z obrazu fedora)
+
+* Zaprezentuj PID1 w kontenerze i procesy dockera na hoście
+
+Uruchamiam system poleceniem
+
+```docker run -it --name container_fedora fedora```
+
+![](./ss_Docker/d_15.png)
+
+Działanie nowoutworzonego kontenera sprawdzam otwierając nowy terminal i wpisując polecenie:
+
+```docker container list```
+
+![](./ss_Docker/d_16.png)
+
+
+Polecenie:
+
+```ps```
+
+umożliwi mi wyświetlenie PID działających procesów.
+
+![](./ss_Docker/d_17.png)
+
+Gdyby interesowało nas wyświetlenie wszystkich działających procesów w systemie wraz z bardziej szczegółowymi infrmacjami, to można użyć polecenia:
+
+```ps -aux```
+
+![](./ss_Docker/d_18.png)
+
+* Wyjście
+
+Z kontenera wychodzimy poleceniem: ```exit```.
+
+### 6. Stworzenie własnoręcznie, zbudowanie i uruchomienie prostego pliku Dockerfile bazujący na wybranym systemie oraz sklonowanie nasze repozytorium.
+
+Tworzę plik Dockerfile poleceniem:
+
+```nano Dockerfile```
+
+Zawartość pliku:
+
+![](./ss_Docker/d_19.png)
+
+plik powstał zgodnie z dobrymi praktykami gdzie:
+    
+    *FROM fedora* -  określa, że nasz nowy obraz Docker będziemy budować na podstawie systemu operacyjnego Fedora
+
+    *RUN dnf -y update && \ dnf install -y git* - aktualizuje listę pakietów w systemie i instaluje Git'a (opcja *-y* automatycznie potwierdza wszystkie pytania o potwierdzenie - przyspiesza pracę)
+
+    *RUN git clone* - klonuje repozytorium za pomocą Git'a
+
+    *WORKDIR /repo* - ustawia katalog roboczy w kontenerze na /repo. Wszystkie kolejne polecenia będą wykonywane w tym katalogu, co pomaga utrzymać porządek i zorganizować strukturę plików w kontenerze.
+
+    *ENTRYPOINT ["/bin/bash"]* - określa domyślne polecenie dla kontenera. Jeśli nie zostanie podane inne polecenie podczas uruchamiania kontenera, automatycznie zostanie uruchomiony interaktywny terminal Bash. Jest to przydatne do debugowania i interaktywnego eksplorowania kontenera.
+
+Konieczna była zmiana nazwy pliku, na taką która zaczyna się małą literą:
+
+![](./ss_Docker/d_20.png)
+
+także zmieniłam nazwę pliku z *Dockerfile* na * dockerfile* i wszystko zadziałało poprawnie.
+
+Budujemy obraz za pomocą nowoutworzonego pliku *dockerfile*:
+
+```docker build -t nazwa_pliku .```
+
+![](./ss_Docker/d_21.png)
+
+Obraz zbudował się poprawnie, sprawdzamy to poleceniem:
+
+```docker images```
+
+![](./ss_Docker/d_22.png)
+
+Uruchamiamy w trybie interaktywnym obraz oraz sprawdzamy czy repozytorium zostało prawidłowo sklonowane:
+
+![](./ss_Docker/d_23.png)
+
+### 7. Pokazanie uruchomionych kontenerów.
+
+Urchomione kontenery (te działający jak i nie działające) wyświetlimy poleceniem:
+
+```docker ps -a```
+
+![](./ss_Docker/d_24.png)
+
+### 8. Czyszczenie obrazów
+
+Zatrzymujemy działanie kontenerów:
+
+```docker stop $(docker ps -a -q)```
+
+Usuwamy kontenery:
+
+```docker rm $(docker ps -a -q)```
+
+Czyścimy obrazy:
+
+```docker rmi $(docker images -a -q)```
+
+![](./ss_Docker/d_25.png)
+
+![](./ss_Docker/d_26.png)
+
+### 9. Dodanie stworzonego pliku Dockefile do folderu swojego Sprawozdanie1 w repozytorium.
+
+Do skopiownanie użyłam komendy: ```cp```
+
+```cp ~/Dockerfile ~/test/MDO2024_INO/INO/GCL1/NBS411634/Sprawozdanie1/```
+
+![](./ss_Docker/d_27.png)
+
+### 10. Wystaw Pull Request do gałęzi grupowej jako zgłoszenie wykonanego zadania.
