@@ -266,7 +266,76 @@ Na końcu w celu wyjścia z kontenera użyto komendy:
 exit
 ```
 Dowodem zakończenia pracy kontenera jest zmiana statusu na 'Excited'.
+
 ///screen12
+
+### 6. Stworzenie, zbudowanie i uruchomienie prostego pliku Dockerfile bazującego na wybranym systemie i sklonowanie repo.
+Na początku utworzono plik o nazwie Dockerfile.
+Umieszczono go w folderze Sprawozdanie1 i zmodyfikowano kierując się dobrymi praktykami, jego treść wygląda następująco:
+
+///screen13
+
+Opis pliku:
+FROM fedora:latest -> Bazowy obraz, który zostanie użyty do zbudowania obrazu kontenera to fedora w najnowszej wersji.
+RUN dnf -y update && dnf -y install git
+Wykonano dwie operacje w jednej instrukcji RUN. Aktualizacja listy pakietów, następnie instalacja pakietu git.
+RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git -> wykonano klonowanie repozytorium Git znajdującego się pod podanym adresem URL,
+WORKDIR /repos ->  ustawiono katalog roboczy na /repos wewnątrz kontenera. Wszystkie kolejne operacje będą wykonywane w tym katalogu.
+ENTRYPOINT ["/bin/bash"] -> domyślna komenda, która zostanie uruchomiona w kontenerze podczas jego startu. Kontener będzie uruchamiał powłokę /bin/bash, co pozwoli użytkownikowi na interaktywną pracę w kontenerze.
+
+Zbudowano plik poprzez komendę:
+```bash
+docker build -t <nazwa_pliku> .
+```
+///screen14
+
+Plik zbudował sie prawidłowo:
+
+///screen15
+
+Powyższy zrzut ekranu zawiera także komendę uruchamiającą interaktywnie kontener i weryfikacje, czy poprawnie sklonowano repozytroium.
+
+### 7. Wyświetlenie uruchomionych ( != "działających" ) kontenerów, wyczyszczenie ich.
+Wyświetlenie listy wszystkich kontenerów Docker, zarówno uruchomionych, jak i zatrzymanych, obecnych w systemie poprzez komendę:
+```bash
+docker ps -a
+```
+Opcja -a oznacza "all" i powoduje wyświetlenie wszystkich kontenerów, niezależnie od ich stanu.
+
+///screen16
+
+Zatrzymania kontenerów dokonano komendą:
+```bash
+docker stop $(docker ps -a -q)
+```
+///screen17
+Wyczyszczenie ich poprzez komendę:
+```bash
+docker rm $(docker ps -a -q)
+```
+Komenda docker rm usuwa kontenery Docker. $() jest konstrukcją używaną w Bashu do wywoływania poleceń wewnątrz innych poleceń. W tym przypadku, $(docker ps -a -q) jest zastępowane przez listę ID wszystkich kontenerów.
+Efekt końcowy:
+///screen18
+
+### 8. Czyszczenie obrazów.
+Odbywa się poprzez komendę:
+```bash
+docker rmi $(docker images -a -q)
+```
+
+///screen19
+
+### 9. Dodano stworzone pliki Dockefile do folderu Sprawozdanie1 w repozytorium.
+
+
+
+
+
+
+
+
+
+
 
 
 
