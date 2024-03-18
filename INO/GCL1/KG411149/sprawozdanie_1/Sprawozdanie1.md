@@ -99,4 +99,11 @@ za pomocą polecenia:
 mkdir KG411149
 ```
 utworzyłem nowy katalog w swojej gałęzi o takiej samej nazwie:
+
 ![folder KG411149](./zrzuty_ekranu/11.jpg)
+
+#### Napisanie Git hoooka
+Kolejnym krokiem było napisanie własnego Git hooka. czyli skryptu werfikującego czy każdy mój "commit message" zaczyna się od **KG411149** czyli od moich inicjałów i numeru indeksu. Utworzyłem skrypt o nazwie **commit-msg** w utworzonym poprzednio katalogu. Najpierw określone jest że skrypt pisany jest w powłoce **sh**, później przypisany zostaje pierwszy argument przekazany do skryptu do zmiennej **COMMIT_MSG_FILE**, następnie w pętli **if** sprawdzane jest za pomocą funkcji **grep -q** która służy do wyszukiwania, czy komunikat commita rozpoczyna się od ciągu znaków **KG411149**, jeśli nie zwracany jest komunikat błędu który informuje że komunikat commita nie rozpoczyna się od **KG411149**, po czym **exit** kończy działanie skryptu z kodem błędu 1, co uniemożliwia wykonanie commita.
+
+![Git hook](./zrzuty_ekranu/12.jpg)
+
