@@ -107,3 +107,8 @@ Kolejnym krokiem było napisanie własnego Git hooka. czyli skryptu werfikujące
 
 ![Git hook](./zrzuty_ekranu/12.jpg)
 
+Nastepnie skopiowałem mój skrypt **commit-msg** do katalogu: 
+```
+/home/krygliw/MDO2024_INO/.git/hooks
+```
+aby uruchamiał się za każdym razem kiedy robię commita. Testy działania **commit-msg**:
