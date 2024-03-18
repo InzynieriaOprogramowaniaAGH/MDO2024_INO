@@ -219,7 +219,7 @@ Aby sprawdzić, czy Docker na pewno się zainstalował, użyłem polecenia `dock
 
 Dokonałem rejestracji w Docker Hub przy użyciu GitHub'a i przejrzałem dokumentację obrazów z dalszej części.
 
-## Pobierz obrazy hello-world, busybox, ubuntu lub fedora, mysql
+## Pobierz obrazy `hello-world`, `busybox`, `ubuntu` lub `fedora`, `mysql`
 
 Obraz **hello-world** jest standardowym narzędziem do demonstracji i testowania podstawowej funkcjonalności Docker'a. Obraz pobrany został za pomocą polecenia: `sudo docker pull hello-world`.
 
@@ -237,7 +237,7 @@ Pobrane obrazy:
 
 ![Docker obrazy](images/obrazy.png)
 
-## Uruchomienie kontenera z obrazu BusyBox
+## Uruchomienie kontenera z obrazu `BusyBox`
 
 Uruchomienie kontenera **BusyBox** można dokonać za pomocą polecenia
 
@@ -262,3 +262,130 @@ Wersja BusyBox'a:
 ```exit```
 
 ## Uruchomienie "systemu w kontenerze" (obraz fedory)
+
+Uruchomienie **fedory** podobnie jak uruchomienie **BusyBox'a** wykonałem w trybie interaktywnym, żeby system od razu nie wyłączył kontenera:
+
+```sudo docker run -i fedora```
+
+Aby użyć polecenia `ps` do sprawdzenia, jakie procesy działają wewnątrz kontenera należy najpierw zainstalować pakiet **procps**:
+
+```dnf install procps -y```
+
+Teraz możemy użyć polecenia `ps -aux`, które wyświetli nam informację o procesach:
+
+![Fedora ps aux](images/ps_aux.png)
+
+Do sprawdzenia procesów Docker'a na hoście, potrzebne mi było ID działającego kontenera **Fedora**. Wyświetliłem więc listę działających kontenerów poleceniem:
+
+```sudo docker container list```
+
+Dzięki temu uzyskałem ID działającej Fedory:
+
+![Docker container list](images/docker_cl.png)
+
+Znaleziony został przeze mnie proces root kontenera po użyciu komendy zawierającej wcześniej wspomniane ID Fedory:
+
+```sudo docker top 95d2abbc4196```
+
+Wynik działania tego polecenia:
+
+![Docker top](images/docker_top.png)
+
+Żeby zaktualizować obecne programy i usługi w kontenerze wystarczyło w jego wnętrzu użyć polecenia:
+
+```sudo dnf upgrade```
+
+![dnf upgrade](images/dnf_upgrade.png)
+
+Pakiety zostały zaktualizowane więc pozostało tylko wyjść z kontenera poleceniem `exit`.
+
+## Stworzenie własnoręcznie, zbudowanie i uruchomienie prostego pliku `Dockerfile` bazującego na wybranym systemie i sklonowanie repozytorium
+
+Utworzyłem plik o nazwie "Dockerfile" poleceniem:
+
+```touch Dockerfile```
+
+Przeczytałem artykuł z dobrymi praktykami przy pisaniu Dockerfile i przeszedłem do napisania własnego.
+Dockerfile zaczyna się linią:
+
+```FROM ubuntu:latest``` 
+
+Ta linia określa obraz bazowy, z którego budowany jest mój obraz Docker. W tym przypadku używany jest najnowszy dostępny obraz systemu Ubuntu. 
+
+Kolejna linia aktualizuje listę pakietów dostępnych w repozytoriach systemu Ubuntu, a następnie instaluje pakiet **git** oraz **ssh**. Opcjonalna flaga **-y** została zastosowana, aby automatycznie zatwierdzać wszystkie pytania o zgodę. **RUN** wykonywane jest podczas budowania obrazu:
+
+```RUN apt-get update && apt-get install -y git ssh```
+
+**WORKDIR** ustawia katalog roboczy na **/projekt** wewnątrz kontenera Docker. Jeśli katalog nie istnieje to i tak zostanie utworzony automatycznie:
+
+```WORKDIR /projekt```
+
+Kolejna linia kodu również zawiera **RUN** ale ona służy do sklonowania repozytorium przedmiotowego Git bezpośrednio do obrazu:
+
+```RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git```
+
+Ostatnia instrukcja **ENTRYPOINT** konfiguruje kontener do uruchomienia jako wykonywalny oraz po uruchomieniu kontenera otwiera powłoki bash:
+
+```ENTRYPOINT ["/bin/bash"]```
+
+Po zdefiniowaniu pliku **Dockerfile** należało go jeszcze zbudować za pomocą polecenia:
+
+```sudo docker build -t new_image .```
+
+Sprawdziłem następnie, czy obraz pojawił się na mojej maszynie wirtualnej:
+
+![Nowy obraz](images/new_image.png)
+
+W celu weryfikacji, czy wszystko poszło tak jak powinno, uruchomiłem kontener w trybie interaktywnym i sprawdziłem, czy do katalogu roboczego zostało ściągnięte repozytorium:
+
+![Git w obrazie](images/inside_image.png)
+
+## Pokaż uruchomione (!= "działające") kontenery, wyczyść je
+
+Wyświetlenie uruchomionych kontenerów moża zrobić stosując polecenie:
+
+```sudo docker ps -a```
+
+Flaga **-f** użyta została w celu przefiltrowania kontnerów i wyświetleniu tylko takich, które status mają jako "exited".
+
+Moja lista uruchomionych kontenerów wygląda tak:
+
+![Lista uruchomionych kontenerów](images/containers.png)
+
+Przed usunęciem kontenerów, należy je napierw zatrzymać poleceniem:
+
+```sudo docker stop $(sudo docker ps -a -q)```
+
+Lista zatrzymanych kontenerów:
+
+![Lista zatrzymanych kontenerów](images/stop.png)
+
+Żeby je usunąć, wystarczy użyć polecenia:
+
+```sudo docker rm $(sudo docker ps -a -q)```
+
+Lista ID usunętych kontenerów:
+
+![Usuwanie kontenerów](images/rm.png)
+
+Jak widać na powyższym zrzucie ekranu, wszystkie kontenery zostały wyczyszczone.
+
+## Czyszczenie obrazów
+
+Aby wyczyścić obrazy, można posłużyć się poleceniem podobny, jak w przypadku zatrzymania czy usunięcia kontenerów, mianowicie:
+
+```sudo docker rmi $(sudo docker ps -a -q)```
+
+Użycie tej komendy w terminalu wygląda tak:
+
+![Czyszczenie obrazów](images/rmi.png)
+
+## Dodanie stworzonego pliku Dockerfile do folderu Sprawozdanie1 w repozytorium
+
+W tym kroku wystarczyło jedynie przekopiować utworzony wcześniej plik **Dockerfile** do folderu **Sprawozdanie1** w repozytorium. U mnie odbyło się to w ten sposób:
+
+```cp Dockerfile ~/ssh/MDO2024_INO/INO/GCL1/HK411077/Sprawozdanie1/```
+
+## Wystawienie Pull Request'a do gałęzi grupowej
+
+Na sam koniec wystawiłem już tylko Pull Request'a w celu formalnego zgłoszenia wykonanej pracy.
