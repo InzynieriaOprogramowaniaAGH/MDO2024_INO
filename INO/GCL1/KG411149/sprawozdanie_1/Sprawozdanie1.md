@@ -156,3 +156,12 @@ git status
 który wyświetla bierzący stan repozytorium Git i w tym liste nowych zmian:
 
 ![git status](./zrzuty_ekranu/16.jpg)
+
+#### Próba wyciągania swojej gałęzi do gałęzi grupowej
+Najepierw aby spróbować wyciągnąć swoją gałąź do gałęzi grupowej zmieniłem  aktulaną gałąź na gałąź grupową czyli **GCL1**. Następnie aby wyciągnąć zmiany z mojej gałęzi do gałęzi grupy używam komendy
+```
+git merge
+```
+![git merge](./zrzuty_ekranu/17.jpg)
+Ten krok udaje się wykonać, jednak gdy próboje za pomocą **push** wypchnąć zmiany do zdalnego hosta nie udaje mi się to ponieważ nie mam odpowiednich od tego uprawnień: 
+![push](./zrzuty_ekranu/18.jpg)
