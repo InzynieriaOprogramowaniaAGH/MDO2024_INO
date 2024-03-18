@@ -4,7 +4,7 @@
 
 Celem laboratorium nr 1 było zapoznanie się z podstawowymi funkcjami systememu kontroli wersji Git. Projekt rozpocząłem się od instalacji Git'a oraz konfiguracji obsługi kluczy SSH. Kolejnym krokiem było sklonowanie repozytorium przedmiotowego za pomocą protokołu HTTPS i personal access token. W następnej części zapewniłem dostęp do repozytorium za pośrednictwem kluczy SSH - w tym celu utworzyłem dwa klucze, w tym jeden zabezpieczony hasłem. W dalszej części projektu skolonowałem repozytorium przedmiotowe i utworzyłem własną gałąź HK411077, pozwalającą na izolację mojej pracy. Na koniec utworzyłem Git hooka weryfikującego format wiadomości commitów.
 
-## Zainstalowanie klienta Git i obsługę kluczy SSH
+### Zainstalowanie klienta Git i obsługę kluczy SSH
 
 Na początku zaktualizowałem bazę pakietów systemu i zainstalowałem klienta Git używając komendy: 
 ```sudo apt update && sudo apt install git```
@@ -28,7 +28,7 @@ Wersja ssh:
 
 ![wersja ssh](images/wersja_ssh.png)
 
-## Sklonuj repozytorium przedmiotowe za pomocą HTTPS i personal access token
+### Sklonuj repozytorium przedmiotowe za pomocą HTTPS i personal access token
 
 Do realizacji tego kroku w pierwszej kolejności wygenerowałem Personal Access Point na GitHub'ie. W tym celu, na stornie GitHub przeszedłem do ustawień konta, wybierając "Settings" z menu rozwijanego po kliknięciu awatara w prawym górnym rogu. W menu po lewej stronie wybrałem "Developer settings". Następnie po lewej stronie wybrałem "Personal access tokens" i "Tokens (classic)". Napisałem notatkę "MDO", wygaśnięcie tokenu ustawiłem za 90 dni, zaznaczyłem zakres uprawnień "repo" i kliknąłem "Generate token".
 
@@ -46,7 +46,7 @@ Polecenie spowodowało następujące działanie w terminalu:
 
 Teraz miałem już na swojej maszynie lokalną kopię repozytorium.
 
-## Upewnij się w kwestii dostępu do repozytorium jako uczestnik i sklonuj je za pomocą utworzonego klucza SSH, zapoznaj się dokumentacją.
+### Upewnij się w kwestii dostępu do repozytorium jako uczestnik i sklonuj je za pomocą utworzonego klucza SSH, zapoznaj się dokumentacją.
 
 Pierwszy klucz utworzyłem za pomocą polecenia:
 
@@ -82,7 +82,7 @@ W celu sklonowania repozytorium za pomocą SSH przeszedłem do repozytorium prze
 
 ```git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git```
 
-## Przełącz się na gałąź main, a potem na gałąź swojej grupy
+### Przełącz się na gałąź main, a potem na gałąź swojej grupy
 
 Poruszanie się po gałęziach jest kluczowym aspektem dla utrzymania porządku i organizacji w projekcie pozwalającą na izolowaną pracę. Aby rozpocząć pracę na własnej gałęzi przeszedłem do katalogu repozytorium i sprawdziłem, na której gałęzi aktualnie jestem:
 
@@ -104,7 +104,7 @@ Teraz znałem już nazwę gałęzi grupy więc przeniosłem się na nią polecen
 
 ```git checkout GCL1```
 
-## Utwórz gałąź o nazwie "HK411077"
+### Utwórz gałąź o nazwie "HK411077"
 
 Celem tego kroku było zapewnienie organizacji i segregacji mojej pracy w repozytorium przedmiotowym. Własna gałąź pozwala na niezależne ekperymentowanie i rozwijanie projektów.
 
@@ -116,7 +116,7 @@ Polecenie to nie tylko utworzyło nową gałąź, ale również przełączyło m
 
 ![moja gałąź](images/moja_gałąź.png)
 
-## Rozpoczęcie pracy na nowej gałęzi
+### Rozpoczęcie pracy na nowej gałęzi
 
 Na mojej nowo utworzonej gałęzi HK411077, w katalogu grupy GCL1 utworzyłem nowy katalog o nazwie HK411077 w którym będą znajdowały się wszystkie materiały związane z moimi zadaniami.
 
@@ -125,7 +125,7 @@ mkdir HK411077
 cd HK411077
 ```
 
-Git hook'i to skrypty, które wykonwyane są przez Git przy różnych okazjach w celu zautomatyzowania pracy. W ramach projektu utworzyłem Git hook'a który sprawdza, czy wiadomość commita zaczyna się od HK411077. Treść skrytu dla commit-msg hook'a:
+Git hook'i to skrypty, które wykonwyane są przez Git przy różnych okazjach w celu zautomatyzowania pracy. W ramach projektu utworzyłem Git hook'a który sprawdza, czy wiadomość commita zaczyna się od "HK411077". Treść skrytu dla commit-msg hook'a:
 
 ```
 #!/bin/sh
@@ -138,5 +138,39 @@ if ! grep -q '^HK411077' "$COMMIT_MSG_FILE"; then
 fi
 ```
 
-Skrypt ten umieściłem w pliku **git/hooks/commit-mgs** w lokalnym repozytorium. Nadałem mu jeszcze uprawnienia za pomocą **chmod +x .git/hooks/commit-mgs** oraz przekopiowałem go do własnego katalogu roboczego.
+Skrypt ten umieściłem w pliku **git/hooks/commit-mgs** w lokalnym repozytorium. Nadałem mu jeszcze uprawnienia za pomocą `chmod +x .git/hooks/commit-mgs` oraz przekopiowałem go do własnego katalogu roboczego.
+
+Teraz, momencie gdy treść commit'a nie zaczyna się od "HK411077" wypisany jest następujący błąd:
+
+![Błąd Git hook](images/hook_error.png)
+
+W momencie, gdy treść zaczyna się od "HK411077" rezultat jest następujący:
+
+![Git hook](images/git_hook.png)
+
+W swoim katalogu roboczym  utworzyłem kolejny katalog o nazwie "Sprawozdanie1" w którym umieszczone zostało sprawozdanie "Sprawozdanie1.md", które pisane jest w formacie **Markdown**. Utworzyłem również katalog "images", w których umieszczam zrzuty ekranu kolejnych etapów projektu.
+
+Dodawanie zrzutów ekranu jako inline do sprawozdania realizuję poprzez wrzucanie ich z lokalnego komputera na maszynę wirtualną właśnie do folderu "images" i użycie formatu: `![Opis](images/nazwa_zrzutu.png)` w sprawozdaniu.
+
+Kolejną rzeczą do zrobienia było wysłanie zmiany do zdalnego źródła. Robimy to za pomocą poleceń:
+
+```
+git add
+git commit
+git push
+```
+
+Pierwsza z powyższych komend dodaje zmiany, które zaszły, czyli nowe pliki, zmodyfikowane pliki itp. Za pomocą drugiego polecenia w którym opisujemy zmiany, które zaszły. Ostatnie polecenie przesyła zmiany z lokalnego źródła do zdalnego repozytorium GitHub.
+
+Gdy chcemy sprawdzić co zostało zmienione lub dodane do naszego projektu możemy użyć polecenia
+
+```git status```
+
+Przykładowe użycie:
+
+![Git status](images/git_status.png)
+
+W tym wypadku widzimi, że zmiana która zaszła a nie została dodana to modyfikacja pliku "Sprawozdanie1.md".
+
+Całość wysłania zmian 
 
