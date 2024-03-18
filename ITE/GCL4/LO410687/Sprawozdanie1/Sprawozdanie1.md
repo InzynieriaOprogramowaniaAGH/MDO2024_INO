@@ -177,18 +177,18 @@ Pobrane obrazy można zobaczyć dzięki poleceniu `sudo docker images`
 
 ### Uruchom kontener z obrazu `busybox`
 
-Następnie zgodnie z poleceniem uruchomiono obraz busybox za pomocą komendy `sudo docker run busybox` i podłączono się interaktywnie do kontenera za pomocą polecenia `sudo docker run -it --rm busybox`, gdzie -it mówi o podłączeniu się interaktywnym oraz --rm znaczy, że kontener zostanie usunięty automatycznie po zakończeniu działania. Za pomocą polecenia `busybox | head -1` wywołano numer wersji **BusyBoxa**.
+Następnie zgodnie z poleceniem uruchomiono obraz busybox za pomocą komendy `sudo docker run busybox` i podłączono się interaktywnie do kontenera za pomocą polecenia `sudo docker run -it --rm busybox`, gdzie **-it** mówi o podłączeniu się interaktywnym oraz **--rm** znaczy, że kontener zostanie usunięty automatycznie po zakończeniu działania. Za pomocą polecenia `busybox | head -1` wywołano numer wersji **BusyBoxa**.
 
 ![busybox](busybox.png)
 
 ### Uruchom "system w kontenerze".
 Następnie zgodnie z poleceniem uruchomiono "system Fedora w kontenerze" za pomocą polecenia `sudo docker run -it --rm fedora`
 
-Następnie w celu zaprezentowania PID1 w kontenerze, możemy użyć polecenia ps, lecz w obrazie Fedory nie ma domyślnie preinstalowanej usługi ps, więc za pomocą polecenia `dnf install procps -y` doinstalujemy sobie ową usługę, -y odpowiada za automatyczne potwierdzanie kolejnych kroków instalacji bez odpowiadania ręcznego na pytanie **y/N?**.
+Następnie w celu zaprezentowania **PID1** w kontenerze, możemy użyć polecenia **ps**, lecz w obrazie Fedory nie ma domyślnie preinstalowanej usługi ps, więc za pomocą polecenia `dnf install procps -y` doinstalujemy sobie ową usługę, **-y** odpowiada za automatyczne potwierdzanie kolejnych kroków instalacji bez odpowiadania ręcznego na pytanie **y/N?**.
 
 ![procps](procps.png)
 
-Prezentacja PID1 kontenerze za pomocą komendy `ps`, oraz procesy dockera na hoście za pomocą `ps auxft`
+Prezentacja **PID1** kontenerze za pomocą komendy `ps`, oraz procesy dockera na hoście za pomocą `ps auxft`
 
 ![pid1](pid1.png)
 
