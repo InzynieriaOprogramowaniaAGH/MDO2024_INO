@@ -114,3 +114,12 @@ Nastepnie skopiowałem mój skrypt **commit-msg** do katalogu:
 aby uruchamiał się za każdym razem kiedy robię commita. Testy działania **commit-msg**:
 
 ![testy commit-msg](./zrzuty_ekranu/13.jpg)
+
+#### Dodawanie pliku ze sprawozdaniem
+W utworzonym wczesniej katalogu **KG411149** utworzyłem katalog **sprawozdanie_1** podobnie jak tworzyłem katalogi wcześniej, w tym katalogu utworzyłem plik **Sprawozdanie1.md** za pomocą polecenia:
+```
+touch Sprawozdanie1.md
+```
+W tym pliku znajduje się cała treść sprawozdania. Następnie w tym samym katalogu utworzyłem kolejny o nazwie **zrzuty_ekranu** w którym umieszczałem zrzuty ekrany służące za udokumentowanie wykonania wszystkich kroków z instrukcji.
+
+![folder sprawozdanie_1](./zrzuty_ekranu/14.jpg)
