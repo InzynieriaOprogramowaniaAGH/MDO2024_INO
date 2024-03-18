@@ -280,7 +280,7 @@ Utworzyłem plik **Dockerfile** w nim ustawiłem obraz bazowy czyli Ubuntu:
 ```
 FROM ubuntu:latest
 ```
-Ustawiłem katalog roboczY:
+Ustawiłem katalog roboczy:
 ```
 WORKDIR /app
 ```
@@ -296,9 +296,33 @@ Na koniec zdefiniowałem główny program który ma zostać uruchomiony w Docker
 ```
 ENTRYPOINT ["/bin/bash"]
 ```
+Plik Dockerfile: 
+
 ![Dockerfile](./zrzuty_ekranu/29.jpg)
 
 Po utworzeniu pliku Dockerfile na jego podstawie tworze swój własny obraz poleceniem: 
 ```
 docker build -t my_image .
+```
+![budowanie mojego obrazu](./zrzuty_ekranu/30.jpg)
+
+Następnie sprawdziłem czy mój obraz się utworzył: 
+![sprawdzanie mojego obrazu](./zrzuty_ekranu/31.jpg)
+
+A następnie uruchomiłem kontener w trybie interaktywnym zeby sprawdzić czy repozytorium poprawnie się sklonowało:
+![sprawdzanie czy repozytorium sie sklonowało](./zrzuty_ekranu/32.jpg)
+
+#### Pokazanie uruchomionych ( != "działające" ) kontenerów, wyczyszczenie ich.
+
+Aby pokazać uruchomione ale nie działające konternery użyłem polecenia: 
+```
+sudo docker ps -a -f status=exited
+```
+Oto one: 
+
+![ uruchomione ale nie działające konternery](./zrzuty_ekranu/33.jpg)
+
+Aby usunąć niedziałające konternery użyłem polecenia:
+```
+sudo docker rm $(docker ps -a -f status=exited -q)
 ```
