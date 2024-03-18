@@ -107,12 +107,18 @@ git push
 ### Inne często używane komendy git
 
 `git add <nazwa_pliku>` - dodaje zmiany w plikach do indeksu (staging area) w celu przygotowania ich do zatwierdzenia.
+
 `git init ` - inicjuje nowe repozytorium Git w bieżącym katalogu.
+
 `git branch`- wyświetla listę dostępnych gałęzi (branchy) oraz aktualną gałąź.
 `git merge <nazwa_gałęzi>` - łączy aktualną gałąź z inną gałęzią.
+
 `git pull ` pobiera najnowsze zmiany z repozytorium zdalnego i scal je z bieżącą gałęzią.
+
 `git diff` - wyświetla różnice między bieżącym stanem a ostatnim zatwierdzeniem.
+
 `git reset <plik>` - resetuje zmiany w określonym pliku, przywracając go do stanu w ostatnim zatwierdzeniu.
+
 ## Część 2 - Docker
 Docker to platforma oprogramowania umożliwiająca pakowanie, wysyłanie i uruchamianie aplikacji w przenośnych kontenerach, co ułatwia zarządzanie środowiskami deweloperskimi oraz wdrażanie aplikacji.
 Kontenery w Dockerze wykorzystują technologię izolacji na poziomie systemu operacyjnego, co oznacza, że dzielą zasoby systemowe z hostem, ale działają w odizolowanym środowisku. Kontenery zawierają tylko niezbędne elementy aplikacji i zależności, co pozwala na ich lekkie i szybkie uruchamianie. Dodatkowo, Docker umożliwia zarządzanie kontenerami za pomocą obrazów, które zawierają wszystkie niezbędne składniki aplikacji oraz konfiguracje.
