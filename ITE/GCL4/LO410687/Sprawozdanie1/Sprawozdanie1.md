@@ -116,7 +116,7 @@ Załączam również dodatkowo przypadek wykonania commit'a niezgodnie z hook'ie
 
 ![failcommit](failcommit.png)
 
-Aby zidentyfikować commitującego stosujemy polecenie `git config --global user.name "imie" oraz git config --global user.email "email"`, gdzie --global oznacza flagę, która określa konfigurację globalnie stosowaną dla konta użytkownika 
+Aby zidentyfikować commitującego stosujemy polecenie `git config --global user.name "imie"` oraz `git config --global user.email "email"`, gdzie --global oznacza flagę, która określa konfigurację globalnie stosowaną dla konta użytkownika 
 
 ![gitconfig](gitconfig.png)
 
