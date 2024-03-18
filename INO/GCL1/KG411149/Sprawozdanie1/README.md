@@ -326,3 +326,4 @@ Aby usunąć niedziałające konternery użyłem polecenia:
 ```
 sudo docker rm $(docker ps -a -f status=exited -q)
 ```
+asdasd
