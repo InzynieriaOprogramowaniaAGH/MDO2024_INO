@@ -43,3 +43,12 @@ ssh-keygen -t ecdsa -C "ja.krystian3243@gmail.com"
 ```
 ![pierwszy klucz ed25519](./zrzuty_ekranu/4.jpg)
 ![drugi klucz ecdsa](./zrzuty_ekranu/5.jpg)
+Następnie uruchomiłem agenta uwierzytelniania SSH za pomocą polecenia: 
+```
+eval $(ssh-agent)
+```
+ oraz dodałem do niego wygenerowane klucze za pomocą polecenia:
+```
+ssh-add ścieżka/do/klucza
+```
+![dodawanie kluczy do agenta](./zrzuty_ekranu/6.jpg)
