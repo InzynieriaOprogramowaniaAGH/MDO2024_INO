@@ -10,7 +10,7 @@ Następnie komendą git push wrzuciłem moją pracę na serwer i utworzyłem pul
 
 # Zajęcia drugie
 Zacząłem od instalacji Dockera na naszych maszynach wirtualnych - **sudo snap install Docker**
-## Następnie pobrałem obrazy *hello-world*, *busybox*, *ubuntu*, *mysql*
+### Następnie pobrałem obrazy *hello-world*, *busybox*, *ubuntu*, *mysql*
 ## Uruchomiłem kontener busybox
 
 Screen z uruchomienia kontenera busybox:
