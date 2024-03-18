@@ -179,16 +179,18 @@ Do sprawdzenia poprawności działania Dockera wykorzystano polecenie:
 ```bash
 sudo systemctl status docker
 ```
-///screen1
-### 2. Zarejestrowano się w Docker Hub i zaponano z sugerowanymi obrazami.
+![Screen1](./screen/screen1.png)
+### 2. Zarejestrowano się w Docker Hub i zapoznano z sugerowanymi obrazami.
 Utworzono konto o nazwie kinga01:
-///screen2
+
+![Screen2](./screen/screen2b.png)
+
 ### 3. Pobrano obrazy hello-world, busybox, fedora, mysql.
 Do pobrania hello-world zastosowano polecenie:
 ```bash
 docker run hello-world
 ```
-///screen3
+![Screen3](./screen/screen3b.png)
 
 kolejne 3 obrazy pobrano za pomocą:
 ```bash
@@ -199,21 +201,23 @@ Do wyświetlenia listy wszystkich obrazów Docker dostępnych w repozytorium uż
 ```bash
 docker images
 ```
-///screen4
+![Screen4](./screen/screen4b.png)
 
 ### 4. Uruchomiono kontener z obrazu busybox.
-Uruchomienie nastąpiło poprzez komendę docker run:
-
-///screen5
+Uruchomienie nastąpiło poprzez komendę 
+```bash
+docker run:
+```
+![Screen5](./screen/screen5b.png)
 
 lecz jak widać na powyższym zrzucie ekranu kontener wyłaczył sie natychmiast.
 Dodatkowo poprzez komendę:
 ```bash
 docker container list --all
 ```
-możliwe jest wyświetlenie listy wszystkich kontenerów, zarówno uruchomionych, jak i zatrzymanych, znajdujących się na systemie.
+możliwe jest wyświetlenie listy wszystkich kontenerów, zarówno uruchomionych, jak i zatrzymanych, znajdujących się w systemie.
 
-///screen6
+![Screen6](./screen/screen6b.png)
 
 Jest to dowód na uruchomienie kontenera.
 Następnie podłączono się do kontenera interaktywnie za pomocą:
@@ -224,24 +228,26 @@ flaga -i oznacza tryb interaktywny,
 a flaga -t oznacza alokację pseudo-terminala.
  
 potem wywołano numer wersji poprzez komendę:
+
 ```bash
 cat --help
 ``` 
-//screen7
+![Screen7](./screen/screen7b.png)
 
 ### 5. Uruchomiono "system w kontenerze" (czyli kontener z obrazu fedora)
 Zastosowano komendę:
 ```bash
 docker run -it fedora
 ```
-///screen8
+![Screen8](./screen/screen8b.png)
 
 Aby zaprezentować PID1 w kontenerze i procesy dockera na hoście, należy wykonać nastepujace kroki:
+
 a) Zainstalować pakiet "procps", który zawiera narzędzia i programy służące do monitorowania procesów w systemie, takie jak ps, top, kill itp. Te narzędzia umożliwiają użytkownikowi wyświetlanie, zarządzanie i analizowanie procesów działających w systemie operacyjnym. Komenda:
 ```bash
 dnf install procps -y
 ```
-///screen9
+![Screen9](./screen/screen9b.png)
 
 b) Po poprawnej instalacji użyć komedny ps, która służy do wyświetlania informacji o aktualnie działających procesach na komputerze.
 Zdecydowano sie dodać konkretne flagi, aby uzyskać bardziej szczegółowe informacje:
@@ -249,17 +255,20 @@ Zdecydowano sie dodać konkretne flagi, aby uzyskać bardziej szczegółowe info
 ps -aux
 ```
 Flaga:
+
 -a: Wyświetla wszystkie procesy na wszystkich terminalach, niezależnie od właściciela.
--u: Wyświetla więcej szczegółowych informacji o procesach, takie jak użytkownik, który uruchomił proces, zużycie zasobów (CPU i pamięć), czas działania itp.
+
+-u: Wyświetla więcej szczegółowych informacji o procesach, takie jak użytkownik, który uruchomił proces, zużycie zasobów, czas działania itp.
+
 -x: Wyświetla także procesy, które nie są bezpośrednio związane z terminalem.
 
-///screen10
+![Screen10](./screen/screen10b.png)
 
 Pakiety zaaktualizowano korzystając z menedżera pakietów DNF oraz komendy:
 ```bash
 dnf update
 ```
-///screen11
+![Screen11](./screen/screen11b.png)
 
 Na końcu w celu wyjścia z kontenera użyto komendy:
 ```bash
@@ -267,33 +276,37 @@ exit
 ```
 Dowodem zakończenia pracy kontenera jest zmiana statusu na 'Excited'.
 
-///screen12
+![Screen12](./screen/screen12b.png)
 
 ### 6. Stworzenie, zbudowanie i uruchomienie prostego pliku Dockerfile bazującego na wybranym systemie i sklonowanie repo.
 Na początku utworzono plik o nazwie Dockerfile.
-Umieszczono go w folderze Sprawozdanie1 i zmodyfikowano kierując się dobrymi praktykami, jego treść wygląda następująco:
+Zmodyfikowano go kierując się dobrymi praktykami, jego treść wygląda następująco:
 
-///screen13
+![Screen13](./screen/screen13b.png)
 
 Opis pliku:
+
 FROM fedora:latest -> Bazowy obraz, który zostanie użyty do zbudowania obrazu kontenera to fedora w najnowszej wersji.
-RUN dnf -y update && dnf -y install git
-Wykonano dwie operacje w jednej instrukcji RUN. Aktualizacja listy pakietów, następnie instalacja pakietu git.
-RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git -> wykonano klonowanie repozytorium Git znajdującego się pod podanym adresem URL,
+
+RUN dnf -y update && dnf -y install git -> Wykonano dwie operacje w jednej instrukcji RUN. Aktualizacja listy pakietów, następnie instalacja pakietu git.
+
+RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git -> wykonano klonowanie repozytorium Git znajdującego się pod podanym adresem URL.
+
 WORKDIR /repos ->  ustawiono katalog roboczy na /repos wewnątrz kontenera. Wszystkie kolejne operacje będą wykonywane w tym katalogu.
+
 ENTRYPOINT ["/bin/bash"] -> domyślna komenda, która zostanie uruchomiona w kontenerze podczas jego startu. Kontener będzie uruchamiał powłokę /bin/bash, co pozwoli użytkownikowi na interaktywną pracę w kontenerze.
 
 Zbudowano plik poprzez komendę:
 ```bash
 docker build -t <nazwa_pliku> .
 ```
-///screen14
+![Screen14](./screen/screen14b.png)
 
 Plik zbudował sie prawidłowo:
 
-///screen15
+![Screen15](./screen/screen15b.png)
 
-Powyższy zrzut ekranu zawiera także komendę uruchamiającą interaktywnie kontener i weryfikacje, czy poprawnie sklonowano repozytroium.
+Powyższy zrzut ekranu zawiera także komendę uruchamiającą interaktywnie kontener i weryfikacje, czy poprawnie sklonowano repozytorium.
 
 ### 7. Wyświetlenie uruchomionych ( != "działających" ) kontenerów, wyczyszczenie ich.
 Wyświetlenie listy wszystkich kontenerów Docker, zarówno uruchomionych, jak i zatrzymanych, obecnych w systemie poprzez komendę:
@@ -302,20 +315,23 @@ docker ps -a
 ```
 Opcja -a oznacza "all" i powoduje wyświetlenie wszystkich kontenerów, niezależnie od ich stanu.
 
-///screen16
+![Screen16](./screen/screen16b.png)
 
 Zatrzymania kontenerów dokonano komendą:
 ```bash
 docker stop $(docker ps -a -q)
 ```
-///screen17
-Wyczyszczenie ich poprzez komendę:
+![Screen17](./screen/screen17b.png)
+
+Wyczyszczenie ich następuje poprzez komendę:
 ```bash
 docker rm $(docker ps -a -q)
 ```
-Komenda docker rm usuwa kontenery Docker. $() jest konstrukcją używaną w Bashu do wywoływania poleceń wewnątrz innych poleceń. W tym przypadku, $(docker ps -a -q) jest zastępowane przez listę ID wszystkich kontenerów.
+Komenda docker rm usuwa kontenery Docker. *$()* jest konstrukcją używaną w Bashu do wywoływania poleceń wewnątrz innych poleceń. W tym przypadku, $(docker ps -a -q) jest zastępowane przez listę ID wszystkich kontenerów.
+
 Efekt końcowy:
-///screen18
+
+![Screen18](./screen/screen18b.png)
 
 ### 8. Czyszczenie obrazów.
 Odbywa się poprzez komendę:
@@ -323,11 +339,13 @@ Odbywa się poprzez komendę:
 docker rmi $(docker images -a -q)
 ```
 
-///screen19
+![Screen19](./screen/screen19b.png)
 
 ### 9. Dodano stworzone pliki Dockefile do folderu Sprawozdanie1 w repozytorium.
 
+![Screen20](./screen/screen20b.png)
 
+Zaaktualizowano sprawozdanie i wykonano pull requesta.
 
 
 
