@@ -3,10 +3,16 @@
 ## Cel ćwiczenia:
  ## 1 część: Wprowadzenie do środowiska Git. Połączenie z serwerem na wirtualnej maszynie Ubuntu, umiejętność posługiwania się podstawowymi poleceniami Git: branch, commit, add, checkout, itp., poprawne rozumienie struktury gałęzi i posługiwanie się nimi w trakcie laboratorium. Należy zrozumieć ideę kluczy SSH i potrafić je generować.
  
- ## 2 część:
+ ## 2 część: Wprowadzenie do Dockera. Poznanie idei używania tego środowiska, odróżnienie go od wirtualnej maszyny, pierwsze użycie praktyczne obrazu, kontenera oraz ich terminologii. 
 
 ---
+
 ## Streszczenie laboratorium:
+
+### W tym laboratorium utworzyłem serwer Ubuntu, a na nim dokonałem odpowiednich konfiguracji związanych z instalacją klienta Git, zarządzaniem kluczami SSH i połączeniem ich ze zdalnym repozytorium. 
+### Moje zadanie polegało na stworzeniu i wdrożeniu swojego własnego katalogu roboczego do gałęzi grupowej, co ma na celu zobrazować pracę ze zdalnymi repozytoriami na GitHub. W tym celu należało sie posługiwać instrukcjami kolejno 'add', 'commit', 'push origin', co zaprezentowałem bardziej szczegółowo poniżej. Utworzyłem także pierwszy Git Hook, który służy za skrypt do pisania np. commitów tak jak w tym przypadku. 
+
+### W kolejnej części zainstalowałem i skonfigurowałem system Docker, który ma za zadanie konteneryzacji aplikacji. Pobrałem przykładowe obrazy i na ich podstawie uruchamiałem kontenery w interaktywnej wersji, aby sprawdzić poprawność ich działania. Udało się stworzyć także Dockerfile, czyli pewną własnoręczną wersję obrazu. 
 
 ---
 ## Przygotowanie środowiska pracy i obsługa kluczy SSH
@@ -32,7 +38,7 @@ Jednym z tych sposobów jest klonowanie za pomocą HTTPS, czyli zwyczajnie kopiu
 
 ![](zrzuty_ekranu/pat_1.png)
 
-W tym przypadku nie trzeba było podawać Personal Access Token, co widać na poniższym zrzucie ekranu. Udało się to zrobić przy pomocy samego linku do GitHub.
+W tym przypadku nie trzeba było podawać Personal Access Token, co widać na poniższym zrzucie ekranu. Udało się to zrobić przy pomocy samego linku do GitHub. Jest to spowodowane prawodpodobnei tym, że nasze repozytorium ma ogólnodostępne, publiczne uprawnienia, co powoduje że po prostu nie ma konieczności uwierzytelniania klonowania. 
 
 ![](zrzuty_ekranu/clone_https.png)
 
@@ -40,7 +46,7 @@ W tym przypadku nie trzeba było podawać Personal Access Token, co widać na po
   - utworzenie dwóch kluczy innych niż RSA
 W przypadku generowania kluczy SSH proces wygląda następująco:
 
-1. Generujemy klucz z poziomu Git ( inny niż domyślny RSA ) 
+1. Generujemy klucz z poziomu Git ( inny niż popularny RSA ) 
 
 Klucz pierwszy bez zabezpieczenia:
 ![](zrzuty_ekranu/keygen1.png)
@@ -139,33 +145,64 @@ Wciągnięcie do gałęzi grupowej polegało na zmergowaniu gałęzi osobistej d
 
 ## Instalacja Dockera w systemie linuksowym
 
+Przed rozpoczęciem pracy z Dockerem należało najpierw go zainstalować a następnie skonfigurować w naszym środowisku. 
+Przy pomocy instrukcji 'sudo snap install docker' instalujemy aktualną wersję programu i sprawdzamy poprawność działania. 
+
 ![](zrzuty_ekranu_docker/install_docker.png)
 
 ## Rejestracja w Docker Hub
+
+Docker Hub to platforma, gdzie udostępniane są obrazy, które można pobrać na nasz system i z nich korzystać/modyfikować je/tworzyć z nich kontenery. To taki odpowiednik repozytoriów na GitHubie. 
+Założyłem tam konto tak jak zalecono w instrukcji, aby móc przeglądać i swobodnie korzystać z zasobów społeczności. 
+
 ![](zrzuty_ekranu_docker/dockerhub.png)
 
 ## Pobranie obrazów z instrukcji
+
+Na samym starcie nie ma zainstalowanych żadnych obrazów. Można je zainstalować na 2 sposoby: albo używając komendy pull, albo run(wtedy wyświetli się co prawda komunikat o braku takiego obrazu, ale po chwili zostanie on pobrany automatycznie)
+
+BusyBox to program komputerowy łączący funkcje podstawowych narzędzi Uniksa w jednym pliku wykonywalnym. Właśnie go pobierzemy.
+
 ![](zrzuty_ekranu_docker/install_busybox_emptyimages.png)
 
+Taki sam schemat postępowania będzie w przypadku obrazu Ubuntu oraz mysql.
+
 ![](zrzuty_ekranu_docker/install_ubuntu_mysql.png)
+
+Poniżej widzimy jako dowód że wszystkie obrazy zostały poprawnie zainstalowane po tym jak zostanie wpisana komenda 'sudo docker images'. Wyświetla ona wszystkie aktualne obrazy. 
 
 ![](zrzuty_ekranu_docker/all_images.png)
 
 ## Uruchomienie kontenera z obrazu busybox
 
+Teraz naszym zadaniem będzie uruchomienie busybox instrukcją 'run'. W momencie, w którym jest ona pusta bez parametrów dodatkowych wtedy nie widzimy żandych rezultatów uruchomienia. to, że działa pokazuje nam jedynie komunikat w trakcie wyświetlania ostatnich procesów dockera na hoscie. Status wskazuje na 'Exited' czyli kontener działał i zakończył to działanie. 
+
 ![](zrzuty_ekranu_docker/run_busybox_empty.png)
 
+Aby zobaczyć rezultat uruchomienia sprawdzimy działanie busybox w wersji interaktywnej.
+
 ![](zrzuty_ekranu_docker/run_busybox.png)
+
+Sprawdamy wersję busyboxa oraz Linuxa komendami odpowiednio : cat --help oraz uname -a.
 
 ![](zrzuty_ekranu_docker/version_busybox.png)
 
 ## Uruchomienie kontenera z obrazu ubuntu
 
+Teraz uruchamiamy system w kontenerze czyli korzystamy z obrazu ubuntu. 
+Należy sprawdzić proces 0 w kontenerze, czyli PID1 - jest  to proces inicjalizujący odpowiedzialny za uruchomienei kontenera i samo działanie. 
+
 ![](zrzuty_ekranu_docker/run_ubuntu_it.png)
+
+Procesy Dockera działające na hoscie możemy sprawdzić na 2 sposoby. Pierwsztm z nich jest polecenie 'sudo docker container list'. (włączyłem do tego drugi terminal aby nie wychodzić z obecnego procesu)
 
 ![](zrzuty_ekranu_docker/check_status_container.png)
 
+Druga metoda, czyli wyświetlenie procesów za pomocą 'sudo docker ps'. Również wtedy wyświetlimy działające aktualnie procesy. 
+
 ![](zrzuty_ekranu_docker/another_method_ps.png)
+
+Aktualizacje pakietów dostępne dla dockera:
 
 ![](zrzuty_ekranu_docker/update.png)
 
@@ -173,23 +210,48 @@ Wciągnięcie do gałęzi grupowej polegało na zmergowaniu gałęzi osobistej d
 
 ![](zrzuty_ekranu_docker/upgrade2.png)
 
+Następnie wychodzimy z ubuntu i sprawdzamy czy tak jak zakładamy przetanie działać proces automatycznie po wyjściu. 
+
 ![](zrzuty_ekranu_docker/wyjscie_z_ubuntu1.png)
 
 ## Stworzenie prostego pliku Dockerfile
 
+W składni Dockerfile używa się serii instrukcji do zdefiniowania, jak zbudować obraz Docker. Pierwszą komendą jest 'FROM'. Ta dyrektywa wskazuje obraz bazowy, od którego zaczniemy budowę obrazu. Kolejną ważną komendą jest 'RUN', która służy do wykonywania poleceń w nowym warstwowym obrazie. 'ADD' i 'COPY' to instrukcje, które kopiują nowe pliki, katalogi lub zdalne pliki url i dodają je do systemu plików obrazu. Każda linia w Dockerfile tworzy nową warstwę w obrazie Docker.
+
+Moim obrazem bazowym będzie Ubuntu - jest to jeden z dwóch systemów który wybiorę. Jest to system kompatybilny i zdatny do instalacji Git oraz ssh. 
+
+Przy pomocy komendy WORKDIR uruchamiar folder roboczy w który będzie zapisany mój plik. 
+
+Instrukcją RUN uruchamiam polecenia warstwowe, w tym wypadku instalacja Git i ssh a później sklonowanie repozytorium za pomocą HTTPS. 
+Inną opcją jest użycie tutaj znaków && które okazują się dobrą praktyką ponieważ nie tworzy się wtedy nowa warstwa tak jak w przypadku podwójnego użycia komendy RUN. 
+
 ![](zrzuty_ekranu_docker/Dockerfile.png)
+
+Zbudowanie obrazu o nazwie 'image_git1' poleceniem 'build'.
 
 ![](zrzuty_ekranu_docker/docker_build.png)
 
+Potwierdzenie utworzenia obrazu przy pomocy wyświetlenia 'docker images'.
+
 ![](zrzuty_ekranu_docker/docker_images_after.png)
 
+Interaktywnie uruchamiamy obraz i sprawdzamy czy znajduje się tam nasz sklonowany katalog z laboratorium. 
+Okazuje się że wszystko zostało skopiowane poprawnie i znajduje się nasz katalog w katalogu roboczym repo utworzonym w trakcie tworzenia Dockerfile. 
+
 ![](zrzuty_ekranu_docker/interaktywny_image.png)
+
+Sprawdzamy czy Git został poprawnie zainstalowany. 
 
 ![](zrzuty_ekranu_docker/git_contener.png)
 
 ## Czyszczenie kontenerów i obrazów 
 
+Teraz naszym zdaniem jest pokazanie uruchomionych kontenerów a następnie wyczyszczenie ich. 
+W tym celu aby wyświetlić te procesy standardowo używamy komendy ps -a -q aby zobaczyć tylko ich ID. 
+
 ![](zrzuty_ekranu_docker/ps-a.png)
+
+USuwamy kontenery a następnie obrazy instrukcją rm. 
 
 ![](zrzuty_ekranu_docker/remove_containers.png)
 
@@ -197,4 +259,5 @@ Wciągnięcie do gałęzi grupowej polegało na zmergowaniu gałęzi osobistej d
 
 ## Dodanie Dockerfile do folderu ze sprawozdaniem
 
-![](zrzuty_ekranu_docker/image.png)
+Dockerfile został poprawnie przeniesiony w miejsce katalogu sprawozdania pierwszego, a następnie został wystawiony pull request do gałęzi grupowej jako zgłoszenie wykonanego zadania. 
+
