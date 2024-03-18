@@ -31,11 +31,9 @@ Poprawność instalacji można sprawdzić komendą ssh -V, która wyświetli bie
 
 ![](./ss_GitHub/ss_2.png)
 
-
-
 ### 2. Klonowanie repozytorium przedmiotowego 
 
-# 2.1 za pomocą HTTPS i personal access token
+#### 2.1 za pomocą HTTPS i personal access token
 Do klonowania rezpozytorium za pomocą HTTPS użyjemy personal access tokenu, który jest alternatywą dla tradycyjnego uwierzytelniania poprzez hasło.
 Token wygenerujemy na Githubie. Należy wejść w ustawienia konta na Githubie --> Developer settings --> Personal access tokens.
 
@@ -51,7 +49,7 @@ Wygenerowanie personal access tokena pozwoliło nam na dostęp do klonowanego re
 
 ![](./ss_GitHub/ss_3.png)
 
-# 2.2 za pomocą klucza SSH
+#### 2.2 za pomocą klucza SSH
 
 Klonowanie repozytorium przy użyciu SSH jest szybsze, wygodniejsze (nie trzeba podawać hasła ani tokenu przy każdej komendzie) oraz bardziej bezpieczne (klucz prywatny jest przechowywany lokalnie i nigdy nie jest przesyłany przez sieć).
 
@@ -273,7 +271,6 @@ Dodanie użytkownika ("nati") do grypu ("docker") daje możliwość wykonywania 
 
 ```sudo usermod -aG docker nati```
 
-
 ### 2. Rejestracja w Docker Hub
 
 Wchodzimy na stronę DockerHub i klikamy przycisk SignUp (znajdujący się w prawym górnym rogu). Postępujemy zgodnie z wyświetlającymi się komunikatami. Po potwierdzeniu swojego konta na mailu możemy przejść do pracy.
@@ -318,20 +315,19 @@ Uruchamiamy nowy kontener Docker z obrazem BusyBox, który będzie działał w t
 
 gdzie:
 
-    *docker run* - komenda do uruchamiania nowego kontenera na podstawie obrazu
+*docker run* - komenda do uruchamiania nowego kontenera na podstawie obrazu
 
-    *-d* - opcja, która oznacza tryb działania w tle (demon)
+*-d* - opcja, która oznacza tryb działania w tle (demon)
 
-    *--name busybox-container* - nadaje kontenerowi nazwę *"busybox-container"*
+*--name busybox-container* - nadaje kontenerowi nazwę *"busybox-container"*
 
-    *busybox* - nazwa obrazu, na podstawie którego zostanie uruchomiony kontener
+*busybox* - nazwa obrazu, na podstawie którego zostanie uruchomiony kontener
 
 ![](./ss_Docker/d_11.png)
 
 Kontener nie dostał żadnego zadania do wykonania, zatem zakończył od razu swoje działanie:
 
 ![](./ss_Docker/d_12.png)
-
 
 * Podłącz się do kontenera interaktywnie i wywołaj numer wersji
 
@@ -371,7 +367,6 @@ Działanie nowoutworzonego kontenera sprawdzam otwierając nowy terminal i wpisu
 
 ![](./ss_Docker/d_16.png)
 
-
 Polecenie:
 
 ```ps```
@@ -402,15 +397,15 @@ Zawartość pliku:
 
 plik powstał zgodnie z dobrymi praktykami gdzie:
     
-    *FROM fedora* -  określa, że nasz nowy obraz Docker będziemy budować na podstawie systemu operacyjnego Fedora
+*FROM fedora* -  określa, że nasz nowy obraz Docker będziemy budować na podstawie systemu operacyjnego Fedora
 
-    *RUN dnf -y update && \ dnf install -y git* - aktualizuje listę pakietów w systemie i instaluje Git'a (opcja *-y* automatycznie potwierdza wszystkie pytania o potwierdzenie - przyspiesza pracę)
+*RUN dnf -y update && \ dnf install -y git* - aktualizuje listę pakietów w systemie i instaluje Git'a (opcja *-y* automatycznie potwierdza wszystkie pytania o potwierdzenie - przyspiesza pracę)
 
-    *RUN git clone* - klonuje repozytorium za pomocą Git'a
+*RUN git clone* - klonuje repozytorium za pomocą Git'a
 
-    *WORKDIR /repo* - ustawia katalog roboczy w kontenerze na /repo. Wszystkie kolejne polecenia będą wykonywane w tym katalogu, co pomaga utrzymać porządek i zorganizować strukturę plików w kontenerze.
+*WORKDIR /repo* - ustawia katalog roboczy w kontenerze na /repo. Wszystkie kolejne polecenia będą wykonywane w tym katalogu, co pomaga utrzymać porządek i zorganizować strukturę plików w kontenerze.
 
-    *ENTRYPOINT ["/bin/bash"]* - określa domyślne polecenie dla kontenera. Jeśli nie zostanie podane inne polecenie podczas uruchamiania kontenera, automatycznie zostanie uruchomiony interaktywny terminal Bash. Jest to przydatne do debugowania i interaktywnego eksplorowania kontenera.
+*ENTRYPOINT ["/bin/bash"]* - określa domyślne polecenie dla kontenera. Jeśli nie zostanie podane inne polecenie podczas uruchamiania kontenera, automatycznie zostanie uruchomiony interaktywny terminal Bash. Jest to przydatne do debugowania i interaktywnego eksplorowania kontenera.
 
 Konieczna była zmiana nazwy pliku, na taką która zaczyna się małą literą:
 
