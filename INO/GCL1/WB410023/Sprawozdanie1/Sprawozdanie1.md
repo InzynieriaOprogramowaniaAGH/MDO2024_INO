@@ -15,13 +15,13 @@ Podczas zajęć korzystałam z systemu Ubuntu na Wirtualnej Maszynie.
 
 Zrzut ekranu przedstawiający zainstalowaną wersję Git:
 
-![1](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/images/image1.png)
+![1](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie1/images/image1.png)
 
 ### 2. Utworzyłam personal access token.
 
 Wybranie w ustawieniach GitHuba po kolei: 'Developer settings' -> 'Personal access token' -> 'Tokens (classic)' -> 'Generate new token (classic).
 
-![2](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/images/image1d.png)
+![2](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie1/images/image1d.png)
 
 ### 3. Sklonowałam repozytorium https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO za pomocą HTTPS.
 
@@ -29,7 +29,7 @@ Wykorzystane polecenie git wraz ze skopiowanym linkiem do repozytorium:
 ```bash
 git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git
 ```
-![3](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/images/image2a.png)
+![3](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie1/images/image2a.png)
 
 ### 4. Utworzyłam dwa klucze SSH (inne niż RSA, w tym co najmniej jeden zabezpieczony hasłem).
 - Klucz SSH typu ed25519 - klucz szyfrowany zabezpieczony hasłem:
@@ -38,7 +38,7 @@ Wykorzystane polecenie git:
 ```bash
 ssh-keygen -t ed25519 -C "weronikaabednarz@gmail.com"
 ```
-![4](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/images/image2b.png)
+![4](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie1/images/image2b.png)
 
 - Klucz SSH typu ecdsa - klucz szyfrowany algorytmem:
 
@@ -49,7 +49,7 @@ ssh-keygen -t ecdsa -b 521 -C "weronikaabednarz@gmail.com"
 
 Wygenerowane klucze zapisałam w katalogu '/home/weronikaabednarz/.ssh/', a następnie dodałam do swojego konta na GitHubie kolejno: 'Settings' -> 'SSH and GPG keys'.
 
-![5](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/images/image3.png)
+![5](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie1/images/image3.png)
 
 ### 5. Skonfigurowałam klucz SSH jako metodę dostępu do GitHuba.
 
@@ -72,11 +72,11 @@ ssh-add ~/.ssh/id_ed25519
 ```
 Zrzut ekranu przedstawiający powyższe kroki:
 
-![6](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/images/image4.png)
+![6](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie1/images/image4.png)
 
 Zrzut ekranu przedstawiający utworzone klucze SSH:
 
-![7](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/images/image6.png)
+![7](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie1/images/image6.png)
 
 ### 6. Sklonowałam repozytorium wykorzystujac protokoł SSH.
 
@@ -84,7 +84,7 @@ Wykorzystane polecenie git:
 ```bash
 git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
 ```
-![8](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/images/image5.png)
+![8](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie1/images/image5.png)
 
 ### 7. Przełączyłam się na gałąź ```main```, a następnie na gałąź ```GCL1```.
 
@@ -106,7 +106,7 @@ git branch WB410023
 ```bash
 git checkout WB410023
 ```
-![9](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/images/image7.png)
+![9](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie1/images/image7.png)
 
 ### 9. W katalogu właściwym dla grupy utworzyłam nowy katalog o nazwie ```WB410023```.
 
@@ -116,7 +116,7 @@ Wykorzystane polecenie:
 ```bash
 mkdir WB410023
 ```
-![10](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/images/image8.png)
+![10](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie1/images/image8.png)
 
 ### 10. Napisałam Git hook - skrypt weryfikujący, czy każdy mój "commit message" zaczyna się od ```WB410023```. Przykładowe githook'i znajdują się w folderze .git/hooks
 ### w repozytorium na dysku.
@@ -127,7 +127,7 @@ nano commit-msg
 ```
 Zrzut ekranu przedstaiwający napisany skrypt:
 
-![11](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/images/image9.png)
+![11](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie1/images/image9.png)
 
 ### 11. Następnie dodałam skrypt do utworzonego wcześniej katalogu, a potem skopiowiałam go we właściwe miejsce, tak by uruchamiał się z każdym commit'em.
 
@@ -139,7 +139,7 @@ Dodanie użytkownikowi uprawnień aby plik mogł zostać uruchomiony:
 ```bash
 chmod +x .git/hooks/commit-msg
 ```
-![12](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/images/image10.png)
+![12](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie1/images/image10.png)
 
 ### 12. Przetestowałam działanie git hook'a.
 
@@ -154,7 +154,7 @@ touch sprawozdanie_lab1.md
 ```bash
 mkdir images
 ```
-![13](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/images/image11.png)
+![13](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie1/images/image11.png)
 
 - Przenoszenie nowych i zmodyfikowanych plików, z wyłączeniem plików usuniętych do obszaru roboczego (do commita) w celu zatwierdzenia
 ```bash
@@ -168,7 +168,7 @@ git commit -m "Test"
 ```bash
 git commit -m "WB410023: first commit"
 ```
-![14](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/images/image12.png)
+![14](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie1/images/image12.png)
 
 ### 13. W katalogu dodałam pliki ze sprawozdaniem wraz z zrzutami ekranu (jako inline).
 
@@ -189,7 +189,7 @@ git commit -m "WB410023 zmiana struktury katalogow"
 ```bash
 git push origin WB410023
 ```
-![15](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/images/image14.png)
+![15](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie1/images/image14.png)
 
 
 ### 15. Podjęłam próbę wciągnięcia swojej gałąź do gałęzi grupowej.
@@ -203,7 +203,7 @@ git checkout GCL1
 ```bash
 git merge WB410023
 ```
-![16](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/images/image13.png)
+![16](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie1/images/image13.png)
 
 
 ### 16. Dodałam zedytowane sprawozdanie oraz zrzuty ekranu.
