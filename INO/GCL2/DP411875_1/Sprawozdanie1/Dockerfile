@@ -1,6 +1,6 @@
 FROM ubuntu:latest
 
-WORKDIR /app
+WORKDIR /repozytorium
 
 
 RUN apt-get update && apt-get install -y git || \
