@@ -21,9 +21,9 @@ gdzie argumenty to:
 `-t` - typ klucza
 `-C` - komentarz, nie jest wymagany ale pozwala na łatwe odróżnienie kluczy.
 Przykładowe działanie powyższej komendy:
-!(Pasted image 20240318000957.png)
+![Screenshot 1](scrnshts/Pasted%20image%2020240318000957.png)
 Po wylistowaniu pliku w katalogu można zauważyć dwa nowoutworzone pliki:
-!(Pasted image 20240318002312.png)
+![Screenshot 2](scrnshts/Pasted%20image%2020240318002312.png)
 Pierwszy z nich to klucz prywatny, a drugi to klucz publiczny.  Klucz publiczny należało dodać do swojego profilu.
 
 ### Klonowanie repozytorium
