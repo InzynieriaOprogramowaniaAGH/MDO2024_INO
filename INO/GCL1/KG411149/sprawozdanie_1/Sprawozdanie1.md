@@ -135,21 +135,21 @@ Każdą zmianę którą przeprowadziłem na mojej gałęzi i chcę aby wbyła wi
 ```
 git add
 ```
-**add** odpowiada za dodanie nowych zmian, wszytkich nowych plików czy tez modyfikacja starych
+**add** odpowiada za dodanie nowych zmian, wszytkich nowych plików czy tez modyfikacje starych.
 
 ```
 git commit
 ```
-**commit** jest komunikatem towarzyszącym zmianą w którego treści umieszczamy co zostało przez nas zmienione od ostatniego wysłania zmian do zdalnego hosta
+**commit** jest komunikatem towarzyszącym zmianą w którego treści umieszczamy co zostało przez nas zmienione od ostatniego wysłania zmian do zdalnego hosta.
 
 ```
 git push
 ```
-**push** krótko mówiąc wypycha zmiany z lokalnego hosta do zdalnego (potwierdza je)
+**push** krótko mówiąc wypycha zmiany z lokalnego hosta do zdalnego (potwierdza je).
 
 ![wysyłanie zmian do zdalnego hosta](./zrzuty_ekranu/15.jpg)
 
-Przydatnym narzędziem przy pracy z gitem jest również 
+Przydatnym narzędziem przy pracy z gitem jest również:
 ```
 git status 
 ```
