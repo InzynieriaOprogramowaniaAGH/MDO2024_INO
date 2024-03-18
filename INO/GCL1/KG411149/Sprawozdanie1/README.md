@@ -222,3 +222,77 @@ sudo docker container list -all
 
 Tutaj widać ze dany kontener pracował jakąś chwile temu, lecz juz zakończył swoje działanie.
 
+
+Kolejnym krokiem było podłączenie się do kontenera interaktywnie i wywołanie numeru wersji. Połączenie interaktywne pozwala na interakcję z aplikacją uruchomioną wewnątrz kontenera poprzez terminal. Aby uruchomić terminal interaktywnie użyłem polecenia: 
+```
+sudo docker run -it busybox  
+```
+Aby wyświetlić informacje o wersji busyboxa nalezy uzyc polecenia: 
+```
+busybox --help
+```
+Żeby wyjść z konternera należy użyć polecenia: 
+```
+exit
+```
+![busybox interaktywnie](./zrzuty_ekranu/25.jpg)
+
+#### Uruchomienie systemu w kontenerze (kontener z obrazu fedora)
+Na początek uruchomiłem w nowym terminalu ten system poleceniem: 
+```
+sudo docker run -it fedora
+```
+Następnie aby sprawdzić proces PID1 użyłem polecenia 
+```
+ps -aux
+```
+jedank w systemie nie było zainsalowanego **ps** więc instalacji dokonałem poleceniem: 
+```
+dnf install procps -y
+```
+teraz juz mogłem sprawdzić PID1 za pomocą ps:
+
+![PID1](./zrzuty_ekranu/26.jpg)
+
+Następnie aby zaprezentowac procesy dockera na hoscie wyświetliłem liste działających kontenerów poleceniem: 
+``` 
+sudo docker container list
+```
+A potem po ID kontenera znajdujemy jego proces root, poleceniem: 
+```
+sudo docker top e4b8865f218a
+```
+![procesy dockera na hoscie](./zrzuty_ekranu/27.jpg)
+
+Następnie przystąpiłem do aktualizacji pakietów poleceniem:
+```
+sudo dnf update
+```
+po czym aby potwierdzić tą aktualizacje wpisałem **y**:
+
+![aktualizacja pakietów](./zrzuty_ekranu/28.jpg)
+
+W ten sposób pobrieramy wszytkie zmiany. Na koniec wychodzimy tak jak wczesniej czyli **exit**.
+
+#### Stworzenie  własnoręcznie, zbudowanie i uruchomienie prostego pliku Dockerfile bazującego na wybranym systemie i sklonowanie repozytorium
+
+Utworzyłem plik **Dockerfile** w nim ustawiłem obraz bazowy czyli Ubuntu: 
+```
+FROM ubuntu:latest
+```
+Ustawiłem katalog roboczY:
+```
+WORKDIR /app
+```
+Następnie zainstalowałem w nim Gita
+```
+RUN apt-get update && apt-get install -y git
+```
+Następnie sklonowałem reporzytorium:
+```
+RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+```
+Na koniec zdefiniowałem główny program który ma zostać uruchomiony w Dockerze jako pierwszy proces:
+```
+ENTRYPOINT ["/bin/bash"]
+```
