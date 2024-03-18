@@ -261,3 +261,5 @@ USuwamy kontenery a następnie obrazy instrukcją rm.
 
 Dockerfile został poprawnie przeniesiony w miejsce katalogu sprawozdania pierwszego, a następnie został wystawiony pull request do gałęzi grupowej jako zgłoszenie wykonanego zadania. 
 
+Listing poleceń zawiera się w katalogu ze zrzutami ekranu jako plik tekstowy.
+
