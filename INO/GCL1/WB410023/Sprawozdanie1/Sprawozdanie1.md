@@ -445,7 +445,7 @@ cp Dockerfile <ścieżka>
 ![38](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie1/images/21.jpg)
 
 
-### 10. Wystawiłam Pull Request do gałęzi grupowej jako zgłoszenie wykonanego zadania.
+### 10. Dodałam zedytowane sprawozdanie oraz zrzuty ekranu.
 
 Wykorzystane polecenia:
 ```bash
