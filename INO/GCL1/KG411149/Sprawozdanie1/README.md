@@ -296,3 +296,9 @@ Na koniec zdefiniowałem główny program który ma zostać uruchomiony w Docker
 ```
 ENTRYPOINT ["/bin/bash"]
 ```
+![Dockerfile](./zrzuty_ekranu/29.jpg)
+
+Po utworzeniu pliku Dockerfile na jego podstawie tworze swój własny obraz poleceniem: 
+```
+docker build -t my_image .
+```
