@@ -462,7 +462,7 @@ Czyścimy obrazy:
 
 ### 9. Dodanie stworzonego pliku Dockefile do folderu swojego Sprawozdanie1 w repozytorium.
 
-Do skopiownanie użyłam komendy: ```cp```
+Upewniłam się czy jestem na swojej gałęzi, a następnie do skopiownanie użyłam komendy: ```cp```
 
 ```cp ~/Dockerfile ~/test/MDO2024_INO/INO/GCL1/NBS411634/Sprawozdanie1/```
 
