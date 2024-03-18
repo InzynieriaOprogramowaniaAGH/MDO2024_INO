@@ -112,3 +112,5 @@ Nastepnie skopiowałem mój skrypt **commit-msg** do katalogu:
 /home/krygliw/MDO2024_INO/.git/hooks
 ```
 aby uruchamiał się za każdym razem kiedy robię commita. Testy działania **commit-msg**:
+
+![testy commit-msg](./zrzuty_ekranu/13.jpg)
