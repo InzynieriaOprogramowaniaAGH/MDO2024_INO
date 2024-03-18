@@ -163,7 +163,9 @@ Dlatego z pomocą komendy
 sudo docker run -it busybox
 ```
 
-podłączam się do niego interaktywnie, dzięki czemu mogę korzystać z jego powłoki i komunikować się z systemem kontenera. Wywołuje numer wersji:
+podłączam się do niego interaktywnie, dzięki czemu mogę korzystać z jego powłoki i komunikować się z systemem kontenera. 
+
+Wywołuje numer wersji:
 
 ![10.1](screenshots/10.1.png)
 
@@ -207,9 +209,9 @@ Inaczej musiałabym najpierw je zatrzymać komendą
 sudo docker stop $(sudo docker ps -aq)
 ```
 
-- Czyszczenie obrazów przebiega podobnie do czyszczenia kontenerów. Za pomocą jednej komendy jesteśmy w stanie usunąc wszystkie obrazy znajdujące się w loklanym rejestrze:
+- Czyszczenie obrazów przebiega podobnie do czyszczenia kontenerów. Za pomocą jednej komendy jesteśmy w stanie usunąc wszystkie obrazy znajdujące się w lokalnym rejestrze:
 
-![14.1](screenshots/13.2.png)
+![14.1](screenshots/14.2.png)
 
 Przy wykonywaniu polecenia pojawił się problem z odnalezieniem ścieżki ostatnich obrazów, jednakże przy wyświetleniu listy wszystkich obrazów nie pojawiły się tam już żadne obrazy i możemy przyjąć, że wszytskie zostały usunięte: 
 
