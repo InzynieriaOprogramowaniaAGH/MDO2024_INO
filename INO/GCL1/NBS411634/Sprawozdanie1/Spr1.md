@@ -21,7 +21,7 @@ Kolejnym krokiem jest instalacja klienta Git:
 
 Aby upewnić się czy wszystko działa prawidłowo warto skorzystać z komendy git --version, która wyświetli aktualną wersję zainstalowanego gita.
 
-![](./ss/ss_1.png)
+![](./ss_GitHub/ss_1.png)
 
 Obsługę SSH instalujemy poleceniem:
 
@@ -29,7 +29,7 @@ Obsługę SSH instalujemy poleceniem:
 
 Poprawność instalacji można sprawdzić komendą ssh -V, która wyświetli bieżącą wersję OpenSSH.
 
-![](./ss/ss_2.png)
+![](./ss_GitHub/ss_2.png)
 
 
 
@@ -49,7 +49,7 @@ Do tego użyjemy komendy:
 
 Wygenerowanie personal access tokena pozwoliło nam na dostęp do klonowanego repozytorium bez konieczności użycia hasła.
 
-![](./ss/ss_3.png)
+![](./ss_GitHub/ss_3.png)
 
 # 2.2 za pomocą klucza SSH
 
@@ -63,11 +63,11 @@ Utworzyłam klucze: ed25519 oraz ecdsa.
 
 Pierwszy klucz ed25519 to klucz bez hasła. Podczas generowania, gdy pojawił się komunikat: *Enter passphrase(empty for no passphrase)*, kliknęłam Enter, a klucz został utworzony bez hasła.
 
-![](./ss/ss_4.png)
+![](./ss_GitHub/ss_4.png)
 
 Drugi klucz ecdsa to klucz już z hasłem.
 
-![](./ss/ss_5.png)
+![](./ss_GitHub/ss_5.png)
 
 Klucze powstały w wersji publicznej, jak i prywatnej. Aby wyświetlić zawartość klucza publicznego użyjemy komendy:
 
@@ -75,14 +75,14 @@ Klucze powstały w wersji publicznej, jak i prywatnej. Aby wyświetlić zawarto�
 
 ```cat ~/.ssh/id_ecdsa.pub```
 
-![](./ss/ss_6.png)
+![](./ss_GitHub/ss_6.png)
 
 Wygenerowane klucze należy dodać do swojego konta GitHub (ustawienia konta na GitHubie --> SSH and GPG keys) -  w tym miejscu wklejamy zawartość klucza publicznego.
 
-![](./ss/ss_7.png)
-![](./ss/ss_8.png)
-![](./ss/ss_9.png)
-![](./ss/ss_10.png)
+![](./ss_GitHub/ss_7.png)
+![](./ss_GitHub/ss_8.png)
+![](./ss_GitHub/ss_9.png)
+![](./ss_GitHub/ss_10.png)
 
 Teraz możemy sklonować repozytorium przy użyciu protokołu SSH. Użyjemy do tego komendy:
 
@@ -93,7 +93,7 @@ Link znajdziemy na Githubie na stronie repozytorium (należy rozwinąć zielony 
 Klonowanie przebiegło pomyślnie. 
 Przed użyciem komendy git clone folder był pusty, natomiast po, pojawił się tam folder repozytorium przedmiotowego.
 
-![](./ss/ss_11.png)
+![](./ss_GitHub/ss_11.png)
 
 ### 3. Przełączenie się na gałąź main oraz gałąź swojej grupy.
 
@@ -105,7 +105,7 @@ Domyślnie znajdujemy się na gałęzi main. Obecne położenie sprawdzamy za po
 
 ```git branch```
 
-![](./ss/ss_12.png)
+![](./ss_GitHub/ss_12.png)
 
 Jeśli chcemy zobaczyć wszystkie istniejące gałęzie możemy użyć polecenia: 
 
@@ -124,7 +124,7 @@ Służy do tego komenda:
 
 Użycie git checkout z opcją -b powoduje stworzenie gałęzi jeżeli taka jeszcze nie istnieje oraz od razu przejście na nią.
 
-![](./ss/ss_13.png)
+![](./ss_GitHub/ss_13.png)
 
 ### 5. Pracę na nowej gałęzi
 
@@ -150,17 +150,17 @@ Teraz nasz git hook będzie uruchamiany przy każdym commicie.
 
 Treść git hooke'a:
 
-![](./ss/ss_14.png)
+![](./ss_GitHub/ss_14.png)
 
 Będąc na swojej gałęzi możemy przetestować czy utworzony git hooke działa prawidłowo.
 
 Błędny commit:
 
-![](./ss/ss_15.png)
+![](./ss_GitHub/ss_15.png)
 
 Prawidłowy commit:
 
-![](./ss/ss_16.png)
+![](./ss_GitHub/ss_16.png)
 
 W katalogu NBS411634 tworzę katalog Sprawozdanie1:
 
@@ -201,7 +201,7 @@ Aby kontrolować wprowadzone zmiany warto używać:
 
 Przykład:
 
-![](./ss/ss_17.png)
+![](./ss_GitHub/ss_17.png)
 
 Wciągnięcie naszej gałęzi do gałęzi grupowej zczniemy od przejścia na gałęź grupy poleceniem:
 
