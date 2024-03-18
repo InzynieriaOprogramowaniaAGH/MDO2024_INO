@@ -35,7 +35,7 @@ Poprawność instalacji można sprawdzić komendą ssh -V, która wyświetli bie
 
 ### 2. Klonowanie repozytorium przedmiotowego 
 
-## 2.1 za pomocą HTTPS i personal access token
+# 2.1 za pomocą HTTPS i personal access token
 Do klonowania rezpozytorium za pomocą HTTPS użyjemy personal access tokenu, który jest alternatywą dla tradycyjnego uwierzytelniania poprzez hasło.
 Token wygenerujemy na Githubie. Należy wejść w ustawienia konta na Githubie --> Developer settings --> Personal access tokens.
 
@@ -51,7 +51,7 @@ Wygenerowanie personal access tokena pozwoliło nam na dostęp do klonowanego re
 
 ![](./ss/ss_3.png)
 
-## 2.2 za pomocą klucza SSH
+# 2.2 za pomocą klucza SSH
 
 Klonowanie repozytorium przy użyciu SSH jest szybsze, wygodniejsze (nie trzeba podawać hasła ani tokenu przy każdej komendzie) oraz bardziej bezpieczne (klucz prywatny jest przechowywany lokalnie i nigdy nie jest przesyłany przez sieć).
 
@@ -89,8 +89,8 @@ Teraz możemy sklonować repozytorium przy użyciu protokołu SSH. Użyjemy do t
 ```git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git```
 
 Link znajdziemy na Githubie na stronie repozytorium (należy rozwinąć zielony przycisk code i skopiować link z zakładki SSH).
-Klonowanie przebiegło pomyślnie. 
 
+Klonowanie przebiegło pomyślnie. 
 Przed użyciem komendy git clone folder był pusty, natomiast po, pojawił się tam folder repozytorium przedmiotowego.
 
 ![](./ss/ss_11.png)
@@ -225,4 +225,7 @@ Na koniec:
 
 spowoduje złączenie zmian z gałęzi NBS411634 do bieżącej gałęzi GCL1 (umożliwia to np. zespołowi pracę nad wspólnym kodem)
 
-*Zaktualizuj sprawozdanie i zrzuty o ten krok i wyślij aktualizację do zdalnego źródła (na swojej gałęzi)
+Zaktualizowane sprawozdanie i zrzuty ekranu wysłam (będąc na swojej gałęzi):
+```git add .```
+```git commit```
+```git push```
