@@ -314,13 +314,13 @@ A następnie uruchomiłem kontener w trybie interaktywnym zeby sprawdzić czy re
 
 #### Pokazanie uruchomionych ( != "działające" ) kontenerów, wyczyszczenie ich.
 
-Aby pokazać uruchomione ale nie działające konternery użyłem polecenia: 
+Aby pokazać uruchomione ale niedziałające konternery użyłem polecenia: 
 ```
 sudo docker ps -a -f status=exited
 ```
 Oto one: 
 
-![ uruchomione ale nie działające konternery](./zrzuty_ekranu/33.jpg)
+![ uruchomione ale niedziałające konternery](./zrzuty_ekranu/33.jpg)
 
 Aby usunąć niedziałające konternery użyłem polecenia:
 ```
