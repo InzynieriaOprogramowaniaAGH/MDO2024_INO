@@ -3,6 +3,6 @@
 #Skrypt weryfikujacy, czy kazdy "commit message" zaczyna sie od "NBS411634"
 
 if ! grep -q '^NBS411634' "$1"; then
-	echo "ERROR! Commit message nie rozpoczyna sie od: 'NBS411634'! "
+	echo >&2 "ERROR! Commit message nie rozpoczyna sie od: 'NBS411634'!"
 	exit 1
 fi
