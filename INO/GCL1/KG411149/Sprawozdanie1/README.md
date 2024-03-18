@@ -189,3 +189,14 @@ sudo docker run hello-world
 Na głownej stronie dockera zarejstrowałem się na tego samego maila którego używam do Gita: 
 
 ![docker rejstracja](./zrzuty_ekranu/21.jpg)
+
+#### Pobieranie obrazów 
+Kolejnym krokiem było pobranie obrazów hello-world, busybox, fedora, mysql, do pobrania używałem polecenia:
+```
+sudo docker pull nazwa_obrazu
+```
+Do przeglądania pobranych obrazów użyłem polecenia: 
+```
+sudo docker images
+```
+![docker obrazy](./zrzuty_ekranu/22.jpg)
