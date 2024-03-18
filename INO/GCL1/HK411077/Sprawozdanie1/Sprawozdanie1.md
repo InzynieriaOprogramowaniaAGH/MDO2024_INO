@@ -172,5 +172,8 @@ Przykładowe użycie:
 
 W tym wypadku widzimi, że zmiana która zaszła a nie została dodana to modyfikacja pliku "Sprawozdanie1.md".
 
-Całość wysłania zmian 
+Całość wysłania zmian do zdalnego źródła wygląda tak:
+
+![Git add i commit](images/git_add.png)
+![Git push](images/git_push.png)
 
