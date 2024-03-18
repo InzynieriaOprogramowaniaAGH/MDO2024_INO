@@ -16,6 +16,7 @@ Zacząłem od instalacji Dockera na naszych maszynach wirtualnych - **sudo snap 
 Screen z uruchomienia kontenera busybox:
 
 ![Uruchomiony busybox](images/docker_run_d_busybox.png)
+
 Screen z uruchomienia kontenera busybox w trybie interaktywnym i sprawdzenie wersji:
 
 ![Wersja busybox](images/busybox_ver.png)
