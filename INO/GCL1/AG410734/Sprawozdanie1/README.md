@@ -111,6 +111,7 @@ git push
 `git init ` - inicjuje nowe repozytorium Git w bieżącym katalogu.
 
 `git branch`- wyświetla listę dostępnych gałęzi (branchy) oraz aktualną gałąź.
+
 `git merge <nazwa_gałęzi>` - łączy aktualną gałąź z inną gałęzią.
 
 `git pull ` pobiera najnowsze zmiany z repozytorium zdalnego i scal je z bieżącą gałęzią.
@@ -200,10 +201,16 @@ ps auxft
 ```
 To bardziej szczegółowe polecenie ps, które wyświetla listę wszystkich procesów uruchomionych na systemie.
 Flagi **auxft** oznaczają:
+
 **a:** Wyświetla procesy wszystkich użytkowników.
-**u:** Wyświetla rozszerzone informacje o procesach, takie jak nazwa użytkownika właściciela procesu, identyfikator użytkownika (UID), identyfikator grupy (GID), zużycie CPU, zużycie pamięci, czas działania procesu itp.
+
+**u:** Wyświetla rozszerzone informacje o procesach, takie jak nazwa użytkownika właściciela procesu, identyfikator 
+użytkownika (UID), identyfikator grupy (GID), zużycie CPU, zużycie pamięci, czas działania procesu itp.
+
 **x:** Wyświetla również procesy, które nie są związane z terminalem.
+
 **f:** Tworzy strukturę drzewa, która pokazuje hierarchię procesów (czyli procesy potomne i ich relacje do procesów nadrzędnych).
+
 **t:** Wyświetla strukturę drzewa, ale w bardziej graficzny sposób, korzystając z drzewa znaków ASCII.
 
 ![](screeny/28.png)
@@ -249,6 +256,7 @@ Następnie zbudowałam obraz, za pomocą polecenia
 ```
 sudo docker build .
 ```
+
 ![](screeny/20.png)
 
 Sprawdziłam czy obraz się zbudował:
@@ -273,10 +281,11 @@ sudo docker ps
 ```
 tylko jeden kontener był uruchomiony, zbudowany na obrazie `my-dockerfile`.
 
-Sprawdziłam też wszytskie dostępne kontenery, zarówno aktywne jak i nieaktywne poleceniem: 
+Sprawdziłam też wszystkie dostępne kontenery, zarówno aktywne jak i nieaktywne poleceniem: 
 ```
 sudo docker ps -a
 ```
+
 ![](screeny/25.png)
 
 Ponieważ miałam tylko jeden uruchomiony kontener zatrzymałam go poleceniem:
