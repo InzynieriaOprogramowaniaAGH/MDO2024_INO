@@ -447,7 +447,7 @@ cp Dockerfile <ścieżka>
 
 ### 10. Dodałam zedytowane sprawozdanie oraz zrzuty ekranu.
 
-Wykorzystane polecenia:
+Wykorzystane polecenia: 
 ```bash
 git add .
 
