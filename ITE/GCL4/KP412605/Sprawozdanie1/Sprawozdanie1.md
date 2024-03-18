@@ -7,7 +7,7 @@ Celem pierwszych laboratoriów było zapoznanie się z podstawowymi pojęciami z
 
 ### Ustawiam maszynę wirtualną.
 
-Ćwiczenia wykonuję na maszynie wirtualnej Hyper-V z wykorzystaniem systemu Ubuntu. Ponadto wykorzstuję program Visual Studio Code, do którego łączę się z maszyny poprzez SSH. 
+Ćwiczenia wykonuję na maszynie wirtualnej Hyper-V z wykorzystaniem systemu Ubuntu. Ponadto wykorzystuję program Visual Studio Code, do którego łączę się z maszyny poprzez SSH. 
 
 ### 1.Instaluję klienta Git i obsługę kluczy SSH.
 Laboratoria rozpoczynamy od zainstalowania klienta Git.
@@ -23,7 +23,7 @@ Następnie, już bezpośrednio w programie instalujemy klienta Git poprzez komen
 ```
 sudo apt-get git
 ```
-Obsługę kluczy instalujemy analogicznie wykorzstując openssh.
+Obsługę kluczy instalujemy analogicznie wykorzystując openssh.
 ### 2.Klonuję repozytorium przedmiotowe za pomocą HTTPS i personal access token.
 Rozpoczynam od utworzenia personal access token:
 
@@ -45,21 +45,21 @@ Po wygenerowaniu, klucz publiczny należy umieścić w zakładce SSH keys na Git
 
 ![lab1zdj1](lab1zdj1.png)
 
-Ostatecznie możemy sklonować nasze repozytorium wykorzustując komendę:
+Ostatecznie możemy sklonować nasze repozytorium wykorzystując komendę:
 ```
 git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
 ```
 
 ### 4.Przełączam się na gałęź main, a następnie na gałęź swojej grupy.
 
-Następnie dążymy do przemieszczenia się do gałezi main wykorzystując komendę `git checkout main`, a następnie na gałęź swojej gupy - w tym przypadku GCL4. Kiedy jesteśmy na danej gałęzi, możemy sprawdzić co to za gałąź wykorzystując komendę `git branch`. 
+Następnie dążymy do przemieszczenia się do gałęzi main wykorzystując komendę `git checkout main`, a następnie na gałąź swojej gupy - w tym przypadku GCL4. Kiedy jesteśmy na danej gałęzi, możemy sprawdzić co to za gałąź wykorzystując komendę `git branch`. 
 
 ![przemieszczenie](przelaczanie.jpg)
 
 Z kolei `git status` pozwala sprawdzić jakie zmiany zaszły na danej gałęzi w danym momencie.
 
 ### 5.Tworzę gałęź o nazwie "inicjały & nr indeksu".
-Kiedy przełączyliśmy się na gałeź swojej grupy możemy przystąpić do utworzenia własnej gałęzi, która ma być określona poprzez inicjały oraz numer indeksu.
+Kiedy przełączyliśmy się na gałąź swojej grupy możemy przystąpić do utworzenia własnej gałęzi, która ma być określona poprzez inicjały oraz numer indeksu.
 
 W tym celu wykorzystujemy komendę `git branch <inicjaly & numer indeksu>`
 
@@ -84,7 +84,7 @@ W pliku commit-msg piszę treść skryptu:
 
 ![tresc](tresc.png)
 
-Następnie nadajemy odpowiednie uprawnienia tak, aby nasz hook wykonywał się prawidłowo za każdym razem.
+Następnie nadaję odpowiednie uprawnienia tak, aby nasz hook wykonywał się prawidłowo za każdym razem.
 
 Jak widać na poniższym screenie, po wpisaniu dowolnych wartości wyskakuje błąd:
 
@@ -98,7 +98,7 @@ Jeśli jednak wprowadzimy commita z inicjałami oraz numerem indeksu wyświetli 
 
 Kolejny etap opiera się na wciągnięciu mojej gałęzi do gałęzi grupowej. Korzystam wiec w tym przypadku z komendy `git merge KP412605`.
 
-Ostatecznie przy użyciu komendy push przenosimy nasze zmiany na repozytorium. 
+Ostatecznie przy użyciu komendy `git push` przenosimy nasze zmiany na repozytorium. 
 
 ![push](push.png)
 
@@ -145,7 +145,7 @@ Dzięki tej platformie jesteśmy w stanie pobierać obrazy, które są potrzebne
 
 ![dockerHub](dockerhub.png)
 
-### 4.Pobieram obrazy hello-world, busybox, ubuntu lub fedora, mysql
+### 4.Pobieram obrazy hello-world, busybox, ubuntu, oraz mysql.
 
 Wykorzystując komendę:
 
@@ -209,7 +209,7 @@ Ostatecznie, aby wyjść z kontenera wykorzystuję komendę `exit`.
 
 Plik rozpoczynam od określenia systemu, w moim przypadku jest to ubuntu. Następnie ustawiam katalog roboczy na `/app`, oraz za pomocą komendy `git clone` klonuję repozytorium.
 
-Ponadto upewniamy się, że obraz będzie miał git'a.
+Ponadto upewniam się, że obraz będzie miał git'a.
 
 
 ```Dockerfile
