@@ -170,3 +170,22 @@ Ten krok udaje się wykonać, jednak gdy próboje za pomocą **push** wypchnąć
 
 ## Zajęcia 2
 
+### Instalacja Dockera w systemie linuksowym
+Na początek zajęć 2 sprawdziłem czy na swoim serwerze posiadam juz dockera polceniem:
+```
+docker --version
+```
+Dockera miałem juz na serwerze dlatego nie potrzebowałem go instalować :
+
+![docker](./zrzuty_ekranu/19.jpg)
+
+Aby się upewnić czy wszystko działa poprawnie uruchomiłem oraz pobrałem obraz hello-world polceniem: 
+```
+sudo docker run hello-world
+```
+![docker test](./zrzuty_ekranu/20.jpg)
+
+#### Rejestracja w dokerze
+Na głownej stronie dockera zarejstrowałem się na tego samego maila którego używam do Gita: 
+
+![docker rejstracja](./zrzuty_ekranu/21.jpg)

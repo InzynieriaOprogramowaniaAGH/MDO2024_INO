@@ -163,5 +163,10 @@ Najepierw aby spróbować wyciągnąć swoją gałąź do gałęzi grupowej zmie
 git merge
 ```
 ![git merge](./zrzuty_ekranu/17.jpg)
+
 Ten krok udaje się wykonać, jednak gdy próboje za pomocą **push** wypchnąć zmiany do zdalnego hosta nie udaje mi się to ponieważ nie mam odpowiednich od tego uprawnień: 
+
 ![push](./zrzuty_ekranu/18.jpg)
+
+## Zajęcia 2
+
