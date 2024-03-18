@@ -1,0 +1,8 @@
+#!/bin/sh
+
+COMMIT_MSG_FILE=$1
+
+if ! grep -q '^HK411077' "$COMMIT_MSG_FILE"; then
+	echo >&2 "ERROR! Commit must start with 'HK411077'."
+	exit 1
+fi

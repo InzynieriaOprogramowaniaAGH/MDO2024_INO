@@ -94,7 +94,7 @@ Następnie przełączyłem gałąź na "main":
 
 W celu sprawdzenia, jakie gałęzie znajdują się w repozytorium użyłem polecenia:
 
-```git branch --remotes```
+```git branch --all```
 
 Wynik sprawdzenia aktualnych gałęzi:
 
@@ -102,7 +102,7 @@ Wynik sprawdzenia aktualnych gałęzi:
 
 Teraz znałem już nazwę gałęzi grupy więc przeniosłem się na nią poleceniem:
 
-```git checkout origin/GCL1```
+```git checkout GCL1```
 
 ## Utwórz gałąź o nazwie "HK411077"
 
@@ -117,3 +117,26 @@ Polecenie to nie tylko utworzyło nową gałąź, ale również przełączyło m
 ![moja gałąź](images/moja_gałąź.png)
 
 ## Rozpoczęcie pracy na nowej gałęzi
+
+Na mojej nowo utworzonej gałęzi HK411077, w katalogu grupy GCL1 utworzyłem nowy katalog o nazwie HK411077 w którym będą znajdowały się wszystkie materiały związane z moimi zadaniami.
+
+```
+mkdir HK411077
+cd HK411077
+```
+
+Git hook'i to skrypty, które wykonwyane są przez Git przy różnych okazjach w celu zautomatyzowania pracy. W ramach projektu utworzyłem Git hook'a który sprawdza, czy wiadomość commita zaczyna się od HK411077. Treść skrytu dla commit-msg hook'a:
+
+```
+#!/bin/sh
+
+COMMIT_MSG_FILE=$1
+
+if ! grep -q '^HK411077' "$COMMIT_MSG_FILE"; then
+        echo >&2 "ERROR! Commit must start with 'HK411077'."
+        exit 1
+fi
+```
+
+Skrypt ten umieściłem w pliku **git/hooks/commit-mgs** w lokalnym repozytorium. Nadałem mu jeszcze uprawnienia za pomocą **chmod +x .git/hooks/commit-mgs** oraz przekopiowałem go do własnego katalogu roboczego.
+
