@@ -237,6 +237,8 @@ Po pobraniu kontenerów warto zweryfikować, że znajdują się w systemie. Pole
 docker images
 ```
 ![Alt Text](./img/wypisane_obrazy.png)
+
+
 ### Uruchomienie obrazu
 Uruchomimy pobrany wcześniej obraz **busybox** i spróbujemy podłączyć się do niego.
 Kontener możemy uruchomić poleceniem
@@ -244,6 +246,8 @@ Kontener możemy uruchomić poleceniem
 docker run busybox
 ```
 ![Alt Text](./img/wszedl_i_wyszedl.png)
+
+
 Jednak wywołanie tego polecenia nie daje nam żadnej informacji zwrotnej. Kontener uruchomił się i natychmiast wyłączył, ponieważ nie miał zadeklarowanego zadania. Wypiszmy więc  kontenery znajdujące się na maszynie poleceniem
 ```console
 docker ps -a
@@ -253,11 +257,23 @@ Rozpocznijmy interaktywną sesję i podłączmy się do kontenera. Polecenie
 docker run -it <nazwa_kontenera>
 ```
 Uruchomi kontener w trybie -interactive oraz -tty. W ten sposób dostaniemy dostęp do terminala i bedziemy mogli przemieszczać się po kontenerze.
+
+
 ![Alt Text](./img/jestem_root.png)
+
+
 Jak widać zostaliśmy podłączeni do kontenera jako root. Na drugim terminalu sprawdźmy listę działających kontenerów.
+
+
 ![Alt Text](./img/dziala_busybox.png)
+
+
 Sprawdźmy numer wersji busybox'a.
+
+
 ![Alt Text](./img/nr_wersji.png)
+
+
 ### Obrazy systemowe
 Docker udostępnia nam obrazy bazowe na podstawie których możemy tworzyć nasze własne, nowe obrazy. Podłączmy się do kontenera **ubuntu** w trybie interaktywnym i sprawdźmy **PID1** oraz zaktualizujmy pakiety.
 Polecenie
@@ -269,7 +285,11 @@ Pozwoli nam uruchomić kontener w trybie interaktywnym. Następnie poleceniem
 ps -auxf
 ```
 Wypiszemy wszystkie działające procesy, we wszystkich sesjach, ze szczegółowymi informacjami o właścicielu procesu, włącznie z procesami niezwiązanymi z terminalem w formie drzewa opisującym relacje między procesami.
+
+
 ![Alt Text](./img/kontener_dziala.png)
+
+
 Po wejściu do kontenera poleceniami
 ```console
 apt update
@@ -305,6 +325,8 @@ Po zbudowaniu kontenera uruchomimy go w trybie **detached** oraz z uruchomionym 
 docker run -dt sprawozdanie1
 ```
 Po uruchomieniu zweryfikujmy, że kontener działa.
+
+
 ![Alt Text](./img/dziala_w_petli.png)
 
 Skoro kontener działa podłączmy się do niego poleceniem
@@ -314,6 +336,8 @@ docker exec -it <hash> /bin/bash
 Docker exec pozwala nam wykonać polecenie wewnątrz kontenera. Wraz ze znaną nam wcześniej opcją -it możemy połączyć się interaktywnie do kontera o hashu "hash" i wywołać powłokę. Bedąc wewnątrz kontenera sprawdźmy czy repo zostało pobrane i git działa.
 
 ![Alt Text](./img/jest_repo.png)
+
+
 ### Czyszczenie
 Sprawdźmy działające kontenery, a następnie usuńmy je, poniewaz nie są nam już potrzebne.
 ```console
@@ -322,7 +346,10 @@ docker rm <nazwa>
 ```
 Docker rm usuwa kontener kierując się tagiem lub hashem.
 Możemy też posłużyć się poleceniem **docker container prune**, aby usunąć wszystkie kontenery, które zakończyły swoją pracę. Podobnie możemy usunąć obrazy poleceniem **docker image prune**. Warto zaznaczyć, że nie zostaną usunięte obrazy na których bazują działające kontenery.
+
+
 ![Alt Text](./img/prune_container.png)
+
 Po usunieciu
 
 ![Alt Text](./img/po_usunieciu.png)
