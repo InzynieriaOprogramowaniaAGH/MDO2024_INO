@@ -43,6 +43,7 @@ ssh-keygen -t ecdsa -C "ja.krystian3243@gmail.com"
 ```
 ![pierwszy klucz ed25519](./zrzuty_ekranu/4.jpg)
 ![drugi klucz ecdsa](./zrzuty_ekranu/5.jpg)
+
 Następnie uruchomiłem agenta uwierzytelniania SSH za pomocą polecenia: 
 ```
 eval $(ssh-agent)
@@ -52,3 +53,8 @@ eval $(ssh-agent)
 ssh-add ścieżka/do/klucza
 ```
 ![dodawanie kluczy do agenta](./zrzuty_ekranu/6.jpg)
+
+Następnie skopiowałem zawartość kluczy publicznych do schowka:
+![kopiowanie zawartosci kluczy](./zrzuty_ekranu/7.jpg)
+
+ i dodałem je do ustawień konta na Githubie wchodząc w: **Settings/SSH and GPG keys** tam klikając w przycisk **New SSH key** 
