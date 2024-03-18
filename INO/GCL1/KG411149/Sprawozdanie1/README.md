@@ -2,9 +2,10 @@
 Krystian Gliwa, IO.
 
 ## Cel projektu
-Celem tego ćwiczenia jest...
+Celem tego ćwiczenia jest przygotowanie środowiska, oraz opanowanie podstawowych funkcji gita oraz dockera.
 
 ## Streszczenie projektu
+ W ramach projektu zainstalowano klienta Git i zaznajomiono się z obsługą kluczy SSH, sklonowano repozytoria za pomocą protokołów HTTPS i SSH, utworzono gałęzie, napisano własny Git hook, dodano pliki do repozytorium, a także przeprowadzono instalację Dockera, pobrano i uruchomiono kontenery z różnymi obrazami. Na koniec zbudowano i uruchomiono prosty plik Dockerfile bazujący na systemie Ubuntu oraz dokonano czyszczenia niedziałających kontenerów i obrazów. 
 
 ## Zajęcia 1
 
@@ -350,6 +351,7 @@ Po usunięciu sprawdziłem czy wykonało sie ono poprawnie:
 ![usuwanie obrazów](./zrzuty_ekranu/35.jpg)
 
 #### Dodanie pliku Docekerfile dp folderu Sprawozdanie1
-Plik Dockerfile był utworzony w folderze Sprawozdanie1 wiece nie musiałem go tam dodawać
+Plik Dockerfile był utworzony w folderze Sprawozdanie1 wiece nie musiałem go tam dodawać.
 
 #### Wystawianie Pull Requesta
+Na koniec zapisałem wszystkie zmiany oraz wystawiłem Pull Requesta do gałęzi grupowej.
