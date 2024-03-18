@@ -169,7 +169,7 @@ Następnie pobieramy podane w poleceniu obrazu za pomocą komendy `sudo docker p
 
 ![dockerstart](dockerstart.png)
 
-Jak widać na powyższym screenshot'cie uzyłem polecenia `sudo docker run hello-world`, gdy jeszcze nie pobrałem obrazu **hello-world** jak widać system nie mógł go znaleźć, więc sam pobrał obraz z rejestru domyslnych obrazów w Docker Hub.
+Jak widać na powyższym screenshocie użyłem polecenia `sudo docker run hello-world`. Z racji tego, że nie pobrałem jeszcze obrazu **hello-world**, system nie mógł go znaleźć, stąd też sam pobrał obraz z rejestru domyslnych obrazów w Docker Hub.
 
 Pobrane obrazy można zobaczyć dzięki poleceniu `sudo docker images`
 
