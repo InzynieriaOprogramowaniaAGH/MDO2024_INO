@@ -1,5 +1,6 @@
 # Sprawozdanie 1
 Dagmara Pasek
+411875
 
 ### Cel ćwiczenia:
 Celem wykonanego ćwiczenia było zapoznanie z systemem kontroli wersji, jakim jest Git oraz serwisem Github, tak aby sprawnie zarządzać projektami. Było to związane z zarządzaniem repozytorium kodu, obsługą kluczy ssh, klonowaniem repozytorium za pomocą protokołów: SSH i HTTPS oraz tworzeniem gałęzi i pracy na nich. Celem ćwiczenia wykonanego na drugich zajęciach było wprowadzenie do oprogramowania służącego do konteneryzacji, jakim jest Docker. Należało zainstalować Dockera, uruchomić różne kontenery, utworzyć własny plik Dockerfile oraz zapoznać się z podstawowymi operacjami. 
