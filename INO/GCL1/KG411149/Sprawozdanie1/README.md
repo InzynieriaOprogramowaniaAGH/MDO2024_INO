@@ -200,3 +200,25 @@ Do przeglądania pobranych obrazów użyłem polecenia:
 sudo docker images
 ```
 ![docker obrazy](./zrzuty_ekranu/22.jpg)
+
+#### Uruchomienie kontenera z obrazu busybox
+Aby to wykonać użyłem polecenia
+```
+sudo docker run busybox
+```
+Aby sprawdzić efekt uruchomienia polecenia użyłem polecenia
+```
+sudo docker container list
+```
+jednak wtedy nie zobaczymy busyboxa wśród działających kontenerów: 
+
+![efekt uruchomienia busybox](./zrzuty_ekranu/24.jpg)
+
+Ale jednak wiemy że uruchamialiśmy go więc należy zobaczyc czy jest w histori uruchomionych kontenerów za pomocą polecenia: 
+```
+sudo docker container list -all
+```
+![efekt uruchomienia busybox_1](./zrzuty_ekranu/23.jpg)
+
+Tutaj widać ze dany kontener pracował jakąś chwile temu, lecz juz zakończył swoje działanie.
+
