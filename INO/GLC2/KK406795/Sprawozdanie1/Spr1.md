@@ -179,7 +179,7 @@ Do sprawdzenia poprawności działania Dockera wykorzystano polecenie:
 ```bash
 sudo systemctl status docker
 ```
-![Screen1](./screen/screen1.png)
+![Screen1](./screen/screen1b.png)
 ### 2. Zarejestrowano się w Docker Hub i zapoznano z sugerowanymi obrazami.
 Utworzono konto o nazwie kinga01:
 
@@ -292,7 +292,7 @@ RUN dnf -y update && dnf -y install git -> Wykonano dwie operacje w jednej instr
 
 RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git -> wykonano klonowanie repozytorium Git znajdującego się pod podanym adresem URL.
 
-WORKDIR /repos ->  ustawiono katalog roboczy na /repos wewnątrz kontenera. Wszystkie kolejne operacje będą wykonywane w tym katalogu.
+WORKDIR /repo ->  ustawiono katalog roboczy na /repos wewnątrz kontenera. Wszystkie kolejne operacje będą wykonywane w tym katalogu.
 
 ENTRYPOINT ["/bin/bash"] -> domyślna komenda, która zostanie uruchomiona w kontenerze podczas jego startu. Kontener będzie uruchamiał powłokę /bin/bash, co pozwoli użytkownikowi na interaktywną pracę w kontenerze.
 
