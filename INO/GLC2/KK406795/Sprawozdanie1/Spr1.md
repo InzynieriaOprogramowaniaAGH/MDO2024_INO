@@ -18,7 +18,7 @@ W celu sprawdzenia wersji i poprawności instalacji użyto poleceń:
 git --version 
 ssh -V
 ```
-![Screen1](./screen/screen1.png)
+![Screen1](./screen/screen1a.png)
 ### 2. Klonowanie repozytorium przedmiotowego za pomocą HTTPS i personal access token.
 
 Na początku w serwisie Github wygenerowano Personal Access Token, który jest wykorzystywany głównie do autoryzacji dostępu do zasobów:
