@@ -19,7 +19,7 @@ ssh -V
 
 ### Klonowanie za pomocą HTTPS i personal access token
 
-Do kolonowania za pomocą HTTPS i personal access token konieczne było utworzenie nowego tokenu na Githubie wybierając: **Settings/Developer Settings** i tam Personal access tokens (classic), po czym wpisać notatke do tokenu oraz wybrać dla niego zakres: 
+Do kolonowania za pomocą HTTPS i personal access token konieczne było utworzenie nowego tokenu na Githubie wybierając: **Settings/Developer Settings** i tam Personal access tokens (classic), po czym wpisać notatke do tokenu oraz zdefiniować jego dostęp: 
 
 ![wersja Gita i OpenSSH](./zrzuty_ekranu/2.jpg)
 
