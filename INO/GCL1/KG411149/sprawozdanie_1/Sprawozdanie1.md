@@ -86,3 +86,17 @@ git checkout -b nazwa_nowej_gałęzi
 korzystając z tych poleceń przełączyłem się na gałąź **main** a potem na gałąź mojej grupy czyli **GCL1** i  tam utworzyłem swoją gałąź o nazwie **KG411149**:
 
 ![operacje na gałęziach](./zrzuty_ekranu/10.jpg)
+
+### Rozpoczęcie pracy na swojej gałęzi
+
+#### Utworzenie nowego katalogu **KG411149** w folderze swojej grupy
+Będąc w lokalizacji: 
+```
+/home/krygliw/MDO2024_INO/INO/GCL1
+```
+za pomocą polecenia: 
+```
+mkdir KG411149
+```
+utworzyłem nowy katalog w swojej gałęzi o takiej samej nazwie:
+![folder KG411149](./zrzuty_ekranu/11.jpg)
