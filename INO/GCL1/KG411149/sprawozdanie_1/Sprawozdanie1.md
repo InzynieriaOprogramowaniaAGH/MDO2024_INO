@@ -57,11 +57,26 @@ ssh-add ścieżka/do/klucza
 Następnie skopiowałem zawartość kluczy publicznych do schowka:
 ![kopiowanie zawartosci kluczy](./zrzuty_ekranu/7.jpg)
 
- i dodałem je do ustawień konta na Githubie wchodząc w: **Settings/SSH and GPG keys** tam klikając w przycisk **New SSH key**:
+ i dodałem je do ustawień konta na Githubie wchodząc w: **Settings/SSH and GPG keys** tam klikając w przycisk **New SSH key** i wklejając zawartość kluczy:
  ![dodawanie kluczy na Githubie](./zrzuty_ekranu/8.jpg)
 
-Po wykonaniu tych kroków mogłem już sklonować repozytorium za pomocą klucza SSH, używając polecenia 
+Po wykonaniu tych kroków mogłem już sklonować repozytorium za pomocą klucza SSH, używając polecenia:
 ```
 git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
 ```
 ![klonowanie za pomoca klucza SSH](./zrzuty_ekranu/9.jpg)
+
+### Poruszanie się po gałęziach
+
+Aby sprawdzić na jakiej gałęzi aktualnie się znajdujemy możemy użyć polecenia:
+```
+git branch
+```
+aby przełączyć się na istniejącą gałąź należy użyć polecenia:
+```
+git checkout nazwa_gałęzi
+```
+aby utworzyć i przełączyć się na nową gałąź należy użyć polecenia: 
+```
+git checkout -b nazwa_nowej_gałęzi
+```
