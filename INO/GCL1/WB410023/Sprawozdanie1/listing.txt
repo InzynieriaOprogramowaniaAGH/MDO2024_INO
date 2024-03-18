@@ -78,3 +78,89 @@
    78  git add .
    79  git commit -m "WB410023 zdjecia"
    80  git push origin WB410023
+   81  LS
+   82  ls
+   83  touch listing.txt
+   84  history
+   85  clear
+   86  docker --version
+   87  sudo apt install gnome-terminal
+   88  sudo apt-get update
+   89  docker --version
+   90  apt install docker.io
+   91  sudo apt install docker.io
+   92  docker --version
+   93  systemctl --user enable docker-desktop
+   94  systemctl --user start docker-desktop
+   95  docker login
+   96  sudo usermod -aG docker weronikaabednarz
+   97  docker login
+   98  ls -l /var/run/docker.sock
+   99  docker --version
+  100  docker login
+  101  docker --version
+  102  docker login
+  103  apt install docker.io
+  104  sudo apt install docker.io
+  105  docker --version
+  106  docker login
+  107  ls /home/weronikaabednarz/.ssh/id_ed25519
+  108  cd home
+  109  ls
+  110  cd Pulpit
+  111  ls
+  112  cd MDO2024_INO/
+  113  ls
+  114  cd INO
+  115  ls
+  116  cd GCL1
+  117  git branch WB410023
+  118  git checkout WB410023
+  119  git add .
+  120  git commit -m "WB410023 sprawozdanie"
+  121  git push origin WB410023
+  122  docker
+  123  docer --version
+  124  docker login
+  125  docker pull hello-word
+  126  docker images
+  127  docker run fedora
+  128  docker login
+  129  docker pull hello-world
+  130  docker pull busybox
+  131  docker pull fedora
+  132  docker pull mysql
+  133  docker images
+  134  docker run busybox
+  135  docker ps
+  136  docker ps -a
+  137  docker run -it busybox
+  138  docker ps -a
+  139  docker run -it fedora
+  140  docker ps -a
+  141  docker stop fd2
+  142  docker rm fd2
+  143  docker ps -a
+  144  docker run -it fedora
+  145  docker ps -a
+  146  docker start cb9
+  147  docker exec -it cb9 bash
+  148  docker ps -a
+  149  docker exec -it cb9 bash
+  150  nano Dockerfile
+  151  docker build --build-arg TOKEN="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" -t repocloner .
+  152  docker images
+  153  docker run -it repocloner
+  154  docker ps -a
+  155  docker container prune
+  156  docker ps -a
+  157  docker stop cb9
+  158  docker rm cb9
+  159  docker ps -a
+  160  docker images
+  161  docker image prune
+  162  docker images
+  163  docker image prune -a
+  164  docker images
+  165  cp Dockerfile /home/weronikaabednarz/Pulpit/MDO2024_INO/INO/GCL1/WB410023/Sprawozdanie1
+  166  history
