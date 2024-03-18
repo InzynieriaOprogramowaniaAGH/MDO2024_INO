@@ -116,10 +116,43 @@ aby uruchamiał się za każdym razem kiedy robię commita. Testy działania **c
 ![testy commit-msg](./zrzuty_ekranu/13.jpg)
 
 #### Dodawanie pliku ze sprawozdaniem
-W utworzonym wczesniej katalogu **KG411149** utworzyłem katalog **sprawozdanie_1** podobnie jak tworzyłem katalogi wcześniej, w tym katalogu utworzyłem plik **Sprawozdanie1.md** za pomocą polecenia:
+W utworzonym wczesniej katalogu **KG411149** utworzyłem katalog **sprawozdanie_1** podobnie jak tworzyłem katalogi wcześniej, w tym katalogu utworzyłem plik **Sprawozdanie1.md** (w tym pliku znajduje się cała treść sprawozdania) za pomocą polecenia :
 ```
 touch Sprawozdanie1.md
 ```
-W tym pliku znajduje się cała treść sprawozdania. Następnie w tym samym katalogu utworzyłem kolejny o nazwie **zrzuty_ekranu** w którym umieszczałem zrzuty ekrany służące za udokumentowanie wykonania wszystkich kroków z instrukcji.
 
 ![folder sprawozdanie_1](./zrzuty_ekranu/14.jpg)
+
+#### Dodawanie zrzutów ekranu
+ Następnie w tym samym katalogu utworzyłem kolejny o nazwie **zrzuty_ekranu** w którym umieszczałem zrzuty ekrany umieszczane tez w sprawozdaniu jako dowód wykonania wszystkich kroków z instrukcji.
+ W piliku **Sprawozdanie1.md** umieszczałem je jako inline czyli w ten sposób: 
+```
+![wersja Gita i OpenSSH](./zrzuty_ekranu/1.jpg)
+```
+
+#### Wysyłanie zmian do zdalnego hosta
+Każdą zmianę którą przeprowadziłem na mojej gałęzi i chcę aby wbyła widoczna na zdalnym hoscie muszę tam wysłać. Aby to zrobić korzystałem z trzech komend:
+```
+git add
+```
+**add** odpowiada za dodanie nowych zmian, wszytkich nowych plików czy tez modyfikacja starych
+
+```
+git commit
+```
+**commit** jest komunikatem towarzyszącym zmianą w którego treści umieszczamy co zostało przez nas zmienione od ostatniego wysłania zmian do zdalnego hosta
+
+```
+git push
+```
+**push** krótko mówiąc wypycha zmiany z lokalnego hosta do zdalnego (potwierdza je)
+
+![wysyłanie zmian do zdalnego hosta](./zrzuty_ekranu/15.jpg)
+
+Przydatnym narzędziem przy pracy z gitem jest również 
+```
+git status 
+```
+który wyświetla bierzący stan repozytorium Git i w tym liste nowych zmian:
+
+![git status](./zrzuty_ekranu/16.jpg)
