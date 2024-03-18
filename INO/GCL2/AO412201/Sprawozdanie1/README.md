@@ -184,9 +184,9 @@ git push
     busybox | head -1
   ```
   - opuszczenie kontenera BusyBox
-    ``` bash
-    exit
-    ```
+  ``` bash
+  exit
+  ```
   - wyświetlenie wszytskich kontenerów
   ``` bash
     docker ps -a
@@ -197,9 +197,9 @@ git push
   ## 5. Uruchomienie systemu w kontenerze
 
   - podłączenie się do kontenera interaktywnie i wywołanie numeru wersji
-``` bash
+  ``` bash
   docker exec -it <CONTAINER_ID> bin/bash
-```
+  ```
 gdzie: 
     aktualizacja pakietów
     ``` bash
@@ -209,6 +209,7 @@ gdzie:
     ``` bash
     exit
     ``` 
+
 Napotkane błędy
  ![ ](./img/19.png)
 
@@ -236,14 +237,14 @@ Poprawnie działająca komenda
   ![ ](./img/25.png)
 
   - wyczyszczenie uruchomionych kontenerów, gdzie CONTAINER_ID wpisywałam pierwsze 3 symbole CONTAINER ID
-    ``` bash
-    docker rm <CONTAINER_ID>
-    ``` 
+  ``` bash
+  docker rm <CONTAINER_ID>
+  ``` 
 ## 8. Wyczyszczenie obrazów
   - wyczyszczenie obrazów
-``` bash
+  ``` bash
   docker rmi <CONTAINER_ID>
-```
+  ```
 gdzie w CONTAINER_ID wpisywałam pierwsze 3 symbole od których zaczyna się IMAGE ID
 
 - napotkanie błędu przy usunięciu jednego obrazu, który mówi, że istnieje kontener który jest na nim oparty
@@ -264,7 +265,8 @@ gdzie w CONTAINER_ID wpisywałam pierwsze 3 symbole od których zaczyna się IMA
   git add .
   git commit -m 
   git push
-```
+  ```
+
   ![ ](./img/30.png)
 
 - napotkane błędy
