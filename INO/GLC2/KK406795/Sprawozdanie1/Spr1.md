@@ -1,10 +1,10 @@
 Kinga Kubajewska
-# Sprawozdanie nr 1 Wprowadzenie, Git, Gałęzie, SSH
+# Sprawozdanie 1, Zajęcia 1: Wprowadzenie, Git, Gałęzie, SSH
 ## Cel zajęć:
 
 Wprowadzenie do platformy GitHub oraz zrozumienie, jak działa system zarządzania repozytoriami. Poznanie różnic między repozytorium lokalnym, a zdalnym. Nauka podstawowych poleceń do obsługi GitHuba, umożliwiających modyfikowacje plików na własnych gałęziach.
 
-W laboratorium korzystano z maszyny wirtualnej stworzonej przy użyciu OpenSUSE oraz oprogramowania do wirtualizacji VMware. Wykonywano zadania za pomocą połączenia SSH w programie Visual Studio Code.
+Podczas laboratorium korzystano z maszyny wirtualnej stworzonej przy użyciu OpenSUSE oraz oprogramowania do wirtualizacji VMware. Wykonywano zadania za pomocą połączenia SSH w programie Visual Studio Code.
 
 ## Przebieg ćwiczenia:
 ### 1. Instalacja klienta Git i obsługi kluczy SSH.
@@ -158,6 +158,124 @@ Otrzymano komunikat błędu.
 
 * Zaktualizowano sprawozdanie i zrzuty o ten krok i wysłano aktualizację do zdalnego źródła (na swojej gałęzi) za pomocą już wyżej opisanych komend.
   
+# Sprawozdanie 1, Zajęcia 2: Git, Docker
+## Cel zajęć:
+Zestawienie środowiska do wykorzystania Dockera jako narzędzia umożliwiającego tworzenie, uruchamianie i skalowanie aplikacji w izolowanych kontenerach, co ułatwia zarządzanie infrastrukturą i zapewnia spójne środowisko od tworzenia po wdrożenie.
+Zapoznanie z podstawowymi poleceniami i pojęciami związanymi z tematem Dockera.
+
+Podczas wykonowania labolatorium po zainstalowaniu Dockera na maszynę OpenSUSE napotakono problemy z jego działaniem, natomiast próba instalacji i poprawonosci działania powiodła się na Ubuntu zatem do wykonania poleceń z labolatorium numer dwa skorzystano z nowej maszyny wirtualnej stworzonej przy użyciu Ubuntu oraz oprogramowania do wirtualizacji Oracle VM VirtualBox.
+
+## Przebieg ćwiczenia:
+### 1. Zainstalowano Docker w systemie linuksowym.
+Do zainstalowania Dockera na Ubuntu użyto polecenia:
+```bash
+sudo apt install docker.io
+```
+Następnie do włączenia usługi Docker'a przy uruchomieniu systemu, użyto poniższej komedy:
+```bash
+sudo systemctl enable docker
+```
+Do sprawdzenia poprawności działania Dockera wykorzystano polecenie:
+```bash
+sudo systemctl status docker
+```
+///screen1
+### 2. Zarejestrowano się w Docker Hub i zaponano z sugerowanymi obrazami.
+Utworzono konto o nazwie kinga01:
+///screen2
+### 3. Pobrano obrazy hello-world, busybox, fedora, mysql.
+Do pobrania hello-world zastosowano polecenie:
+```bash
+docker run hello-world
+```
+///screen3
+
+kolejne 3 obrazy pobrano za pomocą:
+```bash
+docker pull <nazwa_obrazu>
+```
+Do wyświetlenia listy wszystkich obrazów Docker dostępnych w repozytorium użyto polecenia:
+
+```bash
+docker images
+```
+///screen4
+
+### 4. Uruchomiono kontener z obrazu busybox.
+Uruchomienie nastąpiło poprzez komendę docker run:
+
+///screen5
+
+lecz jak widać na powyższym zrzucie ekranu kontener wyłaczył sie natychmiast.
+Dodatkowo poprzez komendę:
+```bash
+docker container list --all
+```
+możliwe jest wyświetlenie listy wszystkich kontenerów, zarówno uruchomionych, jak i zatrzymanych, znajdujących się na systemie.
+
+///screen6
+
+Jest to dowód na uruchomienie kontenera.
+Następnie podłączono się do kontenera interaktywnie za pomocą:
+```bash
+docker run -it busybox
+```
+flaga -i oznacza tryb interaktywny,
+a flaga -t oznacza alokację pseudo-terminala.
+ 
+potem wywołano numer wersji poprzez komendę:
+```bash
+cat --help
+``` 
+//screen7
+
+### 5. Uruchomiono "system w kontenerze" (czyli kontener z obrazu fedora)
+Zastosowano komendę:
+```bash
+docker run -it fedora
+```
+///screen8
+
+Aby zaprezentować PID1 w kontenerze i procesy dockera na hoście, należy wykonać nastepujace kroki:
+a) Zainstalować pakiet "procps", który zawiera narzędzia i programy służące do monitorowania procesów w systemie, takie jak ps, top, kill itp. Te narzędzia umożliwiają użytkownikowi wyświetlanie, zarządzanie i analizowanie procesów działających w systemie operacyjnym. Komenda:
+```bash
+dnf install procps -y
+```
+///screen9
+
+b) Po poprawnej instalacji użyć komedny ps, która służy do wyświetlania informacji o aktualnie działających procesach na komputerze.
+Zdecydowano sie dodać konkretne flagi, aby uzyskać bardziej szczegółowe informacje:
+```bash
+ps -aux
+```
+Flaga:
+-a: Wyświetla wszystkie procesy na wszystkich terminalach, niezależnie od właściciela.
+-u: Wyświetla więcej szczegółowych informacji o procesach, takie jak użytkownik, który uruchomił proces, zużycie zasobów (CPU i pamięć), czas działania itp.
+-x: Wyświetla także procesy, które nie są bezpośrednio związane z terminalem.
+
+///screen10
+
+Pakiety zaaktualizowano korzystając z menedżera pakietów DNF oraz komendy:
+```bash
+dnf update
+```
+///screen11
+
+Na końcu w celu wyjścia z kontenera użyto komendy:
+```bash
+exit
+```
+Dowodem zakończenia pracy kontenera jest zmiana statusu na 'Excited'.
+///screen12
+
+
+
+
+
+
+
+
+
 
 
 
