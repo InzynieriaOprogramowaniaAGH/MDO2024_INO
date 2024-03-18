@@ -21,9 +21,9 @@ Korzystanie z protokołu SSH umożliwia łączenie się ze zdalnymi serwerami i 
 
 Dzięki powiązaniu konta, maszyna wirtualna uzyskała dostęp do GitHuba. Umożliwiło to sklonowanie repozytorium przedmiotu za pomocą: `git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git`.
 
-![branche](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/c81959d8-08b8-4916-966c-f1bb67a41e02)
-
 Poleceniem `git checkout` przełączyłam się na gałąź `main`, a następnie na gałąź grupy `GCL4`. Własną gałąź stworzyłam poleceniem: `git checkout -b MR412777` i na niej wykonywałam resztę poleceń. Po przejściu do katalogu grupy `GCL4`, utworzyłam katalog `MR412777` oraz podkatalog `Sprawozdanie1`.
+
+![branche](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/c81959d8-08b8-4916-966c-f1bb67a41e02)
 
 W lokalizacji MDO2024_INO/ITE/GCL4/MR412777/Sprawozdanie1 utworzyłam plik `README.md` oraz zapisałam w nim skrypt weryfikujący, czy każdy commit message zaczyna się od mojego inicjału oraz numeru indexu.
 
@@ -38,9 +38,9 @@ if [[ ! $commit_message =~ $pattern ]]; then
 fi
 exit 0
 
-![hook -x](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/69f122cc-90cf-436a-bb77-313b7f0ad3c2)
-
 Następnie skopiowałam skrypt do pliku `commit-msg` w lokalizacji MDO2024_INO/.git/hooks. Nadałam plikowi prawa do wykonywania za pomocą polecenia `chmod +x commit-msg`. Dzięki temu hook będzie uruchamiany przy tworzeniu commita.
+
+![hook -x](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/69f122cc-90cf-436a-bb77-313b7f0ad3c2)
 
 Działanie hooka:
 
@@ -60,12 +60,10 @@ Za pomoca polecenia docker pull pobrałam obrazy `hello-world`, `busybox`, `ubun
 
 Uruchomiłam kontener z obrazu `busybox`. Samo uruchomienie nie jest widoczne w terminalu, ponieważ kontener po wykonaniu zadania natychmiast się zatrzymuje. Aby znaleźć się wewnątrz kontenera należy uruchomić go w trybie interaktywnym i się podłączyć. 
 
-![docker busybox](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/5fde5743-637d-4a03-8119-3339716eb5ee)
-
 Znak `/#` w terminalu Docker’a symbolizuje powłokę systemu operacyjnego w kontenerze. Znak `/` oznacza katalog główny, a `#` informuje, że ​​sesja jest uruchomiona z uprawnieniami administratora (root). 
 Aby wyświetlić numer wersji, posłużyłam się poleceniem `busybox | head -n 1`.
 
-![docker PID](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/d4c4d451-4d36-4e11-9359-0ad7b186f273)
+![docker busybox](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/5fde5743-637d-4a03-8119-3339716eb5ee)
 
 Uruchomiłam kontener z obrazu `ubuntu` poleceniem `docker run -it ubuntu`. Aby wyświetlić informacje o procesach posłużyłam się poleceniem ps z parametrami:
     -p wyświetla informacje o konkretnym procesie o podanym PID
@@ -73,27 +71,30 @@ Uruchomiłam kontener z obrazu `ubuntu` poleceniem `docker run -it ubuntu`. Aby 
     -f wyświetla szczegółowe informacje o procesach w formie pełnej listy.
 W celu opuszczenia kontenera w obu przypdkach korzystałam z polecenia exit.
 
+![docker PID](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/d4c4d451-4d36-4e11-9359-0ad7b186f273)
+
 Uruchomiłam kontener z obrazu `ubuntu` ponownie i zaktualizowałam pakiety.
 
 ![docker update](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/57bc1136-736e-4d43-8f53-fa9b8f4d4486)
 
-Następnie w osobnym katalogu `docker_repo` utworzyłam plik `Dockerfile`. Zawiera on skrypt odpowiedzialny za stworzenie nowego obrazu bazującego na ubuntu, instalację Gita oraz sklonowanie repozytorium przedmiotu za pomocą protokołu HTTPS. 
+Warto zauważyć, że w tym przykładzie przy każdym uruchomieniu kontenera, tworzony jest jego unikalny identyfikator. Jest on używany jako nazwa hosta wewnątrz kontenera. Z tego powodu, wraz z każdym uruchomieniem ustawiany jest inny adres root@<id-kontenera>.
+
+W osobnym katalogu `docker_repo` utworzyłam plik `Dockerfile`. Zawiera on skrypt odpowiedzialny za stworzenie nowego obrazu bazującego na ubuntu, instalację Gita oraz sklonowanie repozytorium przedmiotu za pomocą protokołu HTTPS. 
+Następnie zbudowałam obraz korzystając z polecenia `docker build -t obraz-mr412777`, a następnie uruchomiłam interaktywnie (`docker run -it obraz-mr412777`). 
 
 ![docker build](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/e67845bb-c12d-463e-9fac-34e15c3032b4)
 
-Obraz zbudowałam korzystając z polecenia `docker build -t obraz-mr412777`, a następnie uruchomiłam interaktywnie (`docker run -it obraz-mr412777`). 
+Wyświetliłam listę katalogów. Wśród nich znajdował się główny katalog przedmiotu, co świadczy o tym, że klonowanie repozytorium przebiegło pomyślnie.
 
 ![docker run obraz](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/70c86e2a-1894-4a80-b370-f3a0a93b9e74)
 
-Wyświetliłam listę katalogów. Wśród nich znajdował się główny katalog przedmiotu, co świadczy o tym, że klonowanie repozytorium przebiegło pomyślnie.
+Wyświetliłam uruchomione kontenery za pomocą `docker ps -a`, po czym wyczyściłam je korzystając z `docker rm $(docker ps -a -q)`.
 
 ![docker before rm](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/b96554b2-e3cd-4162-98cb-a08964ef2aa8)
 ![docker rm ](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/310572e1-3763-4221-b280-86a0b4d8e368)
 
-Wyświetliłam uruchomione kontenery za pomocą `docker ps -a`, po czym wyczyściłam je korzystając z `docker rm $(docker ps -a -q)`.
+Analogicznie wyświetliłam obrazy (`docker images`) i następnie je wyczyściłam (`docker rmi $(docker images -q)`).
 
 ![docker rmi](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/203359de-c73b-4d76-8b2f-eac054ddbbf5)
-
-Analogicznie wyświetliłam obrazy (`docker images`) i następnie je wyczyściłam (`docker rmi $(docker images -q)`).
 
 Utworzony plik `Dockerfile` wkleiłam do swojego folderu `Sprawozdanie1`.
