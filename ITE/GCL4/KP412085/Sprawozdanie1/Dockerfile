@@ -4,9 +4,9 @@ WORKDIR usr/src/app
 
 #umożliwia cache'owanie instalacji pakietów pomiędzy kolejnymi budowaniami kontenerów
 #z obrazu, (dla włączonego BuildKit w dokerze)
-#RUN --mount=type=cache,target=/var/cache/apt
 
-RUN apt-get update && apt-get install -y git openssh-client \
+RUN --mount=type=cache,target=/var/cache/apt \
+    apt-get update && apt-get install -y git \
     && useradd -ms /bin/bash my_ubuntu && chown -R my_ubuntu:my_ubuntu /usr/src/app
 
 USER my_ubuntu
