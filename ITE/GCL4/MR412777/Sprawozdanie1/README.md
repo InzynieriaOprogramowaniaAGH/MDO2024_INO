@@ -5,6 +5,8 @@
 
 ## Magdalena Rynduch ITE GCL4
 
+Celem laboratorium było zapoznanie się z systemem kontroli wersji Git oraz oprogramowaniem Docker.
+
 Instrukcje realizowane były przy użyciu:
 - hosta wirualizacji: Hyper-V
 - wariantu dystrybucji Linux'a: Ubuntu
@@ -98,3 +100,7 @@ Analogicznie wyświetliłam obrazy (`docker images`) i następnie je wyczyścił
 ![docker rmi](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/203359de-c73b-4d76-8b2f-eac054ddbbf5)
 
 Utworzony plik `Dockerfile` wkleiłam do swojego folderu `Sprawozdanie1`.
+
+Zadania zrealizowane w ramach laboratorium opierały się na praktycznym zastosowaniu Git oraz Docker. Oba narzędzia odgrywają kluczową rolę w tworzeniu oprogramowania. 
+Git to system kontroli wersji, który umożliwia skuteczne zarządzanie kodem źródłowym projektu. Dzięki niemu możemy przechowywać repozytorium zdalnie oraz klonować je na lokalne maszyny. Zmiany mogą być wprowadzane na gałęziach, a następnie łączone, co ułatwia pracę w zespole nad jednym projektem. 
+Docker umożliwia tworzenie izolowanych środowisk - kontenerów. Mogą być one z łatwością przenoszone i uruchamiane na dowolnej maszynie z zainstalowanym Dockerem. Rozwiązuje to problemy związane z różnicami konfiguracyjnymi pomiędzy środowiskami, co przyspiesza cykl rozwoju i testowania oprogramowania.
