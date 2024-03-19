@@ -197,3 +197,108 @@
   197  systemctl status ssh
   198  git push origin AP409745
   199  history > polecenia.txt
+    1  service status sshd
+    2  systemctl status sshd
+    3  ps aux | grep sshd
+    4  ip a
+    5  ipconfig
+    6  ip
+    7  ip a
+    8  sudo apt update
+    9  sudo apt install openssh-server
+   10  clear
+   11  sudo systemctl status ssh
+   12  sudo ufw allow ssh
+   13  ip a
+   14  ssh localhost
+   15  sudo apt install openssh-server
+   16  sudo systemctl status ssh
+   17  ssh localhost
+   18  nano
+   19  sudo nano /etc/ssh/ssgd_config
+   20  cd /etc/ssh/
+   21  ls -l
+   22  nano ssh_config
+   23  sudo nano ssh_config
+   24  sudo systemctl restart ssh
+   25  sudo systemctl status ssh
+   26  ssh localhost
+   27  ip a
+   28  sudo apt upgrade
+   29  sudo add-apt-repository ppa:xtradeb/apps
+   30  clear
+   31  sudo apt update
+   32  sudo apt install filezilla
+   33  filezilla --version
+   34  sudo ufw allow 22/tcp
+   35  sudo systemctl enable --now ssh
+   36  ip addr
+   37  ls -l
+   38  mkdir Github
+   39  cd Github/
+   40  git
+   41  sudo apt install git
+   42  git clone https://github.com/KN_Integra/BytePed
+   43  git clone https://github.com/Grallistrix/BOIL_Project
+   44  ls
+   45  cd BOIL_Project/
+   46  ls
+   47  nano README.md 
+   48  sudo systemctl set-default multi-user.target
+   49  ls
+   50  ls -al
+   51  cd ..
+   52  ls
+   53  ls -al
+   54  cd ..
+   55  ls
+   56  ls -al
+   57  cd .ssh/
+   58  ls
+   59  git -version
+   60  git --version
+   61  sudo systemctl status ssh
+   62  ls
+   63  cd ap/
+   64  ls
+   65  cd Documents/
+   66  ls
+   67  git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+   68  ls
+   69  cd ..
+   70  ls
+   71  cd Github/
+   72  ls
+   73  cd MDO2024_INO/
+   74  git branches --all
+   75  git branch --all
+   76  ls
+   77  man test
+   78  git add .
+   79  git commit -m "Git-Sprawozdanie"
+   80  git commit -m "AP409745 Git-Sprawozdanie"
+   81  git branch
+   82  git checkout AP409745 
+   83  git add .
+   84  git commit -m "AP409745 Git-Sprawozdanie"
+   85  git push
+   86  git branches
+   87  git branch -all
+   88  git branch --all
+   89  git checkout GCL4
+   90  git checkout AP409745 
+   91  git add .
+   92  git commit -m "AP409745 Git-Sprawozdanie"
+   93  git push origin AP409745
+   94  git checkout GCL4
+   95  git pull AP409745
+   96  git pull
+   97  git merge
+   98  git merge AP409745
+   99  git coomit -m "AP409745"
+  100  git commit -m "AP409745"
+  101  git checkout AP409745 
+  102  git branch
+  103  git checkout AP409745 
+  104  history
+  105  history > listring2.txt
