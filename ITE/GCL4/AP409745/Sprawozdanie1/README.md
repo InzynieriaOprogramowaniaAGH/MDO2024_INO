@@ -82,7 +82,7 @@ sudo apt-get update
 Po dodaniu Dockera do repozytorium, użyto `apt` do właściwego pobrania pakietów Dockera.
 ![apt get](./images2/docker%20download.png)
 
-Po zainstalniu Dockera, założyłem konto na DockerHubie i zaznajomiłem się z obrazami z którymi będę pracował:
+Po zainstalowaniu Dockera, założyłem konto na DockerHubie i zaznajomiłem się z obrazami z którymi będę pracował:
 - `hello-world` - najprostszy możliwy kontener, służy do testowania czy Docker działa poprawnie.
 - `busybox` - zestaw najważniejszych narzędzi UNIXowych, używany najczęściej do tworzenia kontenerów testujących i automatyzujących.
 - `mysql` - kontener bazy danych MySQL.
@@ -90,12 +90,28 @@ Po zainstalniu Dockera, założyłem konto na DockerHubie i zaznajomiłem się z
 ![dockerhub login page](./images2/dockerlogin.png)
 
 ## Uruchamianie obrazów
-Po zainstalowaniu Dockera i zaznajomeniu się z obrazami na DockerHubie ściągnąłem określone w instrukcji obrazy za pomocą komendy `docker pull [nazwaObrazu]`. Pobrano obrazy: `hello-world`, `busybox`, `mysql`, `ubuntu` oraz `fedora`. Po pobraniu uruchomiono `hello-world` w celu sprawdzenia czy instalacja przebiegła pomyślnie. Warto tutaj nadmienić, że używanie Dockera domyślnie musi odbywać się poprzez poprzedzenie komend `sudo`. Jest to spowodowane tym, że demon Dockera łączy się z socketem `/var/run/docker.sock`, którego właścicielem jest root. Oznacza to, że domyślnie tylko root (albo osoba z jego uprawnieniami) może korzystać z Dockera. Aby to zmienić trzeba utworzyć grupę `docker` i dodać do niej użytkowników. Wtedy demon (który jednak nadal działa jako root) będzie nadawał uprwanienia dostępu do socketa użytkownikom tylko podczas uruchomienia, eliminując problem przywilejów.
+Po zainstalowaniu Dockera i zaznajomieniu się z obrazami na DockerHubie ściągnąłem określone w instrukcji obrazy za pomocą komendy `docker pull [nazwaObrazu]`. Pobrano obrazy: `hello-world`, `busybox`, `mysql`, `ubuntu` oraz `fedora`. Po pobraniu uruchomiono `hello-world` w celu sprawdzenia czy instalacja przebiegła pomyślnie. Warto tutaj nadmienić, że używanie Dockera domyślnie musi odbywać się poprzez poprzedzenie komend `sudo`. Jest to spowodowane tym, że demon Dockera łączy się z socketem `/var/run/docker.sock`, którego właścicielem jest root. Oznacza to, że domyślnie tylko root (albo osoba z jego uprawnieniami) może korzystać z Dockera. Aby to zmienić trzeba utworzyć grupę `docker` i dodać do niej użytkowników. Wtedy demon (który jednak nadal działa jako root) będzie nadawał uprawnienia dostępu do socketu użytkownikom tylko podczas uruchomienia, eliminując problem przywilejów.
 ![docker downloaded images](./images2/docker%20images.png)
 ![docker hello test](./images2/docker%20hello.png)
 
-Po pomyślnym teście, uruchomiłem kontener `busybox` dwukrotnie - raz bez żadnej ingerencji (`docker run busybox`), a raz interaktywnie (z flagą `-it`). W przypadku zwykłego kontener natymiast po uruchomieniu się wyłącza. Jest to spowodowane faktem, że kontener nie dostał żadnej instrukcji - więc kończy swoje działanie. W wersji interaktywnej użyto komendy `cat --help` w celu dostania informacji o wersji, gdyż pierwsza linijka opisu flagi `--help` zawiera notatkę o wersji Busyboxa. Wyjście z niego możliwe jest albo przez użycie komendy `exit` albo skrótu `Ctrl+D`.
+Po pomyślnym teście, uruchomiłem kontener `busybox` dwukrotnie - raz bez żadnej ingerencji (`docker run busybox`), a raz interaktywnie (z flagą `-it`). W przypadku zwykłego kontener natychmiast po uruchomieniu się wyłącza. Jest to spowodowane faktem, że kontener nie dostał żadnej instrukcji - więc kończy swoje działanie. W wersji interaktywnej użyto komendy `cat --help` w celu dostania informacji o wersji, gdyż pierwsza linijka opisu flagi `--help` zawiera notatkę o wersji Busyboxa. Wyjście z niego możliwe jest albo przez użycie komendy `exit` albo skrótu `Ctrl+D`.
 Warto tu też wspomnieć o używaniu flagi --rm, która sprawia, że po zakończeniu pracy kontenera jest on usuwany, oszczędzając tym samym miejsce na dysku. Jest to niezwykle przydatne przy pracy z kontenerami, które mają za zadanie istnieć tylko przez krótki okres czasu.
 ![docker busybox](./images2/docker_busy.png)
 
-Następnie uruchomiono kontener na bazie obrazu `ubuntu`, także z flagami `-it` oraz `--rm`. Użyto komendy `ps` w celu wyświelenia aktywnym procesów, w tym procesu `PID1`. Zaktualizowałem pakiety przy użyciu `apt update`, i ostatecznie zakończyłem działanie kontenera poprzez `exit`.
+Następnie uruchomiono kontener na bazie obrazu `ubuntu`, także z flagami `-it` oraz `--rm`. Użyto komendy `ps` w celu wyświetlenia aktywnym procesów, w tym procesu `PID1`. Zaktualizowałem pakiety przy użyciu `apt update`, i ostatecznie zakończyłem działanie kontenera poprzez `exit`.
+![docker ubuntu update](./images2/docker%20ubuntu.png)
+
+## Własnoręcznie zbudowany Dockerfile
+Kolejnym krokiem było utworzenie własnego, prostego pliku Dockerfile bazującego na systemie Ubuntu i użycie go do sklonowania repozytorium laboratoryjnego. Kierując się dobrymi praktykami [opisanymi pod tym linkiem](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/). Najpierw aktualizował on wszystko swoje pakiety, potem instalował SSH i Gita, tworzył katalog roboczy `/github` a następnie w nim klonował repozytorium.
+![dockerfile](./images2/dockerfile.png)
+
+Obraz został zbudowany przy pomocy komendy `docker build [lokalizacjaDockerfile] -t "NazwaNaszegoObrazu`, z czego flaga `-t` odpowiedzialna była za otagowanie obrazu wybraną przez siebie nazwą. Jako, że plik Dockerfile został utworzony w tej samej lokalizacji w której przebywałem, to mogłem użyć `.` jako znacznika lokalizacji. Po zbudowaniu, uruchomiłem go z flagą `-d` (detached), przez co kontener został odpalony w tle. Po odczekaniu kilku minut, uruchomiłem kontener w trybie interaktywnym poprzez `docker exec -it [IdKontenera]` i sprawdziłem czy repozytorium zostało pobrane - co jak najbardziej się udało.
+
+![docker build](./images2/docker_build.png)
+![docker run](./images2/docker_uruchom.png)
+
+Po wyjściu z tego kontenera, komendą `docker ps -a` sprawdziłem listę uruchomionych kontenerów - jako że większość czasu korzystałem z flagi `-rm`, to było ich tylko 4. Trzy z nich były zdezaktywowane, więc można je było prosto usunąć komendą `docker rm [IdKontenera]`, ale kontener ubuntu nadal działał. Trzeba go była najpierw zastopować komendą `docker stop [IdKontenera]`, a dopiero potem usunąć.
+![docker cleanup](./images2/czyszczenie.png)
+
+Ostatnim krokiem było usunięcie wszystkich obrazów. W tym celu najpierw wypisałem ich listę poprzez `docker images`, zawierała wszystkie pobrane obrazy oraz osobiście zbudowany. Samo usuwanie odbywało się komendą `docker rmi $(docker images -a -q)`. Samo `docker rmi [IdObrazu]` usuwa obraz o danym ID, a `$(docker images -a -q)` zwraca listę ID wszystkich istniejących obrazów jako zmienną "do usunięcia".
+![docker delenda](./images2/docker%20delete.png)
