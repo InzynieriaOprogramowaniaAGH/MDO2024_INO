@@ -9,12 +9,11 @@ W moim przypadku wybór padł na narzędzie `Virtual Box`, z którym wcześniej 
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie1/VirtualBox.png">
 </p>
-<<<<<<< HEAD
-=======
+
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie1/pamiec.png">
 </p>
->>>>>>> 1a889ed717090514f1c2eeb7d8e8fa6e5a9468c9
+
 
 ### Zainstaluj klienta Git i obsługę kluczy SSH
 Korzystając z następującego polecenia:
@@ -26,13 +25,6 @@ pobrałem klienta Git, który umożliwia zdalne klonowanie repozytoriów. Jednak
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie1/Personal Access Token.png">
 </p>
-<<<<<<< HEAD
-<p align="center">
- <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie1/pamiec.png">
-</p>
-=======
-
->>>>>>> 1a889ed717090514f1c2eeb7d8e8fa6e5a9468c9
 
 Mając już utworzony token mogłem sklonować repozytorium przedmiotu wykorzystując następującą komendę:
 ```
@@ -97,13 +89,12 @@ Wprowadzone zmiany wypchałem na zdalną gałąź przy pomocy komendy:
 ```
 git push origin KR409837
 ```
-<<<<<<< HEAD
+
 Następnie w repozytorium i wykonałem pull request do gałęzi grupowej.
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie1/pullrequest.png">
 </p>
 
-=======
 Następnie w repozytorium wykonałem pull request do gałęzi grupowej.
 
 ####
