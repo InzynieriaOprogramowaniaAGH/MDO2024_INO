@@ -318,10 +318,14 @@ RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git
 CMD ["bash"]
 ```
 > FROM fedora:latest - korzystamy z naszego obrazu systemu fedora.
+
 > RUN dnf -y update && \
     dnf -y install git - uruchamiamy komendy, aby zaktualizować pakiety oraz zainstalować potrzebnego nam git'a
+
 > WORKDIR /repo - ustawiamy nasz katalog roboczy
+
 > RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git - klonujemy nasze repo do kontenera
+
 > CMD ["bash"] - jak nasz obraz ma rozpocząć.
 
 Dzięki gotowemu plikowi budujemy nasz obraz:
@@ -336,6 +340,8 @@ suco docker run -it lab2
 # ls -la
 ```
 ![ss](./ss/ss23.png)
+
+Jak widać katalog z naszym repozytorium został sklonowany
 
 ### 7. Pokaż uruchomione ( != "działające" ) kontenery, wyczyść je.
 
