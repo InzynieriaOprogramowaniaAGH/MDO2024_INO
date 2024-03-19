@@ -91,11 +91,6 @@ git push origin KR409837
 ```
 
 Następnie w repozytorium i wykonałem pull request do gałęzi grupowej.
-<p align="center">
- <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie1/pullrequest.png">
-</p>
-
-Następnie w repozytorium wykonałem pull request do gałęzi grupowej.
 
 ####
 ## Zajęcia 02
