@@ -68,5 +68,27 @@ Wykorzystując komendę `mkdir` w katalogu właściwym dla grupy umiesciłem kat
 touch README.md
 ```
 
-Następnie 
+Następnie w lokalizacji `MDO2024_INO/.git/hooks` utworzyłem plik `commit-msg` oraz nadałem mu odpowiednia prawa. W pliku zamieściłem następującą treść:
+```
+#!/bin/bash 
+commit_msg_file=$1
+commit_msg=$(cat "$commit_msg_file")
+
+if ! echo "$commit_msg" | grep -q "^KR409837"; then
+    echo >&2 "Błąd: Commit musi zaczynać się od: KR409837"
+    exit 1
+fi
+
+exit 0
+```
+W taki sposób stworzyłem githooka sprawdzającego, czy każdy mój commit message zaczyna się od następującej treści: `KR409837`.
+####
+Wprowadzone zmiany wypchałem na zdalną gałąź przy pomocy komendy:
+```
+git push origin KR409837
+```
+Następnie w repozytorium i wykonałem pull request do gałęzi grupowej.
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie1/pullrequest.png">
+</p>
 
