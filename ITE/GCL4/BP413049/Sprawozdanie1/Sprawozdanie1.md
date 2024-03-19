@@ -213,6 +213,7 @@ może to oznaczać, że polecenie busybox w mojej konfiguracji nie zawiera wbudo
 ![](../Sprawozdanie%201ss/Zrzut%20ekranu%202024-03-19%20162020.png)
 
 - Uruchomione kontenery
+
 ![](../Sprawozdanie%201ss/Zrzut%20ekranu%202024-03-19%20162411.png)
 
 - Zakończenie pracy kontenera
