@@ -218,14 +218,9 @@ git merge DP412497
 
 ### 1. Zainstaluj Docker w systemie linuksowym
 
-Zaczynamy od instalacji dockera dzięki: 
+Zaczynamy od instalacji i uruchomienia dockera dzięki: 
 ```
 sudo dnf install docker
-```
-![ss](./ss/ss17.png)
-
-Oraz uruchamiamy go
-```
 sudo systemctl start docker
 ```
 
