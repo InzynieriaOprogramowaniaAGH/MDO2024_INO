@@ -138,3 +138,158 @@ $ git push
 - Przetestowanie działania hooka
 
 ![ss11](../Sprawozdanie%201ss/Zrzut%20ekranu%202024-03-12%20004023.png)
+
+### 7. Instalacja docker na ubuntu
+
+- Wykonanie kolejno poleceń
+
+```
+$ sudo apt update
+```
+```
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+```
+```
+$ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+```
+```
+$ sudo apt install docker-ce docker-ce-cli containerd.io -y
+```
+```
+$ sudo usermod -aG docker $USER
+```
+```
+$ newgrp docker
+```
+```
+$ sudo systemctl status docker
+```
+![](../Sprawozdanie%201ss/Zrzut%20ekranu%202024-03-19%20154235.png)
+
+### 8. Pobranie obrazów
+
+- Pobranie obrazów hello-world, busybox, ubuntu, mysql
+
+```
+$ sudo docker pull hello-world
+```
+```
+$ sudo docker pull busybox
+```
+```
+$ sudo docker pull ubuntu
+```
+```
+$ sudo docker pull mysql
+```
+
+- Zrzut ekranu prezentujący wszystkie pobrane obrazy
+
+![](../Sprawozdanie%201ss/Zrzut%20ekranu%202024-03-19%20155021.png)
+
+### 9. Uruchomienie kontenera z obrazu busybox
+
+```
+$ sudo docker run --tty busybox
+```
+- Opcja  `-tty` podpięcie obecnego terminala do kontenera
+```
+$ sudo docker run -d  --name nazwa busybox tail -f /dev/null
+```
+- `-d` kontener będzie działał w tle
+- `-- name` przypisuje określoną nazwę do kontenera
+- `tail -f /dev/null/` popularny sposób aby utrzymać kontener uruchomiony w nieskończoność, nie wykonując żadnych faktycznych operacji
+
+### 10. Podłączenie interaktywnie do kontenera
+```
+$ docker exec -it my_busybox sh
+```
+- `-it` opcja trybu interaktywnego, umożliwia interaltywną seesję z kontenerem
+- `sh` określa, które polecenie zostanie uruchomione w kontenerze
+
+Przy próbie sprawdzenia numeru wersji otrzymuję `applet not found`
+może to oznaczać, że polecenie busybox w mojej konfiguracji nie zawiera wbudowanego polecenia do wyświetlania wersji.
+
+![](../Sprawozdanie%201ss/Zrzut%20ekranu%202024-03-19%20162020.png)
+
+- Uruchomione kontenery
+![](../Sprawozdanie%201ss/Zrzut%20ekranu%202024-03-19%20162411.png)
+
+- Zakończenie pracy kontenera
+```
+$ docker stop nazwa_kontenera
+```
+### 11. "System w kontenerze"
+
+- Uruchomienie kontenera z obrazu ubuntu
+
+```
+$ docker run -it --name system-container ubuntu /bin/bash
+```
+
+- Wyświetlenie PID1 oraz pracesów dockera na hoście
+
+```
+# PID1 w kontenerze
+$ ps -p 1
+
+# Procesy Dockera na hoście
+$ ps aux | grep docker
+```
+
+- Aktualizacja pakietów w kontenerze Ubuntu
+
+```
+$ apt update
+$ apt upgrade
+```
+- Wyjście z kontenera
+
+```
+$ exit
+```
+
+![](../Sprawozdanie%201ss/Zrzut%20ekranu%202024-03-19%20162827.png)
+
+
+### 12. Plik Dockerfile
+
+- Utworzenie pliku
+- Zbudowanie obrazu
+```
+$ docker build -t moj_obraz .
+```
+![](../Sprawozdanie%201ss/Zrzut%20ekranu%202024-03-19%20164420.png)
+
+- Sprawdzenie obrazów
+![](../Sprawozdanie%201ss/Zrzut%20ekranu%202024-03-19%20164559.png)
+
+- Uruchomienie kontenera z utworzonego obrazu `moj_obraz`
+
+```
+$ docker run moj_obraz
+```
+![](../Sprawozdanie%201ss/Zrzut%20ekranu%202024-03-19%20164810.png)
+
+Pomyślnie udało się sklonować repozytorium.
+
+
+- Aktywne kontenery
+
+```
+$ docker ps -a
+```
+![](../Sprawozdanie%201ss/Zrzut%20ekranu%202024-03-19%20164920.png)
+
+- Usuwanie kontenerów
+```
+$ docker rm nazwa_kontenera
+```
+
+```
+$ docker rm id_kontenera
+```
+
+
+
+
