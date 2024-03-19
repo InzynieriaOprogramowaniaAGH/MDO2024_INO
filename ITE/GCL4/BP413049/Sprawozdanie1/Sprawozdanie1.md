@@ -262,6 +262,7 @@ $ docker build -t moj_obraz .
 ![](../Sprawozdanie%201ss/Zrzut%20ekranu%202024-03-19%20164420.png)
 
 - Sprawdzenie obrazów
+
 ![](../Sprawozdanie%201ss/Zrzut%20ekranu%202024-03-19%20164559.png)
 
 - Uruchomienie kontenera z utworzonego obrazu `moj_obraz`
