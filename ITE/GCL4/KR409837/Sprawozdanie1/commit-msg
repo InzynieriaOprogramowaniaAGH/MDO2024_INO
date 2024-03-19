@@ -1,2 +1,10 @@
 #!/bin/bash 
-commit_message=$(cat "$1") pattern="^KR409837" if [[ ! $commit_message =~ $pattern ]]; then echo "Error: Commit powinien zaczynać się od 'KR409837'" exit 1 fi exit 0
+commit_msg_file=$1
+commit_msg=$(cat "$commit_msg_file")
+
+if ! echo "$commit_msg" | grep -q "^PB412780"; then
+    echo >&2 "Błąd: Commit musi zaczynać się od: PB412780"
+    exit 1
+fi
+
+exit 0
