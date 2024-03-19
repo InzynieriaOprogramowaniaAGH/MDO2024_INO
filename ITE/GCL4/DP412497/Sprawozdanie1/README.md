@@ -215,4 +215,158 @@ git merge DP412497
 
 
 ## Wykonane zadania - Lab 2
-...
+
+### 1. Zainstaluj Docker w systemie linuksowym
+
+Zaczynamy od instalacji dockera dzięki: 
+```
+sudo dnf install docker
+```
+![ss](./ss/ss17.png)
+
+Oraz uruchamiamy go
+```
+sudo systemctl start docker
+```
+
+### 2. Zarejestruj się w [Docker Hub](https://hub.docker.com/) i zapoznaj z sugerowanymi obrazami
+
+W międzyczasie wchodzimy na stronę Docker Hub i rejestrujemy się (lub logujemy jeśli już posiadamy konto).
+Przeglądamy sugerowane obrazy.
+
+### 3. Pobierz obrazy `hello-world`, `busybox`, `ubuntu` lub `fedora`, `mysql`
+
+Pobieramy zadane obrazy:
+```
+sudo docker pull hello-world
+sudo docker pull busybox
+sudo docker pull fedora
+sudo docker pull mysql
+```
+![ss](./ss/ss18.png)
+
+### 4. Uruchom kontener z obrazu `busybox`
+   - Pokaż efekt uruchomienia kontenera
+
+Uruchamiamy kontener dzięki:
+```
+sudo docker run busybox
+```
+Oraz sprawdzamy czy jest uruchomiony na liście:
+```
+sudo docker ps -a
+```
+
+![ss](./ss/ss19.png)
+
+   - Podłącz się do kontenera **interaktywnie** i wywołaj numer wersji
+
+Aby podłączyć się interaktywnie i zobaczyć numer wersji korzystamy z: 
+```
+sudo docker run -it busybox
+busybox --help | head -n 1
+```
+> -it oznacza połączenie interaktywnie
+
+> --help wyświetla informacje i dostępne funkcje. Nie potrzebujemy wszystkiego a jedynie wersji, która jest w pierwszej linijce, dlatego też korzystamy z `head -n 1`, aby otrzymać tylko tą pierwszą linijkę z wersją.
+
+![ss](./ss/ss20.png)
+
+### 5. Uruchom "system w kontenerze" (czyli kontener z obrazu `fedora` lub `ubuntu`)
+   - Zaprezentuj `PID1` w kontenerze i procesy dockera na hoście
+
+Aby sprawdzić `PID1` korzystamy z:
+```
+ps
+```
+> Niestety w naszym obrazie nie mamy zainstalowanej usługi z tą komendą, dlatego musimy zrobić to ręcznie:
+```
+dnf install procps
+```
+I ponawiamy komendę `ps`
+
+![ss](./ss/ss21.png)
+
+Teraz działa poprawnie.
+
+   - Zaktualizuj pakiety
+
+Aktualizujemy pakiety dzięki:
+```
+dnf update
+```
+![ss](./ss/ss22.png)
+
+   - Wyjdź
+
+Wychodzimy poleceniem:
+```
+exit
+```
+
+### 6. Stwórz własnoręcznie, zbuduj i uruchom prosty plik `Dockerfile` bazujący na wybranym systemie i sklonuj nasze repo.
+   - Kieruj się [dobrymi praktykami](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
+   - Upewnij się że obraz będzie miał `git`-a
+   - Uruchom w trybie interaktywnym i zweryfikuj że jest tam ściągnięte nasze repozytorium
+
+Tworzymy plik Dockerfile: 
+```
+FROM fedora:latest
+
+RUN dnf -y update && \
+    dnf -y install git
+
+WORKDIR /repo
+
+RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+
+CMD ["bash"]
+```
+> FROM fedora:latest - korzystamy z naszego obrazu systemu fedora.
+> RUN dnf -y update && \
+    dnf -y install git - uruchamiamy komendy, aby zaktualizować pakiety oraz zainstalować potrzebnego nam git'a
+> WORKDIR /repo - ustawiamy nasz katalog roboczy
+> RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git - klonujemy nasze repo do kontenera
+> CMD ["bash"] - jak nasz obraz ma rozpocząć.
+
+Dzięki gotowemu plikowi budujemy nasz obraz:
+```
+sudo docker build -t lab2 .
+```
+> -t lab2 - określa nazwę naszego obrazu
+
+Gdy wszystko jest gotowe uruchamiamy obraz i sprawdzamy czy nasze repo jest na miejscu:
+```
+suco docker run -it lab2
+# ls -la
+```
+![ss](./ss/ss23.png)
+
+### 7. Pokaż uruchomione ( != "działające" ) kontenery, wyczyść je.
+
+Sprawdzamy listę uruchomionych kontenerów:
+```
+sudo docker ps -a
+```
+I następnie je czyścimy: 
+```
+sudo docker rm -f ID/NAME
+```
+![ss](./ss/ss24.png)
+> Do usunięcia możemy dowolne wykorzystać albo id kontenera, albo jego nazwę
+
+### 8. Wyczyść obrazy
+
+Czyścimy wszystkie obrazy, które nie są używane przez żadne kontenery:
+```
+sudo docker image prune -a
+```
+![ss](./ss/ss25.png)
+
+### 9. Dodaj stworzone pliki `Dockefile` do folderu swojego `Sprawozdanie1` w repozytorium.
+
+Nasz plik Dockerfile umieszczamy w katalogu Sprawozdanie1.
+
+### 10. Wystaw *Pull Request* do gałęzi grupowej jako zgłoszenie wykonanego zadania.
+
+Zapisujemy wszystko, commit'ujemy i wysyłamy do głównej gałęzi a następnie wystawiamy Pull Request do gałęzi grupowej.
