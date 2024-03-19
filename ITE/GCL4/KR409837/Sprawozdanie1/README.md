@@ -1,5 +1,4 @@
 # Sprawozdanie 1 - Konrad Rezler
->>>>>>> 1a889ed717090514f1c2eeb7d8e8fa6e5a9468c9
 ## Zajęcia 01
 ## Wprowadzenie, Git, Gałęzie, SSH
 ### Instalacja środowiska
