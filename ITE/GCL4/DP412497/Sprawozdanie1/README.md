@@ -207,6 +207,8 @@ git merge DP412497
 
    - Zaktualizuj sprawozdanie i zrzuty o ten krok i wyślij aktualizację do zdalnego źródła (na swojej gałęzi)
 
+![ss](./ss/ss15.png)
+
 
 
 
