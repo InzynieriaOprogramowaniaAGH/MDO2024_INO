@@ -187,8 +187,10 @@ git commit -m "Pierwszy commit"
 ```
 
 > Dodajemy wszystkie pliki do indeksu i commit'ujemy 
+
 ![ss](./ss/ss13.png)
 > Jak widać nasz hook działa. Nasza wiadomość nie zaczynała się od naszego indeksu i numeru, więc wyskoczył nasz bład.
+
 ![ss](./ss/ss14.png)
 > Teraz po dodaniu odpowiedniego rozpoczęcia wiadomości commit zadziałał.
 
