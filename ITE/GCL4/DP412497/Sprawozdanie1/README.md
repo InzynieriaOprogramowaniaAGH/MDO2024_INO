@@ -182,7 +182,7 @@ git add .
 git commit -m "Pierwszy commit"
 ```
 
-> Dodajemy wszystkie pliki do indeksu i commit'ujemy
+> Dodajemy wszystkie pliki do indeksu i commit'ujemy 
 
    - Spróbuj wciągnąć swoją gałąź do gałęzi grupowej
 
