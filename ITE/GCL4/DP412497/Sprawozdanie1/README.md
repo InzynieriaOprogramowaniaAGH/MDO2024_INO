@@ -9,7 +9,7 @@ Celem tych ćwiczeń była instalacja, przygotowanie i zapoznanie się z podstaw
 
 ---
 
-## Wykonane zadania
+## Wykonane zadania - Lab 1
 ---
 ### 1. Zainstaluj klienta Git i obsługę kluczy SSH
 Na start aktualizujemy listę pakietów dzięki 
@@ -18,6 +18,7 @@ sudo dnf update
 ```
 > ‘sudo’ wykorzystujemy, aby korzystać z komend z uprawnieniami administratora.
 > Robimy tak, ponieważ powinniśmy zminimalizować korzystanie z konta root’a, więc korzystamy z normalnego użytkownika tylko korzystając z uprawnień.
+
 ![ss](./ss/ss1.png)
 
 Gdy to już jest zrobione instalujemy git’a dzięki:
@@ -44,7 +45,7 @@ Kiedy mamy już token możemy pobrać nasze repozytorium, korzystając z:
 ```
 git clone https://<PAT>@github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git
 ```
-> <PAT> jest to nasz Personal Access Token
+> PAT - jest to nasz Personal Access Token
 
 ![ss](./ss/ss5.png) 
 
@@ -62,7 +63,7 @@ ssh-keygen -t ed25519
 `ed25519` jest to algorytm do klucza, wykorzystujemy inny niż RSA.
 (Pierwszy klucz tworzymy bez hasła, drugi zabezpieczamy hasłem)
 ![ss](./ss/ss6.png) 
-> Aby korzystać z kluczy muszą być one w odpowiednim folderze `./.ssh`
+> Aby korzystać z kluczy muszą być one w odpowiednim folderze `~/.ssh`
 
 Mając gotowy klucz możemy go dodać na naszym GitHub’ie.
 Na naszym koncie GitHub ponownie wchodzimy w `Settings` i tym razem w zakładkę `SSH and GPG keys` i klikamy `Nes SSH key`. Wprowadzamy nazwę dla niego oraz nasz publiczny klucz.
@@ -88,11 +89,13 @@ Zaczynamy od pobrania wtyczki do VSCode o nazwie `Remote - SSH`
 Następnie w folderze .ssh na naszym windowsie wklejamy nasz klucz publiczny.
 > Folder znajduje się w naszym folderze użytkownika:  `C:/users/user/.ssh`
 W VSCode klikamy w lewym dolnym rogu, aby skorzystać z naszej wtyczki i wybieramy `connect to Host…`, a następnie `+ Add New SSH Host` lub (i tak zaraz wykorzystane) `Configure SSH Hosts` i podajemy nasze dane. Używając configure dostajemy się do pliku config w którym podajemy ścieżkę do naszego klucza:
+
 ![ss](./ss/ss9_1.png) 
 
 Teraz możemy spróbować się połączyć z naszym hostem.
 
 Niestety napotkaliśmy błąd:
+
 ![ss](./ss/ss10.png)
 
 Po przeczytaniu konsoli możemy zobaczyć że problemem okazał się brak możliwości rozpakowania pobranego vscode-server przez brak tar (służące do archiwizoania plików).
@@ -101,6 +104,7 @@ Zainstalujmy go na naszym systemie fedora:
 sudo dnf install tar
 ```
 I spróbujmy ponownie. 
+
 ![ss](./ss/ss11.png)
 
 Jak widać tym razem udało nam się połączyć bez problemów.
@@ -183,8 +187,28 @@ git commit -m "Pierwszy commit"
 ```
 
 > Dodajemy wszystkie pliki do indeksu i commit'ujemy 
+![ss](./ss/ss13.png)
+> Jak widać nasz hook działa. Nasza wiadomość nie zaczynała się od naszego indeksu i numeru, więc wyskoczył nasz bład.
+![ss](./ss/ss14.png)
+> Teraz po dodaniu odpowiedniego rozpoczęcia wiadomości commit zadziałał.
+
+```
+git push origin DP412497
+```
+> Wysyłamy do zdalnego źródła
+
 
    - Spróbuj wciągnąć swoją gałąź do gałęzi grupowej
 
+```
+git checkout GCL4
+git merge DP412497
+```
+
    - Zaktualizuj sprawozdanie i zrzuty o ten krok i wyślij aktualizację do zdalnego źródła (na swojej gałęzi)
 
+
+
+
+## Wykonane zadania - Lab 2
+...
