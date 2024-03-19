@@ -370,4 +370,4 @@ Nasz plik Dockerfile umieszczamy w katalogu Sprawozdanie1.
 
 ### 10. Wystaw *Pull Request* do gałęzi grupowej jako zgłoszenie wykonanego zadania.
 
-Zapisujemy wszystko, commit'ujemy i wysyłamy do głównej gałęzi a następnie wystawiamy Pull Request do gałęzi grupowej.
+Zapisujemy wszystko, commit'ujemy i wysyłamy do naszej gałęzi a następnie wystawiamy Pull Request do gałęzi grupowej.
