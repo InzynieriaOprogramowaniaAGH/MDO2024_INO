@@ -9,6 +9,9 @@ W moim przypadku wybór padł na narzędzie `Virtual Box`, z którym wcześniej 
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie1/VirtualBox.png">
 </p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie1/pamiec.png">
+</p>
 
 ### Zainstaluj klienta Git i obsługę kluczy SSH
 Korzystając z następującego polecenia:
@@ -20,9 +23,7 @@ pobrałem klienta Git, który umożliwia zdalne klonowanie repozytoriów. Jednak
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie1/Personal Access Token.png">
 </p>
-<p align="center">
- <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie1/pamiec.png">
-</p>
+
 
 Mając już utworzony token mogłem sklonować repozytorium przedmiotu wykorzystując następującą komendę:
 ```
@@ -87,8 +88,55 @@ Wprowadzone zmiany wypchałem na zdalną gałąź przy pomocy komendy:
 ```
 git push origin KR409837
 ```
-Następnie w repozytorium i wykonałem pull request do gałęzi grupowej.
+Następnie w repozytorium wykonałem pull request do gałęzi grupowej.
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie1/pullrequest.png">
 </p>
+
+####
+## Zajęcia 02
+## Git, Docker
+### Przygotowywanie środowiska
+W swojej maszynie wirtualnej zainstalowałem dockera wykorzystując następującą komendę:
+```
+sudo snap install Docker
+```
+zarejestrowałem się w Docker Hub oraz pobrałem następujące obrazy:
+- hello-world
+- busybox
+- mysql
+- ubuntu
+#### 
+Następnie uruchomiłem kontener z obrazu `busybox`, a nastepnie podłaczyłem się do kontenera interaktywnie wywołując jego numer wersji przy pomocy widocznym na zrzucie ekranu komend
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie1/busybox.png">
+</p>
+####
+Następnie uruchomiłem "system w kontenerze", czyli kontener z obrazu ubuntu. Komenda `docker run -it ubuntu`, a następnie komenda `ps` umożliwiła mi zaprezentowanie `PID1` w kontenerze i procesy dockera na hoście
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie1/obrazubuntu.png">
+</p>
+potem zaktualizowałem pakiety przy pomocy komendy `apt upgrade`.
+
+### Tworzenie pliku `Dockerfile`
+Stworzyłem prosty plik Dockerfile w osobnym katalogu `workspace1`, który zawierał skrypt odpowiedzialny za stworzenie nowego brazu bazującego na ubuntu oraz instalację Gita i sklonowanie repozytorium przedmiotu za pomocą protokołu HTTPS. Wspomniany plik posiadał następującą treść:
+```
+# syntax=docker/dockerfile:1
+FROM ubuntu 
+RUN apt update && apt install -y git ssh 
+WORKDIR /github 
+RUN git clone https://github.com/InzynieriaoprogramowaniaAGH/MDO2024_INO.git 
+```
+następnie utowrzyłem przykładowy obraz korzystając z polecenia `docker buildx build -t obraz .`
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie1/dockerbuild.png">
+</p>
+i upewniłem się, że obraz będzie miał gita i sciągnięte jest tam nasze repozytorium
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie1/obraz potwierdzenie.png">
+</p>
+
+
+
+
 
