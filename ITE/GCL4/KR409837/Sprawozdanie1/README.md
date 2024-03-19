@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 # Sprawozdanie 1 - Konrad Rezler
 >>>>>>> 1a889ed717090514f1c2eeb7d8e8fa6e5a9468c9
 ## Zajęcia 01
@@ -152,8 +150,3 @@ i upewniłem się, że obraz będzie miał gita i sciągnięte jest tam nasze re
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie1/obraz potwierdzenie.png">
 </p>
 
-
-
-
-
->>>>>>> 1a889ed717090514f1c2eeb7d8e8fa6e5a9468c9
