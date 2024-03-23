@@ -1,0 +1,10 @@
+#!/bin/bash
+
+commit_msg=$(cat $1)
+
+if [[ ! $commit_msg =~ ^KS412661.*$ ]]; then
+    echo "Commit message must start with 'KS412661'."  
+    echo "Commit blocked! "  
+    exit 1  
+fi
+echo "Correct commit"
