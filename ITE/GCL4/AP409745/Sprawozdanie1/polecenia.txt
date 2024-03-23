@@ -1,0 +1,304 @@
+    1  service status sshd
+    2  systemctl status sshd
+    3  ps aux | grep sshd
+    4  ip a
+    5  ipconfig
+    6  ip
+    7  ip a
+    8  sudo apt update
+    9  sudo apt install openssh-server
+   10  clear
+   11  sudo systemctl status ssh
+   12  sudo ufw allow ssh
+   13  ip a
+   14  ssh localhost
+   15  sudo apt install openssh-server
+   16  sudo systemctl status ssh
+   17  ssh localhost
+   18  nano
+   19  sudo nano /etc/ssh/ssgd_config
+   20  cd /etc/ssh/
+   21  ls -l
+   22  nano ssh_config
+   23  sudo nano ssh_config
+   24  sudo systemctl restart ssh
+   25  sudo systemctl status ssh
+   26  ssh localhost
+   27  ip a
+   28  sudo apt upgrade
+   29  sudo add-apt-repository ppa:xtradeb/apps
+   30  clear
+   31  sudo apt update
+   32  sudo apt install filezilla
+   33  filezilla --version
+   34  sudo ufw allow 22/tcp
+   35  sudo systemctl enable --now ssh
+   36  ip addr
+   37  ls -l
+   38  mkdir Github
+   39  cd Github/
+   40  git
+   41  sudo apt install git
+   42  git clone https://github.com/KN_Integra/BytePed
+   43  git clone https://github.com/Grallistrix/BOIL_Project
+   44  ls
+   45  cd BOIL_Project/
+   46  ls
+   47  nano README.md 
+   48  sudo systemctl set-default multi-user.target
+   49  ls
+   50  ls -al
+   51  cd ..
+   52  ls
+   53  ls -al
+   54  cd ..
+   55  ls
+   56  ls -al
+   57  cd .ssh/
+   58  ls
+   59  cd Github/
+   60  rm -rf MDO2024_INO/
+   61  rm -rf BOIL_Project/
+   62  ip a
+   63  git --version
+   64  git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO
+   65  ls
+   66  cd MDO2024_INO/
+   67* ssh-keygen -b 4096
+   68  ssh-keygen -t ed25519 -b 4096 -N 'haslo123'
+   69  eval $(ssh-agent -s)
+   70  ssh-add /home/ap/.ssh/id_ed25519.pub 
+   71  ssh-add /home/ap/.ssh/id_ed25519
+   72  cd ..
+   73  rm -rf MDO2024_INO/
+   74  git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO
+   75  git checkout main
+   76  cd MDO2024_INO/
+   77  git checkout main
+   78  git checkout GCL4
+   79  git checkout GLC4
+   80  git branch -a
+   81  git checkout GCL4
+   82  git chceckout main
+   83  git checkout main
+   84  git checkout GCL4
+   85  git checkout -b AP409745
+   86  ls
+   87  cd ITE/GCL4/
+   88  ls
+   89  mkdir AP409745
+   90  cd AP409745/
+   91  mkdir Sprawozdanie1
+   92  cd Sprawozdanie1/
+   93  touch Sprawozdanie1.md
+   94  nano Sprawozdanie1.md 
+   95  ls
+   96  cd ..
+   97  ls
+   98  rm -ef AP409745/
+   99  rm -rf AP409745/
+  100  mkdir AP409745
+  101  cd AP409745/
+  102  mkdir Sprawozdanie1
+  103  cd Sprawozdanie1/
+  104  touch Sprawozdanie1.md
+  105  git status
+  106  cd ..
+  107  touch my-hook
+  108  mv my-hook .git/hooks
+  109  cd ..
+  110  ls
+  111  mkdir .git
+  112  ls -al
+  113  mv /home/ap/Github/MDO2024_INO/ITE/GCL4/my-hook .git/hooks
+  114  chmod +x .git/hooks/my-hook 
+  115  cd ITE/GCL4/AP409745/Sprawozdanie1/
+  116  mkdir images
+  117  cd ..
+  118  git add .
+  119  git commit -m "Testing Testing"
+  120  nano /home/ap/Github/MDO2024_INO/.git/hooks/my-hook 
+  121  cd .git/hooks/
+  122  ls
+  123  nano commit-msg.sample 
+  124  ls
+  125  mv my-hook commit-msg
+  126  cd ..
+  127  ks
+  128  ls
+  129  git commit -m "Testing 2"
+  130  git add .
+  131  git commit -m "Testing 2"
+  132  cd ITE/GCL4/AP409745/Sprawozdanie1/
+  133  touch test1.md
+  134  git add .
+  135  cd ..
+  136  git add .
+  137  cd ..
+  138  git add .
+  139  cd ..
+  140  git add .
+  141  cd ..
+  142  git add .
+  143  git commit -m "Testing 2"
+  144  cd .git/hooks/
+  145  ls
+  146  nano commit-msg
+  147  git commit -m "Testing 2"
+  148  cd ..
+  149  git commit -m "Testing 2"
+  150  cd .git/hooks/
+  151  ls
+  152  nano commit-msg
+  153  cd ..
+  154  git commit -m "Testing Testing"
+  155  cd .git/hooks/
+  156  nano commit-msg
+  157  cat
+  158  cd ..
+  159  git commit -m "Testing Testing"
+  160  rm ITE/GCL4/AP409745/Sprawozdanie1/test1.md 
+  161  git add .
+  162  git commit -m "Testing Testing"
+  163  touch ITE/GCL4/AP409745/Sprawozdanie1/test2.md
+  164  ls
+  165  git add .
+  166  git commit -m "Testing Testing"
+  167  rm ITE/GCL4/AP409745/Sprawozdanie1/test2.md 
+  168  git add .
+  169  git commit -m "Testing Testing"
+  170  touch ITE/GCL4/AP409745/Sprawozdanie1/test3.md
+  171  git add .
+  172  git commit -m "Testing Testing"
+  173  ip a
+  174  nano .git/hooks/commit-msg
+  175  ls
+  176  rm ITE/GCL4/AP409745/Sprawozdanie1/test3.md 
+  177  git add .
+  178  git commit -m "Testing Testing"
+  179  nano .git/hooks/commit-msg
+  180  touch ITE/GCL4/AP409745/Sprawozdanie1/test4.md
+  181  git add .
+  182  git commit -m "Testing Testing"
+  183  nano .git/hooks/commit-msg
+  184* rm ITE/GCL4/AP409745/Sprawozdanie1/tes
+  185  git add .
+  186  git commit -m "Testing Testing"
+  187  nano .git/hooks/commit-msg
+  188  touch ITE/GCL4/AP409745/Sprawozdanie1/test5.md
+  189  git add .
+  190  git commit -m "Testing Testing"
+  191  git commit -m "AP409745 Testing2"
+  192  nano .git/hooks/commit-msg
+  193  git push origin AP409745
+  194  sudo systemctl restart ssh
+  195  nmcli general status
+  196  sudo systemctl restart nmcli
+  197  systemctl status ssh
+  198  git push origin AP409745
+  199  history > polecenia.txt
+    1  service status sshd
+    2  systemctl status sshd
+    3  ps aux | grep sshd
+    4  ip a
+    5  ipconfig
+    6  ip
+    7  ip a
+    8  sudo apt update
+    9  sudo apt install openssh-server
+   10  clear
+   11  sudo systemctl status ssh
+   12  sudo ufw allow ssh
+   13  ip a
+   14  ssh localhost
+   15  sudo apt install openssh-server
+   16  sudo systemctl status ssh
+   17  ssh localhost
+   18  nano
+   19  sudo nano /etc/ssh/ssgd_config
+   20  cd /etc/ssh/
+   21  ls -l
+   22  nano ssh_config
+   23  sudo nano ssh_config
+   24  sudo systemctl restart ssh
+   25  sudo systemctl status ssh
+   26  ssh localhost
+   27  ip a
+   28  sudo apt upgrade
+   29  sudo add-apt-repository ppa:xtradeb/apps
+   30  clear
+   31  sudo apt update
+   32  sudo apt install filezilla
+   33  filezilla --version
+   34  sudo ufw allow 22/tcp
+   35  sudo systemctl enable --now ssh
+   36  ip addr
+   37  ls -l
+   38  mkdir Github
+   39  cd Github/
+   40  git
+   41  sudo apt install git
+   42  git clone https://github.com/KN_Integra/BytePed
+   43  git clone https://github.com/Grallistrix/BOIL_Project
+   44  ls
+   45  cd BOIL_Project/
+   46  ls
+   47  nano README.md 
+   48  sudo systemctl set-default multi-user.target
+   49  ls
+   50  ls -al
+   51  cd ..
+   52  ls
+   53  ls -al
+   54  cd ..
+   55  ls
+   56  ls -al
+   57  cd .ssh/
+   58  ls
+   59  git -version
+   60  git --version
+   61  sudo systemctl status ssh
+   62  ls
+   63  cd ap/
+   64  ls
+   65  cd Documents/
+   66  ls
+   67  git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+   68  ls
+   69  cd ..
+   70  ls
+   71  cd Github/
+   72  ls
+   73  cd MDO2024_INO/
+   74  git branches --all
+   75  git branch --all
+   76  ls
+   77  man test
+   78  git add .
+   79  git commit -m "Git-Sprawozdanie"
+   80  git commit -m "AP409745 Git-Sprawozdanie"
+   81  git branch
+   82  git checkout AP409745 
+   83  git add .
+   84  git commit -m "AP409745 Git-Sprawozdanie"
+   85  git push
+   86  git branches
+   87  git branch -all
+   88  git branch --all
+   89  git checkout GCL4
+   90  git checkout AP409745 
+   91  git add .
+   92  git commit -m "AP409745 Git-Sprawozdanie"
+   93  git push origin AP409745
+   94  git checkout GCL4
+   95  git pull AP409745
+   96  git pull
+   97  git merge
+   98  git merge AP409745
+   99  git coomit -m "AP409745"
+  100  git commit -m "AP409745"
+  101  git checkout AP409745 
+  102  git branch
+  103  git checkout AP409745 
+  104  history
+  105  history > listring2.txt
