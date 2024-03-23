@@ -131,7 +131,7 @@ Docker jako uruchomiony na hoście proces zapisuje wszystkie swoje dane. W zwią
   <i>Znalezione pliki zapisane przez proces dockera w /var/lib/docker/overlay2 </i>
 </p>
 
-**3. Zamontowanie wolumenu do kontenera podczas jego tworzenia**
+**(?)3. Zamontowanie wolumenu do kontenera podczas jego tworzenia**
 <br>
 Ostatnia możliwość to zamontowanie wolumenu w taki sposób, aby dokcer sam skopiował ten plik w odpowiednie miejsce. Można to zrobić na kilka sposobów. Najłatwiejszym z nich jest zamontowanie wolumenu podczas uruchamiania kontenera za pomocą polecenia:
 
@@ -140,7 +140,43 @@ docker run -v ./Build:/irssi/Build/ irssi-builder:0.1
 // -v <path_on_host>:<path_in_container> 
 ```
 
+***Uwaga, polecenie to powoduje, że na lokalnym hoście powstaje katalog ale dane z katalogu z kontenere nie są przepisywane. Dlaczego ?***
+
 
 # Docker Compose
 
-Aby wdrażać kontenery automatycznie możemy stowrzyć dla `Docker compose`, kótry będzie definiował sposób tworzenie kontenerów.
+Aby wdrażać kontenery automatycznie możemy stowrzyć dla `Docker compose`, kótry będzie definiował sposób tworzenie kontenerów. Przykładowy plik `docker-compose.yml` dla budowania kontenerów do budowania i testowania dla aplikacji `irssi` wygląda następująco:
+```docker-compose
+services:
+  irssi-build:
+    build:
+      context: .
+      dockerfile: irssi-build.Dockerfile
+    image: irssi-build:0.1
+    container_name: irssi-build
+
+    restart: 'no'
+
+  irssi-test:
+    build:
+      context: .
+      dockerfile: irssi-test.Dockerfile
+    image: irssi-test:0.1
+    container_name: irssi-test
+
+    depends_on:
+      - irssi-build
+    restart: 'no'
+```
+
+Abu uruchomić ten plik potrzebujemy pobrać rozszerzenie do dockera `dnf install docker-compose`. Po poprawnym pobraniu możemy wykonać operację:
+```
+docker-compose up
+```
+<br>
+<p align="center">
+  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/64956354/a802ff48-78b1-4a44-a54e-552b9cc2314f" width="850" height="200"/>
+</p>
+<p align="center"><i>Wynik budowy kontenerów za pomocą docker-compose</i></p>
+
+
