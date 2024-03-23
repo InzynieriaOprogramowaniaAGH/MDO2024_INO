@@ -1,0 +1,9 @@
+#!/usr/bin/sh
+
+commit_msg=$(cat "$1")
+initials="DP412497"
+
+if ! echo "$commit_msg" | grep -q "^$initials"; then
+    echo "Commit message must start with '$initials'!"
+    exit 1
+fi
