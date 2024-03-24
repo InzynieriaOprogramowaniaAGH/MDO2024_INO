@@ -32,6 +32,7 @@ Teraz będziemy korzystać ze zmienionego repozyturium (zaaktualizowana wersja):
 Teraz komenda ```npm run``` powinna uruchomić program, który wyświetli komunikat, że aplikacja działa i odliczyć od 1 do 10.
 
 **2. Sklonowanie niniejszego repozytorium, przeprowadzenie buildu programu (doinstalowanie wymaganych zależności).**
+
 Najpierw musimy sklonować nasze repozytorium, za pomocą komendy (potrzebujemy do tego git'a, który powinien być na poprzednich zajeciach):
 
 ```git clone https://github.com/dmaciej409926/simple-nodejs.git```
@@ -48,6 +49,7 @@ Następnie przechodzimy do folderu ```simple-nodejs``` i instalujemy potrzebne z
 ![ ](./SS/3.png)
 
 **3. Uruchomienie testów jednostkowych dołączonych do repozytorium**
+
 Jeśli instalacja przebiegła poprawnie możemy wykonać testy jednostkowe:
 
 ```npm test```
