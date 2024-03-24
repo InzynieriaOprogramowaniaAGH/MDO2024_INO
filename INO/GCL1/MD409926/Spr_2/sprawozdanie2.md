@@ -12,6 +12,8 @@
 - jest umieszczone wraz ze swoimi narzędziami Makefile tak, aby możliwe był uruchomienie w repozytorium czegoś na kształt make build oraz make test. Środowisko Makefile jest dowolne. Może to być automake, meson, npm, maven, nuget, dotnet, msbuild...
 - Zawiera zdefiniowane i obecne w repozytorium testy, które można uruchomić np. jako jeden z "targetów" Makefile'a. Testy muszą jednoznacznie formułować swój raport końcowy (gdy są obecne, zazwyczaj taka jest praktyka)
 
+https://github.com/dmaciej409926/simple-nodejs.git
+
 **2. Sklonowanie niniejszego repozytorium, przeprowadzenie buildu proramu (doinstalowanie wymaganych zależności).**
 
 
