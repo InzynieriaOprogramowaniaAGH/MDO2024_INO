@@ -1,0 +1,9 @@
+!/bin/sh
+
+if ! grep -q '^KK406795' "$1"; then
+     echo "Commit nie zaczyna sie od : 'KK406795'. "
+     exit 1
+
+fi 
+
+echo "Commit OK"
