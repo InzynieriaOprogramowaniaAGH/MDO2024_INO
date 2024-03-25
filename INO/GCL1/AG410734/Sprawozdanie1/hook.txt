@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Pobierz nazwę commita
+commit_msg=$(cat "$1")
+
+# Sprawdź, czy nazwa commita zaczyna się od "AG410734"
+if [[ ! "$commit_msg" =~ ^AG410734.* ]]; then
+    echo "Błąd: Nazwa commita musi zaczynać się od 'AG410734'!"
+    exit 1
+fi
+
+# Wyjście z kodem 0 oznacza, że nazwa commita jest poprawna
+exit 0
