@@ -22,7 +22,7 @@
 * Uruchom build w kontenerze
 * Zapisz powstałe/zbudowane pliki na woluminie wyjściowym, tak by były dostępne po wyłączniu kontenera.
 * Pamiętaj udokumentować wyniki.
-* Ponów operację, ale klonowanie na wolumin wejściowy przeprowadź poza kontenerem
+* Ponów operację, ale klonowanie na wolumin wejściowy przeprowadź wewnątrz kontenera (użyj gita w kontenerze)
 * Przedyskutuj możliwość wykonania ww. kroków za pomocą `docker build` i pliku `Dockerfile`. (podpowiedź: `RUN --mount`)
 
 ### Eksponowanie portu
