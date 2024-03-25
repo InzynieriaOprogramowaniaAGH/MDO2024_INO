@@ -1,0 +1,10 @@
+!/bin/sh
+
+if ! grep -q '^BK403414' "$1"; then
+
+echo "commit message ma sie zaczynac od BK403414" 
+exit 1
+
+fi 
+
+echo "ok"
