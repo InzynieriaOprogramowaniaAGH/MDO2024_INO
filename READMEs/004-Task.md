@@ -22,6 +22,8 @@
 * Uruchom build w kontenerze
 * Zapisz powstałe/zbudowane pliki na woluminie wyjściowym, tak by były dostępne po wyłączniu kontenera.
 * Pamiętaj udokumentować wyniki.
+* Ponów operację, ale klonowanie na wolumin wejściowy przeprowadź poza kontenerem
+* Przedyskutuj możliwość wykonania ww. kroków za pomocą `docker build` i pliku `Dockerfile`. (podpowiedź: `RUN --mount`)
 
 ### Eksponowanie portu
 * Zapoznaj się z dokumentacją https://iperf.fr/
