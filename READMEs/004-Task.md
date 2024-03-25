@@ -33,6 +33,7 @@
 * Ponów ten krok, ale wykorzystaj własną dedykowaną sieć mostkową. Spróbuj użyć rozwiązywania nazw
 * Połącz się spoza kontenera (z hosta i spoza hosta)
 * Przedstaw przepustowość komunikacji lub problem z jej zmierzeniem (wyciągnij log z kontenera, woluminy mogą pomóc)
+* Opcjonalnie: odwołuj się do kontenera serwerowego za pomocą nazw, a nie adresów IP
 
 ### Instancja Jenkins
 * Zapoznaj się z dokumentacją  https://www.jenkins.io/doc/book/installing/docker/
