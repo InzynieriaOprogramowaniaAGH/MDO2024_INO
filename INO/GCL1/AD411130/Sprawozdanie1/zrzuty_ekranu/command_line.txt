@@ -1,0 +1,1785 @@
+danko@dankoserver:~/home$ cd ..
+danko@dankoserver:~$ dir
+home
+danko@dankoserver:~$ cd ..
+danko@dankoserver:/home$ dir
+danko
+danko@dankoserver:/home$ cd danko/
+danko@dankoserver:~$ dir
+home
+danko@dankoserver:~$ cd .ssh/
+danko@dankoserver:~/.ssh$ dir
+authorized_keys  id_ed25519  id_ed25519.pub  id_rsa  id_rsa.pub  known_hosts  known_hosts.old
+danko@dankoserver:~/.ssh$ cd ..
+danko@dankoserver:~$ cd home/
+danko@dankoserver:~/home$ dir
+sample_dir
+danko@dankoserver:~/home$ cd sample_dir/
+danko@dankoserver:~/home/sample_dir$ git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+Cloning into 'MDO2024_INO'...
+remote: Enumerating objects: 8, done.
+remote: Counting objects: 100% (8/8), done.
+remote: Compressing objects: 100% (6/6), done.
+remote: Total 8 (delta 0), reused 8 (delta 0), pack-reused 0
+Receiving objects: 100% (8/8), done.
+danko@dankoserver:~/home/sample_dir$ dir
+bobyqa  first_dir  matrix.h  MDO2024_INO  sample.txt
+danko@dankoserver:~/home/sample_dir$ cd MDO2024_INO/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git branch
+* main
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git branch
+* main
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ cd ..
+danko@dankoserver:~/home/sample_dir$ git branch
+fatal: not a git repository (or any of the parent directories): .git
+danko@dankoserver:~/home/sample_dir$ cd MDO2024_INO/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ dir
+README.md  READMEs
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git branch
+* main
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ cd ..
+danko@dankoserver:~/home/sample_dir$ git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+fatal: destination path 'MDO2024_INO' already exists and is not an empty directory.
+danko@dankoserver:~/home/sample_dir$ dir
+bobyqa  first_dir  matrix.h  MDO2024_INO  sample.txt
+danko@dankoserver:~/home/sample_dir$ cd MDO2024_INO/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ dir
+README.md  READMEs
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git branch
+* main
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ cd ..
+danko@dankoserver:~/home/sample_dir$ rm MDO2024_INO/
+rm: cannot remove 'MDO2024_INO/': Is a directory
+danko@dankoserver:~/home/sample_dir$ rm -r MDO2024_INO/
+rm: remove write-protected regular file 'MDO2024_INO/.git/objects/pack/pack-06e671b52d2b0d057e5636c487003271ced0d7f4.idx'? yes
+rm: remove write-protected regular file 'MDO2024_INO/.git/objects/pack/pack-06e671b52d2b0d057e5636c487003271ced0d7f4.pack'? ^C
+danko@dankoserver:~/home/sample_dir$ rm -rf MDO2024_INO/
+danko@dankoserver:~/home/sample_dir$ dir
+bobyqa  first_dir  matrix.h  sample.txt
+danko@dankoserver:~/home/sample_dir$ git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+Cloning into 'MDO2024_INO'...
+remote: Enumerating objects: 19, done.
+remote: Counting objects: 100% (19/19), done.
+remote: Compressing objects: 100% (11/11), done.
+Receiving objects: 100% (19/19), 4.41 KiB | 215.00 KiB/s, done.
+remote: Total 19 (delta 0), reused 19 (delta 0), pack-reused 0
+danko@dankoserver:~/home/sample_dir$ dir
+bobyqa  first_dir  matrix.h  MDO2024_INO  sample.txt
+danko@dankoserver:~/home/sample_dir$ cd MDO2024_INO/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ dir
+README.md  READMEs
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git branch
+* main
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git checkout main
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ dir
+README.md  READMEs
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git branch
+* main
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git pull
+remote: Enumerating objects: 7, done.
+remote: Counting objects: 100% (7/7), done.
+remote: Compressing objects: 100% (4/4), done.
+remote: Total 4 (delta 1), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (4/4), 1.09 KiB | 372.00 KiB/s, done.
+From github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO
+   78c0762..360fad3  main       -> origin/main
+Updating 78c0762..360fad3
+Fast-forward
+ READMEs/001-Task.md | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ dir
+README.md  READMEs
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git branch
+* main
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git pull
+Already up to date.
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git branch
+* main
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git branch --remotes
+  origin/GCL1
+  origin/HEAD -> origin/main
+  origin/KD232144_1
+  origin/main
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git checkout GCL1
+Branch 'GCL1' set up to track remote branch 'GCL1' from 'origin'.
+Switched to a new branch 'GCL1'
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git branch
+* GCL1
+  main
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git checkout -b AD411130
+Switched to a new branch 'AD411130'
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git branch
+* AD411130
+  GCL1
+  main
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ pwd
+/home/danko/home/sample_dir/MDO2024_INO
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git push origin AD411130 
+Total 0 (delta 0), reused 0 (delta 0), pack-reused 0
+remote: 
+remote: Create a pull request for 'AD411130' on GitHub by visiting:
+remote:      https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/pull/new/AD411130
+remote: 
+To github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+ * [new branch]      AD411130 -> AD411130
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ dir
+INO  README.md  READMEs
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git branch
+* AD411130
+  GCL1
+  main
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git branch
+* AD411130
+  GCL1
+  main
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ mkdir AD411130
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ dir
+AD411130  INO  README.md  READMEs
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ cd .git
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git$ dir
+branches  config  description  FETCH_HEAD  HEAD  hooks  index  info  logs  objects  ORIG_HEAD  packed-refs  refs
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git$ cd hooks/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git/hooks$ dir
+applypatch-msg.sample      post-update.sample     pre-merge-commit.sample    pre-rebase.sample        update.sample
+commit-msg.sample          pre-applypatch.sample  prepare-commit-msg.sample  pre-receive.sample
+fsmonitor-watchman.sample  pre-commit.sample      pre-push.sample            push-to-checkout.sample
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git/hooks$ nano pre-commit.sample 
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git/hooks$ nano commit-msg.sample 
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git/hooks$ nano prepare-commit-msg.sample `
+> ^C
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git/hooks$ nano prepare-commit-msg.sample 
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git/hooks$ nano pre-commit.sample 
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git/hooks$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ dir
+AD411130  INO  README.md  READMEs
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ cd AD411130/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ dir
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ dir
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ touch pre-commit
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ nano pre-commit 
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ dir
+pre-commit
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cp pre-commit .git/hooks/pre-commit
+cp: cannot create regular file '.git/hooks/pre-commit': No such file or directory
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cp pre-commit ../.git/hooks/pre-commit
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ dir
+pre-commit
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ cd .git/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git$ cd hooks/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git/hooks$ dir
+applypatch-msg.sample      post-update.sample     pre-commit.sample          pre-push.sample     push-to-checkout.sample
+commit-msg.sample          pre-applypatch.sample  pre-merge-commit.sample    pre-rebase.sample   update.sample
+fsmonitor-watchman.sample  pre-commit             prepare-commit-msg.sample  pre-receive.sample
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git/hooks$ dir
+applypatch-msg.sample      post-update.sample     pre-commit.sample          pre-push.sample     push-to-checkout.sample
+commit-msg.sample          pre-applypatch.sample  pre-merge-commit.sample    pre-rebase.sample   update.sample
+fsmonitor-watchman.sample  pre-commit             prepare-commit-msg.sample  pre-receive.sample
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git/hooks$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ cd AD411130/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ dir
+pre-commit
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ mkdir Sprawozdanie1
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cd Sprawozdanie1/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ touch README.md
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ dir
+README.md
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ dir
+pre-commit  Sprawozdanie1
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ dir
+AD411130  INO  README.md  READMEs
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git status
+On branch AD411130
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   AD411130/Sprawozdanie1/README.md
+        new file:   AD411130/pre-commit
+
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git commit -m "Pierwszy commit - utworzenie folderow i git hook"
+Author identity unknown
+
+*** Please tell me who you are.
+
+Run
+
+  git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+
+to set your account's default identity.
+Omit --global to set the identity only in this repository.
+
+fatal: unable to auto-detect email address (got 'danko@dankoserver.(none)')
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git branch
+* AD411130
+  GCL1
+  main
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ cd AD411130/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "Pierwszy commit - utworzenie folderow i git hook"
+Author identity unknown
+
+*** Please tell me who you are.
+
+Run
+
+  git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+
+to set your account's default identity.
+Omit --global to set the identity only in this repository.
+
+fatal: unable to auto-detect email address (got 'danko@dankoserver.(none)')
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git status
+On branch AD411130
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   Sprawozdanie1/README.md
+        new file:   pre-commit
+
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "Pierwszy commit - utworzenie folderow i git hook"
+Author identity unknown
+
+*** Please tell me who you are.
+
+Run
+
+  git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+
+to set your account's default identity.
+Omit --global to set the identity only in this repository.
+
+fatal: unable to auto-detect email address (got 'danko@dankoserver.(none)')
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git config --list
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.url=git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+branch.main.remote=origin
+branch.main.merge=refs/heads/main
+branch.GCL1.remote=origin
+branch.GCL1.merge=refs/heads/GCL1
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git config --global iser.email "danko@dankoserver"
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git config --global user.email "danko@dankoserver"
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git config --global user.name "danko"
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git config --list
+iser.email=danko@dankoserver
+user.email=danko@dankoserver
+user.name=danko
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.url=git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+branch.main.remote=origin
+branch.main.merge=refs/heads/main
+branch.GCL1.remote=origin
+branch.GCL1.merge=refs/heads/GCL1
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "Pierwszy commit - utworzenie folderow i git hook"
+hint: The '.git/hooks/pre-commit' hook was ignored because it's not set as executable.
+hint: You can disable this warning with `git config advice.ignoredHook false`.
+[AD411130 b247e18] Pierwszy commit - utworzenie folderow i git hook
+ 2 files changed, 11 insertions(+)
+ create mode 100644 AD411130/Sprawozdanie1/README.md
+ create mode 100644 AD411130/pre-commit
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ chmod ug+x AD411130/*
+chmod: cannot access 'AD411130/*': No such file or directory
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ chmod ug+x AD411130/*
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ cd AD411130/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ dir
+pre-commit  Sprawozdanie1
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cp pre-commit ../.git/hooks/pre-commit
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cd AD411130/
+bash: cd: AD411130/: No such file or directory
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cd Sprawozdanie1/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ mkdir zrzuty_ekranu
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "Dodanie folderu ze zrzutami ekranu"
+hint: The '.git/hooks/pre-commit' hook was ignored because it's not set as executable.
+hint: You can disable this warning with `git config advice.ignoredHook false`.
+On branch AD411130
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   pre-commit
+
+no changes added to commit (use "git add" and/or "git commit -a")
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "Dodanie folderu ze zrzutami ekranu"
+hint: The '.git/hooks/pre-commit' hook was ignored because it's not set as executable.
+hint: You can disable this warning with `git config advice.ignoredHook false`.
+[AD411130 df71357] Dodanie folderu ze zrzutami ekranu
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ mode change 100644 => 100755 AD411130/pre-commit
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ chmod +x pre-commit 
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "Dodanie folderu ze zrzutami ekranu"
+hint: The '.git/hooks/pre-commit' hook was ignored because it's not set as executable.
+hint: You can disable this warning with `git config advice.ignoredHook false`.
+On branch AD411130
+nothing to commit, working tree clean
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ dir
+pre-commit  Sprawozdanie1
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git status
+On branch AD411130
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   pre-commit
+
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "Try commit 3"
+hint: The '.git/hooks/pre-commit' hook was ignored because it's not set as executable.
+hint: You can disable this warning with `git config advice.ignoredHook false`.
+[AD411130 378a05f] Try commit 3
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cp pre-commit ../.git/hooks/pre-commit
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git status
+On branch AD411130
+nothing to commit, working tree clean
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ cd .git
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git$ dir
+branches  COMMIT_EDITMSG  config  description  FETCH_HEAD  HEAD  hooks  index  info  logs  objects  ORIG_HEAD  packed-refs  refs
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git$ cd hooks/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git/hooks$ chmod +x 
+applypatch-msg.sample      post-update.sample         pre-commit.sample          pre-push.sample            push-to-checkout.sample
+commit-msg.sample          pre-applypatch.sample      pre-merge-commit.sample    pre-rebase.sample          update.sample
+fsmonitor-watchman.sample  pre-commit                 prepare-commit-msg.sample  pre-receive.sample         
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git/hooks$ chmod +x pre-commit
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git/hooks$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git$ cd ...
+bash: cd: ...: No such file or directory
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ cd AD411130/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ dir
+pre-commit  Sprawozdanie1
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "4 try"
+cat: '': No such file or directory
+Commit message must start with your initials and index number
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "AD411130 Correct commit"
+cat: '': No such file or directory
+Commit message must start with your initials and index number
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git statis
+git: 'statis' is not a git command. See 'git --help'.
+
+The most similar command is
+        status
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git status
+On branch AD411130
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   pre-commit
+
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "AD411130 Correct commit"
+cat: '': No such file or directory
+Commit message must start with your initials and index number
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "AD411130 Correct commit"
+cat: '': No such file or directory
+Commit message must start with your initials and index number
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cp pre-commit ../.git/hooks/pre-commit
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "AD411130 Correct commit"
+Commit message must start with your initials and index number!
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cp pre-commit ../.git/hooks/pre-commit
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "AD411130 Correct commit"
+grep: : No such file or directory
+Commit message must start with your initials and index number!
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cp pre-commit ../.git/hooks/pre-commit
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "AD411130 Correct commit"
+grep: : No such file or directory
+Commit message must start with your initials and index number!
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ dir
+pre-commit  Sprawozdanie1
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git status
+On branch AD411130
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   pre-commit
+
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cp pre-commit ../.git/hooks/pre-commit
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "AD411130 Correct commit"
+grep: : No such file or directory
+Commit message must start with your initials and index number!
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cp pre-commit ../.git/hooks/pre-commit
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "AD411130 Correct commit"
+grep: $COMMIT_MSG_FILE: No such file or directory
+Commit message must start with your initials and index number!
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cp pre-commit ../.git/hooks/pre-commit
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "AD411130 Correct commit"
+grep: : No such file or directory
+Commit message must start with your initials and index number!
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cp pre-commit ../.git/hooks/pre-commit
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "AD411130 Correct commit"
+grep: : No such file or directory
+Commit message must start with your initials and index number!
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cp pre-commit ../.git/hooks/pre-commit
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "AD411130 Correct commit"
+grep: : No such file or directory
+Commit message must start with your initials and index number!
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ mv pre-commit commit_msg
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cp commit_msg  ../.git/hooks/commit-msg
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ chmod u+x ../.git/hooks/commit-msg
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "AD411130 Correct commit"
+grep: : No such file or directory
+Commit message must start with your initials and index number!
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git status
+On branch AD411130
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   commit_msg
+        deleted:    pre-commit
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   commit_msg
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        pre-commit
+
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cp commit_msg  ../.git/hooks/commit-msg
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "AD411130 Correct commit"
+grep: : No such file or directory
+Commit message must start with your initials and index number!
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git statis
+git: 'statis' is not a git command. See 'git --help'.
+
+The most similar command is
+        status
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git status
+On branch AD411130
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   commit_msg
+        modified:   pre-commit
+
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cp pre-commit ../.git/hooks/pre-commit
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ cd .git/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git$ cd hooks/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git/hooks$ dir
+applypatch-msg.sample  fsmonitor-watchman.sample  pre-commit               prepare-commit-msg.sample  pre-receive.sample
+commit-msg             post-update.sample         pre-commit.sample        pre-push.sample            push-to-checkout.sample
+commit-msg.sample      pre-applypatch.sample      pre-merge-commit.sample  pre-rebase.sample          update.sample
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git/hooks$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ cd AD411130/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "AD411130 Correct commit"
+cat: '': No such file or directory
+Commit message must start with your initials and index number
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ cd .git/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git$ cd hooks/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git/hooks$ rm commit-msg
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git/hooks$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ cd AD411130/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ dir
+commit_msg  pre-commit  Sprawozdanie1
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "AD411130 Correct commit"
+cat: '': No such file or directory
+Commit message must start with your initials and index number
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ cd .git/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git$ cd hooks/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git/hooks$ nano commit-msg.sample 
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git/hooks$ dir
+applypatch-msg.sample      post-update.sample     pre-commit.sample          pre-push.sample     push-to-checkout.sample
+commit-msg.sample          pre-applypatch.sample  pre-merge-commit.sample    pre-rebase.sample   update.sample
+fsmonitor-watchman.sample  pre-commit             prepare-commit-msg.sample  pre-receive.sample
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git/hooks$ rm pre-commit
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git/hooks$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/.git$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ dir
+AD411130  INO  README.md  READMEs
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ cd AD411130/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ dir
+commit_msg  Sprawozdanie1
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cd commit_msg
+bash: cd: commit_msg: Not a directory
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cp commit_msg ../.git/hooks/commit-msg
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ chmod u+x ../.git/hooks/commit-msg
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cp commit_msg ../.git/hooks/commit-msg
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "AD411130 Correct commit"
+.git/hooks/commit-msg: 1: !/bin/sh: not found
+[AD411130 cebe189] AD411130 Correct commit
+ 2 files changed, 8 insertions(+), 10 deletions(-)
+ create mode 100755 AD411130/commit_msg
+ delete mode 100755 AD411130/pre-commit
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "Correct commit"
+On branch AD411130
+nothing to commit, working tree clean
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cp commit_msg ../.git/hooks/commit-msg
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "Correct commit"
+.git/hooks/commit-msg: 1: !/bin/sh: not found
+bledna nazwa commitu. zacznij od AD411130!'.
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git commit -m "AD411130 Correct commit"
+.git/hooks/commit-msg: 1: !/bin/sh: not found
+[AD411130 165c622] AD411130 Correct commit
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git status
+On branch AD411130
+nothing to commit, working tree clean
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git push origin AD411130
+Enumerating objects: 22, done.
+Counting objects: 100% (22/22), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (19/19), done.
+Writing objects: 100% (21/21), 2.34 KiB | 82.00 KiB/s, done.
+Total 21 (delta 2), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (2/2), done.
+To github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+   faa7031..165c622  AD411130 -> AD411130
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git pull
+remote: Enumerating objects: 756, done.
+remote: Counting objects: 100% (184/184), done.
+remote: Compressing objects: 100% (146/146), done.
+remote: Total 756 (delta 11), reused 107 (delta 8), pack-reused 572
+Receiving objects: 100% (756/756), 3.45 MiB | 3.81 MiB/s, done.
+Resolving deltas: 100% (51/51), completed with 2 local objects.
+From github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO
+ * [new branch]      AB413227   -> origin/AB413227
+   165c622..a4a0e3d  AD411130   -> origin/AD411130
+ * [new branch]      AG410734   -> origin/AG410734
+ * [new branch]      AO412201   -> origin/AO412201
+ * [new branch]      AP409745   -> origin/AP409745
+ * [new branch]      AP412695   -> origin/AP412695
+ * [new branch]      DP411875_1 -> origin/DP411875_1
+ * [new branch]      DP412497   -> origin/DP412497
+ * [new branch]      GCL2       -> origin/GCL2
+ * [new branch]      GCL4       -> origin/GCL4
+ * [new branch]      HK411077   -> origin/HK411077
+ * [new branch]      JF412010   -> origin/JF412010
+ * [new branch]      JK412625   -> origin/JK412625
+ * [new branch]      JL407285   -> origin/JL407285
+ * [new branch]      JL410322   -> origin/JL410322
+ * [new branch]      JL410406   -> origin/JL410406
+ * [new branch]      JR412219   -> origin/JR412219
+ * [new branch]      KCH411627  -> origin/KCH411627
+ * [new branch]      KD232144_2 -> origin/KD232144_2
+ * [new branch]      KD232144_3 -> origin/KD232144_3
+ * [new branch]      KG411149   -> origin/KG411149
+ * [new branch]      KK406795   -> origin/KK406795
+ * [new branch]      KP412085   -> origin/KP412085
+ * [new branch]      KR409759   -> origin/KR409759
+ * [new branch]      KR409837   -> origin/KR409837
+ * [new branch]      KS409417   -> origin/KS409417
+ * [new branch]      KS412661   -> origin/KS412661
+ * [new branch]      LO410687   -> origin/LO410687
+ * [new branch]      LS412597   -> origin/LS412597
+ * [new branch]      MD409926   -> origin/MD409926
+ * [new branch]      MJ410315   -> origin/MJ410315
+ * [new branch]      MK412502   -> origin/MK412502
+ * [new branch]      MR410206   -> origin/MR410206
+ * [new branch]      MR412777   -> origin/MR412777
+ * [new branch]      NBS411634  -> origin/NBS411634
+ * [new branch]      PZ410049   -> origin/PZ410049
+ * [new branch]      SK412907   -> origin/SK412907
+ * [new branch]      TD412544   -> origin/TD412544
+ * [new branch]      WB410023   -> origin/WB410023
+ * [new branch]      WS306695   -> origin/WS306695
+ * [new branch]      ZF410837   -> origin/ZF410837
+ * [new branch]      ZR413063   -> origin/ZR413063
+There is no tracking information for the current branch.
+Please specify which branch you want to merge with.
+See git-pull(1) for details.
+
+    git pull <remote> <branch>
+
+If you wish to set tracking information for this branch you can do so with:
+
+    git branch --set-upstream-to=origin/<branch> AD411130
+
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cd Sprawozdanie1/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ dir
+README.md  zrzuty_ekranu
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ rm zrzuty_ekranu/
+rm: cannot remove 'zrzuty_ekranu/': Is a directory
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ git add .
+\danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ git status
+On branch AD411130
+nothing to commit, working tree clean
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ git -remote
+unknown option: -remote
+usage: git [--version] [--help] [-C <path>] [-c <name>=<value>]
+           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
+           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]
+           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
+           [--super-prefix=<path>] [--config-env=<name>=<envvar>]
+           <command> [<args>]
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ git --remote
+unknown option: --remote
+usage: git [--version] [--help] [-C <path>] [-c <name>=<value>]
+           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
+           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]
+           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
+           [--super-prefix=<path>] [--config-env=<name>=<envvar>]
+           <command> [<args>]
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ git status --remote
+error: unknown option `remote'
+usage: git status [<options>] [--] <pathspec>...
+
+    -v, --verbose         be verbose
+    -s, --short           show status concisely
+    -b, --branch          show branch information
+    --show-stash          show stash information
+    --ahead-behind        compute full ahead/behind values
+    --porcelain[=<version>]
+                          machine-readable output
+    --long                show status in long format (default)
+    -z, --null            terminate entries with NUL
+    -u, --untracked-files[=<mode>]
+                          show untracked files, optional modes: all, normal, no. (Default: all)
+    --ignored[=<mode>]    show ignored files, optional modes: traditional, matching, no. (Default: traditional)
+    --ignore-submodules[=<when>]
+                          ignore changes to submodules, optional when: all, dirty, untracked. (Default: all)
+    --column[=<style>]    list untracked files in columns
+    --no-renames          do not detect renames
+    -M, --find-renames[=<n>]
+                          detect renames, optionally set similarity index
+
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ git status --remotes
+error: unknown option `remotes'
+usage: git status [<options>] [--] <pathspec>...
+
+    -v, --verbose         be verbose
+    -s, --short           show status concisely
+    -b, --branch          show branch information
+    --show-stash          show stash information
+    --ahead-behind        compute full ahead/behind values
+    --porcelain[=<version>]
+                          machine-readable output
+    --long                show status in long format (default)
+    -z, --null            terminate entries with NUL
+    -u, --untracked-files[=<mode>]
+                          show untracked files, optional modes: all, normal, no. (Default: all)
+    --ignored[=<mode>]    show ignored files, optional modes: traditional, matching, no. (Default: traditional)
+    --ignore-submodules[=<when>]
+                          ignore changes to submodules, optional when: all, dirty, untracked. (Default: all)
+    --column[=<style>]    list untracked files in columns
+    --no-renames          do not detect renames
+    -M, --find-renames[=<n>]
+                          detect renames, optionally set similarity index
+
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ git --remotes
+unknown option: --remotes
+usage: git [--version] [--help] [-C <path>] [-c <name>=<value>]
+           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
+           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]
+           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
+           [--super-prefix=<path>] [--config-env=<name>=<envvar>]
+           <command> [<args>]
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ dir
+README.md  zrzuty_ekranu
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ rm -f zrzuty_ekranu/
+rm: cannot remove 'zrzuty_ekranu/': Is a directory
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ rm -r zrzuty_ekranu/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ dir
+README.md
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ git status
+On branch AD411130
+nothing to commit, working tree clean
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git status
+On branch AD411130
+nothing to commit, working tree clean
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ mkdir zrzuty_ekranu
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ dir
+commit_msg  Sprawozdanie1  zrzuty_ekranu
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ rm -r zrzuty_ekranu/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ cd Sprawozdanie1/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ mkdir zrzuty_ekranu
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ git status
+On branch AD411130
+nothing to commit, working tree clean
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ cd zrzuty_ekranu/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1/zrzuty_ekranu$ touch command_line.txt
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1/zrzuty_ekranu$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ git status
+On branch AD411130
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        zrzuty_ekranu/
+
+nothing added to commit but untracked files present (use "git add" to track)
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ git commit -m "AD411130 add photos"
+.git/hooks/commit-msg: 1: !/bin/sh: not found
+[AD411130 f407d55] AD411130 add photos
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/command_line.txt
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ git push origin AD411130
+To github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+ ! [rejected]        AD411130 -> AD411130 (non-fast-forward)
+error: failed to push some refs to 'github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130/Sprawozdanie1$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git push origin AD411130
+To github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+ ! [rejected]        AD411130 -> AD411130 (non-fast-forward)
+error: failed to push some refs to 'github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git pull
+remote: Enumerating objects: 34, done.
+remote: Counting objects: 100% (34/34), done.
+remote: Compressing objects: 100% (21/21), done.
+remote: Total 34 (delta 5), reused 34 (delta 5), pack-reused 0
+Unpacking objects: 100% (34/34), 159.51 KiB | 759.00 KiB/s, done.
+From github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO
+   c4b4aaa..177d538  AB413227   -> origin/AB413227
+   1af5730..08ffa28  AO412201   -> origin/AO412201
+There is no tracking information for the current branch.
+Please specify which branch you want to merge with.
+See git-pull(1) for details.
+
+    git pull <remote> <branch>
+
+If you wish to set tracking information for this branch you can do so with:
+
+    git branch --set-upstream-to=origin/<branch> AD411130
+
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git push origin AD411130
+To github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+ ! [rejected]        AD411130 -> AD411130 (non-fast-forward)
+error: failed to push some refs to 'github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git push origin AD411130
+To github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+ ! [rejected]        AD411130 -> AD411130 (non-fast-forward)
+error: failed to push some refs to 'github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ git push -f origin AD411130
+Enumerating objects: 9, done.
+Counting objects: 100% (9/9), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (6/6), 557 bytes | 557.00 KiB/s, done.
+Total 6 (delta 0), reused 1 (delta 0), pack-reused 0
+To github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+ + a4a0e3d...f407d55 AD411130 -> AD411130 (forced update)
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/AD411130$ 
+
+
+
+Get:7 http://security.ubuntu.com/ubuntu jammy-security/main amd64 Packages [1569 kB]
+Get:8 http://security.ubuntu.com/ubuntu jammy-security/multiverse amd64 Packages [44.6 kB]
+Get:9 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 Packages [1079 kB]
+Get:10 http://security.ubuntu.com/ubuntu jammy-security/restricted amd64 Packages [1961 kB]
+Get:11 http://archive.ubuntu.com/ubuntu jammy/multiverse amd64 Packages [266 kB]           
+Get:12 http://archive.ubuntu.com/ubuntu jammy/universe amd64 Packages [17.5 MB]
+Get:13 http://archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 Packages [1998 kB]                                                    
+Get:14 http://archive.ubuntu.com/ubuntu jammy-updates/multiverse amd64 Packages [50.4 kB]                                                    
+Get:15 http://archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages [1353 kB]                                                      
+Get:16 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [1848 kB]                                                          
+Get:17 http://archive.ubuntu.com/ubuntu jammy-backports/main amd64 Packages [80.9 kB]                                                        
+Get:18 http://archive.ubuntu.com/ubuntu jammy-backports/universe amd64 Packages [33.3 kB]                                                    
+Fetched 30.3 MB in 28s (1079 kB/s)                                                                                                           
+Reading package lists... Done
+root@3b231330a3eb:/# apt-get upgrade docker-ce
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+Package docker-ce is not available, but is referred to by another package.
+This may mean that the package is missing, has been obsoleted, or
+is only available from another source
+
+E: Package 'docker-ce' has no installation candidate
+root@3b231330a3eb:/# apt-get upgrade docker
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+Calculating upgrade... Done
+The following NEW packages will be installed:
+  docker libbsd0 libglib2.0-0 libglib2.0-data libicu70 libmd0 libx11-6 libx11-data libxau6 libxcb1 libxdmcp6 libxml2 shared-mime-info
+  wmdocker xdg-user-dirs
+The following packages will be upgraded:
+  dpkg
+1 upgraded, 15 newly installed, 0 to remove and 0 not upgraded.
+Need to get 15.5 MB of archives.
+After this operation, 48.5 MB of additional disk space will be used.
+Do you want to continue? [Y/n] Y
+Get:1 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 dpkg amd64 1.21.1ubuntu2.3 [1239 kB]
+Get:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 libmd0 amd64 1.0.4-1build1 [23.0 kB]
+Get:3 http://archive.ubuntu.com/ubuntu jammy/main amd64 libbsd0 amd64 0.11.5-1 [44.8 kB]
+Get:4 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libglib2.0-0 amd64 2.72.4-0ubuntu2.2 [1463 kB]
+Get:5 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libglib2.0-data all 2.72.4-0ubuntu2.2 [4612 B]
+Get:6 http://archive.ubuntu.com/ubuntu jammy/main amd64 libicu70 amd64 70.1-2 [10.6 MB]
+Get:7 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libxml2 amd64 2.9.13+dfsg-1ubuntu0.4 [763 kB]
+Get:8 http://archive.ubuntu.com/ubuntu jammy/main amd64 shared-mime-info amd64 2.1-2 [454 kB]
+Get:9 http://archive.ubuntu.com/ubuntu jammy/main amd64 xdg-user-dirs amd64 0.17-2ubuntu4 [53.9 kB]
+Get:10 http://archive.ubuntu.com/ubuntu jammy/main amd64 libxau6 amd64 1:1.0.9-1build5 [7634 B]
+Get:11 http://archive.ubuntu.com/ubuntu jammy/main amd64 libxdmcp6 amd64 1:1.1.3-0ubuntu5 [10.9 kB]
+Get:12 http://archive.ubuntu.com/ubuntu jammy/main amd64 libxcb1 amd64 1.14-3ubuntu3 [49.0 kB]
+Get:13 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libx11-data all 2:1.7.5-1ubuntu0.3 [120 kB]
+Get:14 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libx11-6 amd64 2:1.7.5-1ubuntu0.3 [667 kB]
+Get:15 http://archive.ubuntu.com/ubuntu jammy/universe amd64 wmdocker amd64 1.5-2 [13.0 kB]
+Get:16 http://archive.ubuntu.com/ubuntu jammy/universe amd64 docker all 1.5-2 [1316 B]
+Fetched 15.5 MB in 3s (5339 kB/s)
+debconf: delaying package configuration, since apt-utils is not installed
+(Reading database ... 4393 files and directories currently installed.)
+Preparing to unpack .../dpkg_1.21.1ubuntu2.3_amd64.deb ...
+Unpacking dpkg (1.21.1ubuntu2.3) over (1.21.1ubuntu2.2) ...
+Setting up dpkg (1.21.1ubuntu2.3) ...
+Selecting previously unselected package libmd0:amd64.
+(Reading database ... 4393 files and directories currently installed.)
+Preparing to unpack .../00-libmd0_1.0.4-1build1_amd64.deb ...
+Unpacking libmd0:amd64 (1.0.4-1build1) ...
+Selecting previously unselected package libbsd0:amd64.
+Preparing to unpack .../01-libbsd0_0.11.5-1_amd64.deb ...
+Unpacking libbsd0:amd64 (0.11.5-1) ...
+Selecting previously unselected package libglib2.0-0:amd64.
+Preparing to unpack .../02-libglib2.0-0_2.72.4-0ubuntu2.2_amd64.deb ...
+Unpacking libglib2.0-0:amd64 (2.72.4-0ubuntu2.2) ...
+Selecting previously unselected package libglib2.0-data.
+Preparing to unpack .../03-libglib2.0-data_2.72.4-0ubuntu2.2_all.deb ...
+Unpacking libglib2.0-data (2.72.4-0ubuntu2.2) ...
+Selecting previously unselected package libicu70:amd64.
+Preparing to unpack .../04-libicu70_70.1-2_amd64.deb ...
+Unpacking libicu70:amd64 (70.1-2) ...
+Selecting previously unselected package libxml2:amd64.
+Preparing to unpack .../05-libxml2_2.9.13+dfsg-1ubuntu0.4_amd64.deb ...
+Unpacking libxml2:amd64 (2.9.13+dfsg-1ubuntu0.4) ...
+Selecting previously unselected package shared-mime-info.
+Preparing to unpack .../06-shared-mime-info_2.1-2_amd64.deb ...
+Unpacking shared-mime-info (2.1-2) ...
+Selecting previously unselected package xdg-user-dirs.
+Preparing to unpack .../07-xdg-user-dirs_0.17-2ubuntu4_amd64.deb ...
+Unpacking xdg-user-dirs (0.17-2ubuntu4) ...
+Selecting previously unselected package libxau6:amd64.
+Preparing to unpack .../08-libxau6_1%3a1.0.9-1build5_amd64.deb ...
+Unpacking libxau6:amd64 (1:1.0.9-1build5) ...
+Selecting previously unselected package libxdmcp6:amd64.
+Preparing to unpack .../09-libxdmcp6_1%3a1.1.3-0ubuntu5_amd64.deb ...
+Unpacking libxdmcp6:amd64 (1:1.1.3-0ubuntu5) ...
+Selecting previously unselected package libxcb1:amd64.
+Preparing to unpack .../10-libxcb1_1.14-3ubuntu3_amd64.deb ...
+Unpacking libxcb1:amd64 (1.14-3ubuntu3) ...
+Selecting previously unselected package libx11-data.
+Preparing to unpack .../11-libx11-data_2%3a1.7.5-1ubuntu0.3_all.deb ...
+Unpacking libx11-data (2:1.7.5-1ubuntu0.3) ...
+Selecting previously unselected package libx11-6:amd64.
+Preparing to unpack .../12-libx11-6_2%3a1.7.5-1ubuntu0.3_amd64.deb ...
+Unpacking libx11-6:amd64 (2:1.7.5-1ubuntu0.3) ...
+Selecting previously unselected package wmdocker.
+Preparing to unpack .../13-wmdocker_1.5-2_amd64.deb ...
+Unpacking wmdocker (1.5-2) ...
+Selecting previously unselected package docker.
+Preparing to unpack .../14-docker_1.5-2_all.deb ...
+Unpacking docker (1.5-2) ...
+Setting up libxau6:amd64 (1:1.0.9-1build5) ...
+Setting up xdg-user-dirs (0.17-2ubuntu4) ...
+Setting up libglib2.0-0:amd64 (2.72.4-0ubuntu2.2) ...
+No schema files found: doing nothing.
+Setting up libglib2.0-data (2.72.4-0ubuntu2.2) ...
+Setting up libx11-data (2:1.7.5-1ubuntu0.3) ...
+Setting up libmd0:amd64 (1.0.4-1build1) ...
+Setting up libbsd0:amd64 (0.11.5-1) ...
+Setting up libicu70:amd64 (70.1-2) ...
+Setting up libxdmcp6:amd64 (1:1.1.3-0ubuntu5) ...
+Setting up libxcb1:amd64 (1.14-3ubuntu3) ...
+Setting up libx11-6:amd64 (2:1.7.5-1ubuntu0.3) ...
+Setting up libxml2:amd64 (2.9.13+dfsg-1ubuntu0.4) ...
+Setting up wmdocker (1.5-2) ...
+Setting up shared-mime-info (2.1-2) ...
+Setting up docker (1.5-2) ...
+Processing triggers for libc-bin (2.35-0ubuntu3.6) ...
+root@3b231330a3eb:/# exit
+exit
+danko@dankoserver:~$ sudo docker ps
+[sudo] password for danko: 
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+danko@dankoserver:~$ dir
+home  snap
+danko@dankoserver:~$ cd home/
+danko@dankoserver:~/home$ dir
+MDO2024_INO  sample_dir
+danko@dankoserver:~/home$ cd MDO2024_INO/
+danko@dankoserver:~/home/MDO2024_INO$ dir
+README.md  READMEs
+danko@dankoserver:~/home/MDO2024_INO$ dir -all
+total 20
+drwxrwxr-x 4 danko danko 4096 Mar 11 12:45 .
+drwxrwxr-x 4 danko danko 4096 Mar 11 12:45 ..
+drwxrwxr-x 8 danko danko 4096 Mar 11 12:45 .git
+-rw-rw-r-- 1 danko danko   14 Mar 11 12:45 README.md
+drwxrwxr-x 2 danko danko 4096 Mar 11 12:45 READMEs
+danko@dankoserver:~/home/MDO2024_INO$ cd .git/
+danko@dankoserver:~/home/MDO2024_INO/.git$ dir
+branches  config  description  HEAD  hooks  index  info  logs  objects  packed-refs  refs
+danko@dankoserver:~/home/MDO2024_INO/.git$ cd ..
+danko@dankoserver:~/home/MDO2024_INO$ cd .git/
+danko@dankoserver:~/home/MDO2024_INO/.git$ dir
+branches  config  description  HEAD  hooks  index  info  logs  objects  packed-refs  refs
+danko@dankoserver:~/home/MDO2024_INO/.git$ cd ..
+danko@dankoserver:~/home/MDO2024_INO$ cd ..
+danko@dankoserver:~/home$ dir
+MDO2024_INO  sample_dir
+danko@dankoserver:~/home$ cd ..
+danko@dankoserver:~$ dir
+home  snap
+danko@dankoserver:~$ cd .ssh/
+danko@dankoserver:~/.ssh$ dir
+authorized_keys  id_ecdsa  id_ecdsa.pub  id_ed25519  id_ed25519.pub  id_rsa  id_rsa.pub  known_hosts  known_hosts.old
+danko@dankoserver:~/.ssh$ cat known_hosts
+|1|FQSfJXcYcC7ZN8DcMjV4FkUwzzI=|27J5sjbsty8bqF6rPo5uTunSXMk= ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
+|1|OIYnUBiFX9wkqwybXdF2P614POs=|8QFdAnKMDjkcIF5CxpxOxYbKI9M= ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mHBL9j1aNUkY4Ue1gvwnGLVlOhGeYrnZaMgRK6+PKCUXaDbC7qtbW8gIkhL7aGCsOr/C56SJMy/BCZfxd1nWzAOxSDPgVsmerOBYfNqltV9/hWCqBywINIR+5dIg6JTJ72pcEpEjcYgXkE2YEFXV1JHnsKgbLWNlhScqb2UmyRkQyytRLtL+38TGxkxCflmO+5Z8CSSNY7GidjMIZ7Q4zMjA2n1nGrlTDkzwDCsw+wqFPGQA179cnfGWOWRVruj16z6XyvxvjJwbz0wQZ75XK5tKSb7FNyeIEs4TT4jk+S4dhPeAUC5y+bDYirYgM4GC7uEnztnZyaVWQ7B381AK4Qdrwt51ZqExKbQpTUNn+EjqoTwvqNj4kqx5QUCI0ThS/YkOxJCXmPUWZbhjpCg56i+2aB6CmK2JGhn57K5mj0MNdBXA4/WnwH6XoPWJzK5Nyu2zB3nAZp+S5hpQs+p1vN1/wsjk=
+|1|KhVs/UUTLeZtQ/WZGRxorkNJ71M=|Kh2g9bz0mgwSGiExUivSyeLxLuM= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg=
+danko@dankoserver:~/.ssh$ dir
+authorized_keys  id_ecdsa  id_ecdsa.pub  id_ed25519  id_ed25519.pub  id_rsa  id_rsa.pub  known_hosts  known_hosts.old
+danko@dankoserver:~/.ssh$ nano known_hosts
+danko@dankoserver:~/.ssh$ touch Dockerfile
+danko@dankoserver:~/.ssh$ rm Dockerfile 
+danko@dankoserver:~/.ssh$ cd ..
+danko@dankoserver:~$ touch Dockerfile
+danko@dankoserver:~$ docker build -t IMAGE_GIT1 .
+ERROR: permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/_ping": dial unix /var/run/docker.sock: connect: permission denied
+danko@dankoserver:~$ docker build\ IMAGE_GIT1 .
+docker: 'build IMAGE_GIT1' is not a docker command.
+See 'docker --help'
+danko@dankoserver:~$ docker build IMAGE_GIT1 .
+ERROR: "docker buildx build" requires exactly 1 argument.
+See 'docker buildx build --help'.
+
+Usage:  docker buildx build [OPTIONS] PATH | URL | -
+
+Start a build
+danko@dankoserver:~$ docker build -t IMAGE_GIT1 .
+ERROR: permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/_ping": dial unix /var/run/docker.sock: connect: permission denied
+danko@dankoserver:~$ sudo docker build -t IMAGE_GIT1 .
+[sudo] password for danko: 
+[+] Building 0.0s (0/0)                                                                                                        docker:default
+ERROR: invalid tag "IMAGE_GIT1": repository name must be lowercase
+danko@dankoserver:~$ sudo docker build  image_git1 .
+ERROR: "docker buildx build" requires exactly 1 argument.
+See 'docker buildx build --help'.
+
+Usage:  docker buildx build [OPTIONS] PATH | URL | -
+
+Start a build
+danko@dankoserver:~$ docker buildx build --help
+
+Usage:  docker buildx build [OPTIONS] PATH | URL | -
+
+Start a build
+
+Aliases:
+  docker buildx build, docker buildx b
+
+Options:
+      --add-host strings              Add a custom host-to-IP mapping (format: "host:ip")
+      --allow strings                 Allow extra privileged entitlement (e.g., "network.host", "security.insecure")
+      --attest stringArray            Attestation parameters (format: "type=sbom,generator=image")
+      --build-arg stringArray         Set build-time variables
+      --build-context stringArray     Additional build contexts (e.g., name=path)
+      --builder string                Override the configured builder instance
+      --cache-from stringArray        External cache sources (e.g., "user/app:cache", "type=local,src=path/to/dir")
+      --cache-to stringArray          Cache export destinations (e.g., "user/app:cache", "type=local,dest=path/to/dir")
+      --cgroup-parent string          Optional parent cgroup for the container
+  -f, --file string                   Name of the Dockerfile (default: "PATH/Dockerfile")
+      --iidfile string                Write the image ID to the file
+      --label stringArray             Set metadata for an image
+      --load                          Shorthand for "--output=type=docker"
+      --metadata-file string          Write build result metadata to the file
+      --network string                Set the networking mode for the "RUN" instructions during build (default "default")
+      --no-cache                      Do not use cache when building the image
+      --no-cache-filter stringArray   Do not cache specified stages
+  -o, --output stringArray            Output destination (format: "type=local,dest=path")
+      --platform stringArray          Set target platform for build
+      --progress string               Set type of progress output ("auto", "plain", "tty"). Use plain to show container output (default
+                                      "auto")
+      --provenance string             Shorthand for "--attest=type=provenance"
+      --pull                          Always attempt to pull all referenced images
+      --push                          Shorthand for "--output=type=registry"
+  -q, --quiet                         Suppress the build output and print image ID on success
+      --sbom string                   Shorthand for "--attest=type=sbom"
+      --secret stringArray            Secret to expose to the build (format: "id=mysecret[,src=/local/secret]")
+      --shm-size bytes                Size of "/dev/shm"
+      --ssh stringArray               SSH agent socket or keys to expose to the build (format: "default|<id>[=<socket>|<key>[,<key>]]")
+  -t, --tag stringArray               Name and optionally a tag (format: "name:tag")
+      --target string                 Set the target build stage to build
+      --ulimit ulimit                 Ulimit options (default [])
+danko@dankoserver:~$ sudo docker build --no-cache  image_git1 .
+ERROR: "docker buildx build" requires exactly 1 argument.
+See 'docker buildx build --help'.
+
+Usage:  docker buildx build [OPTIONS] PATH | URL | -
+
+Start a build
+danko@dankoserver:~$ sudo docker images
+REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
+ubuntu        latest    ca2b0f26964c   2 weeks ago     77.9MB
+mysql         latest    019814493c7a   8 weeks ago     632MB
+busybox       latest    ba5dc23f65d4   10 months ago   4.26MB
+hello-world   latest    d2c94e258dcb   10 months ago   13.3kB
+danko@dankoserver:~$ sudo docker build image_git1 .
+ERROR: "docker buildx build" requires exactly 1 argument.
+See 'docker buildx build --help'.
+
+Usage:  docker buildx build [OPTIONS] PATH | URL | -
+
+Start a build
+danko@dankoserver:~$ sudo docker build -t image_git1 .
+[+] Building 1.1s (6/8)                                                                                                        docker:default
+ => [internal] load build definition from Dockerfile                                                                                     0.3s
+ => => transferring dockerfile: 222B                                                                                                     0.1s
+ => [internal] load .dockerignore                                                                                                        0.4s
+ => => transferring context: 2B                                                                                                          0.0s
+ => [internal] load metadata for docker.io/library/ubuntu:latest                                                                         0.0s
+ => [internal] load build context                                                                                                        0.3s
+ => => transferring context: 2B                                                                                                          0.0s
+ => [1/4] FROM docker.io/library/ubuntu:latest                                                                                           0.1s
+ => ERROR [2/4] ADD ssh-private-key /root/.ssh/id_ed25519                                                                                0.0s
+------
+ > [2/4] ADD ssh-private-key /root/.ssh/id_ed25519:
+------
+Dockerfile:3
+--------------------
+   1 |     FROM ubuntu:latest
+   2 |     
+   3 | >>> ADD ssh-private-key /root/.ssh/id_ed25519
+   4 |     RUN apt-get update && apt-get install -y git ssh
+   5 |     RUN git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+--------------------
+ERROR: failed to solve: failed to compute cache key: failed to calculate checksum of ref f008e99b-43ff-4937-948b-ad42730b6b60::x7oziqg8kr97u1c36bx2a59jv: "/ssh-private-key": not found
+danko@dankoserver:~$ sudo docker build --no-cache -t image_git1 .
+bad flag syntax: ---no-cache
+See 'docker buildx build --help'.
+danko@dankoserver:~$ sudo docker build --no-cache t image_git1 .
+ERROR: "docker buildx build" requires exactly 1 argument.
+See 'docker buildx build --help'.
+
+Usage:  docker buildx build [OPTIONS] PATH | URL | -
+
+Start a build
+danko@dankoserver:~$ sudo docker build --no-cache -t image_git1 .
+[+] Building 0.7s (6/8)                                                                                                        docker:default
+ => [internal] load build definition from Dockerfile                                                                                     0.2s
+ => => transferring dockerfile: 222B                                                                                                     0.0s
+ => [internal] load .dockerignore                                                                                                        0.2s
+ => => transferring context: 2B                                                                                                          0.1s
+ => [internal] load metadata for docker.io/library/ubuntu:latest                                                                         0.0s
+ => CACHED [1/4] FROM docker.io/library/ubuntu:latest                                                                                    0.0s
+ => [internal] load build context                                                                                                        0.2s
+ => => transferring context: 2B                                                                                                          0.0s
+ => ERROR [2/4] ADD ssh-private-key /root/.ssh/id_ed25519                                                                                0.0s
+------
+ > [2/4] ADD ssh-private-key /root/.ssh/id_ed25519:
+------
+Dockerfile:3
+--------------------
+   1 |     FROM ubuntu:latest
+   2 |     
+   3 | >>> ADD ssh-private-key /root/.ssh/id_ed25519
+   4 |     RUN apt-get update && apt-get install -y git ssh
+   5 |     RUN git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+--------------------
+ERROR: failed to solve: failed to compute cache key: failed to calculate checksum of ref f008e99b-43ff-4937-948b-ad42730b6b60::k64gf0ygy5ik2d2dicqwao9h4: "/ssh-private-key": not found
+danko@dankoserver:~$ sudo docker build -t image_git1 .
+[+] Building 0.5s (6/8)                                                                                                        docker:default
+ => [internal] load build definition from Dockerfile                                                                                     0.3s
+ => => transferring dockerfile: 216B                                                                                                     0.1s
+ => [internal] load .dockerignore                                                                                                        0.2s
+ => => transferring context: 2B                                                                                                          0.1s
+ => [internal] load metadata for docker.io/library/ubuntu:latest                                                                         0.0s
+ => [internal] load build context                                                                                                        0.1s
+ => => transferring context: 2B                                                                                                          0.0s
+ => CACHED [1/4] FROM docker.io/library/ubuntu:latest                                                                                    0.0s
+ => ERROR [2/4] ADD ssh-private-key .ssh/id_ed25519                                                                                      0.0s
+------
+ > [2/4] ADD ssh-private-key .ssh/id_ed25519:
+------
+Dockerfile:3
+--------------------
+   1 |     FROM ubuntu:latest
+   2 |     
+   3 | >>> ADD ssh-private-key .ssh/id_ed25519
+   4 |     RUN apt-get update && apt-get install -y git ssh
+   5 |     RUN git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+--------------------
+ERROR: failed to solve: failed to compute cache key: failed to calculate checksum of ref f008e99b-43ff-4937-948b-ad42730b6b60::cqgkjxqbhrh0oki0s9hw1xuza: "/ssh-private-key": not found
+danko@dankoserver:~$ sudo docker build -t image_git1 .
+[+] Building 0.7s (6/8)                                                                                                        docker:default
+ => [internal] load .dockerignore                                                                                                        0.2s
+ => => transferring context: 2B                                                                                                          0.0s
+ => [internal] load build definition from Dockerfile                                                                                     0.3s
+ => => transferring dockerfile: 217B                                                                                                     0.1s
+ => [internal] load metadata for docker.io/library/ubuntu:latest                                                                         0.0s
+ => [internal] load build context                                                                                                        0.1s
+ => => transferring context: 2B                                                                                                          0.0s
+ => CACHED [1/4] FROM docker.io/library/ubuntu:latest                                                                                    0.0s
+ => ERROR [2/4] ADD ssh-private-key /.ssh/id_ed25519                                                                                     0.0s
+------
+ > [2/4] ADD ssh-private-key /.ssh/id_ed25519:
+------
+Dockerfile:3
+--------------------
+   1 |     FROM ubuntu:latest
+   2 |     
+   3 | >>> ADD ssh-private-key /.ssh/id_ed25519
+   4 |     RUN apt-get update && apt-get install -y git ssh
+   5 |     RUN git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+--------------------
+ERROR: failed to solve: failed to compute cache key: failed to calculate checksum of ref f008e99b-43ff-4937-948b-ad42730b6b60::ij2ocapzkf4mky9cf0ig3b752: "/ssh-private-key": not found
+danko@dankoserver:~$ sudo docker build -t image_git1 .
+[+] Building 138.7s (6/6) FINISHED                                                                                             docker:default
+ => [internal] load .dockerignore                                                                                                        0.2s
+ => => transferring context: 2B                                                                                                          0.0s
+ => [internal] load build definition from Dockerfile                                                                                     0.2s
+ => => transferring dockerfile: 181B                                                                                                     0.1s
+ => [internal] load metadata for docker.io/library/ubuntu:latest                                                                         0.0s
+ => CACHED [1/3] FROM docker.io/library/ubuntu:latest                                                                                    0.0s
+ => [2/3] RUN apt-get update && apt-get install -y git ssh                                                                             135.4s
+ => ERROR [3/3] RUN git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git                                                 2.5s 
+------                                                                                                                                        
+ > [3/3] RUN git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git:                                                            
+1.730 Cloning into 'MDO2024_INO'...                                                                                                           
+2.208 Host key verification failed.                                                                                                           
+2.211 fatal: Could not read from remote repository.                                                                                           
+2.211 
+2.211 Please make sure you have the correct access rights
+2.211 and the repository exists.
+------
+Dockerfile:5
+--------------------
+   3 |     
+   4 |     RUN apt-get update && apt-get install -y git ssh
+   5 | >>> RUN git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+--------------------
+ERROR: failed to solve: process "/bin/sh -c git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git" did not complete successfully: exit code: 128
+danko@dankoserver:~$ sudo docker images
+REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
+ubuntu        latest    ca2b0f26964c   2 weeks ago     77.9MB
+mysql         latest    019814493c7a   8 weeks ago     632MB
+busybox       latest    ba5dc23f65d4   10 months ago   4.26MB
+hello-world   latest    d2c94e258dcb   10 months ago   13.3kB
+danko@dankoserver:~$ sudo docker build -t image_git1 .
+[+] Building 0.7s (6/8)                                                                                                        docker:default
+ => [internal] load build definition from Dockerfile                                                                                     0.1s
+ => => transferring dockerfile: 217B                                                                                                     0.0s
+ => [internal] load .dockerignore                                                                                                        0.1s
+ => => transferring context: 2B                                                                                                          0.0s
+ => [internal] load metadata for docker.io/library/ubuntu:latest                                                                         0.0s
+ => [internal] load build context                                                                                                        0.2s
+ => => transferring context: 2B                                                                                                          0.0s
+ => CACHED [1/4] FROM docker.io/library/ubuntu:latest                                                                                    0.1s
+ => ERROR [2/4] ADD ssh-private-key /.ssh/id_ed25519                                                                                     0.0s
+------
+ > [2/4] ADD ssh-private-key /.ssh/id_ed25519:
+------
+Dockerfile:3
+--------------------
+   1 |     FROM ubuntu:latest
+   2 |     
+   3 | >>> ADD ssh-private-key /.ssh/id_ed25519
+   4 |     RUN apt-get update && apt-get install -y git ssh
+   5 |     RUN git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+--------------------
+ERROR: failed to solve: failed to compute cache key: failed to calculate checksum of ref f008e99b-43ff-4937-948b-ad42730b6b60::4e1zvqyd1pqb4pjaw4ygkguxq: "/ssh-private-key": not found
+danko@dankoserver:~$ sudo docker build -t image_git1 .
+[+] Building 0.5s (7/9)                                                                                                        docker:default
+ => [internal] load build definition from Dockerfile                                                                                     0.1s
+ => => transferring dockerfile: 255B                                                                                                     0.0s
+ => [internal] load .dockerignore                                                                                                        0.1s
+ => => transferring context: 2B                                                                                                          0.0s
+ => [internal] load metadata for docker.io/library/ubuntu:latest                                                                         0.0s
+ => CACHED [1/5] FROM docker.io/library/ubuntu:latest                                                                                    0.0s
+ => [internal] load build context                                                                                                        0.1s
+ => => transferring context: 2B                                                                                                          0.0s
+ => [2/5] WORKDIR /repo                                                                                                                  0.2s
+ => ERROR [3/5] ADD ssh-private-key /.ssh/id_ed25519                                                                                     0.0s
+------
+ > [3/5] ADD ssh-private-key /.ssh/id_ed25519:
+------
+Dockerfile:3
+--------------------
+   1 |     FROM ubuntu:latest
+   2 |     WORKDIR /repo
+   3 | >>> ADD ssh-private-key /.ssh/id_ed25519
+   4 |     RUN apt-get update && apt-get install -y git ssh
+   5 |     RUN git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+--------------------
+ERROR: failed to solve: failed to compute cache key: failed to calculate checksum of ref f008e99b-43ff-4937-948b-ad42730b6b60::gjpo96ugo4ekko1iw053x64od: "/ssh-private-key": not found
+danko@dankoserver:~$ sudo docker build -t image_git1 .
+[+] Building 135.7s (7/7) FINISHED                                                                                             docker:default
+ => [internal] load .dockerignore                                                                                                        0.2s
+ => => transferring context: 2B                                                                                                          0.1s
+ => [internal] load build definition from Dockerfile                                                                                     0.2s
+ => => transferring dockerfile: 211B                                                                                                     0.0s
+ => [internal] load metadata for docker.io/library/ubuntu:latest                                                                         0.0s
+ => [1/4] FROM docker.io/library/ubuntu:latest                                                                                           0.0s
+ => CACHED [2/4] WORKDIR /repo                                                                                                           0.0s
+ => [3/4] RUN apt-get update && apt-get install -y git ssh                                                                             131.5s
+ => ERROR [4/4] RUN git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git                                                 3.2s 
+------                                                                                                                                        
+ > [4/4] RUN git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git:                                                            
+2.468 Cloning into 'MDO2024_INO'...                                                                                                           
+2.978 Host key verification failed.                                                                                                           
+2.980 fatal: Could not read from remote repository.                                                                                           
+2.980 
+2.980 Please make sure you have the correct access rights
+2.980 and the repository exists.
+------
+Dockerfile:4
+--------------------
+   2 |     WORKDIR /repo
+   3 |     RUN apt-get update && apt-get install -y git ssh
+   4 | >>> RUN git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+   5 |     CMD ["/bin/bash"]
+--------------------
+ERROR: failed to solve: process "/bin/sh -c git clone git@github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git" did not complete successfully: exit code: 128
+danko@dankoserver:~$ DIR
+DIR: command not found
+danko@dankoserver:~$ dir
+Dockerfile  home  snap
+danko@dankoserver:~$ cd .ssh/
+danko@dankoserver:~/.ssh$ cat id_ecdsa
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAACmFlczI1Ni1jdHIAAAAGYmNyeXB0AAAAGAAAABAHZG3W8S
+yrSIFVYkFH4C/RAAAAEAAAAAEAAACsAAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlz
+dHA1MjEAAACFBAGV0B9RADX4hYfzwhVbIjWsXwulhYjk6Hv8etPjhFpuWcoMJovMaRlS9c
+RTZVS/ryGhgVJowO4F9T+inVbSftX9vAFgiH87Hu0TTOBqTdw/i2HLTq3linE0n5JH2wtN
+mNuAU8e/1Qmg+1PgTqGXvl0ARxsHpiKogywrccle5zsBUKuDbQAAASDCu/RKo8yKbnavm1
+5HtL2qhRRIFC8rzQnXh0EqMSQQm1IZ7v8FAx2hsA4mDXSDel1AlkaVNlvCeDyyYT7tK9zd
+72Yl7pWlq+7Lc8UaOEoZPzhzDzpYnBXhWHk9KV9xgfvBAGdB4bTPkfMulDZc+MLnGmitjH
+db83mww3xtE8rXF1Ygv+jHgjgeE1KpRwJ3ve77vlgqv1Zu4VOrnoP5O/Ekmv2olEmoNMLj
+rER5zNmYuMlrRpnwjJbkf2JcIi0r7WrO/TBi/gF+9bffsUSiSVPdOreknNCSacIUbDRB1u
+Dr27LSeV7XlCdtIyAkX/LajhYmFdqb/14skayI1GMUHN0lSvjnA4i5TPrfeQgtGxoBjXp9
+eZL6hmhGmoZQ8+cWhpc=
+-----END OPENSSH PRIVATE KEY-----
+danko@dankoserver:~/.ssh$ cd ..
+danko@dankoserver:~$ dir
+Dockerfile  home  snap
+danko@dankoserver:~$ sudo docker build -t image_git1 .
+[sudo] password for danko: 
+[+] Building 14.6s (8/8) FINISHED                                                                                              docker:default
+ => [internal] load build definition from Dockerfile                                                                                     0.4s
+ => => transferring dockerfile: 215B                                                                                                     0.2s
+ => [internal] load .dockerignore                                                                                                        0.3s
+ => => transferring context: 2B                                                                                                          0.1s
+ => [internal] load metadata for docker.io/library/ubuntu:latest                                                                         0.0s
+ => [1/4] FROM docker.io/library/ubuntu:latest                                                                                           0.0s
+ => CACHED [2/4] WORKDIR /repo                                                                                                           0.0s
+ => CACHED [3/4] RUN apt-get update && apt-get install -y git ssh                                                                        0.0s
+ => [4/4] RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git                                                   5.8s
+ => exporting to image                                                                                                                   7.9s
+ => => exporting layers                                                                                                                  7.8s
+ => => writing image sha256:1e31589e2c400991b07d2ff2fbf0324899e58232ce1a5dfc617d190b631bf6ad                                             0.0s
+ => => naming to docker.io/library/image_git1                                                                                            0.0s
+danko@dankoserver:~$ dir
+Dockerfile  home  snap
+danko@dankoserver:~$ sudo docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+danko@dankoserver:~$ sudo docker ps -a
+CONTAINER ID   IMAGE         COMMAND                  CREATED       STATUS                   PORTS     NAMES
+3b231330a3eb   ubuntu        "/bin/bash"              3 hours ago   Exited (0) 3 hours ago             gifted_burnell
+4a07dd277465   busybox       "sh"                     4 hours ago   Exited (0) 4 hours ago             inspiring_shaw
+2a08c740adcb   ubuntu        "/bin/bash"              5 hours ago   Exited (0) 4 hours ago             sharp_clarke
+0148439b4e73   busybox       "sh"                     6 days ago    Exited (0) 6 days ago              youthful_archimedes
+df08767786b3   busybox       "sh"                     6 days ago    Exited (0) 6 days ago              sad_wozniak
+1222bd8271eb   mysql         "docker-entrypoint.s…"   6 days ago    Exited (1) 6 days ago              vigorous_ishizaka
+cbffd9a92906   ubuntu        "/bin/bash"              6 days ago    Exited (0) 6 days ago              sad_swirles
+452501e55e8d   hello-world   "/hello"                 6 days ago    Exited (0) 6 days ago              happy_nobel
+63e791e4c1a5   busybox       "sh"                     6 days ago    Exited (0) 6 days ago              optimistic_bouman
+danko@dankoserver:~$ sudo docker container list
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+danko@dankoserver:~$ sudo docker container list -a
+CONTAINER ID   IMAGE         COMMAND                  CREATED       STATUS                   PORTS     NAMES
+3b231330a3eb   ubuntu        "/bin/bash"              3 hours ago   Exited (0) 3 hours ago             gifted_burnell
+4a07dd277465   busybox       "sh"                     4 hours ago   Exited (0) 4 hours ago             inspiring_shaw
+2a08c740adcb   ubuntu        "/bin/bash"              5 hours ago   Exited (0) 4 hours ago             sharp_clarke
+0148439b4e73   busybox       "sh"                     6 days ago    Exited (0) 6 days ago              youthful_archimedes
+df08767786b3   busybox       "sh"                     6 days ago    Exited (0) 6 days ago              sad_wozniak
+1222bd8271eb   mysql         "docker-entrypoint.s…"   6 days ago    Exited (1) 6 days ago              vigorous_ishizaka
+cbffd9a92906   ubuntu        "/bin/bash"              6 days ago    Exited (0) 6 days ago              sad_swirles
+452501e55e8d   hello-world   "/hello"                 6 days ago    Exited (0) 6 days ago              happy_nobel
+63e791e4c1a5   busybox       "sh"                     6 days ago    Exited (0) 6 days ago              optimistic_bouman
+danko@dankoserver:~$ docker images
+permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.24/images/json": dial unix /var/run/docker.sock: connect: permission denied
+danko@dankoserver:~$ sudo docker images
+REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
+image_git1    latest    1e31589e2c40   2 minutes ago   324MB
+ubuntu        latest    ca2b0f26964c   2 weeks ago     77.9MB
+mysql         latest    019814493c7a   8 weeks ago     632MB
+busybox       latest    ba5dc23f65d4   10 months ago   4.26MB
+hello-world   latest    d2c94e258dcb   10 months ago   13.3kB
+danko@dankoserver:~$ sudo docker run -interactive image_git1
+unknown shorthand flag: 'n' in -nteractive
+See 'docker run --help'.
+danko@dankoserver:~$ sudo docker run -i image_git1
+dir
+MDO2024_INO
+cd ..
+dir
+bin   dev  home  lib32  libx32  mnt  proc  root  sbin  sys  usr
+boot  etc  lib   lib64  media   opt  repo  run   srv   tmp  var
+cd repo
+dir
+MDO2024_INO
+cd MDO2024_INO
+dir
+README.md  READMEs
+git --version
+git version 2.34.1
+^Cexit
+danko@dankoserver:~$ sudo docker ps
+[sudo] password for danko: 
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+danko@dankoserver:~$ sudo docker ps -a
+CONTAINER ID   IMAGE         COMMAND                  CREATED          STATUS                     PORTS     NAMES
+4e394d0c0941   image_git1    "/bin/bash"              25 minutes ago   Exited (0) 2 minutes ago             upbeat_albattani
+3b231330a3eb   ubuntu        "/bin/bash"              4 hours ago      Exited (0) 3 hours ago               gifted_burnell
+4a07dd277465   busybox       "sh"                     4 hours ago      Exited (0) 4 hours ago               inspiring_shaw
+2a08c740adcb   ubuntu        "/bin/bash"              5 hours ago      Exited (0) 5 hours ago               sharp_clarke
+0148439b4e73   busybox       "sh"                     6 days ago       Exited (0) 6 days ago                youthful_archimedes
+df08767786b3   busybox       "sh"                     6 days ago       Exited (0) 6 days ago                sad_wozniak
+1222bd8271eb   mysql         "docker-entrypoint.s…"   6 days ago       Exited (1) 6 days ago                vigorous_ishizaka
+cbffd9a92906   ubuntu        "/bin/bash"              6 days ago       Exited (0) 6 days ago                sad_swirles
+452501e55e8d   hello-world   "/hello"                 6 days ago       Exited (0) 6 days ago                happy_nobel
+63e791e4c1a5   busybox       "sh"                     6 days ago       Exited (0) 6 days ago                optimistic_bouman
+danko@dankoserver:~$ sudo docker rm $(docker ps -a -q)
+permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/json?all=1": dial unix /var/run/docker.sock: connect: permission denied
+"docker rm" requires at least 1 argument.
+See 'docker rm --help'.
+
+Usage:  docker rm [OPTIONS] CONTAINER [CONTAINER...]
+
+Remove one or more containers
+danko@dankoserver:~sudo docker rm --help
+
+Usage:  docker rm [OPTIONS] CONTAINER [CONTAINER...]
+
+Remove one or more containers
+
+Aliases:
+  docker container rm, docker container remove, docker rm
+
+Options:
+  -f, --force     Force the removal of a running container (uses SIGKILL)
+  -l, --link      Remove the specified link
+  -v, --volumes   Remove anonymous volumes associated with the container
+danko@dankoserver:~$ sudo docker rm -f  $(docker ps -a -q)
+permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/json?all=1": dial unix /var/run/docker.sock: connect: permission denied
+"docker rm" requires at least 1 argument.
+See 'docker rm --help'.
+
+Usage:  docker rm [OPTIONS] CONTAINER [CONTAINER...]
+
+Remove one or more containers
+danko@dankoserver:~$ docker rm -f  $(docker ps -a -q)
+permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/json?all=1": dial unix /var/run/docker.sock: connect: permission denied
+"docker rm" requires at least 1 argument.
+See 'docker rm --help'.
+
+Usage:  docker rm [OPTIONS] CONTAINER [CONTAINER...]
+
+Remove one or more containers
+danko@dankoserver:~$ docker rm $(docker ps -a -q)
+permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/json?all=1": dial unix /var/run/docker.sock: connect: permission denied
+"docker rm" requires at least 1 argument.
+See 'docker rm --help'.
+
+Usage:  docker rm [OPTIONS] CONTAINER [CONTAINER...]
+
+Remove one or more containers
+danko@dankoserver:~$ docker ps -a
+permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/json?all=1": dial unix /var/run/docker.sock: connect: permission denied
+danko@dankoserver:~$ sudo docker ps -a
+CONTAINER ID   IMAGE         COMMAND                  CREATED          STATUS                     PORTS     NAMES
+4e394d0c0941   image_git1    "/bin/bash"              31 minutes ago   Exited (0) 8 minutes ago             upbeat_albattani
+3b231330a3eb   ubuntu        "/bin/bash"              4 hours ago      Exited (0) 3 hours ago               gifted_burnell
+4a07dd277465   busybox       "sh"                     4 hours ago      Exited (0) 4 hours ago               inspiring_shaw
+2a08c740adcb   ubuntu        "/bin/bash"              5 hours ago      Exited (0) 5 hours ago               sharp_clarke
+0148439b4e73   busybox       "sh"                     6 days ago       Exited (0) 6 days ago                youthful_archimedes
+df08767786b3   busybox       "sh"                     6 days ago       Exited (0) 6 days ago                sad_wozniak
+1222bd8271eb   mysql         "docker-entrypoint.s…"   6 days ago       Exited (1) 6 days ago                vigorous_ishizaka
+cbffd9a92906   ubuntu        "/bin/bash"              6 days ago       Exited (0) 6 days ago                sad_swirles
+452501e55e8d   hello-world   "/hello"                 6 days ago       Exited (0) 6 days ago                happy_nobel
+63e791e4c1a5   busybox       "sh"                     6 days ago       Exited (0) 6 days ago                optimistic_bouman
+danko@dankoserver:~$ sudo docker ps -a -q
+4e394d0c0941
+3b231330a3eb
+4a07dd277465
+2a08c740adcb
+0148439b4e73
+df08767786b3
+1222bd8271eb
+cbffd9a92906
+452501e55e8d
+63e791e4c1a5
+danko@dankoserver:~$ sudo docker rm $(sudo docker ps -a -q)
+4e394d0c0941
+3b231330a3eb
+4a07dd277465
+2a08c740adcb
+0148439b4e73
+df08767786b3
+1222bd8271eb
+cbffd9a92906
+452501e55e8d
+63e791e4c1a5
+danko@dankoserver:~$ sudo docker rml $(sudo docker images  -a -q)
+docker: 'rml' is not a docker command.
+See 'docker --help'
+danko@dankoserver:~$ sudo docker rmi $(sudo docker images  -a -q)
+Untagged: image_git1:latest
+Deleted: sha256:1e31589e2c400991b07d2ff2fbf0324899e58232ce1a5dfc617d190b631bf6ad
+Untagged: ubuntu:latest
+Untagged: ubuntu@sha256:77906da86b60585ce12215807090eb327e7386c8fafb5402369e421f44eff17e
+Deleted: sha256:ca2b0f26964cf2e80ba3e084d5983dab293fdb87485dc6445f3f7bbfc89d7459
+Untagged: mysql:latest
+Untagged: mysql@sha256:9d1c923e5f66a89607285ee2641f8a53430a1ccd5e4a62b35eb8a48b74b9ff48
+Deleted: sha256:019814493c7ab16a057af0399b1288a1208b75ba852b915541840095c0fedfd0
+Deleted: sha256:2a66a556bad7c58bbaf826c55cc3354a47dc8b68409c58429f9eaaf9b36de271
+Deleted: sha256:6239c774197fa3717e92ad1a8da1b4701f905db4bc45d1d1f1409b8d96b64595
+Deleted: sha256:85114563ca1330272d408b81d20399eeec9ea2ddbc0ddacc37f972c115ae1fda
+Deleted: sha256:2cb936a23222090d81c8c1c0d94fcf1d5d761d050fd1dfa2bc0213f8adbe9236
+Deleted: sha256:17f0a5c233a212c5dd1b9005e71144a2cd1b125d25020eed5c41a5181f98a456
+Deleted: sha256:3b4e435387b4c388b1e7d2eb20c8bec41d0b3c54d30311fb27f8332ab321f9e1
+Deleted: sha256:8787be40457a8e20bcadd90b9af3a4343120df8fb893ea455a769de68acf83da
+Deleted: sha256:d3d7006381e094f467d049de0a8737e64ef1bf5a6268a9fa4a7d5d87032f28d6
+Deleted: sha256:9bf9b56cfbd1604a40cfbde1651a4b63f4a250c7ecc23d05a8ece899c8240b2e
+Deleted: sha256:18a3ada103a9229bc00b549b66ae7caa0bc0eb47e785859d8b1346a254a871d1
+Untagged: busybox:latest
+Untagged: busybox@sha256:650fd573e056b679a5110a70aabeb01e26b76e545ec4b9c70a9523f2dfaf18c6
+Deleted: sha256:ba5dc23f65d4cc4a4535bce55cf9e63b068eb02946e3422d3587e8ce803b6aab
+Deleted: sha256:95c4a60383f7b6eb6f7b8e153a07cd6e896de0476763bef39d0f6cf3400624bd
+Untagged: hello-world:latest
+Untagged: hello-world@sha256:d000bc569937abbe195e20322a0bde6b2922d805332fd6d8a68b19f524b7d21d
+Deleted: sha256:d2c94e258dcb3c5ac2798d32e1249e42ef01cba4841c2234249495f87264ac5a
+Deleted: sha256:ac28800ec8bb38d5c35b49d45a6ac4777544941199075dff8c4eb63e093aa81e
+danko@dankoserver:~$ git status
+fatal: not a git repository (or any of the parent directories): .git
+danko@dankoserver:~$ cd home/
+danko@dankoserver:~/home$ dir
+AD411130  MDO2024_INO  sample_dir
+danko@dankoserver:~/home$ cd MDO2024_INO/
+danko@dankoserver:~/home/MDO2024_INO$ dir
+README.md  READMEs
+danko@dankoserver:~/home/MDO2024_INO$ cd ..
+danko@dankoserver:~/home$ dir
+AD411130  MDO2024_INO  sample_dir
+danko@dankoserver:~/home$ cd sample_dir/
+danko@dankoserver:~/home/sample_dir$ dir
+bobyqa  first_dir  matrix.h  MDO2024_INO  sample.txt
+danko@dankoserver:~/home/sample_dir$ cd MDO2024_INO/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ dir
+INO  README.md  READMEs
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git status
+On branch GCL1
+Your branch is ahead of 'origin/GCL1' by 13 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        deleted:    AD411130/Sprawozdanie1/README.md
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/blad_email.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/change_to_groupbranch.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/chmod_cp_commit_correct.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/clone_https.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/clone_ssh1.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/command_line.txt
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/commit_bez_inicjalow.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/commit_msg1.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/commit_po_email.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/dir_sprawozdanie.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/email.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/exec_file.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/exec_file_commitmsg.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/file_sprawozdanie.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/git1.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/keygen1.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/keygen_2.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/keys_dir1.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/new_branch1.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/obsluga_kluczy.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/pat_1.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/precommit_zle.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/push_newbranch1.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/ssh_server.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/tresc_sprawozdania.png
+        deleted:    AD411130/commit_msg
+
+no changes added to commit (use "git add" and/or "git commit -a")
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git checkout AD411130 
+D       AD411130/Sprawozdanie1/README.md
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/blad_email.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/change_to_groupbranch.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/chmod_cp_commit_correct.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/clone_https.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/clone_ssh1.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/command_line.txt
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/commit_bez_inicjalow.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/commit_msg1.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/commit_po_email.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/dir_sprawozdanie.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/email.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/exec_file.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/exec_file_commitmsg.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/file_sprawozdanie.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/git1.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/keygen1.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/keygen_2.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/keys_dir1.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/new_branch1.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/obsluga_kluczy.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/pat_1.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/precommit_zle.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/push_newbranch1.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/ssh_server.png
+D       AD411130/Sprawozdanie1/zrzuty_ekranu/tresc_sprawozdania.png
+D       AD411130/commit_msg
+Switched to branch 'AD411130'
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ dir
+INO  README.md  READMEs
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ cd INO/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/INO$ dir
+GCL1
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/INO$ cd GCL1/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/INO/GCL1$ dir
+AD411130  README.md
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/INO/GCL1$ AD411130/
+bash: AD411130/: Is a directory
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/INO/GCL1$ dir
+AD411130  README.md
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/INO/GCL1$ cd AD411130/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/INO/GCL1/AD411130$ dir
+commit_msg  Sprawozdanie1
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/INO/GCL1/AD411130$ Sprawozdanie1/
+bash: Sprawozdanie1/: Is a directory
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/INO/GCL1/AD411130$ cd Sprawozdanie1/
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/INO/GCL1/AD411130/Sprawozdanie1$ dir
+README.md  zrzuty_ekranu
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/INO/GCL1/AD411130/Sprawozdanie1$ dir
+README.md  zrzuty_ekranu
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/INO/GCL1/AD411130/Sprawozdanie1$ mkdir zrzuty_ekranu_docker
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/INO/GCL1/AD411130/Sprawozdanie1$ cp ~/Dockerfile .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/INO/GCL1/AD411130/Sprawozdanie1$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/INO/GCL1/AD411130$ git status
+On branch AD411130
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        deleted:    ../../../AD411130/Sprawozdanie1/README.md
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/blad_email.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/change_to_groupbranch.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/chmod_cp_commit_correct.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/clone_https.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/clone_ssh1.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/command_line.txt
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/commit_bez_inicjalow.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/commit_msg1.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/commit_po_email.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/dir_sprawozdanie.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/email.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/exec_file.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/exec_file_commitmsg.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/file_sprawozdanie.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/git1.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/keygen1.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/keygen_2.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/keys_dir1.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/new_branch1.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/obsluga_kluczy.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/pat_1.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/precommit_zle.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/push_newbranch1.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/ssh_server.png
+        deleted:    ../../../AD411130/Sprawozdanie1/zrzuty_ekranu/tresc_sprawozdania.png
+        deleted:    ../../../AD411130/commit_msg
+        modified:   Sprawozdanie1/README.md
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        Sprawozdanie1/Dockerfile
+
+no changes added to commit (use "git add" and/or "git commit -a")
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/INO/GCL1/AD411130$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/INO/GCL1/AD411130$ git commit -m 'AD411130 docker part 1'
+.git/hooks/commit-msg: 1: !/bin/sh: not found
+[AD411130 e014fda] AD411130 docker part 1
+ 2 files changed, 72 insertions(+), 1 deletion(-)
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/Dockerfile
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/INO/GCL1/AD411130$ git push origin AD411130
+Enumerating objects: 14, done.
+Counting objects: 100% (14/14), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (7/7), done.
+Writing objects: 100% (8/8), 1.22 KiB | 139.00 KiB/s, done.
+Total 8 (delta 2), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+   1ca2daf..e014fda  AD411130 -> AD411130
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/INO/GCL1/AD411130$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/INO/GCL1$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO/INO$ cd ..
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git status
+On branch AD411130
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        deleted:    AD411130/Sprawozdanie1/README.md
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/blad_email.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/change_to_groupbranch.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/chmod_cp_commit_correct.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/clone_https.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/clone_ssh1.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/command_line.txt
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/commit_bez_inicjalow.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/commit_msg1.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/commit_po_email.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/dir_sprawozdanie.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/email.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/exec_file.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/exec_file_commitmsg.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/file_sprawozdanie.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/git1.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/keygen1.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/keygen_2.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/keys_dir1.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/new_branch1.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/obsluga_kluczy.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/pat_1.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/precommit_zle.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/push_newbranch1.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/ssh_server.png
+        deleted:    AD411130/Sprawozdanie1/zrzuty_ekranu/tresc_sprawozdania.png
+        deleted:    AD411130/commit_msg
+
+no changes added to commit (use "git add" and/or "git commit -a")
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git commit -m "AD411130 remove unnecesary"
+.git/hooks/commit-msg: 1: !/bin/sh: not found
+[AD411130 e05cc3c] AD411130 remove unnecesary
+ 27 files changed, 101 deletions(-)
+ delete mode 100644 AD411130/Sprawozdanie1/README.md
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/blad_email.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/change_to_groupbranch.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/chmod_cp_commit_correct.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/clone_https.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/clone_ssh1.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/command_line.txt
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/commit_bez_inicjalow.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/commit_msg1.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/commit_po_email.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/dir_sprawozdanie.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/email.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/exec_file.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/exec_file_commitmsg.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/file_sprawozdanie.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/git1.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/keygen1.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/keygen_2.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/keys_dir1.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/new_branch1.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/obsluga_kluczy.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/pat_1.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/precommit_zle.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/push_newbranch1.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/ssh_server.png
+ delete mode 100644 AD411130/Sprawozdanie1/zrzuty_ekranu/tresc_sprawozdania.png
+ delete mode 100755 AD411130/commit_msg
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git push origin 411130
+error: src refspec 411130 does not match any
+error: failed to push some refs to 'github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git push origin AD411130
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (2/2), 292 bytes | 292.00 KiB/s, done.
+Total 2 (delta 0), reused 0 (delta 0), pack-reused 0
+To github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+   e014fda..e05cc3c  AD411130 -> AD411130
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git status
+On branch AD411130
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   INO/GCL1/AD411130/Sprawozdanie1/README.md
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git add .
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git commit -m "AD411130 docker update2"
+.git/hooks/commit-msg: 1: !/bin/sh: not found
+[AD411130 b2dae7d] AD411130 docker update2
+ 24 files changed, 1 insertion(+), 1 deletion(-)
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/Dockerfile.png
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/all_images.png
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/another_method_ps.png
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/check_status_container.png
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/docker_build.png
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/docker_images_after.png
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/dockerhub.png
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/git_contener.png
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/install_busybox_emptyimages.png
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/install_docker.png
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/install_ubuntu_mysql.png
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/interaktywny_image.png
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/ps_-a.png
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/remove_containers.png
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/remove_images.png
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/run_busybox.png
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/run_busybox_empty.png
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/run_ubuntu_it.png
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/update.png
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/upgrade1.png
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/upgrade2.png
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/version_busybox.png
+ create mode 100644 INO/GCL1/AD411130/Sprawozdanie1/zrzuty_ekranu_docker/wyjscie_z_ubuntu1.png
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ git push origin AD411130
+Enumerating objects: 37, done.
+Counting objects: 100% (37/37), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (30/30), done.
+Writing objects: 100% (31/31), 702.63 KiB | 7.98 MiB/s, done.
+Total 31 (delta 1), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To github.com:InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+   e05cc3c..b2dae7d  AD411130 -> AD411130
+danko@dankoserver:~/home/sample_dir/MDO2024_INO$ 
