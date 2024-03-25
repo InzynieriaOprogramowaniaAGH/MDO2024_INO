@@ -131,6 +131,7 @@ Poniższa komenda udowadnia, że kontener został uruchomiony. Funkcja --all poz
 ```
 docker container list --all
 ```
+Uruchowmienie i pokazanie wnętrza kontenera busybox przedstawia screen poniżej.
 ![](../Screeny/2.4.1.png)
 
 ### 5. Uruchomienie systemu w kontenerze
