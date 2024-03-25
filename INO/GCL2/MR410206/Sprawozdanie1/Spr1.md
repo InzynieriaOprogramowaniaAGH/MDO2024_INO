@@ -132,3 +132,60 @@ Poniższa komenda udowadnia, że kontener został uruchomiony. Funkcja --all poz
 docker container list --all
 ```
 ![](../Screeny/2.4.1.png)
+
+### 5. Uruchomienie systemu w kontenerze
+Aby uruchomić system w kontenerze została użyta poniższa komenda.
+```
+docker run -it nazwa_obrazu
+```
+Poniższy screen przedstawia odpalenie podanej komendy, oraz polecenia ```ps``` który wyświetla infomacje o procesach w systemie ubuntu.
+![](../Screeny/2.5.1.png)
+Kolejnym poleceniem było ```top``` W porównaniu do poprzedniego polecenia było narzędzie do interaktywnego monitorowania procesów. Oprócz tego zostały wyświetlone inne informacje takie jak: obciążenie CPU, zużycie pamieci czy też czas działania systemu. Poniższy screen przedstawia konsekwencje uruchomienia tego polecenia.
+![](../Screeny/2.5.2.png)
+Kolejnym krokiem była aktualizacja pakiety przy użyciu poniższego polecenia.
+```
+apt update
+```
+Poniższy screen przedstawia uruchomienie uaktualnienia.
+![](../Screeny/2.5.3.png)
+
+### 6. Utworzenie pliku Dockerfile i klonowanie repozytorium
+Pierwszym krokiem było utworzenie pliku Dockerfile. Treść powstawłego pliku przedstawia screen poniżej.
+![](../Screeny/2.6.1.png)
+Instrukcja bazuje na obrazie Fedora jako fundament dla tworzenia nowego obrazu.
+Za pomocą polecenia ```RUN```, system aktualizuje wszystkie pakiety oraz instaluje narzędzie Git, co umożliwia zarządzanie kodem źródłowym.
+Następnie, używając Git, dokonuje się klonowania wybranego repozytorium.
+Polecenie ```WORKDIR``` ustawia /repo jako katalog roboczy, co oznacza, że wszystkie kolejne operacje będą wykonywane właśnie w tym miejscu.
+Ostatecznie, dzięki ```ENTRYPOINT```, domyślną czynnością kontenera jest uruchomienie interaktywnej sesji Bash. To znaczy, jeśli przy starcie kontenera nie zostanie określone inne polecenie, automatycznie aktywowany zostanie terminal Bash.
+
+Przy pomocy poniższego polecenia zostało uruchomione budowanie obrazu.
+```
+docker build -t nazwa_pliku .
+```
+Poniższy screen przedstawia uruchomienie polecenia.
+![](../Screeny/2.6.2.png)
+Następnie zostało sprawdzone czy nasz obraz się wybudował i czy zawiera sklonowane repozytorium.
+![](../Screeny/2.6.3.png)
+![](../Screeny/2.6.4.png)
+
+### 7. Uruchomione ( != "działające" ) kontenery i ich czyszczenie
+W celu znalezienia wszystkich działających użyto poniższej komendy
+```
+docker ps -a -f status=exited
+```
+Opcja -f status=exited pozwalała na ograniczenie wyników do kontenerów które miały status exited - niedziałających.
+Poniższy screen przedstawia uruchomienie tego polecenia.
+![](../Screeny/2.7.1.png)
+W celu wyczyszczenia niedziałających kontenerów użyto ponizszego polecenia.
+```
+docker container rm -f $(sudo docker ps -q -a -f status=exited)
+```
+Polecenie ```rm``` powodowało usunięcie kontenerów, natomiast konkretne polecenia powodowały "-f" wymuszenie tego usunięcia, "-q" zwrócenie identyfikatora, "-a" wypisanie wszystkich. Poniższy screen przedstawia uruchomienie tego polecenia.
+![](../Screeny/2.7.2.png)
+### 8. Usunięcie obrazu
+Ostatnim poleceniem do wykonania było usunięcie obrazów, było ono dość analogiczne do czyszczenia kontenerów, jednak z poleceniem "rmi". Dokładne polecenie znajduje się poniżej.
+```
+docker rmi $(sudo docker images -q -a)
+```
+Poniższy screen przedstawia uruchomienie polecenia usuwania obrazu.
+![](../Screeny/2.8.1.png)
