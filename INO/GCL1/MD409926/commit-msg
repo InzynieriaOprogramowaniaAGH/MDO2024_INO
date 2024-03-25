@@ -1,0 +1,9 @@
+!/bin/sh
+
+COMMIT_MSG_FILE=$1
+
+# Sprawdź, czy commit zaczyna się od - MD409926
+if ! grep -q '^MD409926' "$COMMIT_MSG_FILE"; then
+    echo >&2 "ERROR: Commit message musi zaczynać się od 'MD409926'!"
+    exit 1
+fi
