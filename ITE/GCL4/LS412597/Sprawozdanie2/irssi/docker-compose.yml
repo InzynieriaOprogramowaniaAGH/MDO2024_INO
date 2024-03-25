@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  irssi_build:
+    build:
+      context: .
+      dockerfile: ./irssi_builder.Dockerfile
+    image: irssi_build
+
+  irssi_test:
+    build:
+      context: .
+      dockerfile: ./irssi_tester.Dockerfile
+    image: irssi_test
+    depends_on:
+      - irssi_build

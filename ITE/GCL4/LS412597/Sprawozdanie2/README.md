@@ -217,3 +217,149 @@ Po zbudowaniu obrazu ze zbudowaną aplikacją możemy zbudować nasz obraz z tes
 ![Budowa obrazu test](Images/Zdj16.png)
 
 Dla obu tych obrazów próba uruchomienia ich nie da żadnego efektu, ponieważ nie podaliśmy żadnej komendy, którą nasz obraz ma wykonać.
+
+### Docker Compose
+
+Jeśli chcielibyśmy bardziej zautomatyzować nasz proces, aby nie musieć ręcznie budować jednego obrazu, a następnie drugiego, możemy cały ten proces zawrzeć w docker-compose. W tym celu musimy doinstalować potrzebne narzędzia oraz rozszerzenie do Docker'a.
+
+W pierwszej kolejności, ponieważ pracujemy na systemie Fedora musimy doinstalować narzędzie dnf-plugins-core:
+
+```bash
+  sudo dnf -y install dnf-plugins-core
+```
+
+A następnie przy jego pomocy dodać repozytorium:
+
+```bash
+ sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+```
+
+Po wykonaniu tych kroków możemy doinstalować docker-compose:
+
+```bash
+sudo dnf install docker-compose-plugin
+```
+
+![Instalacja docker-compose-plugin](Images/Zdj17.png)
+
+Gdy już mamy zainstalowany docker-compose-plugin możemy przejść do tworzenia naszego pliku docker-compose. W tym celu wcześniej wykonałem małe porządki w katalogach, mianowicie wszystkie dockerfile zostały odpowiednio skatalogowane.
+
+![Katalogi](Images/Zdj18.png)
+
+Teraz możemy przejść do tworzenia docker-compose, zaniczemy od aplikacji Irssi. W tym celu w katalogu `/Irsii` utworzymy nowy plik o nazwie `docker-compose.yml`.
+
+```YML
+version: '3'
+
+services:
+  irssi_build:
+    build:
+      context: .
+      dockerfile: ./irssi_builder.Dockerfile
+    image: irssi_build
+
+  irssi_test:
+    build:
+      context: .
+      dockerfile: ./irssi_tester.Dockerfile
+    image: irssi_test
+    depends_on:
+      - irssi_build
+```
+
+W pliku tym dodajemy kolejne serwisy, mianowicie obraz ze zbudowaną aplikacja, oraz obraz z przeprowadzonymi testami. Jak widać obraz z testami jest zależny od obrazu ze zbudowaną aplikacja. Dodatkowo obrazy dostały określone z góry nazwy, ponieważ w pliku irssi_tester.Dockerfile mamy określone na jakim obrazie ma bazować.
+
+Po napisaniu całego pliku możemy przejść do uruchomienia, znajdując sie w katalogu z plikiem `docker-compose.yml` uruchamiamy polecenie:
+
+```bash
+docker-compose up
+```
+
+> Warto przed tym usunąć wcześniej utworzone obrazy.
+
+![docker-compose up](Images/Zdj19.png)
+![docker-compose up](Images/Zdj20.png)
+
+Jak widać oba nasze dockerfile zostały zbudowane przy pomocy jednego polecenia. Udało się nam ten proces bardziej zautomatyzować, dodatkowo przy pomocy `docker images` widzimy, że nasze obrazy zostały utworzone.
+
+Dla aplikacji To Do Web App wykonujemy identyczne czynności, w tym przypadku jednak dodamy jeden dodatkowy Dockerfile, będzie to wdrożeniowy dockerfila.
+
+Jego zawartość będzie wyglądała następująco:
+
+```Dockerfile
+FROM nodeapp_build
+
+CMD ["npm", "start"]
+```
+
+Obraz ten po uruchomieniu będzie wykonywał polecenie `npm start`, które uruchomi naszą aplikację.
+
+Plik docker-compose będzie wyglądał następująco:
+
+```YML
+version: '3'
+
+services:
+  nodeapp_build:
+    build:
+      context: .
+      dockerfile: ./nodeapp_builder.Dockerfile
+    image: nodeapp_build
+
+  nodeapp_test:
+    build:
+      context: .
+      dockerfile: ./nodeapp_tester.Dockerfile
+    image: nodeapp_test
+    depends_on:
+      - nodeapp_build
+
+  nodeapp_depoy:
+    build:
+      context: .
+      dockerfile: ./nodeapp_deploy.Dockerfile
+    image: nodeapp_deploy
+    depends_on:
+      - nodeapp_build
+```
+
+Uruchamiamy go identycznie jak poprzednio.
+
+![docker-compose up](Images/Zdj21.png)
+![docker-compose up](Images/Zdj22.png)
+
+Jak widać nasza aplikacja została zbudowana, przetestowana oraz uruchomiona i jest dostępna pod adresem `http://localhost:3000`
+
+W ten sposób dodaliśmy kolejny etap, który jest wdrożeniem, nasza aplikacja na podstawie zbudowanego obrazu uruchomiła nam aplikację.
+
+### Dyskusja
+
+- Czy program nadaje się do wdrażania i publikowania jako kontener, czy taki sposób interakcji nadaje się tylko do builda
+
+> W przypadku aplikacji Irssi obecna konfiguracja Dockefilów nadaje się tylko do budowania oraz testowania. Jest to spowodowane specyfiką aplikacji, aplikacja w terminalu tworzy interfej użytkownika, który nie nada się nam przy wykorzystaniu z kontenerem. Inaczej jest jednak w przypadku aplikacji napisanej w nodejs. W jej przypadku możemy wykorzystać nasze Dockerfile do budowania, testowania oraz wrażania aplikacji, wymagało by to od nas dodatkowej konfiguracji, tak aby w obrazie wdrożeniowym znajdowała się tylko nasza aplikacja, bez kodu źródłowego, ponieważ nie chcemy go udostępniać przy końcowym etapie. Dodatkowo aplikacja napisana w nodejs działa jako serwis w tle, z którym się łączymy przy pomocy przeglądarki.
+
+- Opisz w jaki sposób miałoby zachodzić przygotowanie finalnego artefaktu
+
+> Do przygotowania finalnego artefaktu aplikacja musiała by przejść przez kilka etapów:
+>
+> - Budowanie: zbudowanie aplikacji w kontenerze. Ten krok obejmował by pobranie źródeł aplikacji, instalację zależności, kompilację kodu źródłowego itp.
+> - Testowanie: Po zbudowaniu aplikacji musimy uruchomić nasze testy sprawdzajace czy aplikacja na pewno poprawnie działa. Od tego kroku może zależeć czy kolejne etapy zostana wykonane, w przypadku niepowodzenia przy którymś teście nasz proces by się przerywał.
+> - Pakowanie: utworzenie pakietu zawierającego gotową aplikację
+> - Przeniesienie pakietu: nasz pakiet przenosimy z kontenera do innego miejsca, gdzie będzie dostępny dla użytkowników lub dla dalszego wykorzystania
+> - Dystrybucja: po uzyskaniu pakietu możemy go udostępnić użytkownikom lub systemowi np. udostępnienie innym użytkownikom, wdrożenie na serwer lub chmurę.
+
+- Jeżeli program miałby być publikowany jako kontener - czy trzeba go oczyszczać z pozostałości po buildzie?
+
+> Oczywiście, w przypadku gdybyśmy chcieli publikować nasz obraz nie chcemy udostępniać przede wszystkim kodu źródłowego, naszym celem jest udostępnienie tylko zbudowanej aplikacji. Osoba, która bedzie pracowała na tym kontenerze nie powinna mieć wglądu na kod źródłowy, aby nic w nim nie zmienić. Dodatkowo będziemy chcieli usunąć wszystkie niepotrzebne pliki oraz artefakty związane z procesem budowania.
+
+- A może dedykowany deploy-and-publish byłby oddzielną ścieżką (inne Dockerfiles)?
+
+> Takie podejście jest dobrym pomysłem, w ten sposób będziemy mogli oddzielić budowanie i publikowanie przy użyciu np. różnych Dockerfile'ów. W ten sposób będziemy mieć jeden zestaw instrukcji do budowania obrazu używaneto podczas tworzenia aplikacji oraz drugi do publikacji gotowego obrazu do użycia. W ten sposób proces budowania będzie mógł zawierać kod źródłowy, wszelkie zależności, narzędzia developerskie, które będą potrzebne przy budowaniu aplikacji, a proces publikacji będzie się skupiał tylko na minimalizacji rozmiaru obrazu oraz zapewnieniu niezbędnych elementów dla środowiska wdrożeniowego.
+
+- Czy zbudowany program należałoby dystrybuować jako pakiet, np. JAR, DEB, RPM, EGG?
+
+> Dużo w tym przypadku zależy od tego w jakim środowisku oraz jakie wymagania mamy do naszego pakietu. Ogólnie takie podejście da nam dużo korzyści, takich jak łatwość instalacji, łatwiejsze zarządzanie aktualizacjiami, zarządzanie zależnościami itp.
+
+- W jaki sposób zapewnić taki format? Dodatkowy krok (trzeci kontener)? Jakiś przykład?
+
+> Do takiego podejścia możemy wykorzystywać gotowe narzędzia budowania pakietów, które są dostępne dla danej platformy/systemu. Możemy również dodać trzeci kontener, który będzie służył jako kontener do formatowania naszego pakietu. Po zbudowaniu oraz przetestowaniu aplikacji przez poprzednie kontenery, trzeci kontener będzie używany do utworzenia pakietu z gotową aplikacją. Przykładowo, jeśli tworzymy aplikację na system Linux, mozemy dodać trzeci kontener oparty na obrazie zawierającym narzędzia do tworzenia pakietów, np. dpkg-dev. Następnie możemy użyć tego kontenera do utworzenia pakieto DEB z gotową aplikacją.
