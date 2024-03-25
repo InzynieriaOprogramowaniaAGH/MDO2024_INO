@@ -1,0 +1,10 @@
+!/bin/sh
+
+# sprawdzenie czy commit message zaczyna sie od ustalonego inicjalu
+if ! grep -q '^AB413227' "$1"; then
+     echo "Blad! Twoj commit message nie rozpoczyna sie od: 'AB413227'. "
+     exit 1
+
+fi
+
+echo "Commit message OK"
