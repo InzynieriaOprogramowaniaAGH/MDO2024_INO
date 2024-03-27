@@ -59,7 +59,7 @@ Główną ideą automatyzacji tego procesu jest stworzenie kontenerów, które w
 
   ```bash
   docker run --rm -it fedora
-  dnf -y update && i dnf -y install git meson ninja* gcc
+  dnf -y update && dnf -y install git meson ninja* gcc
   git clone https://github.com/irssi/irssi
   cd irssi
   meson Build
@@ -175,8 +175,111 @@ docker-compose up
 ```
 <br>
 <p align="center">
-  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/64956354/a802ff48-78b1-4a44-a54e-552b9cc2314f" width="850" height="200"/>
+  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/64956354/a802ff48-78b1-4a44-a54e-552b9cc2314f" width="800" height="160"/>
 </p>
 <p align="center"><i>Wynik budowy kontenerów za pomocą docker-compose</i></p>
+
+# Zachowywanie stanu
+
+Na stan danej aplikacji, a zatem również takiej działającej w kontenerze składa się kilka rzeczy, m.in. są to:
+- ENV, czyli zmienne środowsikowe,
+- pliki konfiguracyjne
+- dane z bazy danych
+- pliki tymczasowe, wygenerowane w trakcie działania aplikacji
+- RAM
+- pamięć cache
+
+W momencie zamknięcia kontenera ważne jest, aby część z tych danych przechowywać, w zależności od tego jaki cel chcemy osiągnąć. Bardzo ważne jest zapisywanie w wolumenie (specjalny mechanizm dockera, który umożliwia zapiswanie danych w pamięci lokalnej, co umożliwia ich dostarczanie do uruchamianego kontenera oraz ich zachowywanie z zamykanego kontenera) danych z bazy danych. Natomiast w celu zachowania pełnego stanu aplikacji, co umożliwiłoby nam błyskawiczne odtworzenie kontenera, musimy zachować wszystkie z powyższych oprócz plików tymczasowych.
+<br></br>
+W związku z tym w celu realizacji tej części sprawozdania, zbudujemy kontener do budowania aplikacji `irssi`, ale w taki sposób, że dostarczymy do niego kod źródłowy oraz wszystkie potrzebne zależności jako wolumeny, po czym zbudowny katalog `Build` zapiszemy w wolumenie "wyjściowym". Umożliwi nam to wyizolowanie danych aplikacji koniecznych do jej prawidłowego uruchomienia do osobnych wolumenów, przez co ponowny start aplikacji w nowym kontenerze będzie błyskawiczny (bez konieczności budowania i pobierania zależności). W tym celu wykonujemy następujące kroki:
+
+**1. Tworzymy potrzebne wolumeny**
+<br>
+Potrzebujemy łącznie rzech wolumenów. W `irssi_src` zapiszemy sklonowane repozytorium projektu, natomiast w `irssi_Build` zapiszemy z kontenera docelowego zbudowaną aplikację. Ponadto dane wszystkich pakietów w systemie `Fedora` zapisywane są w katalogu `/var/cache/dnf`, dlatego ostatni wolumen `fedora_cache_dnf` umożliwi nam zapisywanie wszystkich potrzebnych zależności potrzebnych do budowania i uruchamiania aplikacji.
+
+```bash
+docker volume create irssi_src
+docker volume create irssi_Build
+docker volume create fedora_cache_dnf
+```
+***Uwaga! W wolumenie fedora_cache_dnf zapisujemy zależności potrzebne do budowania i działania aplikacji. W rzeczywistości powinniśmy rozdzielić to osobno na zależności do budowania, i zależności uruchomieniowe aplikacji, tak aby zminimalizować liczbę pakietów znajdujących się w docelowym kontenerze/maszynie z wersją produkcyjną aplikacji, ale dla uproszczenia procesu pozostaniemi przy połączonym wolumenie***
+
+**2. Kontener pomocniczy**
+<br>
+W celu sklonowania projektu i zapisania zależności tworzymy pomocniczy kontener w któym realizujemy te działania. Aby zamontować dany wolumen do kontenera używamy polecenia `--mount source=<volume>,destination=<path_in_container>` (można użyć uproszczonej składni: `-v <volume>:<path_in_container>`)
+
+```bash
+docker run --rm -it --mount source=irssi_src,destination=/irssi --mount source=fedora_cache_dnf,destination=/var/cache/dnf fedora bash
+```
+
+Po utworzeniu kontenera klonujemy repozytorium na ścieżkę `/` (nadpisuje to nasz istniejący katalog irssi zapisując tam repozytorium) oraz instalujemy wszystkie zależności zgodnie z wcześniejszymi instrukcjami dla tej aplikacji:
+
+```bash
+git clone https://github.com/irssi/irssi
+dnf -y update && dnf -y install git meson ninja* gcc glib2-devel utf8proc* ncurses* perl-Ext*
+```
+
+Po zakończeniu procesu, dla upewnienia się, ponownie uruchamiamy taki sam kontener i sprawdzamy czy wszystki się zgadza:
+
+<p align="center">
+  <image src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/64956354/11879307-4738-48f6-9dc9-3ac9ca31a3fd" ></image>
+</p>
+
+**3. Budowanie w docelowym kontenerze**
+
+Ostatnim etapem jest uruchomienie kontenera z podpiętymi wszystkimi stworzonymi wolumenami i zbudowanie aplikacji na podstawie dostarczonych plików źródłowych i zależności. Wynikowy katalog ze zbudowaną aplikacją umieszczamy w wolumenie `irssi_Build`.
+<br>
+```bash
+//uruchamiamy kontener
+docker run --rm -it --mount source=irssi_src,destination=/irssi --mount source=fedora_cache_dnf,destination=/var/cache/dnf --mount source=irssi_Build,destination=/irssi/Build fedora bash
+
+//przechodzimy do katalogu projektu i budujemy go
+cd irssi
+meson Build
+ninja -C irssi/Build
+```
+
+<p align="center">
+  <image src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/64956354/b927639b-5ee0-4a06-92b0-4beb66c5c382" height="350" width="550"></image>
+</p>
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^ (jak zrobić cache volume) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**4. Przeniesienie procesu do Dockerfile**
+Korzystając z opcji `RUN --mount=type=cache` można podczas budowania obrazu zamontować do niego cache, który będzie przechowywany pomiędzy kolejnymi budowaniami obrazu (chyba że nastąpi ingerencja do warstwy obrazu w której budujemy ten cache, co spowoduje jego ponowne zbudowanie). Opcja `RUN --mount=type=bind` pozwoli natomiast "zainstalować" katalog z hosta ze sklonowanym repozytorium (lub można bezpośrednio sklonować repozytorium w obrazie) oraz dodając do niego opcję `rw`, umożliwimy zapis w katalogu nowego katalogu z plikami wynikowymi pod ścieżką `irssi/Build`. Przykładowy `dockerfile` realizujący takie działanie może wyglądać następująco:
+
+```Dockerfile
+FROM fedora:39
+
+RUN --mount=type=cache,target=/var/cache/dnf \
+ dnf -y update && dnf -y install git meson ninja* gcc glib2-devel utf8proc* ncurses* perl-Ext*
+
+# 1 opcja (pobieramy repozytorium)
+#RUN git clone https://github.com/irssi/irssi
+
+# 2 opcja (bindujemy wolumen z istniejącym repozytorium na hoscie)
+# opcja rw - read/write, ENV musi zostac podany jako parametr przy budowaniu
+ARG HOME=$HOME
+
+RUN mkdir -p /irssi
+RUN --mount=type=bind,source=$HOME/irssi,target=/irssi,rw
+
+WORKDIR /irssi
+
+RUN meson Build && ninja -C /irssi/Build
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
