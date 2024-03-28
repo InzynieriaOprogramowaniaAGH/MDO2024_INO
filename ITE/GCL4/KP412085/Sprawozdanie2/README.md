@@ -269,6 +269,63 @@ WORKDIR /irssi
 RUN meson Build && ninja -C /irssi/Build
 ```
 
+# Eksponowanie portu
+
+Iperf3 to program pozwalający na pomiar szybkości połączenia pomiędzy klientem a serwerem. Za jego pomocą w tej części będziemy sprawdzać szybkość połączenia pomiędzy kontenerami oraz hostem i kontenerm. Program ten pobieramy na dystrybucję `Fedora39` za pomoca `dnf install iperf3`. Uruchomienie programu jako serwera wykonuje się za pomocą polecenia `iperf -s`, natomiast jako klienta `iperf -c <IP_ADDR>`
+
+**1. Połączenie kontenerów domyślną siecią Dockera**
+
+Obraz sieci w moim przypadku wygląda następująco. Mój host ma adres `192.168.0.100/24`. Maszyna wirtualna, na której pracuję ma adres z tej samej podsieci `192.168.0.104` co umożliwia jej komunikację z hostem. `Docker` odpalany na maszynie jest dodatkowo wirtualizowany, wieć ostatecznie proces `dockerd` odpala się na specjalnym wirtualizatorze konfigurowanym przez dockera. Wraz z nim tworzona jest nowa podsieć, na naszej maszynie wirtualnej, która umozliwia komuniację pomiędzy `VM`, a `dockerem`. Adres ten ma postać `172.17.0.1/16`. W momencie tworzenia kontenerów z domyślnymi ustawieniami sieci (nie zdefiniowanymi), docker przydziela im kolejne adresy z własnej podsieci, dlatego jak pokazane na 2 screen'ie, adres pierwszego utworzonego kontenera to `172.17.0.2`. Taka konfiguracja umożliwia połączenie pomiędzy dowolnymi tworzonymi w tej domyślnej podsieci kontenerami. 
+
+<p align="center">
+  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/64956354/bdfe7cdb-75e7-4551-95cd-41eb5638440b"  width="800" height="250"/>
+</p>
+<p align="center"><i>Omawiane powyżej adresy VM i dockera</i></p>
+
+<p align="center">
+  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/64956354/a3f83e7f-64bf-407c-8558-968deba0387b"  width="800" height="300"/>
+</p>
+<p align="center"><i>Sprawdzenie sieci domyślnej utworzonej przez dockera dla kontenera służącego jako serwer dla iperf3</i></p>
+
+Za pomocą programu `iperf3` testujemy szybkość połączenia pomiędzy 2 kontenerami utworzonymi w domyślnej sieci:
+
+<p align="center">
+  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/64956354/c2a513d7-e79c-47ed-bfd5-6d5791c12581"/>
+</p>
+<p align="center"><i>Wyniki połączenia</i></p>
+
+**2. Połączenie kontenerów stworzoną dedykowaną siecią mostkową**
+
+Sieć dedykowaną tworzymy za pomocą polecenia:
+
+```
+docker network create -d bridge my_net
+```
+
+Takie utworzenie nowej sieci możemy sprawdzić analogicznie jak poprzednio, poprzez inspekcję sieci. Zanim to robimy tworzymy dodatkowo dwa kontenery podłączone do tej sieci:
+
+```docker
+docker run --rm -it --network my_net --name serwer fedora bash
+docker run --rm -it --network my_net --name client fedora bash
+```
+
+<p align="center">
+  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/64956354/b7ae0445-0201-4581-a7d5-b597773f7ada" width="700" height="500"/>
+</p>
+<p align="center"><i>docker network inspect my_net</i></p>
+
+Jak widać powyżej, docker network inspect my_net ukazuje powstanie nowej podsieci `172.19.0.0/16` oraz dodane do niej 2 adresy nowo utworzonych kontenerów. Przeprowadzamy pomiar szybkości analogicznie jak poprzednio i otrzymujemy następujące wyniki:
+
+<p align="center">
+  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/64956354/c9bcd44f-12be-408e-b402-9cdd265d6dc7" width="600" height="400"/>
+</p>
+
+***UWAGA ! Dzięki utworzeniu nowej sieci i połączeniu z nią kontenrów, możemy odwoływać się wzajemnie do kontenerów po nazwie a nie adresie - Docker tworzy i konfiguruje za nas DNS***
+
+
+
+
+
 
 
 
