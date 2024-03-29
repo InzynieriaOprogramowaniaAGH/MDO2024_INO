@@ -322,6 +322,118 @@ Jak widać powyżej, docker network inspect my_net ukazuje powstanie nowej podsi
 
 ***UWAGA ! Dzięki utworzeniu nowej sieci i połączeniu z nią kontenrów, możemy odwoływać się wzajemnie do kontenerów po nazwie a nie adresie - Docker tworzy i konfiguruje za nas DNS***
 
+**3. Połączenie kontenera z hostem**
+
+Uruchamiamy kontener z opcją przekierowywania portów. Umożliwi to na przesyłanie pakietów do kontenera - serwera `iperf` w momencie jeśli z hosta wyślemy takie pakiety na adres maszyny wirtualnej na której działa docker, na odpowiedni port. Dzieje się tak dlatego, że kierujemy komunikację na adres w podsieci porta -> maszynę wirtualną, a ona wewnętrznie ma skonfigurowane połączenie z podsiecią dockera.
+
+<p align="center">
+  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/64956354/77264dc9-1c59-4c82-8398-296b5cd83234" width="700" height="400"/>
+</p>
+
+**4.Wyciąganie log'ów z kontenera**
+
+Aby sprawdzić problemy z komunikacją w przypadku ich wystąpienia możemy posłużyć się logami rejestrowanymi przez program iperf3. Takie działanie umozliwia polecenie:
+
+```
+docker logs <container_name>
+```
+
+Innym sposobem jest zamonotwanie wolumenu w taki sposób aby logi były zapisywane na nim. Można to zrobić uruchamiając kontener z programem iperf, którego wyniki działania zapiszemy do pliku zlokalizowanego na zamontowanym wolumenie. Jednak nie możemy uruchomić wtedy bezpośrednio kontenera z obrazu programu iperf, (nie ma konsoli ani innych poleceń systemowych do zapisu) tylko musimy uruchomić iperf3 na obrazie jakiegoś systemu.
+
+```
+docker run --rm -it --name serwer -p 5201:5201 -v serwer_logs:/logs fedora bash -c "sudo dnf -y update && sudo dnf -y install iperf3 && iperf3 -s > /logs/iperf3.log"
+```
+
+Po poprawnym połączeniu z serwerem, zamykamy go, a następnie uruchamiamy nowy kontener z dołączonym wolumenem `serwer_logs` i sprawdzamy czy logi serwera zostały poprawnie zapisane:
+
+<p align="center">
+  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/64956354/991176ea-3e49-4046-8630-2d16ec4e91cb" width="700" height="400"/>
+</p>
+
+<br></br>
+**5.Podsumowanie szybkości połączeń**
+<br></br>
+
+<table align="center">
+    <tr>
+        <th>Rodzaj Połączenia</th>
+        <th>Bitrate</th>
+    </tr>
+    <tr>
+        <td>Połączenie kontenerów domyślną siecią Dockera</td>
+        <td>5.65 Gbits/sec</td>
+    </tr>
+    <tr>
+        <td>Połączenie kontenerów stworzoną dedykowaną siecią mostkową</td>
+        <td>30.2 Gbits/sec</td>
+    </tr>
+    <tr>
+        <td>Połączenie kontenera z hostem</td>
+        <td>618 Mbits/sec</td>
+    </tr>
+    <tr>
+        <td>Połączenie kontnera z hostem zewnętrznym</td>
+        <td>-</td>
+    </tr>
+</table>
+
+# Instancja Jenskins
+
+Zgodnie z instrukcjami na stronie [https://www.jenkins.io/doc/book/installing/docker/](https://www.jenkins.io/doc/book/installing/docker/), tworzymy sieć dla `jenkinsa`:
+
+> ```
+> docker network create jenkins
+> ```
+
+Nastepnie przeprowadzamy instalację skonteneryzowanej instancji `Jenkinsa` z pomocnikim `DIND`
+
+>```docker
+>docker run \
+>  --name jenkins-docker \
+>  --rm \
+>  --detach \
+>  --privileged \
+>  --network jenkins \
+>  --network-alias docker \
+>  --env DOCKER_TLS_CERTDIR=/certs \
+>  --volume jenkins-docker-certs:/certs/client \
+>  --volume jenkins-data:/var/jenkins_home \
+>  --publish 2376:2376 \
+>  docker:dind \
+>  --storage-driver overlay2
+>```
+
+Kolejno zgodnie z instrukcją tworzymy nowy obraz jenkinsa z dockerem (domyślnie zgodnie z instrukcją) oraz budujemy go:
+```
+docker build -t myjenkins-blueocean:2.440.2-1 -f jenkins.Dockerfile
+```
+
+Uruchamiamy nowy kontener na podstawie zbudowanego obrazu:
+>```docker
+>docker run \
+>  --name jenkins-blueocean \
+>  --restart=on-failure \
+>  --detach \
+>  --network jenkins \
+>  --env DOCKER_HOST=tcp://docker:2376 \
+>  --env DOCKER_CERT_PATH=/certs/client \
+>  --env DOCKER_TLS_VERIFY=1 \
+>  --publish 8080:8080 \
+>  --publish 50000:50000 \
+>  --volume jenkins-data:/var/jenkins_home \
+>  --volume jenkins-docker-certs:/certs/client:ro \
+>  myjenkins-blueocean:2.440.2-1
+>```
+
+Po poprawnej inicjalizacji kontenera otrzymujemy w przeglądarce pod adresem maszyny wirtualnej i portu `8080` klienta jenkins:
+
+<p align="center">
+  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/64956354/a0c56520-20fa-44aa-9ad6-4a210648ac16" width="700" height="500"/>
+</p>
+
+Działające kontenery i sposób dostępu do hasła:
+<br></br>
+![image](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/64956354/469f61c5-5bf2-4056-a730-e5c3718868c8)
 
 
 
