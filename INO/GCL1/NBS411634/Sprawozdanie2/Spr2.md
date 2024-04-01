@@ -15,7 +15,7 @@ Wybranym przeze mnie oprogramowaniem jest:
 
 ```https://github.com/codeclown/tesseract.js-node.git```
 
-Repozytorium zawiera generator projektów dla frameworka Express.js. Umożliwia na szybkie tworzenie struktury i konfiguracji nowych aplikacji internetowych w JavaScript.
+Repozytorium zawiera implementację biblioteki Tesseract.js która umożliwia rozpoznawanie tekstu w obrazach przy użyciu technologii (OCR - Optical Character Recognition).
 
 Repozytorium dysponuje otwartą licencją (Apache 2.0 - zatem możliwe jest swobodne korzystanie, modyfikowanie oraz rozpowszechnianie kodu źródłowego)
 
