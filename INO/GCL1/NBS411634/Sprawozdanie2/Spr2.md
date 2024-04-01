@@ -8,8 +8,7 @@ Natalia Borysowska-Ślęczka, IO
 
 ### Wybór oprogramowania
 
-- Znajdź repozytorium z kodem dowolnego oprogramowania, które:
-
+* Znajdź repozytorium z kodem dowolnego oprogramowania, które:
 - dysponuje otwartą licencją
 
 Wybranym przeze mnie oprogramowaniem jest:
