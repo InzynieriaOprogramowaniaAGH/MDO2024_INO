@@ -3,10 +3,11 @@
 > **Główne punkty sprawozdania :**
  > - budowa i testowanie wybranych aplikacji w kontenerze
  > -  tworzenie docker compose
- > -  
- > - 
+ > -  korzystanie z wolumenów
+ > -  iperf3
+ > -  jenkins
 
-W ramach zajęć przeprowadzamy operacje budowy i testowania wybranych aplikacji z wykorzystaniem różnych narzędzi (u mnie npm, meson i maven). Na tej podstawie następnie automatyzujemy cały proces poprzez stworzenie plikow Dockerfile. Brak poleceń CMD i ENTRYPOINT pozwala na efekt w którym kontenery są tworzone i natychmiastowo kończą swoje działanie, po poprawnej budowie lub teście aplikacji (kod exit 0). Dzięki temu uzyskujemy środowisko o zdefiniowanej architekturze i konfiguracji, mające niskie wymagania sprzętowe, co umozliwia łatwą automatyzacje procesu(budowanie, testowanie, wdrażanie). Kontenery służą głównie do budowania oraz testowania aplikacji, a nie do jej uruchamiania, głównie ze względów takich, że może to być mniej wydajne lub jest to słaba opcja dla aplikacji graficznych lub intearaktywnych bo kontenery głównie są przeznaczone do działania w tle lub serwerowania.
+W ramach zajęć przeprowadzamy operacje budowy i testowania wybranych aplikacji z wykorzystaniem różnych narzędzi (u mnie npm, meson i maven). Na tej podstawie następnie zautomatyzujemy cały proces poprzez stworzenie plikow Dockerfile. Poprzez nieumieszczanie poleceń CMD i ENTRYPOINT w plikach Dockerfile, kontenery są tworzone i kończą swoje działanie natychmiast po poprawnej budowie lub teście aplikacji (kod exit 0). Dzięki temu uzyskujemy środowisko o zdefiniowanej architekturze i konfiguracji, które wymaga niewielkich zasobów sprzętowych, co ułatwia automatyzację procesu (budowanie, testowanie, wdrażanie). Kontenery służą głównie do budowy i testowania aplikacji, a nie do ich uruchamiania. Jest to szczególnie istotne ze względu na to, że uruchamianie aplikacji graficznych lub interaktywnych w kontenerach może być mniej wydajne lub niepraktyczne, ponieważ kontenery są przede wszystkim przeznaczone do pracy w tle lub do serwowania usług.
 
 
 
@@ -19,14 +20,14 @@ Wybrałam repozytoria z zajęć:
 Oraz
 - https://github.com/spring-projects/spring-petclinic (maven)
 
-Licencja dla wszystkich umożliwia korzystanie z kodu. Środowiska umożliwiają budowanie i tetsowanie.
+Licencja dla wszystkich umożliwia korzystanie z kodu. Środowiska umożliwiają budowanie i testowanie.
 
 
 
 
-## Wykrzystanie maven
+## Wykorzystanie narzędzia Maven
 
-Aby przeprowadzić build w kontenerze zbudowanym z obrazu maven, uruchamiamy w trybie interaktywnym, pobieramy gita jeśli nie ma a nastepnie uruchamiamy skrypt mavena do budowania projektu. W przypadku Mavena ten krok obejmuje także proces pobierania zależności i kompilowania do postaci wykonywalnej. Następnie uruchamiamy skrypt do wykonywania testów.
+Aby zbudować projekt w kontenerze maven, wykonujemy następujące kroki: Uruchamiamy kontener w trybie interaktywnym, instalujemy git, jeśli nie jest już zainstalowany w kontenerze, wykonujemy skrypt mavena do budowy projektu, a następnie uruchamiamy skrypt do wykonania testów aplikacji.
 
 
 ```bash
@@ -38,9 +39,11 @@ cd spring-petclinic
 ```
 
 Budowa:
+
 ![](ss/1.png)
 
 Testy:
+
 ![](ss/2.png)
 
 ### Automatyzacja powyższych operacji
@@ -65,7 +68,7 @@ Wynik :
 
 ## Wykorzystanie środowiska npm
 
-Zadanie wykonuje w wersji z Dockerfile, ponieważ wcześniejszą wykonywalismy na zajęciach.
+Zadanie wykonuje w wersji z Dockerfile, ponieważ wcześniejszą wykonywaliśmy na zajęciach.
 
 Wersja zautomatyzowana: 
 
@@ -94,9 +97,11 @@ Aby uruchomić ten plik musimy pobrać rozszerzenie docker-compose, a później 
 
 
 Plik dla środowiska node:
+
 ![](ss/10.png)
 
 
 Wynik działania: 
 
 ![](ss/9.png)
+
