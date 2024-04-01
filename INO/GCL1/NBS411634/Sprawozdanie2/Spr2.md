@@ -81,7 +81,7 @@ gdzie:
 
 ![](./ss_lab3/lab3_2.png)
 
-	* sklonuj repozytorium
+* sklonuj repozytorium
 
 Analogicznie jak wyżej kolnuje repoytorium poleceniem:
 
@@ -89,7 +89,7 @@ Analogicznie jak wyżej kolnuje repoytorium poleceniem:
 
 ![](./ss_lab3/lab3_3.png)
 
-	* uruchom *build*
+* uruchom *build*
 
 Przechodzę do folderu sklonowanego repozytorium:
 
@@ -105,7 +105,7 @@ gdzie uruchamiam proces budowania:
 
 ![](./ss_lab3/lab3_6(2).png)
 
-	* uruchom testy
+* uruchom testy
 
 Używam ```npm test``` aby uruchomić testy
 
