@@ -8,8 +8,8 @@ Natalia Borysowska-Ślęczka, IO
 
 ### Wybór oprogramowania
 
-* Znajdź repozytorium z kodem dowolnego oprogramowania, które:
-    * dysponuje otwartą licencją
+1. Znajdź repozytorium z kodem dowolnego oprogramowania, które:
+* dysponuje otwartą licencją
 
 Wybranym przeze mnie oprogramowaniem jest:
 
@@ -33,7 +33,7 @@ w wybranym repozytorium do budowania aplikacji używa się komendy:
 
 ...
 
-* Sklonuj niniejsze repozytorium, przeprowadź build programu (doinstaluj wymagane zależności)
+2. Sklonuj niniejsze repozytorium, przeprowadź build programu (doinstaluj wymagane zależności)
 
 W nowo utworzonym folderze *lab3* klonuje wybrane przeze mnie repozytorium
 
@@ -49,7 +49,7 @@ i instaluje potrzebne zależności poleceniem:
 
 ![](./ss_lab3/lab3_3.png)
 
-* Uruchom testy jednostkowe dołączone do repozytorium
+3. Uruchom testy jednostkowe dołączone do repozytorium
 
 Po zainstalowaniu zależności przechodzimy do uruchomienia testów jednostkowych za pomocą polecenia:
 
