@@ -44,9 +44,11 @@ docker run -it --rm ubuntu bash
 ```
 
 gdzie:
--it: interaktywne uruchomienie kontenera oraz przypisanie terminalu hosta do kontenera
--- rm: automatyczne usunięcie kontenera po zakończeniu działania procesu wewnątrz kontenera
-bash: otwiera interaktywny terminal bash wewnątrz kontenera 
+`-it`: interaktywne uruchomienie kontenera oraz przypisanie terminalu hosta do kontenera
+
+`-- rm`: automatyczne usunięcie kontenera po zakończeniu działania procesu wewnątrz kontenera
+
+`bash`: otwiera interaktywny terminal bash wewnątrz kontenera 
 
 Zaktualizowałam listę zależności i zainstalowałam gita:
 
@@ -130,8 +132,10 @@ docker build -t bldr -f BLDR.Dockerfile .
 ```
 
 gdzie:
- -t: pozwala nadać nazwę obrazowi
- -f: pozwala na określenie ścieżki do pliku Dockerfile, który zostanie użyty do budowania obrazu
+ `-t`: pozwala nadać nazwę obrazowi
+
+ `-f`: pozwala na określenie ścieżki do pliku Dockerfile, który zostanie użyty do budowania obrazu
+
  Kropka oznacza, że Docker będzie szukał pliku Dockerfile w bieżącym katalogu.
 
  Za pierwszym razem nie udało się, ponieważ zapomniałam dodać w pliku Dockerfile przy niektórych komendach opcji `-y`, która automatycznie potwierdza zgody na instalację pakietów. 
@@ -229,14 +233,15 @@ docker volume ls
 
 ![](screeny/13.png)
 
-**Klonowanie irssi na wolumin na zewnątrz kontenera**
+**Klonowanie irssi na wolumin wejściowy na zewnątrz kontenera**
 
-Za pomocą poniższego polecenia utworzyłam nowy kontener o nazwie `ubuntu-volume` na podstawie obrazu ubuntu, ponieważ nie ma tam zainstalowanego git'a domyślnie:
+Za pomocą poniższego polecenia utworzyłam nowy kontener o nazwie `ubuntu-volume` na podstawie obrazu ubuntu, ponieważ domyślnie nie ma tam zainstalowanego git'a :
 
 ![](screeny/14.png)
 
 gdzie: 
 `--mount source=input_volum,target=/in`: Montuje wolumin o nazwie "input_volum" do ścieżki "/in" w kontenerze.
+
 `--mount source=output_volum,target=/out`: Montuje wolumin o nazwie "output_volum" do ścieżki "/out" w kontenerze.
 
 Sprawdziłam czy w kontenerze jest zainstalowany git:
@@ -290,10 +295,11 @@ Wyłączyłam kontener i sprawdziłam, czy zawartość woluminu wyjściowego jes
 
 ![](screeny/27.png)
 
-**Klonowanie irssi na wolumin wewnątrz kontenera.**
+**Klonowanie irssi na wolumin wejściowy wewnątrz kontenera.**
+
 Następnie powtórzyłam uruchomienie kontenera z woluminami, jednak tym razem sklonowałam `irssi` na wolumin wejściowy wewnątrz kontenera.
 
-Stworzyłam nowe, pute woluminy:
+Stworzyłam nowe, puste woluminy:
 
 ![](screeny/23.png)
 
@@ -326,8 +332,7 @@ RUN apt-get install -y meson build-essential libglib2.0-dev libssl-dev libncurse
 
 RUN ninja -C /in/Build
 ```
-gdzie polecenie `RUN --mount=type=volume,source=input_volume,target=/in git clone https://github.`
-wykonuje klonowanie repozytorium `irssi` z GitHuba do woluminu wejściowego `input_volume`, który jest montowany wewnątrz kontenera pod ścieżką `/in`.
+gdzie polecenie `RUN --mount=type=volume,source=input_volume,target=/in git clone https://github.com/irssi/irssi.git` wykonuje klonowanie repozytorium `irssi` z GitHuba do woluminu wejściowego `input_volume`, który jest montowany wewnątrz kontenera pod ścieżką `/in`.
 
 Istnieje także możliwość stworzenia woluminu w pliku Dockerfile za pomocą instrukcji `VOLUME`.
 
@@ -350,7 +355,7 @@ sudo docker run -it --name=iperf3server -p 5201:5201 networkstatic/iperf3 -s
 gdzie:
 `-p 5201:5201`: Określa przekierowanie portów. Mapuje port hosta 5201 na port kontenera 5201.
 
-`networkstatic/iperf3`: wczesniej pobrany obraz Dockera
+`networkstatic/iperf3`: Wcześniej pobrany obraz Dockera
 
 `-s`: Jest to opcja dla iperf3, która uruchamia serwer iperf3 w kontenerze
 
@@ -359,7 +364,7 @@ Po uruchomieniu:
 
 ![](screeny/30.png)
 
-Następnie w innym terminalu, sprawdziłam adres ip, tego serwera poleceniem:
+Następnie w innym terminalu, sprawdziłam adres ip tego serwera poleceniem:
 ```
 sudo docker inspect -f '{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(sudo docker ps -aq)
 ```
@@ -372,6 +377,7 @@ sudo docker run -it --rm --name=iperf3client networkstatic/iperf3 -c 172.17.0.2
 ```
 
 gdzie:
+
 `--name=iperf3client`: Określa nazwę kontenera jako "iperf3client"
 
 `networkstatic/iperf3`: Obraz Dockera
@@ -395,6 +401,7 @@ Korzystając z możliwości, jakie daje nam narzędzie network create, utworzył
 sudo docker network create --driver bridge my_bridge_network
 ```
 gdzie:
+
 `--driver bridge`: Określa typ sterownika używanego do utworzenia sieci. 
 
 ![](screeny/34.png)
@@ -410,7 +417,7 @@ sudo docker run -d --name iperf-server-2 --network=my_bridge_network networkstat
 gdzie:
 
 `--network=my_bridge_network`: Określa, że ten kontener zostanie podłączony do wcześniej utworzonej sieci o nazwie "my_bridge_network".
-`iperf3 -s`:oznacza uruchomienie serwera iperf3 wewnątrz kontenera, po uruchomieniu
+`iperf3 -s`: Oznacza uruchomienie serwera iperf3 wewnątrz kontenera, po uruchomieniu
 
 Następnie połączyłam się z serwerem iperf z innego kontenera:
 
@@ -552,15 +559,18 @@ Po zainstalowaniu wtyczek ukazał się panel admina:
 
 ### Zakres rozszerzony 
 **Co jest potrzebne by w naszym Jenkinsie uruchomić Dockerfile dla buildera?**
+
 Uruchomienie Dockerfile wewnątrz kontenera Jenkinsa, wymagając skonfigurowania kontenera Jenkinsa w trybie Docker in Docker.
 
 Krok 1: Przygotowanie środowiska
+
 `Dockerfile`- Definiuje środowisko do zbudowania.
 
 `Jenkinsfile`- Definiuje sposób w jaki Jenkins powinien budować i testować projekt.
 
 Krok 2: Konfiguracja Jenkinsa
 Plugin Docker dla Jenkinsa: Plugin umożliwiający Jenkinsowi komunikację z Dockerem i uruchamianie kontenerów.
+
 Krok 3: Wybór sposobu uruchomienia kontenera Jenkinsa.
 
 - Tryb Docker in Docker:
