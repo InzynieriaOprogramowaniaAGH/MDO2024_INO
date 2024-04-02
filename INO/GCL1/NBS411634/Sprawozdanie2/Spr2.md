@@ -393,7 +393,7 @@ Odczytuje IP, jest to: *10.0.2.15*
 
 ![](./ss_lab4/lab4_31.png)
 
-Modyfikuje ustawienia w maszynie wirtualnej zgodnie z poniższym zrzutem ekranu
+Modyfikuje ustawienia w maszynie wirtualnej zgodnie z poniższym zrzutem ekranu:
 
 ![](./ss_lab4/lab4_32.png)
 
