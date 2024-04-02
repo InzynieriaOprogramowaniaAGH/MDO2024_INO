@@ -1,0 +1,5 @@
+FROM redis_build
+
+WORKDIR /redis-stable
+
+RUN make test MALLOC=libc

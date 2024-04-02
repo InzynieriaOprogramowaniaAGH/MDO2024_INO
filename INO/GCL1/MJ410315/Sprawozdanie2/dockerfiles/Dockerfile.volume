@@ -1,0 +1,18 @@
+From fedora
+
+RUN mkdir in
+RUN mkdir out
+
+RUN --mount=type=bind,source=var/snap/docker/common/var-lib-docker/volumes/input_volume/_data,target=/in \
+    --mount=type=bind,source=var/snap/docker/common/var-lib-docker/volumes/output_volume/_data,target=/out,rw
+
+WORKDIR /in
+
+RUN dnf install -y make gcc tcl tcl-devel tk procps which git
+RUN git clone -b 7.2 https://github.com/redis/redis.git ./dockerfile_redis
+
+WORKDIR /in/dockerfile_redis
+
+RUN git make
+
+RUN cp -r src ../../out/dockerfile_src

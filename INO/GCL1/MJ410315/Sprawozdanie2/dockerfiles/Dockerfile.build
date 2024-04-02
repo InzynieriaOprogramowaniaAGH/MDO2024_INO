@@ -1,0 +1,9 @@
+FROM fedora
+
+RUN dnf install -y wget make gcc tcl tcl-devel tk procps which && \
+    wget https://download.redis.io/redis-stable.tar.gz && \
+    tar -xzvf redis-stable.tar.gz
+    
+WORKDIR /redis-stable
+
+RUN make
