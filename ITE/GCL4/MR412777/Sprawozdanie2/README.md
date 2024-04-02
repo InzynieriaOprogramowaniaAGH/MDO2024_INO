@@ -18,7 +18,7 @@ Oprogramowanie zawiera zdefiniowane i obecne w repozytorium testy (`src/test`), 
 
 ![image](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/049c0af2-c03a-465d-90ad-6c015242a303)
 
-W skorzystania z projektu konieczna byla instalacja Maven. W tym celu posłużyłam się poleceniem `apt install maven`. Instalacja wykonywana była z poziomu katalogu, stworzonego z myślą o innym repozytorium, z którego ostatecznie zrezygnowałam. Ścieżka nie ma to wpływu na przebieg instalacji.
+W skorzystania z projektu konieczna byla instalacja Maven. W tym celu posłużyłam się poleceniem `apt install maven`. Instalacja wykonywana była z poziomu katalogu stworzonego z myślą o innym repozytorium, z którego ostatecznie zrezygnowałam. Ścieżka nie ma to wpływu na przebieg instalacji.
 
 ![sudo apt mvn](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/24add425-9591-42d4-943e-8139148106c2)
 
@@ -40,7 +40,7 @@ Uruchomiłam kontener w trybie interaktywnym za pomocą `docker run -it`. Urucho
 
 ![docker run](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/ff095d0c-96b4-4488-84c1-a97b3da877b5)
 
-Zaopatrzyłam kontener w wymagania wstępne. Konieczna była aktualizacja pakietów systemowych, instalacja maven oraz gita. Posłużył do tego komendy: `apt-get update`, `apt-get install maven` oraz `apt-get install git`. 
+Zaopatrzyłam kontener w wymagania wstępne. Konieczna była aktualizacja pakietów systemowych, instalacja maven oraz gita. Posłużyły do tego komendy: `apt-get update`, `apt-get install maven` oraz `apt-get install git`. 
 
 ![docker apt-get update](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/7e0e5b4e-5468-499f-b409-489ff687cf72)
 
@@ -71,7 +71,9 @@ Pliki `Dockerfile` umieściłam w folderze `~/maven-app/dockerfiles` i korzystaj
 
 ![dockerfile images](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/f24d20e7-a7c5-45af-8954-7841bd40e30b)
 
-W celu sprawdzenia poprawności działania, uruchomiłam kontener z obrazu `test_image` i sprawdziłam jego zawartość. Znajdowało się w nim sklonowane repozytorium `maven-simple`. W katalogu głównym projektu powstał folder `target`, co świadczy o tym że zaszła kompilacja. Klonowanie ani kompilacja nie mogłyby zajść, gdyby nie uprzednio poprawnie zainstalowane zależności. Etap instalacji, klonowania oraz kompilacji znajdowały się w pliku `Dockerfile.build`, zaś obraz `test_image` korzysta z `Dockerfile.test`. Stąd również można wywnioskować, że jeden plik w poprawny sposób nawiązuje do drugiego.
+W celu sprawdzenia poprawności działania, uruchomiłam kontener z obrazu `test_image` i sprawdziłam jego zawartość. Znajdowało się w nim sklonowane repozytorium `maven-simple`. W katalogu głównym projektu powstał folder `target`, co świadczy o tym że zaszła kompilacja. Klonowanie ani kompilacja nie mogłyby zajść, gdyby nie uprzednio poprawnie zainstalowane zależności. Oznacza to, że polecenia z pliku `Dockerfile` są wykonywane prawidłowo.
+
+Etap instalacji, klonowania oraz kompilacji znajdowały się w pliku `Dockerfile.build`, zaś obraz `test_image` korzysta z `Dockerfile.test`. Stąd można wywnioskować, że jeden pliki `Dockerfile` w poprawny sposób do siebie nawiązują.
 
 ![dockerfile run](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/a1067186-8170-4725-987c-f7af6c10acb4)
 
@@ -100,7 +102,7 @@ Skopiowałam repozytorium do katalogu `/app` i uruchomiłam compile.
 
 ![docker mvn compile](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/bdcc1eb9-ce55-44f3-9047-2ffb1cae84fb)
 
-Powstiałe pliki w wyniku kompilacji (`/target`) skopiowałam na wolumin wyjściowy `/output`.
+Powstałe pliki w wyniku kompilacji (`/target`) skopiowałam na wolumin wyjściowy `/output`.
 
 ![cp target](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/a24998a5-9cf3-4a30-8dfc-760f64bdcddf)
 ![docker volume out](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/10b56dda-e157-4bb8-b904-6d416a1c728c)
@@ -111,8 +113,8 @@ Całą operację wykonałam analogicznie drugi raz, ale z klonowaniem na wolumin
 ![docker apt-get install git 2](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/c38232e6-8554-41cc-80b4-c3ad2f936acf)
 ![docker git clone](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/8ac944f9-3e80-4e94-8a3a-38e75043370b)
 
-Można by zautomatyzować operacje na woluminach w procesie budowania obrazu Dockera `docker build`, dzięki instrukcji `RUN --mount`. Umożliwia ona tworzenie woluminu do kontenera podczas wykonywania polecenia RUN w pliku Dockerfile.
-W tym przypadku plik `Dockerfile` mogłoby zawierać przykłądowo polecenie:
+Istnieje sposób aby zautomatyzować operacje na woluminach w procesie budowania obrazu Dockera `docker build`. Można to zrobić korzystając z instrukcji `RUN --mount`. Umożliwia ona tworzenie woluminu do kontenera podczas wykonywania polecenia RUN w pliku Dockerfile.
+W tym przypadku plik `Dockerfile` mogłoby zawierać polecenie:
 `RUN --mount=type=volume,source=volume-in,target=/app git clone https://github.com/jitpack/maven-simple /app`
 
 Następnie zapoznałam się z dokumentacją `https://iperf.fr/`. Zainstalowałam `iPerf3` wewnątrz dwóch kontenerów.
@@ -120,7 +122,7 @@ Następnie zapoznałam się z dokumentacją `https://iperf.fr/`. Zainstalowałam
 ![docker iperf install](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/e230c7e8-48ff-4e5e-98b4-58b6cb2178a5)
 ![docker iperf install 2](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/6301618f-c0d0-4a70-91c3-2f52ce022ba1)
 
-Pracowałam na dwócho otwartych terminalach jednocześnie. W jednym z kontenerów uruchomiłam serwer iperf, a w drugim client iperf.
+Pracowałam na dwóch otwartych terminalach jednocześnie. W jednym z kontenerów uruchomiłam serwer iperf, a w drugim client iperf.
 
 ![docker iperf -c -s](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/e947e9ef-8589-4652-a4c2-a81c097a66de)
 
@@ -155,7 +157,7 @@ Następnie, po zapoznaniu się z dokumentacją `https://www.jenkins.io/doc/book/
 Pobrałam oficjalny obraz Jenkinsa z Docker Hub za pomocą `docker pull`.
 ![jenkins pull](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/5255e2f6-2215-40e3-a854-5b18ae9ba97e)
 
-Uruchomiłam Jenkinsa w kontenerze z DIND za pomocą `docker run` oraz wyświetliłam hasło inicjalizacyjne Jenkinsa za pomocą `docker exec`. A celu wyświetlenia UI Jenkinsa konieczna była znajomość adresu ip, więc sprawdziłam go poleceniem `ifconfig`.
+Uruchomiłam Jenkinsa w kontenerze z DIND za pomocą `docker run` oraz wyświetliłam hasło inicjalizacyjne Jenkinsa za pomocą `docker exec`. W celu wyświetlenia UI Jenkinsa konieczna była znajomość adresu ip, więc sprawdziłam go poleceniem `ifconfig`.
 
 ![jenkins install ](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/fbd0e036-18f4-4780-b081-9491f25a433c)
 
@@ -167,11 +169,7 @@ Znalazłam stronę w przeglądarce po adresie IP i odpowiednim portcie. Wprowadz
 
 ![jenkins install 2](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/ba123506-a131-4cb2-9d45-e4c32463a893)
 
-Zainstalowałam sugerowane wtyczki.
-
-![jenkins install 3](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/2b69f1eb-f0ed-46ca-8a6c-1f5c4db661c8)
-
-Podążałam według instrukcji na stronie. Wprowadziłam dane administratora i pominęłam konfigurację bazowgo adresu URL.
+Zainstalowałam sugerowane wtyczki i podążałam według instrukcji na stronie. Wprowadziłam dane administratora i pominęłam konfigurację bazowgo adresu URL. Po zakończonej konfiguracji wyświetliła się strona główna po zalogowaniu.
 
 ![jenkins install 7](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/7ee3057f-d171-4349-ad40-a684da6beca7)
 
