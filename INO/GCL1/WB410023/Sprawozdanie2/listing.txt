@@ -1,0 +1,75 @@
+  233  git clone https://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@github.com/fairoos-nm/Game-of-Life.git
+  234  cd Game-of-Life
+  235  sudo apt install python3-pip
+  236  python3 main.py
+  237  pip install pytest
+  238  pytest
+  239  apt install python-pytest
+  240  sudo apt install python-pytest
+  241  pytest
+  242  docker --version
+  243  docker login
+  244  cd ..
+  245  docker pull ubuntu:latest
+  246  docker images
+  247  docker run -it ubuntu
+  248  docker ps -a
+  249  docker start cb3
+  250  docker exec -it cb3 bash
+  251  nano Dockerfile
+  252  docker build --build-arg TOKEN="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" -t builder .
+  253  docker images
+  254  docker run -it builder
+  255  docker ps -a
+  256  nano Dockerfile2
+  257  docker build -t tester -f Dockerfile2 .
+  258  docker images
+  259  nano Dockerfile2
+  260  docker run -it tester
+  261  nano docker-compose.yml
+  262  docker-compose up --build
+  263  sudo apt install docker-compose
+  264  docker-compose up --build
+  265  nano docker-compose.yml
+  266  docker-compose up --build
+  267  nano docker-compose.yml
+  268  history
+  
+  -------------------------------------------------
+  283  docker login
+  284  ls
+  285  docker ps -a
+  286  docker volume create input_volume
+  287  docker volume create output_volume
+  288  docker run -v input_volume:/input -v output_volume:/output -it ubuntu
+  289  docker ps -a
+  290  docker cp Game-of-Life 936:/input
+  291  docker cp Game-of-Life 936732b9387c:/input
+  292  ls
+  293  git clone https://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@github.com/fairoos-nm/Game-of-Life.git
+  294  ls
+  295  docker cp Game-of-Life 936732b9387c:/input
+  296  docker start 936732b9387c
+  297  docker exec -it 936 bash
+  298  docker volume ls
+  299  docker start 936732b9387c
+  300  docker exec -it 936 bash
+  301  docker pull networkstatic/iperf3
+  302  docker run -it --name=server -p 5201:5201 networkstatic/iperf3 -s
+  303  docker inspect server
+  304  docker ps -a
+  305  docker rm 22f
+  306  docker ps -a
+  307  docker run -it --name=server -p 5201:5201 networkstatic/iperf3 -s
+  308  docker logs server > logs.txt
+  309  cat logs.txt
+  310  docker login
+  311  docker network create jenkins
+  312  docker network ls
+  313  docker run --name jenkins-docker --rm --detach --privileged --network jenkins --network-alias docker --env DOCKER_TLS_CERTDIR=/certs --volume jenkins-docker-certs:/certs/client --volume jenkins-data:/var/jenkins_home --publish 2376:2376 docker:dind --storage-driver overlay2
+  314  nano Dockerfile
+  315  docker build -t my-jenkins .
+  316  docker run --name jenkins-blueocean --restart=on-failure --detach --network jenkins --env DOCKER_HOST=tcp://docker:2376 --env DOCKER_CERT_PATH=/certs/client --env DOCKER_TLS_VERIFY=1 --volume jenkins-data:/var/jenkins_home --volume jenkins-docker-certs:/certs/client:ro --publish 8080:8080 --publish 50000:50000 my-jenkins
+  317  docker ps
+  318  docker exec jenkins-blueocean cat /var/jenkins_home/secrets/initialAdminPassword
+  319  history
