@@ -2,7 +2,7 @@
 ## Część 1 - Dockerfiles, kontener jako definicja etapu
 
 ### Wybór oprogramowania na zajęcia
-W pierwszej części zadania sklonowałam repozytorium ze strony https://github.com/irssi/irssi do jednego z katalogów na maszynie wirtualnej. Aby móc zbudować aplikację, musiałam dosinstalować szereg zależności:
+W pierwszej części zadania sklonowałam repozytorium ze strony https://github.com/irssi/irssi do jednego z katalogów na maszynie wirtualnej. Wybrałam to oprogramowanie, żeby poćwiczyć na bardziej wymagającym przykładzie, tak aby w przyszłości praca na innych oprogramowaniach nie stanowiła problemu. Aby móc zbudować aplikację, musiałam doinstalować szereg zależności:
 
  ```
   241  git clone git@github.com:irssi/irssi.git
@@ -29,7 +29,7 @@ W pierwszej części zadania sklonowałam repozytorium ze strony https://github.
 
   ![](screeny/2.png)
 
-  Po doinstalowaniu wszystkich niezbędnych zależności, testy wykonały się poprawnie:
+  Po doinstalowaniu wszystkich niezbędnych zależności i przeprowadzeniu builda, testy wykonały się poprawnie:
 
  ![](screeny/3.png)
 
@@ -44,6 +44,7 @@ docker run -it --rm ubuntu bash
 ```
 
 gdzie:
+
 `-it`: interaktywne uruchomienie kontenera oraz przypisanie terminalu hosta do kontenera
 
 `-- rm`: automatyczne usunięcie kontenera po zakończeniu działania procesu wewnątrz kontenera
@@ -132,6 +133,7 @@ docker build -t bldr -f BLDR.Dockerfile .
 ```
 
 gdzie:
+
  `-t`: pozwala nadać nazwę obrazowi
 
  `-f`: pozwala na określenie ścieżki do pliku Dockerfile, który zostanie użyty do budowania obrazu
@@ -240,6 +242,7 @@ Za pomocą poniższego polecenia utworzyłam nowy kontener o nazwie `ubuntu-volu
 ![](screeny/14.png)
 
 gdzie: 
+
 `--mount source=input_volum,target=/in`: Montuje wolumin o nazwie "input_volum" do ścieżki "/in" w kontenerze.
 
 `--mount source=output_volum,target=/out`: Montuje wolumin o nazwie "output_volum" do ścieżki "/out" w kontenerze.
@@ -260,6 +263,7 @@ Następnie poza kontenerem sklonowałam repozyorium `irrsi` do woluminu wejścio
 sudo git clone https://github.com/irssi/irssi.git $(docker volume inspect -f '{{ .Mountpoint }}' input_volume)
 ```
 gdzie :
+
 `$(docker volume inspect -f '{{ .Mountpoint }}' input_volume)` wykonuje polecenie `docker volume inspect`, aby uzyskać informacje o ścieżce montowania woluminu o nazwie `input_volume`, a następnie zwraca tę ścieżkę jako wynik
 
 Wynik klonowania:
@@ -353,6 +357,7 @@ Uruchomiłam wewnątrz kontenera serwer iperf3, który jest gotowy na przyjmowan
 sudo docker run -it --name=iperf3server -p 5201:5201 networkstatic/iperf3 -s
 ```
 gdzie:
+
 `-p 5201:5201`: Określa przekierowanie portów. Mapuje port hosta 5201 na port kontenera 5201.
 
 `networkstatic/iperf3`: Wcześniej pobrany obraz Dockera
@@ -417,6 +422,7 @@ sudo docker run -d --name iperf-server-2 --network=my_bridge_network networkstat
 gdzie:
 
 `--network=my_bridge_network`: Określa, że ten kontener zostanie podłączony do wcześniej utworzonej sieci o nazwie "my_bridge_network".
+
 `iperf3 -s`: Oznacza uruchomienie serwera iperf3 wewnątrz kontenera, po uruchomieniu
 
 Następnie połączyłam się z serwerem iperf z innego kontenera:
