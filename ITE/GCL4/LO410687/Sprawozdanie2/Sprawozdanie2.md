@@ -65,7 +65,7 @@ ninja test
 
 ![ninjatest](ninjatest.png)
 
-Jak widać wszystkie testy przeszły pozytywnie.
+Jak widać wszystkie testy przeszły pozytywnie i możemy opuścić kontener poleceniem `exit`.
 
 Kolejnym przykładem aplikacji będzie **To do web app**, które będzie wymagać mniejszej ilości działań w celu udanej konfiguracji aplikacji.
 
@@ -88,6 +88,8 @@ Podobnie jak na wcześniejszym przykładzie klonujemy repo poleceniem `git clone
 
 ![aptupdategitcd](aptupdategitcd.png)
 
+Następnie przenosimy się do katalogu `node`.
+
 Do instalacji zależności określonych pliku package.json używamy polecenia 
 
 ```
@@ -99,7 +101,7 @@ npm install
 Następnie po instalacji niezbędnych zależności, można uruchomić test dołączony do sklonowanego repozytorium poleceniem 
 
 ```
-npm test
+npm run test
 ```
 
 ![runtestcont](runtestcont.png)
@@ -208,7 +210,7 @@ sudo docker build -t irssi-builder -f ./irssi-builder.Dockerfile .
 Obraz test budujemy poniższym poleceniem 
 
 ```
-sudo docker build -t irssi-builder -f ./irssi-builder.Dockerfile .
+sudo docker build -t irssi-test -f ./irssi-test.Dockerfile .
 ```
 
 ![buildtestirssi](buildtestirssi.png)
@@ -222,4 +224,7 @@ i sprawdzamy poleceniem `sudo docker container ps -a` efekt uruchomienia kontene
 ![ps-a](ps-a.png)
 
 ## Lab 4
+Celem kolejnych laboratoriów było zapoznanie się z dodatkowymi terminami w konteneryzacji m.in. jak **woluminy**, **sieci**. Dodatkowo poznano również narzędzie **Jenkins**.
+
+### Zachowywanie stanu
 
