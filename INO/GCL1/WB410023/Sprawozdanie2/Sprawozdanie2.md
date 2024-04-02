@@ -243,7 +243,7 @@ Wykaż, że kontener wdraża się i pracuje poprawnie. Pamiętaj o różnicy mi�
 
 Zbudowany obraz =/= działający kontener. Kontener uruchmiamy poleceniem:
 ```bash
-docker run.
+docker run
 ```
 W tych kontenerach po zbudowaniu nic nie pracuje. Mimo braku aktywnego procesu po uruchomieniu, kontenery zawierają gotowe repozytorium oraz przetestowany, działający kod.
 Testy kodu są wykonywane w trakcie budowania kontenera, a nie w momencie jego uruchomienia. To oznacza, że są przeprowadzane na kodzie przed jego umieszczeniem w kontenerze (tylko raz), 
