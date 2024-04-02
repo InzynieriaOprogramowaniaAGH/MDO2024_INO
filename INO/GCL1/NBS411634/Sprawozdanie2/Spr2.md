@@ -23,15 +23,19 @@ Repozytorium dysponuje otwartą licencją (Apache 2.0 - zatem możliwe jest swob
 
 * jest umieszczone wraz ze swoimi narzędziami Makefile tak, aby możliwe był uruchomienie w repozytorium czegoś na kształt make build oraz make test. Środowisko Makefile jest dowolne. Może to być automake, meson, npm, maven, nuget, dotnet, msbuild...
 
-w wybranym repozytorium do budowania aplikacji używa się komendy:
+W wybranym repozytorium do budowania aplikacji używa się komendy:
 
 ```npm install```
 
-...
+ Jest ona używana w środowisku *Node.js* do instalacji zależności zdefiniowanych w pliku *package.json* projektu. 
 
 * zawiera zdefiniowane i obecne w repozytorium testy, które można uruchomić np. jako jeden z "targetów" Makefile'a. Testy muszą jednoznacznie formułować swój raport końcowy (gdy są obecne, zazwyczaj taka jest praktyka)
 
-...
+Testy uruchamiane są poleceniem:
+
+```npm test```
+
+W wybranym repozytorium umieszczone zostały w osobnym folderze *test*
 
 2. Sklonuj niniejsze repozytorium, przeprowadź build programu (doinstaluj wymagane zależności)
 
@@ -115,5 +119,52 @@ Wszystkie testy przeszły pomyślnie.
 
 2. Stwórz dwa pliki `Dockerfile` automatyzujące kroki powyżej, z uwzględnieniem następujących kwestii:
 	* Kontener pierwszy ma przeprowadzać wszystkie kroki aż do *builda*
+
+Utworzyłam plik DOckerfilea, który wykonuje wszystkie powyższe kroki:
+
+![](./ss_lab3/lab3_12.png)
+
+Obraz buduej komendą:
+
+```docker build -f ./builder.Dockerfile -t builder .```
+
+![](./ss_lab3/lab3_13.png)
+
+Wszystko przebiegło prawidłowo (otrzymałam wartość 0).
+Zwrócenie wartości 0 oznacza, że proces budowania zakończył się bez problemów, wszystkie instrukcje w Dockerfilu zostały wykonane poprawnie, a obraz został pomyślnie zbudowany.
+
+![](./ss_lab3/lab3_16.png)
+
 	* Kontener drugi ma bazować na pierwszym i wykonywać testy
+
+Drugi plik Dockerfilea bazuje na pierwszym - wykorzystując wcześniej zbudowane już oprogramowanie:
+
+![](./ss_lab3/lab3_14.png)
+
+Budujemy analogicznie jak wyżej komendą:
+
+```docker build -f ./tester.Dockerfile -t tester .```
+
+![](./ss_lab3/lab3_15.png)
+
+Wszystko przebiegło prawidłowo (otrzymałam wartość 0).
+
+![](./ss_lab3/lab3_17.png)
+
 3. Wykaż, że kontener wdraża się i pracuje poprawnie. Pamiętaj o różnicy między obrazem a kontenerem. Co pracuje w takim kontenerze?
+
+Uruchomiłam kontenery na podstawie wcześniej utworzonych obrazów poleceniem:
+
+ ```docker run```
+
+![](./ss_lab3/lab3_18.png)
+
+a ich status i poprawność działania sprawdziłam poleceniem: 
+
+```docker container list --all```
+
+![](./ss_lab3/lab3_19.png)
+
+
+
+## Wykonane kroki - laboratorium nr 4
