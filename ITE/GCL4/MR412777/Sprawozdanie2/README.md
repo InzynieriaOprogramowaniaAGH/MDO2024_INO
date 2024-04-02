@@ -13,12 +13,12 @@ Instrukcje realizowane były przy użyciu:
 
 Laboratorium rozpoczęłam od poszukiwań oprogramowania, które umożliwi zrealizowanie zadań w instrukcji. Wybrałam repozytorium https://github.com/jitpack/maven-simple. 
 Dysponuje ono licencją MIT. Jest to otwarta licencja oprogramowania zapewniająca użytkownikom swobodę w używaniu, modyfikowaniu oraz rozpowszechnianiu oprogramowania, zarówno w formie oryginalnej, jak i zmodyfikowanej. 
-Oprogramowanie zostało wykonane w środowisku Maven. W budowie aplikacji tego typu projektów wyróżnia się osiem głównych cykli: clean, validate, compile, test, package, integration-test, verify, install oraz deploy. Na potrzeby laboratorium korzystałam z dwóch: compile (kompilującego kod źródłowy) oraz test (przeprowadzającego testy jednostkowe).
+Oprogramowanie zostało wykonane w środowisku Maven. W budowie aplikacji tego typu wyróżnia się operacje takie jak np. compile (kompilującą kod źródłowy) oraz test (przeprowadzającą testy jednostkowe).
 Oprogramowanie zawiera zdefiniowane i obecne w repozytorium testy (`src/test`), które można uruchomić i uzyskać jednoznaczny raport końcowy.
 
 ![image](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/049c0af2-c03a-465d-90ad-6c015242a303)
 
-W skorzystania z projektu konieczna byla instalacja Maven. W tym celu posłużyłam się poleceniem `apt install maven`. Instalacja wykonywana była z poziomu katalogu stworzonego z myślą o innym repozytorium, z którego ostatecznie zrezygnowałam. Ścieżka nie ma to wpływu na przebieg instalacji.
+W celu skorzystania z projektu konieczna byla instalacja Maven. Posłużyłam się poleceniem `apt install maven`. (Instalacja wykonywana była z poziomu katalogu stworzonego z myślą o innym repozytorium, z którego ostatecznie zrezygnowałam. Ścieżka nie ma to wpływu na przebieg instalacji.)
 
 ![sudo apt mvn](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/24add425-9591-42d4-943e-8139148106c2)
 
@@ -26,7 +26,7 @@ Utworzyłam katalog `maven-app` i sklonowałam do niego wybrane repozytorium.
 
 ![git clone](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/90f208da-a2cb-4234-b1ea-3dcd0860f027)
 
-Skompilowałam plikację za pomocą `mvn compile`.
+Skompilowałam aplikację za pomocą `mvn compile`.
 
 ![mvn compile](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/ecfd0259-80bd-4e8c-b94d-01ec3d1e9025)
 ![mvn compile 2](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/85f95e08-d37d-4cbb-b364-108c77b3ec69)
@@ -92,7 +92,7 @@ Zainstalowałam w kontenerze niezbędne pakiety z wyjątkiem gita.
 ![docker apt-get install maven](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/192f70ea-8b61-4ad9-9115-7b92432425c7)
 ![docker apt-get install maven 2](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/6574398d-00f4-4b2d-8142-4f228a2b65a9)
 
-Aby umieścić repozytorium w kontenerze bez instalacji w nim gita, można posłużyć się woluminem wejściowym `input`. Sprawdziłam jego początkową zawartość poleceniem `ls` i był pusty. Otworzyłam nowe okno teminalu, skopiowałam repozytorium z maszyny lokalnej (uprzednio sklonowane z githuba) do woluminu za pomocą `cp -r`. Przy ponownym sprawdzeniu zawartości `input`, znajdowało się tam już skopiowane repozytorium.
+Aby umieścić repozytorium w kontenerze bez instalacji w nim gita, można posłużyć się woluminem wejściowym. Sprawdziłam jego początkową zawartość `input` poleceniem `ls` i był pusty. Otworzyłam nowe okno teminalu, skopiowałam repozytorium z maszyny lokalnej (uprzednio sklonowane z githuba) do woluminu za pomocą `cp -r`. Przy ponownym sprawdzeniu zawartości `input`, znajdowało się tam już skopiowane repozytorium.
 
 ![docker cp](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/0c67e490-13f1-48c4-9996-17a3a25c7315)
 
@@ -142,9 +142,9 @@ Zbadałam połączenie pomiędzy kontenerami. W tym celu doinstalowałam ping na
 ![ping install client](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/c3928c75-a2f9-4b69-a57f-52cb4c352de4)
 ![ping](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/1669c38d-8bb6-4680-b727-4cabf14c14c8)
 
-Z pomiarów wynika, że komunikacja między kontenerami w sieci Docker jest sprawna. Sieć Docker została poprawnie skonfigurowana, ponieważ dpowiedzi są otrzymywane z obu kontenerów. Czasy odpowiedzi są niskie, co oznacza, że połączenie jest szybkie i stabilne.
+Z pomiarów wynika, że komunikacja między kontenerami w sieci Docker jest sprawna. Sieć Docker została poprawnie skonfigurowana, ponieważ odpowiedzi są otrzymywane z obu kontenerów. Czasy odpowiedzi są krótkie, co oznacza, że połączenie jest szybkie i stabilne.
 
-Następnie przeszłam do wykonałam połączenia do kontenera spoza kontenera. Rozpoczęłam od instalacji iPerf3 na maszynie.
+Następnie przeszłam do wykonania połączenia do kontenera spoza kontenera. Rozpoczęłam od instalacji iPerf3 na maszynie.
 
 ![iperf install](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/96431223/fe856505-2328-4f94-87d9-d5412a9a2acd)
 
