@@ -213,7 +213,8 @@ Sprawdzenie natomiast stworzonych woluminów wykonuje komenda:
 ```sh
 docker volume ls
 ```
-**Zrzut Ekranu 1**
+**Zrzut Ekranu 1**  
+<img src="images/Zrzut ekranu 2024-03-25 180116.png">
 
 W poprzednich laboratoriach używałem kontenera fedory jako bazowy. Podczas uruchamiania konteneru z obrazu możemy podłączyć wolumin poprzez flagę *--mount*, natomiast trzeba określić parametry *source* (nazwa woluminu) oraz *target* (lokalizację woluminu) oddzielone przecinkiem.
 
@@ -223,6 +224,7 @@ docker run -it --rm --name volume_fedora --mount source=input_volume,target=/in 
 ```
 
 **Zrzut Ekranu 2**
+<img src="images/Zrzut ekranu 2024-03-25 182931.png">
 
 Jak widać, po uruchomieniu kontenera wolumin znajduje się w kontenerze w folderze o nazwie "*in*". 
 
@@ -234,9 +236,10 @@ Tak jak poprzednio, wymagania należy zainstalować, w moim konkretnym przypadku
 dnf install -y make gcc tcl tcl-devel tk procps which git
 ```
 
-W pierwszym kroku należało sklonować za pomocą gita w kontenerze, dlatego dodałem go do programów do instalacji.
+W pierwszym kroku należało sklonować za pomocą gita w kontenerze, dlatego dodałem go do programów do instalacji. (Sam git został zainstalowany później).
 
 **Zrzut Ekranu 3**
+<img src="images/Zrzut ekranu 2024-04-02 132610.png">
 
 Poprzednio, pobierałem kod źródłowy z hostowanego prywatnie przez redisa repozytorium, lecz możliwe jest także pobranie tego przez git: najnowsza stabilna wersja (którą poprzednio także pobrałem) jest **redis 7.2**. Jest możliwe sklonowanie tylko tego brancha z oficjalnego repozytorium z githuba komendą:  
 
@@ -247,6 +250,7 @@ git clone -b 7.2 https://github.com/redis/redis.git
 Następnym krokiem w laboratorium jest sklonowanie programu na wolumin wejściowy w kontenerze, czyli przejście do folderu *in* oraz uruchomienie powyższej komendy:  
 
 **Zrzut Ekranu 4**
+<img src="images/Zrzut ekranu 2024-04-02 135401.png">
 
 Kolejno, należało uruchomić budowanie programu komendą `make`, ale wcześniej trzeba było uruchomić jeszcze raz kontener, ale z podłączonym drugim - wyjściowym woluminem komendą:  
 ```sh
@@ -255,15 +259,18 @@ docker run -it --rm --name volume_fedora --mount source=input_volume,target=/in 
 
 Uruchomienie buildu w kontenerze na woluminie:  
 **Zrzut Ekranu 5**  
+<img src="images/Zrzut ekranu 2024-04-02 135726.png">
 
 Zakończenie budowania na woluminie:  
 **Zrzut Ekranu 6**  
+<img src="images/Zrzut ekranu 2024-04-02 140039.png">
 
 W poniższy sposób można skopiować repozytorium do wnętrzna kontenera dzięki komendzie:  
 ```sh
 cp -r redis/ ../
 ```  
 **Zrzut Ekranu 7**  
+<img src="images/Zrzut ekranu 2024-04-02 141900.png">
 
 Niestety, projekt ten jest skomplikowany i nie jest jasne, gdzie wszystkie zbudowane pliki się znajdują, ale pliki wykonawcze takie jak `redis-server` oraz `redis-cli` znajdują się w folderze `src`, dlatego zapiszę właśnie ten folder w woluminie wyjściowym aby można było mieć dostęp do plików po wyłączeniu kontenera.
 
@@ -272,10 +279,12 @@ cp -r src ../../out/
 ```
 
 **Zrzut Ekranu 8**  
+<img src="images/Zrzut ekranu 2024-04-02 142506.png">
 
 Zapisane pliki w woluminach:  
 
 **Zrzut Ekranu 9**  
+<img src="images/Zrzut ekranu 2024-04-02 142709.png">
 
 Ponowienie operacji klonowania na wolumin wejściowy ale z kontenera jest bardzo proste, różni się jedynie folderem do którego należy zapisać sklonowane repozytorium, ja zapiszę do nowego folderu `new_redis`:  
 
@@ -284,6 +293,7 @@ git clone -b 7.2 https://github.com/redis/redis.git /in/new_redis
 ```
 
 **Zrzut Ekranu 10**  
+<img src="images/Zrzut ekranu 2024-04-02 144303.png">
 
 ### Sprawdzenie wykonania powyższych kroków za pomocą pliku Dockerfile
 
@@ -337,6 +347,7 @@ Następnie, uruchamia się serwer komendą:
 iperf3 -s
 ```
 **Zrzut Ekranu 13**
+<img src="images/Zrzut ekranu 2024-04-02 164241.png">
 
 W celu sprawdzenia adresu serwera użyłem komendy:  
 
@@ -345,6 +356,7 @@ docker inspect -f'{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <id_
 ```
   
 **Zrzut Ekranu 12**  
+<img src="images/Zrzut ekranu 2024-04-02 164128.png">
 
 Z drugiego kontenera można się połączyć jako klient z serwerem poprzez komendę:
 ```sh
@@ -354,6 +366,7 @@ iperf3 -c <ip_serwera>
 Po wpisaniu komendy otrzymujemy (po lewej stronie klient, po prawej serwer), natępujący komunikat:  
 
 **Zrzut Ekranu 14**
+<img src="images/Zrzut ekranu 2024-04-02 164842.png">
 
 Iperf testuje szybkość między kontenerami, w moim przypadku prękość ta to średnio 15.7 Gb/s.  
 
@@ -378,6 +391,7 @@ docker network inspect <id_sieci>
 ```
 
 **Zrzut Ekranu 15**  
+<img src="images/Zrzut ekranu 2024-04-02 170230.png">
 
 ### Połączenie Z wirtualnej maszyny (z hosta)
 
@@ -393,6 +407,7 @@ iperf3 -c 172.19.0.2
 ```
 
 **Zrzut Ekranu 16**  
+<img src="images/Zrzut ekranu 2024-04-02 174045.png">
 
 Już na pierwszy rzut oka widać, że prędkość jest większa. Może to być spowodowane mniejszą ilością warstw przez które informacja musi przebiec, co sprawia mniejszą latencję.
 
@@ -425,6 +440,7 @@ iperf Done.
 Mając pobrany WSL (*Windows Subsystem for Linux*) uznałem, że będzie najprościej użyć tego narzędzia, lecz było to błędne myślenie. Mimo, że prawidłowe porty zostały eksponowane, nie byłem w stanie się połączyć z maszyną wirtualną w żaden sposób. Pobrałem więc iperf3 na Windowsa i nie bez problemów udało mi się ostatecznie nawiązać połączenie. Ostatecznie, być może reset maszyny wirtualnej pomógł, ale nie jestem do końca pewien czy jest to pomocne w każdym przypadku.  
 
 **Zrzut Ekranu 23**
+<img src="images/Zrzut ekranu 2024-04-02 214754.png">
 
 ## Instalacja Jenkins
 
@@ -435,6 +451,7 @@ docker network create jenkins
 ```
 
 **Zrzut Ekranu 17**  
+<img src="images/Zrzut ekranu 2024-04-02 210832.png">
 
 Następnie należy pobrać obraz dockera poprzez uruchomienie konteneru z opcjami zawartymi w [instrukcji](https://www.jenkins.io/doc/book/installing/docker/):  
 
@@ -499,6 +516,7 @@ docker run \
 
 Poniżej na zrzucie ekranu widać że kontener z Jenkinsem działa poprawnie:  
 **Zrzut Ekranu 18**  
+<img src="images/Zrzut ekranu 2024-04-02 212620.png">
 
 Aby uruchomić ekran logowania do Jenkinsa należy dodać przekierowanie portów w sieci NAT z której korzysta VirtualBox. Na początku konieczny jest adres IP:
 
@@ -509,14 +527,17 @@ ip addr
 Ukazuje się wiele pozycji, ale istotna jest druga: publiczny adres. Dla mnie wynosi on `10.0.2.15`.
 
 **Zrzut Ekranu 19**  
+<img src="images/Zrzut ekranu 2024-04-02 212939.png">
 
 W kliencie VirtualBoxa należy wejść w Ustawienia->Sieć->Zaawansowane->Przekierowania Portów->
 
 **Zrzut Ekranu 20**  
+<img src="images/Zrzut ekranu 2024-04-02 213143.png">
 
 Jenkins domyślnie korzysta z portu 8080, zatem taki ustawiłem. Aby otworzyć panel logowania należy w przeglądarce wpisać `localhost:8080` a następnie ukaże się widok jak na poniższym zrzucie ekranu:  
 
-**Zrzut Ekranu 21**
+**Zrzut Ekranu 21**  
+<img src="images/Zrzut ekranu 2024-04-02 213759.png">
 
 Na ekranie po wpisaniu w maszynie wirtualnej komendy:  
 
@@ -526,3 +547,6 @@ sudo docker exec 5846ded81d6f cat /var/jenkins_home/secrets/initialAdminPassword
 Ukazuje się następujący ekran:
 
 **Zrzut Ekranu 22**
+<img src="images/Zrzut ekranu 2024-04-02 214207.png">
+
+*Note*: Zrzuty ekranu są numerowane według kolejności w folderze
