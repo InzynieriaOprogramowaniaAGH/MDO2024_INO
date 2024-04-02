@@ -108,7 +108,6 @@ gdzie uruchamiam proces budowania:
 ![](./ss_lab3/lab3_5.png)
 
 ![](./ss_lab3/lab3_6(2).png)
-
 * uruchom testy
 
 Używam ```npm test``` aby uruchomić testy
@@ -118,7 +117,7 @@ Używam ```npm test``` aby uruchomić testy
 Wszystkie testy przeszły pomyślnie.
 
 2. Stwórz dwa pliki `Dockerfile` automatyzujące kroki powyżej, z uwzględnieniem następujących kwestii:
-	* Kontener pierwszy ma przeprowadzać wszystkie kroki aż do *builda*
+* Kontener pierwszy ma przeprowadzać wszystkie kroki aż do *builda*
 
 Utworzyłam plik DOckerfilea, który wykonuje wszystkie powyższe kroki:
 
@@ -135,7 +134,7 @@ Zwrócenie wartości 0 oznacza, że proces budowania zakończył się bez proble
 
 ![](./ss_lab3/lab3_16.png)
 
-	* Kontener drugi ma bazować na pierwszym i wykonywać testy
+* Kontener drugi ma bazować na pierwszym i wykonywać testy
 
 Drugi plik Dockerfilea bazuje na pierwszym - wykorzystując wcześniej zbudowane już oprogramowanie:
 
