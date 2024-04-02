@@ -241,6 +241,14 @@ Testy jednostkowe osiągnęły identyczne wyniki, jak we wcześniejszych podpukt
 
 Wykaż, że kontener wdraża się i pracuje poprawnie. Pamiętaj o różnicy między obrazem a kontenerem. Co pracuje w takim kontenerze?
 
+Zbudowany obraz =/= działający kontener. Kontener uruchmiamy poleceniem:
+```bash
+docker run.
+```
+W tych kontenerach po zbudowaniu nic nie pracuje. Mimo braku aktywnego procesu po uruchomieniu, kontenery zawierają gotowe repozytorium oraz przetestowany, działający kod.
+Testy kodu są wykonywane w trakcie budowania kontenera, a nie w momencie jego uruchomienia. To oznacza, że są przeprowadzane na kodzie przed jego umieszczeniem w kontenerze (tylko raz), 
+a nie na działającej aplikacji.
+
 ## Zakres rozszerzony tematu sprawozdania
 
 ### 1. Zdefiniowano kompozycję - zamiast ręcznie wdrażać kontenery - która tworzy dwie usługi. Pierwszą na bazie dockerfile'a budującego, a drugą na bazie pierwszej.
@@ -492,7 +500,7 @@ Nie udało się połączyć, prawdopodobnie dlatego, że adres IP może być nie
 ### 6. Przedstawiono przepustowość komunikacji:
 - **Kontener-Kontener** -> 27.0 Gbits/sec
 - **Kontener-Host** -> 28.4 Gbits/sec
-- **Kontener-Host Zewnętrzny** -> udało się połączyć.
+- **Kontener-Host Zewnętrzny** -> nie udało się połączyć.
 
 ### 7. Zainstalowanie niezbędnych narzędzi:
 
@@ -512,8 +520,7 @@ cat logs.txt
 
 ### Instancja **Jenkins**:
 
-### 1. Zapoznano się z dokumentacją:
-- https://www.jenkins.io/doc/book/installing/docker/ 
+### 1. Zapoznano się z dokumentacją - https://www.jenkins.io/doc/book/installing/docker/ 
 
 ### 2. Przeprowadzono instalację skonteneryzowanej instancji Jenkinsa z pomocnikiem DIND.
 Utworzenie nowej sieci o nazwie **jenkins** w Dockerze oraz wyświetlenie sieci:
