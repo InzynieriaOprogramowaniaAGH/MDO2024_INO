@@ -36,8 +36,6 @@ Fragment pliku `package.json`
     "test": "istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec --recursive"
   },
 ```
-TODO: istanbul cover
-
 
 Poniżej znajduje się podsumowanie pokrycia testów i ich wyniki.
 
@@ -47,7 +45,7 @@ Poniżej znajduje się podsumowanie pokrycia testów i ich wyniki.
 
 #### Przygotowanie plików Dockerfile
 
-Aby za każdym razem nie powtarzać tych samych kroków ręcznie wykorzystujemy `Dockerfile`. Pierwszy obraz składa się z:
+Aby za każdym razem nie powtarzać ręcznie tych samych kroków, wykorzystujemy `Dockerfile`. Pierwszy obraz składa się z:
 - wybrania obrazu bazowego (node:18-bullseye)
 - aktualizacji pakietów
 - sklonowania repozytorium
@@ -255,7 +253,7 @@ docker inspect --format "{{ .NetworkSettings.IPAddress }}" <nazwa/id kontenera>
 
 ![alt text](img/image-22.png)
 
-Po uzyskaniu adresu IP możemy połączyć się z serwerem iperf. Zgodnie z dokumentacją połączymy się w trybie klienckim `-c`. Dostajemy poniższy wynik.
+Po uzyskaniu adresu IP możemy połączyć się z serwerem iperf. Zgodnie z dokumentacją połączymy się w trybie klienckim `-c`. Przeprowadzony zostanie test przepustowości. Dostajemy poniższy wynik.
 
 ![alt text](img/image-23.png)
 
@@ -269,6 +267,10 @@ Jak wyżej wspomniano, kontenery można skomunikować ze sobą w jednej sieci. A
 
 Poniżej stworzono kontener z serwerem iperf3 w dedykowanej sieci mostkowej. Podczas tworzenia komendą `docker run` wystarczy dodać opcję `--network <nazwa_sieci>`.
 
+```bash
+docker run -it --rm --name=iperf3-server --network iperf_bridge -p 5201:5201 networkstatic/iperf3 -s
+```
+
 ![alt text](img/image-25.png)
 
 Przeprowadzony został test przepustowości z zewnątrz (z poziomu systemu operacyjnego) oraz z wewnątrz (z poziomu kontenera w tej samej sieci mostkowej). Na początku połączono się z zewnątrz, po uzyskaniu adresu ip kontenera komendą `docker inspect`. 
@@ -281,11 +283,102 @@ Z wewnątrz kontenera podpiętego pod tą samą sieć co serwer iperf wygląda t
 
 ![alt text](img/image-27.png)
 
-Przepustowość jest znacząco mniejsza niż gdy wykorzystujemy domyślną sieć mostkową dockera. Może być to spowodowane, że w przypadku komunikacji z kontenerami powstaje narzut na komunikację wewnątrz sieci. Pakiety muszą przechodzić przez warstwę sieciową i warstwę kontroli kontrolera zanim dotrą do dedykowanego hosta.
+Ostatnim testem było sprawdzenie przepustowości gdy łączymy się spoza hosta tzn. w moim przypadku, z systemu operacyjnego, obok którego działa maszyna wirtualna z systemem OpenSuse. W tym celu należało dodać regułę do `port-forwarding` aby umożliwić komunikację z portem 5210, na którym działał serwer `iperf3`.
 
-TODO: logi komunikacji?
+> Aby dodać nowy port do listy `port forwarding rules` w VirtualBox należy przejść do Settings -> Network -> Adapter -> Advanced Options -> Port Forwarding i dodać nowy port
+
+Na system Windows 10 pobrana została binarka z programem iperf3. W terminalu łączymy się z `127.0.0.1:5201`, ponieważ maszyna wirtualna ustawiona jest w trybie sieciowym NAT czyli bramą wyjścia jest host Windows. Jednakże maszyna wirtualna posiada wirtualny interfejs sieciowy z podsiecią 10.0.2.15/24.
+
+Z zewnątrz (z poziomu Windowsa) wygląda to następująco.
+
+![alt text](img/image-51.png)
+
+Z wewnątrz kontenera z serwerem iperf3.
+
+![alt text](img/image-52.png)
+
+Przepustowość jest znacząco mniejsza niż gdy wykorzystujemy domyślną sieć mostkową dockera. Szczególnie jest to zauważalne z poziomu Windowsa. Może być to spowodowane, że w przypadku komunikacji z kontenerami powstaje narzut na komunikację wewnątrz sieci. Pakiety muszą przechodzić przez warstwę sieciową i warstwę kontroli kontrolera zanim dotrą do dedykowanego hosta. Pakiety najdłuższą drogę pokonują w przypadku łączenia się z zewnątrz maszyny wirtualnej.
+
 
 #### Instalacja Jenkins
 
-TODO: install jenkins
+Pierwszym krokiem w [dokumentacji](https://www.jenkins.io/doc/book/installing/docker/#installing-docker) było stworzenie sieci mostkowej dla jenkinsa.
 
+```bash
+docker newtork create jenkins
+```
+
+Następnie należało uruchomić obraz docker:dind poniższą komendą.
+
+```bash
+docker run \
+  --name jenkins-docker \
+  --restart=on-failure \
+  --detach \
+  --privileged \
+  --network jenkins \
+  --network-alias docker \
+  --env DOCKER_TLS_CERTDIR=/certs \
+  --volume jenkins-docker-certs:/certs/client \
+  --volume jenkins-data:/var/jenkins_home \
+  --publish 2376:2376 \
+  docker:dind \
+  --storage-driver overlay2
+```
+
+Customizacja obrazu jenkins `jenkins.Dockerfile` zgodnie z dokumentacją.
+
+```Dockerfile
+FROM jenkins/jenkins:2.440.2-jdk17
+USER root
+RUN apt-get update && apt-get install -y lsb-release
+RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc \
+  https://download.docker.com/linux/debian/gpg
+RUN echo "deb [arch=$(dpkg --print-architecture) \
+  signed-by=/usr/share/keyrings/docker-archive-keyring.asc] \
+  https://download.docker.com/linux/debian \
+  $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
+RUN apt-get update && apt-get install -y docker-ce-cli
+USER jenkins
+RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
+```
+
+Komenda do zbudowania:
+
+```bash
+docker build -t myjenkins-blueocean:2.440.2-1 -f jenkins.Dockerfile .
+```
+
+Komenda do uruchomienia instancji jenkinsa:
+
+```bash
+docker run \
+  --name jenkins-blueocean \
+  --restart=on-failure \
+  --detach \
+  --network jenkins \
+  --env DOCKER_HOST=tcp://docker:2376 \
+  --env DOCKER_CERT_PATH=/certs/client \
+  --env DOCKER_TLS_VERIFY=1 \
+  --publish 8080:8080 \
+  --publish 50000:50000 \
+  --volume jenkins-data:/var/jenkins_home \
+  --volume jenkins-docker-certs:/certs/client:ro \
+  myjenkins-blueocean:2.440.2-1
+```
+
+Działające kontenery możemy zobaczyć gdy uruchomimy komendę `docker ps`.
+
+![alt text](img/image-60.png)
+
+Na tym etapie można przekierować port 8080 na świat zewnętrzny żeby móc połączyć się z webowym GUI. Aby to zrobić można użyć dodatku Remote-SSH w VSCode lub przekierować port z poziomu maszyny wirtualnej. W GUI jenkinsa na początku jesteśmy proszeni o podanie hasła administratora znajdującego się w /var/jenkins_home/secrets/initialAdminPassword.
+
+![alt text](img/image-61.png)
+
+Po podaniu hasła można wybrać jakie dodatki zostaną zainstalowane w jenkinsie. Ja wybrałem domyślną instalację. Po zainstalowaniu komponentów możemy dalej korzystać z domyślnego hasła/loginu lub podać nowy. Po zmianie hasła jesteśmy witani panelem administratora.
+
+![alt text](img/image-62.png)
+
+W celu weryfikacji, że można uruchamiać kontenery wewnątrz naszej instancji jenkinsa, stworzony został prosty projekt uruchamiający komendę `docker run hello-world`. Obraz ten powinien zwrócić powitalny napis, że instalacja dockera przebiegła pomyślnie
+
+![alt text](img/image-63.png)
