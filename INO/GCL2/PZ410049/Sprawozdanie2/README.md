@@ -670,6 +670,6 @@ Otwieram panel logowania poprzez wpisanie w przeglądarce 'localhost:8080':
 
 ![Jenkins](./screenshots/4.26.png)
 
-Następnie loguje się do Jenkinsa wpisanie hasła: 
+Następnie loguje się do Jenkinsa poprzez wpisanie hasła zapisanego w odpowiednim pliku: 
 
 ![Jenkins-password](./screenshots/4.27.png)
