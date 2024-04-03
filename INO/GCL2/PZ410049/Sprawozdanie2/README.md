@@ -4,7 +4,7 @@
 
 ## Cel projektu
 
-Celem projektu jest automatyzacja procesu budowania i testowania oprogramowania za pomocą plików dockerfile. W tym projekcie należy odpowiednio napisać pliki dockerfile do zdefiniowania dwóch kontenerów. Pierwszy z nich służy do procesu budowania aplikacji, natomiast drugi opiera się na pierwszym i jest przeznaczony do uruchamiania testów jednostkowych. Dzięki temu podejściu procesy budowania i testowania mogą być w prosty sposób replikowane na różnych środowiskach, zapewniając spójność i niezawodność wdrażania aplikacji. 
+Celem projektu jest automatyzacja procesu budowania i testowania oprogramowania za pomocą plików dockerfile. W tym projekcie należy odpowiednio napisać pliki dockerfile do zdefiniowania dwóch kontenerów. Pierwszy z nich służy do procesu budowania aplikacji, natomiast drugi opiera się na pierwszym i jest przeznaczony do uruchamiania testów jednostkowych. Dzięki temu podejściu procesy budowania i testowania mogą być w prosty sposób replikowane na różnych środowiskach, zapewniając spójność i niezawodność wdrażania aplikacji. W dalszej częsci projektu wykonałem zadania, które pozwalają na zdobycie praktycznej wiedzy związanej z konteneryzacją aplikacji praz wykorzystaniem różnych narzędzi i funkcjnalności Dockera i Jenkinsa. 
 
 ## Streszczenie projektu
 
@@ -24,7 +24,9 @@ Dla programu Irssi do procesu budowania użyte są narzędzia Meson i Ninja, nat
 #### Dla Irsii
 
 Aby sklonować repozytorium posłużyłem się się komendą: 
+
     git clone https://github.com/irssi/irssi
+    
 ![sklonowanie repozytorium](./screenshots/1.png)
 
 Następnie za pomocą komendy 'cd irssi' przeniosłem się do odpowieniego katalogu  i wykonałem komendę służącą do budowania oprogramowania: 
