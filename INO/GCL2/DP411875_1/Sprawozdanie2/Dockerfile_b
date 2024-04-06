@@ -1,0 +1,5 @@
+FROM node
+RUN git clone https://github.com/jaspenlind/node-ts-starter-template.git
+WORKDIR /node-ts-starter-template
+RUN npm install
+RUN npm run-script build
