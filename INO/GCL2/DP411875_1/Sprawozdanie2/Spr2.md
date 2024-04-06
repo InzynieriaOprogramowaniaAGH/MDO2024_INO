@@ -11,7 +11,7 @@ Celem wykonanego ćwiczenia było zapoznanie z procesem budowania, testowania i 
 1. Początkowo znalazłam repozytorium, które było szablonem dla projektów opartych na Node.js i TypeScript. Wybrałam je dlatego, że dysponowało otwartą licencją - MIT, która pozwalała na korzystanie z oprogramowania w dowolnym celu. Można zatem kopiować i modyfikować oprogramowanie.
 
 
-SCREEEN LICENCJI 
+![](./screeny/2licencja.png)
 
 
 Do budowania natomiast używane było narzędzie npm, czyli Node Package Manager, który stanowi menadżer pakietów dla Node.js.
@@ -20,7 +20,7 @@ Oprogramowanie zawierało również osobny katalog z testami.
 
 
 
-SCREEN TEST FOLDER
+![](./screeny/2ft.png)
 
 
 
@@ -30,7 +30,7 @@ SCREEN TEST FOLDER
 git clone https://github.com/jaspenlind/node-ts-starter-template.git
 ```
 
-SCREEN CLONE
+![](./screeny/2gc.png)
 
 
 Doinstalowałam również wymagane zależności - menedżer pakietów dla środowiska uruchomieniowego JavaScript. Użyłam do tego polecenia:
@@ -39,18 +39,20 @@ Doinstalowałam również wymagane zależności - menedżer pakietów dla środo
 npm install
 ```
 
+![](./screeny/2ni.png)
 
 
-SCREENY  Z npm install
 
 
-Przy użyciu polecenia:
+Użyłam polecenia:
 
 ```
 npm run-script build
 ```
 aby dokonać budowania. Wykonany był skrypt o nazwie "build", który był zdefiniowany w pliku package.json
 
+
+![](./screeny/2build.png)
 
 3. Finalnie uruchomiłam testy jednostkowe. 
 Do ich wykonania użyłam polecenia:
@@ -60,8 +62,7 @@ npm test
 ```
 
 
-
-SCREEN
+![](./screeny/2testy.png)
 
 
 #### Przeprowadzenie buildu w kontenerze
@@ -73,19 +74,19 @@ sudo docker run -it node /bin/bash
 ```
 Sklonowałam wewnątrz repozytorium. 
 
-SCREEN
+![](./screeny/2rk.png)
 
 Weszłam do odpowiedniego katalogu i uruchomiłam build po zainstalowaniu zależności, a następnie uruchomiłam test. Używałam tych samych poleceń co poza kontenerem.
 
-SCREEN
+![](./screeny/2b.png)
 
 
 5. W katalogu 'Sprawozdanie2' utworzyłam dwa pliki Dockerfile automatyzujące kroki powyżej.
-Kontener pierwszy przeprowadzał wszystkie kroki aż do builda. W plikach Dockerfile nie umieszczałam poleceń ENTRYPOINT lub CMD, tak     aby po poprawnym przejściu testów lub buildu kontener zakończył się.
+Kontener pierwszy przeprowadzał wszystkie kroki aż do builda. W plikach Dockerfile nie umieszczałam poleceń ENTRYPOINT lub CMD, tak aby po poprawnym przejściu testów lub buildu kontener zakończył się.
 
 Utworzyłam plik 'Dockerfile_b', który zawierał używane wcześniej polecenia aż do buildu. Był on tzw. przepisem na obraz kontenera. Wyglądał następująco:
 
-SCREEN DF1
+![](./screeny/2df1.png)
 
 Dokonałam budowania przy użyciu polecenia:
 ```
@@ -96,7 +97,9 @@ Build budował plik będący przepisem na obraz kontenera.
 Opcja -t pozwalała na utworzenie nowego obrazu o nazwie: 'build_file', a opcja -f pozwalała określić ścieżkę do pliku Dockerfile, który był użyty do budowy obrazu. 
 
 
-SCREEN 
+![](./screeny/2bdf1.png)
+
+![](./screeny/2sdi.png)
    
 
 Kontener drugi bazował na pierwszym i wykonywał testy.
@@ -104,19 +107,19 @@ Kontener drugi bazował na pierwszym i wykonywał testy.
 Utworzyłam drugi plik 'Dockerfile_t', który używał poleceń:
 
 
-SCREEN DF2
+![](./screeny/2df2.png)
 
 Ponownie dokonałam budowania:
 
 
-SCREEN
+![](./screeny/2bt.png)
 
 Utworzony został nowy obraz o nazwie: 'test_file'.
 
 6. Kontener wdrażał się i pracował poprawnie. Gdy spróbowałam uruchomić kontener z powstałych obrazów nic się nie działo. Zbudowany program znajdował się w środku obrazów. Nie uruchamiane były żadne testy. Kontener wykonywał operacje jedynie na etapie budowania, a nie na etapie uruchamiana. 
  
 
-SCREEN
+![](./screeny/2koniec.png)
 
 
 ### Przebieg ćwiczenia 004:
@@ -128,6 +131,11 @@ Do utworzenia woluminów użyłam polecenia:
 ```
 sudo docker volume create
 ```
+
+
+![](./screeny/2volumecreate.png)
+
+![](./screeny/2volumels.png)
 
 Podłączyłam utworzone woluminy do kontenera bazowego z którego rozpoczynałam pracę, czyli node. 
 
@@ -142,7 +150,7 @@ Opcja -it powodowała interaktywne uruchomienie kontenera z terminalem, -rm powo
 ```
 sudo docker volume inspect vin
 ```
-SCREEN 
+![](./screeny/2insp.png)
 
 Kolejno używając:
 ```
@@ -155,7 +163,7 @@ Przeszłam do katalogu, a w nim dokonałam klonowania repozytorium, używanego w
 git clone https://github.com/jaspenlind/node-ts-starter-template.git
 ```
 
-SCREEN 
+![](./screeny/2ter.png)
 
 4. Uruchomiłam build w kontenerze. Tak jak w poprzednim ćwiczeniu zastosowałam polecenia:
    
@@ -169,7 +177,9 @@ oraz
 npm run-script build
 ```
 
-SCREEN
+![](./screeny/2npmi.png)
+
+![](./screeny/2buildd.png)
 
 5. Zapisałam powstałe pliki na woluminie wyjściowym poprzez ich skopiowanie.
 
@@ -177,13 +187,17 @@ SCREEN
    cp -r node_modules ../../out
    ```
 
-   SCREEN 
+ ![](./screeny/2cp.png) 
 
 6. Ponowiłam operację, ale klonowanie na wolumin wejściowy przeprowadziłam wewnątrz kontenera, ale w nowym folderze o nazwie: "new". Użyłam tej samej komendy do klonowania co wcześniej.
 
 ```
 git clone https://github.com/jaspenlind/node-ts-starter-template.git /in/new
 ```
+
+![](./screeny/2cln.png)
+
+![](./screeny/2in.png)
 
 
 Wykonanie powyższych instrukcji w pliku Dockerfile było możliwe. Używająć ```history``` wyświetliły się wcześniej używane polecenia. Należało użyć 'RUN --mount'do zamontowania woluminów do kontenera podczas budowowania.
@@ -220,23 +234,21 @@ Następnie uruchomiłam serwer iperf3 w następujący sposób:
 iperf3 -s
 ```
 
-
-SCREEN NOWE
+![](./screeny/2ips.png)
 
 Aby znaleźć adres IP serwera użyłam:
 ```
 hostname -i
 ```
 
-
-SCREEN IP 
+![](./screeny/2ip.png)
 
 Kolejno w osobnym terminalu uruchomiłam drugi kontener z obrazu ubuntu, jako klient, a w nim zastosowałam polecenie:
 ```
-iperf3 -c 172.17.0.2
+iperf3 -c 172.17.0.5
 ```
 
-
+![](./screeny/2ipc.png)
 
 
 
@@ -246,7 +258,7 @@ iperf3 -c 172.17.0.2
 sudo docker network create my_net
 ```
 
-SCREEN
+![](./screeny/2crn.png)
 
 
 Kontener z serwerem uruchomiłam w tle stosując parametr -d, a kontener z klientem uruchomiłam z użyciem powłoki Bash. 
@@ -263,7 +275,7 @@ sudo docker network inspect my_net
 ```
 
 
-SCREEN 
+![](./screeny/2cont.png)
 
 Uruchomiłam serwer na kontenerze stosując:
 
@@ -271,7 +283,7 @@ Uruchomiłam serwer na kontenerze stosując:
 iperf3 -s
 ```
 
-SCREEN
+![](./screeny/2ipserv.png)
 
 
 Na drugim kontenerze(z klientem) połączyłam klienta i serwera używając polecenia:
@@ -282,22 +294,23 @@ iperf3 -c serv
 gdzie serv to nazwa kontenera. Nie używałam adresu IP serwera.
 
 
-SCREEN
+![](./screeny/2bezip.png)
 
 
 10. Połączyłam się również z hosta, czyli z maszyny wirtualnej do utworzonego wcześniej serwera. 
 
 
-SCREEN
+![](./screeny/2host.png)
 
 
 Próbowałam również połączyć się spoza hosta. Pobrałam na Mac'a iperf3, jednak nie udawało mi się połaczyć.
 
 
-SCREEN 
+![](./screeny/2mac.png)
 
 
 11. Przepustowość komunikacji:
+    -połączenie przez sieć Dockera: 106 Gbits/sec
     -połączenie przez własną sieć mostkową: 96.2 Gbits/sec
     -połączenie z hosta - wirtualnej maszyny z serwerem: 120 Gbits/sec
     W przypadku łączenia się z hostem, przepustowość była największa. 
@@ -325,15 +338,14 @@ SCREEN
 
 Utworzyłam nowy plik Dockerfile, a w nim zawierały się narzędzia pozwalające na dostosowywanie obrazu.
 
-
-SCREEN
+![](./screeny/2jd.png)
 
 Dokonałam budowania, używając:
 ```
  sudo docker build -t myjenkins-blueocean:2.440.2-1 -f jenkins_Dockerfile .
 ```
 
-SCREEN
+![](./screeny/2jb.png)
 
 Uruchomiłam kontener jenkins na podstawie obrazu stosując:
 ```
@@ -358,7 +370,7 @@ http://localhost:8080
 ```
 wyświetlało się okno z ekranem logowania. 
 
-SCREEN
+![](./screeny/2jenkins.png)
 
 
     
