@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  builder:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - TOKEN=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
+
+  tester:
+    build:
+      context: .
+      dockerfile: Dockerfile2
+    depends_on:
+      - builder

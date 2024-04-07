@@ -1,0 +1,44 @@
+-----------------------------------------------------------
+Server listening on 5201
+-----------------------------------------------------------
+Accepted connection from 172.17.0.6, port 53048
+[  5] local 172.17.0.5 port 5201 connected to 172.17.0.6 port 53062
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec  85.8 MBytes   719 Mbits/sec                  
+[  5]   1.00-2.00   sec  3.33 GBytes  28.6 Gbits/sec                  
+[  5]   2.00-3.00   sec  3.41 GBytes  29.3 Gbits/sec                  
+[  5]   3.00-4.01   sec  3.36 GBytes  28.6 Gbits/sec                  
+[  5]   4.01-5.00   sec  3.64 GBytes  31.7 Gbits/sec                  
+[  5]   5.00-6.00   sec  3.30 GBytes  28.4 Gbits/sec                  
+[  5]   6.00-7.00   sec  3.65 GBytes  31.4 Gbits/sec                  
+[  5]   7.00-8.00   sec  3.33 GBytes  28.6 Gbits/sec                  
+[  5]   8.00-9.00   sec  3.58 GBytes  30.8 Gbits/sec                  
+[  5]   9.00-10.00  sec  3.35 GBytes  28.8 Gbits/sec                  
+[  5]  10.00-10.93  sec  3.28 GBytes  30.3 Gbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-10.93  sec  34.3 GBytes  27.0 Gbits/sec                  receiver
+-----------------------------------------------------------
+Server listening on 5201
+-----------------------------------------------------------
+Accepted connection from 172.17.0.1, port 34174
+[  5] local 172.17.0.5 port 5201 connected to 172.17.0.1 port 34184
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec  3.12 GBytes  26.8 Gbits/sec                  
+[  5]   1.00-2.00   sec  2.99 GBytes  25.7 Gbits/sec                  
+[  5]   2.00-3.00   sec  3.48 GBytes  29.9 Gbits/sec                  
+[  5]   3.00-4.00   sec  3.57 GBytes  30.7 Gbits/sec                  
+[  5]   4.00-5.00   sec  4.07 GBytes  34.9 Gbits/sec                  
+[  5]   5.00-6.00   sec  2.82 GBytes  24.2 Gbits/sec                  
+[  5]   6.00-7.00   sec  3.31 GBytes  28.4 Gbits/sec                  
+[  5]   7.00-8.00   sec  3.28 GBytes  28.2 Gbits/sec                  
+[  5]   8.00-9.00   sec  3.29 GBytes  28.2 Gbits/sec                  
+[  5]   9.00-10.00  sec  3.14 GBytes  27.0 Gbits/sec                  
+[  5]  10.00-10.04  sec  95.2 MBytes  17.8 Gbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-10.04  sec  33.2 GBytes  28.4 Gbits/sec                  receiver
+-----------------------------------------------------------
+Server listening on 5201
+-----------------------------------------------------------
+^Ciperf3: interrupt - the server has terminated
