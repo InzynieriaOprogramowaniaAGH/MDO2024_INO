@@ -1,0 +1,90 @@
+[?2004h]0;root@3631119430db: /root@3631119430db:/# [7mapt-get update[27m
+
+[7mapt-get install -y iperf3[27m
+
+[7miperf3 -s[27m[A[A[A[A119430db:/# apt-get update
+
+apt-get install -y iperf3
+
+iperf3 -s
+[?2004l0% [Working]            Get:1 http://archive.ubuntu.com/ubuntu jammy InRelease [270 kB]
+0% [1 InRelease 2612 B/270 kB 1%] [Waiting for headers]                                                       Get:2 http://security.ubuntu.com/ubuntu jammy-security InRelease [110 kB]
+0% [1 InRelease 6992 B/270 kB 3%] [2 InRelease 2609 B/110 kB 2%]                                                                0% [1 InRelease 225 kB/270 kB 83%]                                  0% [Waiting for headers]                        Get:3 http://archive.ubuntu.com/ubuntu jammy-updates InRelease [119 kB]
+0% [3 InRelease 57.0 kB/119 kB 48%]                                   0% [Waiting for headers]                        Get:4 http://archive.ubuntu.com/ubuntu jammy-backports InRelease [109 kB]
+0% [4 InRelease 63.4 kB/109 kB 58%]                                   0% [Working]0% [Working]0% [Working]            Get:5 http://security.ubuntu.com/ubuntu jammy-security/multiverse amd64 Packages [44.6 kB]
+0% [5 Packages 2713 B/44.6 kB 6%]                                 0% [Working]0% [5 Packages store 0 B]                         0% [Waiting for headers]                        Get:6 http://security.ubuntu.com/ubuntu jammy-security/restricted amd64 Packages [2067 kB]
+0% [6 Packages 21.1 kB/2067 kB 1%]0% [6 Packages 410 kB/2067 kB 20%]0% [6 Packages 623 kB/2067 kB 30%]                                  Get:7 http://archive.ubuntu.com/ubuntu jammy/main amd64 Packages [1792 kB]
+0% [7 Packages 2519 B/1792 kB 0%] [6 Packages 924 kB/2067 kB 45%]                                                                 0% [7 Packages 420 kB/1792 kB 23%] [Waiting for headers]0% [6 Packages store 0 B] [7 Packages 420 kB/1792 kB 23%] [Waiting for h                                                                        Get:8 http://security.ubuntu.com/ubuntu jammy-security/main amd64 Packages [1641 kB]
+0% [6 Packages store 0 B] [7 Packages 549 kB/1792 kB 31%] [8 Packages 120% [6 Packages store 0 B] [7 Packages 707 kB/1792 kB 39%] [8 Packages 16                                                                        0% [7 Packages 916 kB/1792 kB 51%] [8 Packages 394 kB/1641 kB 24%]0% [7 Packages 1354 kB/1792 kB 76%] [8 Packages 1337 kB/1641 kB 81%]0% [7 Packages 1616 kB/1792 kB 90%] [Waiting for headers]   566 kB/s 33s0% [8 Packages store 0 B] [7 Packages 1616 kB/1792 kB 90%] [Waiting for 0% [8 Packages store 0 B] [7 Packages 1616 kB/1792 kB 90%] [Waiting for                                                                         Get:9 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 Packages [1081 kB]
+0% [8 Packages store 0 B] [7 Packages 1746 kB/1792 kB 97%] [9 Packages 20% [8 Packages store 0 B] [9 Packages 69.9 kB/1081 kB 6%]   566 kB/s 43s                                                                        Get:10 http://archive.ubuntu.com/ubuntu jammy/restricted amd64 Packages [164 kB]
+0% [8 Packages store 0 B] [10 Packages 32.3 kB/164 kB 20%] [9 Packages 20% [Waiting for headers] [9 Packages 329 kB/1081 kB 30%]    566 kB/s 42s0% [7 Packages store 0 B] [Waiting for headers] [9 Packages 329 kB/1081                                                                         Get:11 http://archive.ubuntu.com/ubuntu jammy/multiverse amd64 Packages [266 kB]
+0% [7 Packages store 0 B] [11 Packages 60.9 kB/266 kB 23%] [9 Packages 40% [7 Packages store 0 B] [Waiting for headers] [9 Packages 612 kB/1081                                                                         Get:12 http://archive.ubuntu.com/ubuntu jammy/universe amd64 Packages [17.5 MB]
+0% [7 Packages store 0 B] [12 Packages 64.8 kB/17.5 MB 0%] [9 Packages 6                                                                        0% [12 Packages 130 kB/17.5 MB 1%] [9 Packages 806 kB/1081 kB 75%]0% [10 Packages store 0 B] [12 Packages 194 kB/17.5 MB 1%] [9 Packages 8                                                                        0% [12 Packages 222 kB/17.5 MB 1%] [9 Packages 831 kB/1081 kB 77%]0% [11 Packages store 0 B] [12 Packages 260 kB/17.5 MB 1%] [9 Packages 8                                                                        0% [12 Packages 286 kB/17.5 MB 2%] [9 Packages 959 kB/1081 kB 89%]0% [12 Packages 439 kB/17.5 MB 3%]                          566 kB/s 39s0% [9 Packages store 0 B] [12 Packages 439 kB/17.5 MB 3%]   566 kB/s 39s0% [9 Packages store 0 B] [12 Packages 699 kB/17.5 MB 4%]   566 kB/s 39s0% [12 Packages 766 kB/17.5 MB 4%]                          566 kB/s 39s0% [12 Packages 1206 kB/17.5 MB 7%]                         566 kB/s 38s40% [12 Packages 1505 kB/17.5 MB 9%]                        566 kB/s 38s41% [12 Packages 2051 kB/17.5 MB 12%]                      1008 kB/s 20s43% [12 Packages 2533 kB/17.5 MB 15%]                      1008 kB/s 20s44% [12 Packages 3064 kB/17.5 MB 18%]                      1008 kB/s 19s45% [12 Packages 3531 kB/17.5 MB 20%]                      1008 kB/s 19s47% [12 Packages 4040 kB/17.5 MB 23%]                      1008 kB/s 18s48% [12 Packages 4528 kB/17.5 MB 26%]                      1008 kB/s 18s49% [12 Packages 5053 kB/17.5 MB 29%]                      1008 kB/s 17s50% [12 Packages 5503 kB/17.5 MB 31%]                      1008 kB/s 17s52% [12 Packages 6029 kB/17.5 MB 35%]                      1008 kB/s 16s53% [12 Packages 6523 kB/17.5 MB 37%]                      1008 kB/s 16s54% [12 Packages 6842 kB/17.5 MB 39%]                      1008 kB/s 16s55% [12 Packages 7268 kB/17.5 MB 42%]                      1008 kB/s 15s56% [12 Packages 7821 kB/17.5 MB 45%]                       958 kB/s 15s58% [12 Packages 8308 kB/17.5 MB 48%]                       958 kB/s 15s59% [12 Packages 8863 kB/17.5 MB 51%]                       958 kB/s 14s60% [12 Packages 9358 kB/17.5 MB 54%]                       958 kB/s 14s62% [12 Packages 9873 kB/17.5 MB 57%]                       958 kB/s 13s63% [12 Packages 10.4 MB/17.5 MB 59%]                       958 kB/s 13s65% [12 Packages 10.9 MB/17.5 MB 63%]                       958 kB/s 12s66% [12 Packages 11.4 MB/17.5 MB 65%]                       958 kB/s 12s67% [12 Packages 12.0 MB/17.5 MB 68%]                       958 kB/s 11s69% [12 Packages 12.4 MB/17.5 MB 71%]                       958 kB/s 11s70% [12 Packages 13.0 MB/17.5 MB 74%]                       958 kB/s 10s71% [12 Packages 13.5 MB/17.5 MB 77%]                        958 kB/s 9s73% [12 Packages 14.0 MB/17.5 MB 80%]                       1016 kB/s 8s74% [12 Packages 14.5 MB/17.5 MB 83%]                       1016 kB/s 8s75% [12 Packages 15.0 MB/17.5 MB 86%]                       1016 kB/s 7s77% [12 Packages 15.5 MB/17.5 MB 89%]                       1016 kB/s 7s78% [12 Packages 16.1 MB/17.5 MB 92%]                       1016 kB/s 6s79% [12 Packages 16.6 MB/17.5 MB 95%]                       1016 kB/s 6s81% [12 Packages 17.1 MB/17.5 MB 98%]                       1016 kB/s 5s82% [Working]                                               1016 kB/s 5s82% [12 Packages store 0 B] [Waiting for headers]           1016 kB/s 5s                                                                        Get:13 http://archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 Packages [2107 kB]
+                                                                        82% [12 Packages store 0 B] [13 Packages 31.6 kB/2107 kB 1%]83% [12 Packages store 0 B] [13 Packages 583 kB/2107 kB 28%]85% [12 Packages store 0 B] [13 Packages 1106 kB/2107 kB 52%]85% [12 Packages store 0 B] [13 Packages 1439 kB/2107 kB 68%]87% [12 Packages store 0 B] [13 Packages 1881 kB/2107 kB 89%]87% [13 Packages 1991 kB/2107 kB 94%]                       1016 kB/s 3s88% [Working]                                               1016 kB/s 3s88% [13 Packages store 0 B] [Waiting for headers]           1016 kB/s 3s                                                                        Get:14 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [1920 kB]
+                                                                        88% [13 Packages store 0 B] [14 Packages 4959 B/1920 kB 0%]89% [14 Packages 364 kB/1920 kB 19%]                         952 kB/s 3s91% [14 Packages 913 kB/1920 kB 48%]                         952 kB/s 2s92% [14 Packages 1396 kB/1920 kB 73%]                        952 kB/s 2s93% [Working]                                                952 kB/s 1s93% [14 Packages store 0 B] [Waiting for headers]            952 kB/s 1s                                                                        Get:15 http://archive.ubuntu.com/ubuntu jammy-updates/multiverse amd64 Packages [61.2 kB]
+93% [14 Packages store 0 B] [15 Packages 4963 B/61.2 kB 8%]  952 kB/s 1s93% [14 Packages store 0 B] [Waiting for headers]            952 kB/s 1s                                                                        Get:16 http://archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages [1357 kB]
+                                                                        94% [14 Packages store 0 B] [16 Packages 130 kB/1357 kB 10%]95% [16 Packages 323 kB/1357 kB 24%]                         952 kB/s 1s                                                                        95% [15 Packages store 0 B] [16 Packages 326 kB/1357 kB 24%]95% [16 Packages 331 kB/1357 kB 24%]                         952 kB/s 1s97% [16 Packages 856 kB/1357 kB 63%]                         952 kB/s 0s98% [Waiting for headers]                                    952 kB/s 0s98% [16 Packages store 0 B] [Waiting for headers]            952 kB/s 0s                                                                        Get:17 http://archive.ubuntu.com/ubuntu jammy-backports/main amd64 Packages [80.9 kB]
+98% [16 Packages store 0 B] [17 Packages 0 B/80.9 kB 0%]     952 kB/s 0s98% [16 Packages store 0 B]                                  952 kB/s 0s                                                                        Get:18 http://archive.ubuntu.com/ubuntu jammy-backports/universe amd64 Packages [33.3 kB]
+98% [16 Packages store 0 B] [18 Packages 2363 B/33.3 kB 7%]  952 kB/s 0s98% [16 Packages store 0 B]                                  952 kB/s 0s99% [Working]                                                952 kB/s 0s99% [17 Packages store 0 B]                                  952 kB/s 0s99% [Working]                                                952 kB/s 0s99% [18 Packages store 0 B]                                  952 kB/s 0s100% [Working]                                               952 kB/s 0s                                                                        Fetched 30.7 MB in 34s (891 kB/s)
+Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 5%Reading package lists... 5%Reading package lists... 6%Reading package lists... 6%Reading package lists... 25%Reading package lists... 53%Reading package lists... 59%Reading package lists... 59%Reading package lists... 60%Reading package lists... 60%Reading package lists... 67%Reading package lists... 67%Reading package lists... 75%Reading package lists... 75%Reading package lists... 79%Reading package lists... 80%Reading package lists... 80%Reading package lists... 80%Reading package lists... 80%Reading package lists... 81%Reading package lists... 81%Reading package lists... 81%Reading package lists... 81%Reading package lists... 87%Reading package lists... 87%Reading package lists... 95%Reading package lists... 95%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done
+Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 5%Reading package lists... 5%Reading package lists... 6%Reading package lists... 6%Reading package lists... 23%Reading package lists... 56%Reading package lists... 59%Reading package lists... 59%Reading package lists... 60%Reading package lists... 60%Reading package lists... 67%Reading package lists... 67%Reading package lists... 75%Reading package lists... 75%Reading package lists... 80%Reading package lists... 80%Reading package lists... 80%Reading package lists... 80%Reading package lists... 81%Reading package lists... 81%Reading package lists... 81%Reading package lists... 81%Reading package lists... 81%Reading package lists... 87%Reading package lists... 87%Reading package lists... 95%Reading package lists... 95%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done
+Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... 99%Building dependency tree... Done
+Reading state information... 0% Reading state information... 0%Reading state information... Done
+The following additional packages will be installed:
+  libiperf0 libsctp1
+Suggested packages:
+  lksctp-tools
+The following NEW packages will be installed:
+  iperf3 libiperf0 libsctp1
+0 upgraded, 3 newly installed, 0 to remove and 12 not upgraded.
+Need to get 106 kB of archives.
+After this operation, 346 kB of additional disk space will be used.
+0% [Working]            Get:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 libsctp1 amd64 1.0.19+dfsg-1build1 [9370 B]
+7% [1 libsctp1 9370 B/9370 B 100%]                                  14% [Working]             Get:2 http://archive.ubuntu.com/ubuntu jammy-updates/universe amd64 libiperf0 amd64 3.9-1+deb11u1build0.22.04.1 [81.6 kB]
+14% [2 libiperf0 0 B/81.6 kB 0%]                                Get:3 http://archive.ubuntu.com/ubuntu jammy-updates/universe amd64 iperf3 amd64 3.9-1+deb11u1build0.22.04.1 [14.6 kB]
+85% [3 iperf3 3683 B/14.6 kB 25%]                                 100% [Working]              Fetched 106 kB in 1s (196 kB/s)
+debconf: delaying package configuration, since apt-utils is not installed
+Selecting previously unselected package libsctp1:amd64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 4393 files and directories currently installed.)
+Preparing to unpack .../libsctp1_1.0.19+dfsg-1build1_amd64.deb ...
+Unpacking libsctp1:amd64 (1.0.19+dfsg-1build1) ...
+Selecting previously unselected package libiperf0:amd64.
+Preparing to unpack .../libiperf0_3.9-1+deb11u1build0.22.04.1_amd64.deb ...
+Unpacking libiperf0:amd64 (3.9-1+deb11u1build0.22.04.1) ...
+Selecting previously unselected package iperf3.
+Preparing to unpack .../iperf3_3.9-1+deb11u1build0.22.04.1_amd64.deb ...
+Unpacking iperf3 (3.9-1+deb11u1build0.22.04.1) ...
+Setting up libsctp1:amd64 (1.0.19+dfsg-1build1) ...
+Setting up libiperf0:amd64 (3.9-1+deb11u1build0.22.04.1) ...
+Setting up iperf3 (3.9-1+deb11u1build0.22.04.1) ...
+Processing triggers for libc-bin (2.35-0ubuntu3.6) ...
+-----------------------------------------------------------
+Server listening on 5201
+-----------------------------------------------------------
+Accepted connection from 172.19.0.1, port 38346
+[  5] local 172.19.0.2 port 5201 connected to 172.19.0.1 port 38360
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec  1.42 GBytes  12.2 Gbits/sec                  
+[  5]   1.00-2.00   sec  1.46 GBytes  12.5 Gbits/sec                  
+[  5]   2.00-3.00   sec  1.79 GBytes  15.3 Gbits/sec                  
+[  5]   3.00-4.00   sec  1.31 GBytes  11.2 Gbits/sec                  
+[  5]   4.00-5.00   sec  1.24 GBytes  10.7 Gbits/sec                  
+[  5]   5.00-6.00   sec  1.71 GBytes  14.7 Gbits/sec                  
+[  5]   6.00-7.00   sec  1.06 GBytes  9.10 Gbits/sec                  
+[  5]   7.00-8.00   sec  1.37 GBytes  11.8 Gbits/sec                  
+[  5]   8.00-9.00   sec  1.38 GBytes  11.9 Gbits/sec                  
+[  5]   9.00-10.00  sec  1.66 GBytes  14.3 Gbits/sec                  
+[  5]  10.00-10.05  sec  75.2 MBytes  12.0 Gbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-10.05  sec  14.5 GBytes  12.4 Gbits/sec                  receiver
+-----------------------------------------------------------
+Server listening on 5201
+-----------------------------------------------------------
+q
+^Ciperf3: interrupt - the server has terminated
+[?2004h]0;root@3631119430db: /root@3631119430db:/# [Kls
+[?2004l[0m[01;36mbin[0m   [01;34mdev[0m  [01;34mhome[0m  [01;36mlib32[0m  [01;36mlibx32[0m  [01;34mmedia[0m  [01;34mopt[0m   [01;34mroot[0m  [01;36msbin[0m  [01;34msys[0m  [01;34musr[0m
+[01;34mboot[0m  [01;34metc[0m  [01;36mlib[0m   [01;36mlib64[0m  [01;34mlogs[0m    [01;34mmnt[0m    [01;34mproc[0m  [01;34mrun[0m   [01;34msrv[0m   [30;42mtmp[0m  [01;34mvar[0m
+[?2004h]0;root@3631119430db: /root@3631119430db:/# cd logs
+[?2004l[?2004h]0;root@3631119430db: /logsroot@3631119430db:/logs# ls
