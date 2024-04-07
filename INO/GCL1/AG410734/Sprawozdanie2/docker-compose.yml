@@ -1,0 +1,18 @@
+version: '3.3'
+
+services:
+  builder:
+    build:
+      context: .
+      dockerfile: BLDR.Dockerfile
+
+  tester:
+    build:
+      context: .
+      dockerfile: TSTR.Dockerfile
+    depends_on:
+      - builder
+
+networks:
+  irssi_network:
+    driver: bridge
