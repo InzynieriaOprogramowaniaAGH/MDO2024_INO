@@ -348,7 +348,8 @@ dokładniejsze wyjaśnienie polecenia:
  
   [](./screeny/lab2+3/lab4NasluchiwanieHost.png)
 
-Łączenie powiodło się.
+Łączenie powiodło się. Logi z kontenera wyciągnęłam za pomocą polecenia 
+```sudo docker container logs serverS > logs/log```
 
 ## Instalacja Jenkinsa
 
