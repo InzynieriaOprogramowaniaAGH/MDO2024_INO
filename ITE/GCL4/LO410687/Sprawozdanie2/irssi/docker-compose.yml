@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  irssi-builder:
+    build:
+      context: .
+      dockerfile: irssi-builder.Dockerfile
+    volumes:
+      - .:/irssi
+    working_dir: /irssi
+    command: "echo 'Irssi builder container is ready'"
+
+  irssi-test:
+    build:
+      context: .
+      dockerfile: irssi-test.Dockerfile
+    volumes:
+      - .:/irssi
+    working_dir: /irssi
+    command: "echo 'Irssi testing container is ready'"
