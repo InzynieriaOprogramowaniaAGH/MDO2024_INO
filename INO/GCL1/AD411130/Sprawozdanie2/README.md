@@ -1,13 +1,16 @@
 # Sprawozdanie nr 2
 ---
 ## Cel ćwiczenia:
- ## txt
+ ## Celem ćwiczenia było przeprowadzenie kompleksowego procesu przygotowania repozytorium z kodem oprogramowania oraz uruchomienie budowy i testów tego oprogramowania w kontenerze Docker. Dodatkowo, zadaniem było  zaznajomienie się z wykorzystaniem woluminów oraz eksponowanie portów w kontenerach Docker. W ramach ćwiczenia również eksplorowano narzędzie Jenkins do automatyzacji procesów związanych z tworzeniem oprogramowania.
 
 ---
 
 ## Streszczenie laboratorium:
 
-### txt
+###  Repozytorium zostało przygotowane z odpowiednimi plikami umożliwiającymi budowę i testowanie oprogramowania. W trakcie budowania wykorzystano narzędzie npm, a także obraz 'node' dla Node.js w kontenerze Docker. Testy przeprowadzono zgodnie z instrukcjami zawartymi w pliku 'package.json'. Po udanym przetestowaniu oprogramowania, przechodzono do uruchomienia kontenera node oraz zaopatrzenia go w wymagania wstępne. W trakcie tego procesu napotkano pewne problemy z zależnościami, które wymagały ręcznej aktualizacji. 
+
+
+### Następnie przystąpiono do pracy z woluminami, podłączając je do kontenerów i przekazując między nimi dane. Utworzono również własną sieć mostkową dla kontenerów. Eksponowano porty dla serwera iperf, umożliwiając badanie przepustowości łącza. Ostatnim etapem było przygotowanie Jenkinsa do automatyzacji procesów związanych z tworzeniem oprogramowania, gdzie również uruchomiono serwer Jenkinsa i przeprowadzono jego konfigurację.
 
 ---
 ## Przygotowanie repozytorium z kodem oprogramowania 
@@ -167,110 +170,209 @@ Nie udało mi się natomiast poprawnie przeprowadzić testów. Z pewnego powodu 
 
 ---
 
-## 
+
+## Przygotowanie woluminów
+
+Rozpoczynamy pracę z woluminami. Wolumin to instancja, która pozwala na przechowywanie zasobów niezależnie od czasu życia kontenera. Ułatwia komunikację pomiędzy nimi, ponieważ każdy kontener który będzie miał przypisany ten sam wolumin będzie miał również te same dane.
+
+
+Żeby jasno zrozumieć przepływ pomiędzy woluminami a kontenerami tworzymy dwa woluminy - wejściowy i wyjściowy.
 
 sudo docker volume create input_vol
+
 sudo docker volume create output_vol
+
+
+A następnie sprawdzamy poprawność ich utworzenia:
 
 ![](zrzuty_ekranu/docker_volume_ls.png)
 
-##
+
+
+## Podłączenie do kontenera bazowego
+
+
+Pierwsze użycie woluminów rozpoczynamy od kontenera bazowego z wcześniejszego ćwiczenia, czyli 'node'. Wykażemy że woluminy rzeczywiście potrafią przekazywać niejako informacje i zapisywać je.
+
+
+Uruchamiam kontener z flagą --mount, która oznacza właśnie dołączanie woluminów, określając ich źródło oraz miejsce docelowe, czyli (source,target):
+
+source - nazwa woluminu
+
+target - miejsce docelowe 
+
+
+Ostateczna komenda którą uruchomiłem aby zmapować woluminy do kontenera bazowego 'node':
+
 
 ![](zrzuty_ekranu/run_container_node.png)
 
-##
+
+## Kontener tymczasowy - sklonowanie na wolumin wejściowy, uruchomienie build
+
+I teraz dochodzimy do głównego celu posługiwania się woluminami. Powstaje pytanie.
+
+Co należy zrobić żeby nie mając zainstalowanego git'a na kontenerze posiadać w jego środku repozytorium z git'a?
+
+Z pomocą przychodzi nam kontener tymczasowy. Czyli tworzymy drugi kontener w którym będzie zainstalowany git oraz ściągniemy tam repozytorium. Następnie zbudujemy oprogramowanie na woluminie wejściowym.
+
+Uruchamiamy kontener i dołączamy tak jak w poprzednim przypadku wolumin wejściowy, przez którego dwa kontenery będą się komunikować.
 
 ![](zrzuty_ekranu/run_tmp_container_node.png)
 
-##
+
+Klonujemy repozytorium do konteneraz GitHuba. Możemy to zrobić ponieważ w tym kontenerze możęmy posługiwać się Gitem.
+
 
 ![](zrzuty_ekranu/git_clone_tmp.png)
 
-##
+
+Nie widzę przeszkód żeby wykonać budowanie na 2 sposoby. Mianowicie jedna opcja to taka, żeby zbudować program jeszcze na kontenerze tymczasowym, a druga żeby zrobić to już na tym pierwszym kontenerze. Być może druga opcja ma większy sens, dlatego że budowanie na kontenerze docelowym byłoby bardziej racjonalne, chociaż spróbuję skorzystać tutaj z tego pierwszego sposobu.
+
 
 ![](zrzuty_ekranu/build_tmp.png)
 
-##
+
+## Kontener docelowy - zapis do wolumina wyjściowego i na zewnątrz
+
+
+Teraz przenosimy się na pierwszy kontener i sprawdzamy czy znajduje się tam nasze repozytorium.
+
 
 ![](zrzuty_ekranu/check_repo_other_container.png)
 
-##
+Wszystko jest w porządku. Na woluminie wejściowym jest zapisane repo. 
+
+
+Przenosimy repozytorium do środka kontenera.
+
 
 ![](zrzuty_ekranu/event_w_kontenerze.png)
 
-##
+
+A następnie kopiujemy zmiany które zaszły do wolumina wyjściowego. W tym przypadku raczej jest to folder 'node_modules', ale pozwolę sobie przesłać cały katalog 'src'. 
+
 
 ![](zrzuty_ekranu/copy_to_output.png)
 
-##
+
+Należy również wykazać, że to, co przesłaliśmy na wolumin wyjściowy znajduje się poza kontenerem. Należało dostać się do plików globalnych gdzie te woluminy się znajdują.
+
 
 ![](zrzuty_ekranu/dowod_poza_kontenerem.png)
 
-##
+Widzimy, że wewnątrz woluminu wyjściowego znajduje się nasz katalog src.
+
+
+## Klonowanie bezpośrednie do woluminu wejściowego
+
+Aby sklonować z wewnątrz kontenera repozytorium do woluminu wejściowgo bezpośrednio należało po prostu sklonować repo z zaznaczeniem katalogu. Dodałem dodatkowo podfolder, do odosobnienia nowgo repozytorium. 
 
 ![](zrzuty_ekranu/cloning_into.png)
 
-##
+## Dockerfile do wykonywania powyższych kroków 
 
-![](zrzuty_ekranu/uruchamianie_ubuntu.png)
+Należało stworzyć Dockerfile do wyżej wymienionych kroków. Automatyzacja takich procesów polega najprościej mówiąc na tym, żeby powtórzyć wszystkie kroki jeszcze raz, ale w jednym pliku i z zachowaniem poprawności lokalizacji i uruchomień. 
 
-##
+W tym celu zbudowałem Dockerfile, utworzyłem podfoldery input i output, a następnie posługując się flagą RUN --mount zmapowałem woluminy do podfolderów wcześniej utworzonych. 
+
+Przenosząc się do woluminu wejściowego sklonowałem repozytorium i zbudowałem tam program.
+
+Jest to niejako podsumowanie wcześniejszych akapitów. 
+
+![](zrzuty_ekranu/build_vol_dockerfile.png)
+
+## Eksponowanie portu
+
+Iperf to narzędzie do pomiaru wydajności łącza zazwyczaj wewnątrz sieci LAN i przepustowości TCP oraz UDP. Funkcjonuje w środowisku systemów operacyjnych Microsoft Windows oraz Linux.
+
+My będziemy badać ruch pomiędzy klientem a serwerem na naszych kontenerach. 
+
+W tym celu uruchamiam ubuntu.
+
+![](zrzuty_ekranu/uruchamiam_ubuntu.png)
+
+
+Aktualizuję apt-get a następnie instaluję iperf3
 
 ![](zrzuty_ekranu/install_iperf3.png)
 
-##
+Uruchamiam serwer insturkcją 'iperf3 -s'.
+
+Widzimy komunikat że serwer nasłuchuje na porcie 5201.
 
 ![](zrzuty_ekranu/uruchomienie_serwera_iperf.png)
 
-##
+Teraz naszym zadaniem jest połączenie się do serwera klientem z innego terminala tak, żeby uruchomić ruch pomiędzy nimi. 
+
+Aby połączyć się z serwerem konieczna jest informacja jak nazywa się serwer bądź jaki ma adres. Na ten moment przypatrzmy się jak sprawdzić adres serwera. 
+
+Aby to zrobić należy uruchomić dedykowaną komendę 'inspect' z parametrami jak poniżej. Należy również dołączyć identyfikator kontenera, aby docker wiedziałem o jaki serwer nam chodzi do któego chcemy się połączyć. 
 
 ![](zrzuty_ekranu/adres_serwera.png)
 
-##
+Teraz uruchamiamy inny kontener , tworzymy klienta do serwera o powyższym adresie. 
+
+Widzimy ruch pomiędzy serwerem a klientem, wymianę danych, prędkość transferu oraz przedziały czasowe.
 
 ![](zrzuty_ekranu/connected_server_client.png)
 
+Kolejnym naszym zadaniem było utworzenie własnej sieci mostkowej. Tworzenie sieci następuje za pomocą isntrukcji 'docker network create'. Przy okazji od razu widzimy identyfikator.
 
-##
 
 ![](zrzuty_ekranu/create_siec_mostkowa.png)
 
-##
+Teraz tworzymy kontener serwera i klienta na podstawie naszego własnego połączenia sieciowego: 
+
+
+docker run -it --rm --name server --network siec_mostkowa ubuntu bash
+
+docker run -it --rm --name client --network siec_mostkowa ubuntu bash
+
+
+Widzimy również klienta i serwer połączonych do sieci mostkowej przy użyciu polecenia 'inspect'.
 
 ![](zrzuty_ekranu/inspect_mostkowa.png)
 
-##
+Wykazuję również ruch pomiędzy instancjami.
 
 ![](zrzuty_ekranu/kolejny_ruch.png)
 
-##
+Spróbowałem również połączyć się poza kontenerem ale mam informacji na temat tego jak powinno się to zrobić poprawnie. Serwer się uruchamia ale nie ma tego później dostępnego w połączeniu sieciowym.
 
 ![](zrzuty_ekranu/proba_poza.png)
 
-##
+## Jenkins
+
+Jenkins – serwer typu open source służący do automatyzacji związanej z tworzeniem oprogramowania. W szczególności ułatwia budowanie, testowanie i wdrażanie aplikacji, czyli umożliwia rozwój oprogramowania w trybie ciągłej integracji i ciągłego dostarczania. 
+
+Tworzymy sieć Jenkins:
 
 ![](zrzuty_ekranu/sudo_docker_jenkins.png)
 
-##
+Następnie zgodnie z dokumentacją uzupełniamy uruchomienie z konkretnymi parametrami a natępnie Dockerfile również zgodnie z dokumentacją. 
 
 ![](zrzuty_ekranu/run1_jenkins.png)
 
-##
+
+Budowanie Jenkins:
 
 ![](zrzuty_ekranu/myjenkins.png)
 
-##
+
 
 ![](zrzuty_ekranu/1.png)
 
-##
+
+Udowadniam że kontener się uruchomił i jest w użyciu na podstawie statusu:
 
 ![](zrzuty_ekranu/container.png)
 
-##
+Sprawdzam adres wirtualnej maszyny co będzie mi potrzebne do utworzenia dedykowanego portu w VM dla Jenkins. 
 
 ![](zrzuty_ekranu/ipa.png)
 
-##
+
+Udało się połączyć w przeglądarce z Jenkins:
 
 ![](zrzuty_ekranu/mamyto.png)
