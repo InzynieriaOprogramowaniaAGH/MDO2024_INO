@@ -156,7 +156,13 @@ Następnie poleceniem ```apt-get update```, zaktualizowałam listę pakietów do
  ##### Obraz to szablon, z którego tworzone są kontenery. Obraz zawiera wszystkie pliki i instrukcje potrzebne do uruchomienia kontenera. Obrazy są przechowywane w repozytoriach, skąd można je pobierać i używać do tworzenia kontenerów.
 
 
+
+
+
+
 ## Projekt 4
+
+
 
 ### Cel projektu
 
@@ -271,6 +277,7 @@ Ponownie skopiowałam repozytorium do woluminu wejściowego z poziomu kontenera 
 
 ![](./screeny/lab2+3/lab4CloneBuild.png)
 
+Próba wykonania powyższych kroków przy pomocy Dockerfile nie powiodła się, ponieważ, jak się okazało, nie można zamontować woluminów wewnątrz dockerfile, możliwe jest jedynie zamontowanie katalogu.
 
 ####  Eksponowanie portu
 
