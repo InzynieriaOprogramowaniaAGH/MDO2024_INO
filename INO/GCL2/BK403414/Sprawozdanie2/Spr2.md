@@ -80,16 +80,16 @@ Następnie poleceniem ```apt-get update```, zaktualizowałam listę pakietów do
 * W następnym kroku sklonowałam repozytorium, komendą ``` git clone https://github.com/alt-romes/programmer-calculator.git```,
  następnie otrzymałam błąd w trakcie próby użycia polecenia ```make``` z powodu braku zainstalowania opcji ``` make``` i ```gcc```
 
-  [](./screeny/lab2+3/dockerInstallMake.png)
+![](./screeny/lab2+3/dockerInstallMake.png)
 
-  [](./screeny/lab2+3/dockerMakeGcc.png)
+  ![](./screeny/lab2+3/dockerMakeGcc.png)
 
 * Uruchomiłam program poleceniem ```make``` oraz uruchomiłam testy poleceniem ```bash ./run-tests.sh```, uruchomienie programu oraz testy przeszeszły pomyślnie.
 
  
-  [](./screeny/lab2+3/dockerMake.png)
+  ![](./screeny/lab2+3/dockerMake.png)
 
-  [](./screeny/lab2+3/dockerTest.png)
+  ![](./screeny/lab2+3/dockerTest.png)
 
 
 ### 2. Stworzenie dwóch plików Dockerfile automatyzujących kroki powyżej
@@ -102,7 +102,7 @@ Następnie poleceniem ```apt-get update```, zaktualizowałam listę pakietów do
   ##### WORKDIR zmienia katalog roboczy na utworzony programmer-calculator
   ##### RUN ```make``` uruchamia proces kompilacji i budowy kodu źródłowego zgodnie z Makefile w środowisku kontenera
 
-[](./screeny/lab2+3/dockerfile1.png)
+![](./screeny/lab2+3/dockerfile1.png)
 
 * Zbudowałam obraz, podane polecenie rozpoczęło analizę pliku i wykonanie zawartych w nim instrukcji.
  
@@ -112,14 +112,14 @@ Następnie poleceniem ```apt-get update```, zaktualizowałam listę pakietów do
 
 ##### Obraz został pomyślnie zbudowany
 
-[](./screeny/lab2+3/dockerfileBuild.png)
+![](./screeny/lab2+3/dockerfileBuild.png)
 
 * Stworzyłam drugi kontener, który bazuje na pierwszym kontenerze i uruchamia testy
 
 ##### FROM ```builder-dockerfile``` oznacza że obraz bazowy będzie będzie wcześniej zrobiony kontener. 
 ##### RUN ```bash ./run-tests.sh``` uruchamia powłokę bash w skrypcie i wykonuje testy
 
-[](./screeny/lab2+3/dockerfileTest.png)
+![](./screeny/lab2+3/dockerfileTest.png)
 
 * Zbudowałam obraz na wzór wcześniejszego, powtarzając komendę z zmianą nazw
 
@@ -127,27 +127,27 @@ Następnie poleceniem ```apt-get update```, zaktualizowałam listę pakietów do
 
 ##### Obraz został pomyślnie zbudowany
 
-[](./screeny/lab2+3/dockerfileTestBuild.png)
+![](./screeny/lab2+3/dockerfileTestBuild.png)
 
 ### 3. Wykazanie że kontener wdraża się i pracuje poprawnie
 
 * Uruchomienie kontenerów test-dockerfile i builder-dockerfile w trybie interaktywnym
 
-  [](./screeny/lab2+3/dockerRunTest.png)
+  ![](./screeny/lab2+3/dockerRunTest.png)
   
-  [](./screeny/lab2+3/dockerRunBuilder.png)
+  ![](./screeny/lab2+3/dockerRunBuilder.png)
 
 * Weryfikacja uruchomienia obrazów
 
 ##### W tym celu użyłam polecenia ```sudo docker images```, które wyszukuje wszystkie obrazy przechowywane lokalnie w systemie
 
-[](./screeny/lab2+3/dockerImages.png)
+![](./screeny/lab2+3/dockerImages.png)
 
 * Weryfikacja uruchomienia kontenerów
   
   ##### W tym ceu użyłam polecenia ```sudo docker ps``` który służy do wyświetlania listy uruchomionych kontenerów Docker.
 
-[](./screeny/lab2+3/dockerPs.png)
+![](./screeny/lab2+3/dockerPs.png)
 
 
 
@@ -190,11 +190,11 @@ konteneryzowanej instancji Jenkinsa.
 	Kolejno tworzę nowe woluminy o nazwie "wejściowy" i "wyjściowy" za pomocą polecenia
  ```sudo docker volume create```
 
-[](./screeny/lab2+3/lab4VolumeCreate.png)
+![](./screeny/lab2+3/lab4VolumeCreate.png)
 
 Polecenie ```sudo docker volume ls``` potwierdza utworzenie woluminów przez wyświetlenie ich
 
-[](./screeny/lab2+3/lab4VolumeLs.png)
+![](./screeny/lab2+3/lab4VolumeLs.png)
 
  Następnie podanym poleceniem uruchamiam kontener o nazwie ubuntu4. Kontener ten jest oparty na obrazie Ubuntu z którego rozpoczynałam poprzednio pracę. 
 
@@ -210,13 +210,13 @@ Dokładniejsze wytłumaczenie polecenia:
     ```-mount source wyjsciowy,target=/katalogout``` - montuje wolumin wyjsciowy do katalogu /katalogout w kontenerze.
     ```ubuntu``` - Nazwa obrazu Docker, na którym jest oparty kontener.
  
-[](./screeny/lab2+3/lab4DockerRunMount.png)
+![](./screeny/lab2+3/lab4DockerRunMount.png)
 
 * Zainstalowanie niezbędnych wymagań wstępnych oraz sklonowanie repozytorium na wolumin wejściowy
 
 	Kolejno zainstalowałam: ```apt update``` zaktualizowałam listę pakietów, ```apt-get install libncurses5-dev libncursesw5-dev``` aby zainstalować potrzebne biblioteki, ```apt-get install make``` i ```apt-get install gcc```   
 
-[](./screeny/lab2+3/lab4VolumeAptUpdate.png)
+![](./screeny/lab2+3/lab4VolumeAptUpdate.png)
 
 Aby przygotowwać wolumin wejściowy wykonałam następujący czynności. Njapierw sklonowałam repozytorium do katalogu na hoscie, po czym uruchomiłam tymczasowy kontener do którego zamontowałam katalog z repozytorium oraz wolumin wejsciowy
 
@@ -232,44 +232,44 @@ Dokładniejsze wytłumaczenie polecenia:
 
 Polecenie od --mount montuje bieżący katalog jako "/input-mount" i katalog "programmer-calculator" jako "/repo" wewnątrz kontenera.
 
-[](./screeny/lab2+3/lab4tmpkontener.png)
+![](./screeny/lab2+3/lab4tmpkontener.png)
 
 Następnie aby przekopiować repozytorium użyłam komendy cp,
 w ten sposób przekopiowałam repozytorium z katalogu na hoscie do kontenera
 
-[](./screeny/lab2+3/lab4kopiowanieRepo.png)
+![](./screeny/lab2+3/lab4kopiowanieRepo.png)
 
 *Uruchomienie builda w kontenerze i zapisanie powstałych plików na woluminie wyjściowych
 
 Za pomocą narzedzia ```make``` zbudowałam program, skopiowałam katalog z plikami wykonywalnymi do wolumina wyjsciowego
 
 
-[](./screeny/lab2+3/lab4RepoMake.png)
+![](./screeny/lab2+3/lab4RepoMake.png)
 
-[](./screeny/lab2+3/lab4CopyOutput.png)
+![](./screeny/lab2+3/lab4CopyOutput.png)
 
 
 * Ponowienie operacji klonowanie repozytorium
 
 Ponownie skopiowałam repozytorium do woluminu wejściowego z poziomu kontenera do budowania na którym zainstalowałam wpierw gita
 
-[](./screeny/lab2+3/lab4KlonowanieZKontenera.png)
+![](./screeny/lab2+3/lab4KlonowanieZKontenera.png)
 
 
 * Przedyskutowanie możliwości wykonania ww. kroków przez Dockerfile i docker build
 
 
 
-[](./screeny/lab2+3/lab4BuildDockerfile.png)
+![](./screeny/lab2+3/lab4BuildDockerfile.png)
 
 
-[](./screeny/lab2+3/lab4CloneDockerfile.png)
+![](./screeny/lab2+3/lab4CloneDockerfile.png)
 
 
-[](./screeny/lab2+3/lab4BladBuild.png)
+![](./screeny/lab2+3/lab4BladBuild.png)
 
 
-[](./screeny/lab2+3/lab4CloneBuild.png)
+![](./screeny/lab2+3/lab4CloneBuild.png)
 
 
 ####  Eksponowanie portu
@@ -282,24 +282,24 @@ Ponownie skopiowałam repozytorium do woluminu wejściowego z poziomu kontenera 
 
 	Najpierw uruchomiłam kontener jak wcześniej, zaktualizowałam aktualizacje i zaczęłam instalację iperf3 poleceniem ```apt-get install -y iperf3```
 
-[](./screeny/lab2+3/lab4InstallIperf3.png)
+![](./screeny/lab2+3/lab4InstallIperf3.png)
 
 Następnie używając flagę ```-s```  uruchamiam serwer iperf3
 
 
- [](./screeny/lab2+3/lab4IperfS.png)
+![](./screeny/lab2+3/lab4IperfS.png)
 
 * Połączenie się z serwerem z drugiego kontenera
   
 	Stworzyłam drugi kontener w którym wykonałam dokładnie takie same kroki jak w pierwszym, zaktualizowałam i pobrałam iperf3, następnie kolejno dzięki komendzie ```sudo docker ps``` poznałam ID kontenera, który użyłam w poleceniu ```docker inspect -f'{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' f50204281fae``` dzięi któremu uzyskuję adres IP,  
 
- [](./screeny/lab2+3/lab4Inspekt.png)
+ ![](./screeny/lab2+3/lab4Inspekt.png)
 
  Używając komendy ```iperf3 -c 172.17.0.2``` nawiązałam połączenie z drugim serwerem
 
-  [](./screeny/lab2+3/lab4C.png)
+  ![](./screeny/lab2+3/lab4C.png)
 
- [](./screeny/lab2+3/lab4Nasluchiwanie.png)
+ ![](./screeny/lab2+3/lab4Nasluchiwanie.png)
 
 * Zapoznanie się z dokumentacją network create załączoną w instrukcji
 
@@ -316,15 +316,15 @@ Dokładne wyjaśnienie polecenia:
 ```bridge``` jest domyślnym typem sterownika i tworzy wirtualny switch.
 
 
- [](./screeny/lab2+3/lab4Siec.png)
+ ![](./screeny/lab2+3/lab4Siec.png)
 
 Jak w poprzednim zadaniu tworzę dwa kontenery, które danym poleceniu przyłączę do nowo powstałej sieci
 
 ```--network siecSiec```
 
- [](./screeny/lab2+3/lab4SiecC.png)
+ ![](./screeny/lab2+3/lab4SiecC.png)
  
- [](./screeny/lab2+3/lab4Nasluchiwanie2.png)
+ ![](./screeny/lab2+3/lab4Nasluchiwanie2.png)
 
 Jak widać zamiast adresu IP mogłam użyć tylko nazwy aby nawiązać połączenie
 
@@ -342,11 +342,11 @@ dokładniejsze wyjaśnienie polecenia:
 ```-p 5201:5201``` Opcja ta mapuje port 5201 wewnątrz kontenera na port 5201 na hoście. 
 
 
-  [](./screeny/lab2+3/lab4inspect.png)
+  ![](./screeny/lab2+3/lab4inspect.png)
 
-  [](./screeny/lab2+3/lab4Chost.png)
+  ![](./screeny/lab2+3/lab4Chost.png)
  
-  [](./screeny/lab2+3/lab4NasluchiwanieHost.png)
+  ![](./screeny/lab2+3/lab4NasluchiwanieHost.png)
 
 Łączenie powiodło się. Logi z kontenera wyciągnęłam za pomocą polecenia 
 ```sudo docker container logs serverS > logs/log```
@@ -420,10 +420,10 @@ Aby sfinalizować proces instalacji, należało z poziomu przeglądarki przejś�
 Najpierw musiałam dodać przekierowanie portu z maszyny wirtualnej, aby móc połączyć sie z Jeniknsem z przeglądarki na Windowsie.
 
 
- [](./screeny/lab2+3/jenkins-port.png)
+ ![](./screeny/lab2+3/jenkins-port.png)
 
  W celu dostępu do konfiguracji, musiałam wpisać hasło podane w logach, które odczytałam z kontera poprzez:
  ```  sudo docker exec jenkins-blueocean cat var/jenkins_home/secrets/initialAdminPassword ```
  Po zakończeniu konfiguracji ukazała mi się strona jenkinsa.
 
- [](./screeny/lab2+3/jenkins.png)
+ ![](./screeny/lab2+3/jenkins.png)
