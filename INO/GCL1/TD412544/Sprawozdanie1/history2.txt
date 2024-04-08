@@ -1,0 +1,21 @@
+    1  docker run hello-world
+    2  sudo systemctl enable docker.service
+    3  sudo systemctl enable containerd.service
+    4  docker images
+    5  docker pull busybox fedora mysql
+    6  docker pull busybox
+    7  docker pull fedora
+    8  docker pull mysql
+    9  docker run busybox
+   10  docker ps -a
+   11  docker run -it --rm busybox
+   12  docker run -it fedora
+   13  touch Dockerfile
+   14  vim Dockerfile
+   15  docker build -t fedora_img .
+   16  docker images
+   17  docker run -i --rm fedora_img
+   18  docker ps -a
+   19  docker rm $(docker ps -qa)
+   20  docker ps -a
+   21  history > hist.txt

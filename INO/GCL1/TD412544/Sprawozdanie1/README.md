@@ -179,3 +179,133 @@ git push
 ```
 ### 11. ~~Wystaw Pull Request do gałęzi grupowej~~
 ### 12. ~~Zgłoś zadanie (Teams assignment - jeżeli dostępne)~~
+
+# Zajęcia 02
+
+---
+
+# Git, Docker
+
+## Zadania do wykonania
+
+1. Zainstaluj Docker w systemie linuksowym
+
+Dockera zainstalowałem podążająć za instrukcjami z dokumentacji - wykonałem ciag poleceń:
+```
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+```
+Sprawdzenie działania dockera:
+
+![Docker installation](part2_ss/1_docker_install_1.png)
+
+Dodanie użytkownika do grupy docker (żeby nie uniknąć konieczności stosowania sudo) - wykonanie poniższego ciągu poleceń:
+
+```
+sudo usermod -aG docker $USER - dodanie bierzacego uzytkownika do grupy
+newgrp docker - "zalogowanie się" do grupy
+
+```
+
+![Docker run](part2_ss/1_docker_install_2.png)
+
+
+2. Zarejestruj się w [Docker Hub](https://hub.docker.com/) i zapoznaj z sugerowanymi obrazami
+
+Docker hub jest platformą, na której udostępniane są obrazy, z których można korzystać. Założyłem konto żeby móc przeglądać tamtejsze repozytorium.
+
+![dockerhub](part2_ss/2_docker_hub.png)
+
+3. Pobierz obrazy `hello-world`, `busybox`, `ubuntu` lub `fedora`, `mysql`
+
+Wyjściowo nie ma zainstalowanych żadnych obrazów. Obrazy pobiera się poleceniem `docker pull`.
+
+![docker pull](part2_ss/3_docker_pull.png)
+
+
+4. Uruchom kontener z obrazu `busybox`
+   - Pokaż efekt uruchomienia kontenera
+   - Podłącz się do kontenera **interaktywnie** i wywołaj numer wersji
+
+Busyboxa można uruchomić stosująć polecenie `docker run`. Problem jest taki, że samo uruchomienie busyboxa powoduje jego natychmiastowe zamknięcie (uruchamia sh bez trybu interaktywnego i tym samym konczy swoją pracę).
+
+![busybox 1](part2_ss/4_busybox_initial.png)
+
+Żeby zobaczyć rezultaty pracy z busyboxem uruchamiam go w trybie interaktywnym.
+
+![busybox int](part2_ss/4_busybox_interactive.png)
+
+Wywołanie dowolnego polecenia z parametrem `--help` pozwoli zweryfikować wersję busyboxa. Dodatkowo przyglądam się wersji systemu operacyjnego poleceniem `uname -a`
+
+5. Uruchom "system w kontenerze" (czyli kontener z obrazu `fedora` lub `ubuntu`)
+   - Zaprezentuj `PID1` w kontenerze i procesy dockera na hoście
+   - Zaktualizuj pakiety
+   - Wyjdź
+
+PID1 będzie pierwszym procesem uruchomionym w kontenerze - procesem wejściowym. Sprawdzam listę procesów poleceniem `ps` po wcześniejszej instalacji pakietu w kontenerze z fedorą (uruchomionym w trybie interaktywnym).
+
+![fedora ps install](part2_ss/5_1_fedora_ps_install.png)
+![fedora ps](part2_ss/5_2_ps.png)
+
+Następnie wyświetlam procesy dockera działające na hoście.
+
+![docker ps](part2_ss/5_2_2_docker_ps.png)
+
+Aktualizację pakietów można wykonać poleceniem `dnf update`
+
+![dnf update](part2_ss/5_3_dnf_update.png)
+![dnf update result](part2_ss/5_4_result.png)
+
+
+6. Stwórz własnoręcznie, zbuduj i uruchom prosty plik `Dockerfile` bazujący na wybranym systemie i sklonuj nasze repo.
+   - Kieruj się [dobrymi praktykami](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
+   - Upewnij się że obraz będzie miał `git`-a
+   - Uruchom w trybie interaktywnym i zweryfikuj że jest tam ściągnięte nasze repozytorium
+
+Stworzyłem Dockerfile na bazie fedory. Dockerfile składa się z dyrektyw, które instruują jak zbudować kontener:
+```
+FROM - wskazanie obrazu bazowego i wersji
+WORKDIR - wskazanie katalogu roboczego
+RUN - wykonanie polecenia
+CMD - pozwala okreslic punkt startowy dla kontenera
+```
+
+Utworzony Dockerfile:
+
+![dockefile](part2_ss/6_1_dockerfile.png)
+
+Zbudowanie kontenera na podstawie dockerfile'a za pomocą polecenia `docker build`:
+
+![build](part2_ss/6_2_build.png)
+
+Uruchomienie nowopowstałego kontenera:
+
+![fedora img run](part2_ss/6_3_fedora_img_run.png)
+
+
+7. Pokaż uruchomione ( != "działające" ) kontenery, wyczyść je.
+
+Kontenery można usuwać poleceniem `docker rm` podając id kontenera (lub listę tych id):
+
+![deletion](part2_ss/6_4_deletion.png)
+
+8. Wyczyść obrazy
+
+Obrazy można kasować poleceniem `docker rmi` (remove image) w taki sam sposób jak kontenery.
+
+![image deletion](part2_ss/7_image_del.png)
+
+9. Dodaj stworzone pliki `Dockefile` do folderu swojego `Sprawozdanie1` w repozytorium.
+✅
+10. Wystaw *Pull Request* do gałęzi grupowej jako zgłoszenie wykonanego zadania. ✅
