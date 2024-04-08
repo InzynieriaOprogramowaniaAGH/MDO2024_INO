@@ -1,9 +1,0 @@
-#!/bin/sh
-#
-
-a=$(grep -v '^#' $1 | grep -v '^$')
-if echo "$a" | grep -q "^JL410322"; then
-    echo "commit message zaczyna sie od JL410322" >&2
-else
-    echo "commit message nie zaczyna sie od JL410322" >&2
-fi

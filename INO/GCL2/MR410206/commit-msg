@@ -1,9 +1,0 @@
-#!/bin/sh
-
-# Sprawdzenie czy commit zaczyna się od inicjału
-if ! grep -q '^MR410206' "$1"; then
-	echo "Uwaga blad!!! Twoj commit message NIE zaczyna się od 'MR410206'. "
-	exit 1
-fi
-
-echo "Commit message PRAWIDLOWY"
