@@ -223,6 +223,62 @@ i sprawdzamy poleceniem `sudo docker container ps -a` efekt uruchomienia kontene
 
 ![ps-a](ps-a.png)
 
+### Docker Compose
+
+W celu automatyzacji procesu budowania obrazów, możemy stworzyć docker-compose w którym przygotujemy wykonanie tego zadania.
+
+Najpierw w celu wykonania tej części ćwiczenia musimy dokonać instalacji poniższych narzędzi:
+
+```
+sudo dnf -y install dnf-plugins core
+```
+
+![install](install.png)
+
+Następnie tworzymy docker-compose, przedstawione to zostanie na przykładzie repozytorium node'owego, zatem umieszczamy go w naszym uprzednio utworzonym katalogu node.
+
+```
+version: '3.8'
+
+services:
+  node-builder:
+    build:
+      context: .
+      dockerfile: node-builder.Dockerfile
+    volumes:
+      - .:/node
+    working_dir: /node
+    command: "echo 'node builder container is ready'"
+
+  node-test:
+    build:
+      context: .
+      dockerfile: node-test.Dockerfile
+    volumes:
+      - .:/node
+    working_dir: /node
+    command: "echo 'node testing container is ready'"
+
+  node-deploy:
+    build:
+      context: .
+      dockerfile: node-deploy.Dockerfile
+    volumes:
+      - .:/node
+    working_dir: /node
+    command: "echo 'node deployment container is ready'"
+```
+Owy `docker-compose` definiuje budowanie, testowanie i wdrażanie aplikacji, z każdą działającą w osobnym kontenerze, z udziałem współdzielonych woluminów i ustawionym katalogiem roboczym na `/node`.
+
+Po utworzeniu pliku uruchamiamy go poleceniem:
+
+```
+docker compose up
+```
+![composeup](composeupnode.png)
+
+Wynikiem jest zbudowanie utworzonych obrazów.
+
 ## Lab 4
 Celem kolejnych laboratoriów było zapoznanie się z dodatkowymi terminami w konteneryzacji m.in. jak **woluminy**, **sieci**. Dodatkowo poznano również narzędzie **Jenkins**.
 
@@ -332,11 +388,11 @@ Następnie sprawdzamy adres kontenera serwerowego poleceniem `docker inspect`
 
 Analogicznie uruchamiamy identyczny kontener, który pełni rolę klienta, instalujemy analogicznie iperf3.
 
-Kolejnym krokiem będzie połączenie się z kontenera client do serwera poleceniem `iperf3 -c <adres_serwera>`. Będzie również widoczny raport z pruchu w trakcie połączenia, gdzie będzie między innymi widoczna prędkość transferu.
+Kolejnym krokiem będzie połączenie się z kontenera client do serwera poleceniem `iperf3 -c <adres_serwera>`, gdzie -c oznacza clienta. Będzie również widoczny raport z pruchu w trakcie połączenia, gdzie będzie między innymi widoczna prędkość transferu.
 
 ![iperfc1](iperfc1.png)
 
-Wynik połączenia z serwera
+Wynik połączenia z serwera `iperf -s`, gdzie s oznacza server
 
 ![iperfs1](iperfs1.png)
 
