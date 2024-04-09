@@ -180,8 +180,11 @@ WORKDIR node-js-dummy-test
 RUN npm install
 ```
 > FROM node - korzystamy z obrazu node
+
 > RUN git clone ... - klonujemy repozytorium
+
 > WORKDIR node-js-dummy-test - ustawiamy katalog 'node-js-dummy-test' jako katalog roboczy
+
 > RUN npm install - budujemy nasz program
 
 > Polecenie RUN w Dockerfilu wywołuje komendy w trakcie budowania kontenera
@@ -205,6 +208,20 @@ WORKDIR /irssi
 RUN meson Build
 RUN ninja -C /irssi/Build
 ```
+
+> FROM fedora - korzystamy z obrazu fedory
+
+> RUN dnf -y ... - instalujemy wszystkie potrzebne moduły
+
+> RUN git clone ... - klonujemy repozytorium
+
+> WORKDIR /irssi - ustawiamy katalog 'irssi' jako katalog roboczy
+
+> RUN meson Build
+
+> RUN ninja -C /irssi/Build - budujemy nasz program
+
+> Polecenie RUN w Dockerfilu wywołuje komendy w trakcie budowania kontenera
 
 * Kontener drugi ma bazować na pierwszym i wykonywać testy
 
