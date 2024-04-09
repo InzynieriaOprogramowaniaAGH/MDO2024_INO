@@ -250,17 +250,13 @@ Jak widać wszystko jest wykonywane w trakcie budowania kontenerów zgodnie z oc
 > Kontener jest to działająca instancja zbudowana z obrazu.
 
 
-> W takim kontenerze nic nie pracuje 
+> W takim kontenerze nic nie pracuje, ponieważ kończy swoje działania zaraz po starcie gdyż nie ma napisanego żadnego działania.
 
 
 
+## Wykonane zadania - Lab 4
+---
 
-
-
-# LAB 4 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-## Zadania do wykonania
 ### Zachowywanie stanu
 * Zapoznaj się z dokumentacją https://docs.docker.com/storage/volumes/
 * Przygotuj woluminy wejściowy i wyjściowy, o dowolnych nazwach, i podłącz je do kontenera bazowego, z którego rozpoczynano poprzednio pracę
