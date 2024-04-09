@@ -1,0 +1,12 @@
+#!/bin/bash
+
+commit_message=$(cat "$1")
+
+pattern="^MR412777"
+
+if [[ ! $commit_message =~ $pattern ]]; then
+  echo "Błąd: Commit message  musi zaczynać się od 'twoje inicjały & nr indexu'"
+  exit 1
+fi
+
+exit 0
