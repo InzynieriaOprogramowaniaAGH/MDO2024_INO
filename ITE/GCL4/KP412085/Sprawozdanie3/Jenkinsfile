@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+    
+    environment {
+        IMAGE_TAG = "\$(date +%s)"
+    }
+
+    stages {
+        stage('Prepare') {
+            steps {
+                sh 'rm -rf MDO2024_INO'
+                sh 'git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+                dir("MDO2024_INO"){
+                    sh 'git checkout KP412085'
+                }
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie2/irssi"){
+                    sh 'docker build --no-cache -t irssi-build:\$IMAGE_TAG -f irssi-build.Dockerfile .'
+                }
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi"){
+                    sh 'docker build --no-cache --build-arg IMAGE_TAG=$IMAGE_TAG -t irssi-test:\$IMAGE_TAG -f irssi-test-date-tag.Dockerfile .'
+                }
+            }
+        }
+    }
+}
