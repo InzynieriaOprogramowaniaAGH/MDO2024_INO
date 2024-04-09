@@ -179,6 +179,6 @@ docker run \
  ```
 Po zainstalowaniu i uruchomieniu możeby się połączyć ze stroną Jenkinsa, w celu odblokowania i zalogowania się. Hasła uzyskamy uzywając komendą `sudo docker exec <ID_Kontenera> cat /var/jenkins_home/secrets/initialAdminPassword`
 ![alt text](./images2/jenking.png)
-![alt text](./images2/cenzura.png)
+![alt text](./images2/cenzura1.png)
 ![alt text](image.png)
 
