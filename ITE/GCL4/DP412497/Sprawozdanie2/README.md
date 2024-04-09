@@ -82,85 +82,103 @@ ninja test
 ### Przeprowadzenie buildu w kontenerze
 ### 1. Wykonaj kroki `build` i `test` wewnątrz wybranego kontenera bazowego. Tj. wybierz "wystarczający" kontener, np ```ubuntu``` dla aplikacji C lub ```node``` dla Node.js
 #### Dla programu `node-js-dummy-test`
-	* uruchom kontener
-	* podłącz do niego TTY celem rozpoczęcia interaktywnej pracy
-    ```
-    docker run -it node bash
-    ```
+
+* uruchom kontener
+* podłącz do niego TTY celem rozpoczęcia interaktywnej pracy
+
+```
+docker run -it node bash
+```
 > Jeśli nie posiadamy obrazu 'node' zostanie automatycznie pobrany jego :latest obraz.
 
-	* zaopatrz kontener w wymagania wstępne (jeżeli proces budowania nie robi tego sam)
+* zaopatrz kontener w wymagania wstępne (jeżeli proces budowania nie robi tego sam)
 > Podstawowy obraz node posiada w sobie zainstalowane wszystkie podstawowe moduły potrzebne do pracy na projekcie jak i samego git'a.
-	* sklonuj repozytorium
+
+* sklonuj repozytorium
 ```
 git clone https://github.com/devenes/node-js-dummy-test
 ```
 ![ss](./ss/ss08.png)
 
-	* uruchom *build*
+* uruchom *build*
+
 ```
 cd node-js-dummy-test
 npm install
 ```
+
 ![ss](./ss/ss09.png)
 
-	* uruchom testy
+* uruchom testy
+
 ```
 npm test
 ```
+
 ![ss](./ss/ss10.png)
 
 Jak widać wszystko bezproblemowo działa w kontenerze.
 
 #### Dla programu `irssi`
-	* uruchom kontener
-	* podłącz do niego TTY celem rozpoczęcia interaktywnej pracy
-    ```
-    docker run -it fedora bash
-    ```
+
+* uruchom kontener
+* podłącz do niego TTY celem rozpoczęcia interaktywnej pracy
+
+```
+docker run -it fedora bash
+```
 > Jeśli nie posiadamy obrazu 'fedora' zostanie automatycznie pobrany jego :latest obraz.
 
-	* zaopatrz kontener w wymagania wstępne (jeżeli proces budowania nie robi tego sam)
+* zaopatrz kontener w wymagania wstępne (jeżeli proces budowania nie robi tego sam)
+
 Potrzebujemy doinstalować wszystkie wymagane moduły, czyli wszystkie których potrzebowaliśmy doinstalować,
 gdy pracowaliśmy na projekcie przed kontenerami, a nawet więcej, gdyż obraz fedory nie posiada w sobie git'a
+
 ```
 dnf -y install git gcc meson glib2-devel utf8proc* ncurses* perl-Ext* ninja*
 ```
 > -y zaakceptuje automatycznie wszystkie zapytania w trakcie instalacji.
 
-	* sklonuj repozytorium
+* sklonuj repozytorium
+
 ```
 git clone https://github.com/irssi/irssi
 ```
+
 ![ss](./ss/ss11.png)
 
-	* uruchom *build*
+* uruchom *build*
+
 ```
 cd irssi
 mason Build
 ninja -C /irssi/Build
 ```
+
 ![ss](./ss/ss12.png)
 
-	* uruchom testy
+* uruchom testy
+
 ```
 cd Build
 ninja test
 ```
+
 ![ss](./ss/ss13.png)
 
 Jak widać dla drugiego projektu także wszystko zadziałało poprawnie.
 
 ### 2. Stwórz dwa pliki `Dockerfile` automatyzujące kroki powyżej, z uwzględnieniem następujących kwestii:
 #### Dla programu `node-js-dummy-test`
-	* Kontener pierwszy ma przeprowadzać wszystkie kroki aż do *builda*
-    Plik node-builder.Dockerfile : 
-    ```
+
+* Kontener pierwszy ma przeprowadzać wszystkie kroki aż do *builda*
+Plik node-builder.Dockerfile : 
+```
 FROM node
 RUN git clone https://github.com/devenes/node-js-dummy-test
 WORKDIR node-js-dummy-test
 RUN npm install
-    ```
+```
 > FROM node - korzystamy z obrazu node
 > RUN git clone ... - klonujemy repozytorium
 > WORKDIR node-js-dummy-test - ustawiamy katalog 'node-js-dummy-test' jako katalog roboczy
@@ -168,15 +186,17 @@ RUN npm install
 
 > Polecenie RUN w Dockerfilu wywołuje komendy w trakcie budowania kontenera
 
-	* Kontener drugi ma bazować na pierwszym i wykonywać testy
-    ```
+* Kontener drugi ma bazować na pierwszym i wykonywać testy
+```
 FROM node-builder - korzystamy z naszego poprzedniego kontenera
 RUN npm test - wykonujemy testy
-    ```
+```
 
 #### Dla programu `irssi`
-	* Kontener pierwszy ma przeprowadzać wszystkie kroki aż do *builda*
-    ```
+
+* Kontener pierwszy ma przeprowadzać wszystkie kroki aż do *builda*
+
+```
 FROM fedora
 RUN dnf -y update && \
     dnf -y install meson ninja* git gcc glib2-devel utf8proc* ncurses* perl-Ext*
@@ -184,13 +204,15 @@ RUN git clone https://github.com/irssi/irssi
 WORKDIR /irssi
 RUN meson Build
 RUN ninja -C /irssi/Build
-    ```
-	* Kontener drugi ma bazować na pierwszym i wykonywać testy
-    ```
+```
+
+* Kontener drugi ma bazować na pierwszym i wykonywać testy
+
+```
 FROM irssi-builder
 WORKDIR /irssi/Build
 RUN ninja test
-    ```
+```
 
 ### 3. Wykaż, że kontener wdraża się i pracuje poprawnie. Pamiętaj o różnicy między obrazem a kontenerem. Co pracuje w takim kontenerze?
 
