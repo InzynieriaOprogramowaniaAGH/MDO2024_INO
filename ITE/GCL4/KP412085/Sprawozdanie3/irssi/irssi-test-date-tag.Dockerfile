@@ -1,6 +1,6 @@
 ARG IMAGE_TAG
 
-FROM irssi-test:$IMAGE_TAG
+FROM irssi-build:$IMAGE_TAG
 
 WORKDIR /irssi/Build
 

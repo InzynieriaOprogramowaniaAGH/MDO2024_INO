@@ -212,7 +212,15 @@ Po uruchomieniu takiego pipeline'a otrzymujemy następujący wynik:
 
 
 **4. Róznica pomiędzy DIND oraz budowaniem bezpośrednio w kontenerze CI**
-<br></br>
+
+- <b>Budowanie na dedykowanym DIND (Docker-in-Docker):</b>
+    - Izolacja środowiska: W tym podejściu każde zadanie budowania uruchamiane jest w oddzielnym kontenerze Docker, który działa wewnątrz innego kontenera Docker. Oznacza to, że proces budowania odbywa się w pełni izolowanym środowisku, które ma dostęp do pełnego stosu Docker.
+    - Złożoność konfiguracji: Konfiguracja DIND może być bardziej złożona ze względu na potrzebę zapewnienia poprawnej konfiguracji warstw kontenerów. Wymaga to odpowiedniej konfiguracji uprawnień i ustawień, aby zapobiec potencjalnym problemom bezpieczeństwa i wydajności.
+    - Wykorzystanie zasobów: Uruchomienie kontenera Docker w kontenerze może być bardziej zasobożerne niż uruchomienie kontenera CI bezpośrednio na hostu, ponieważ wymaga dodatkowej warstwy wirtualizacji.
+- <b>Budowanie na kontenerze CI:</b>
+    - Prostota konfiguracji: W przypadku bezpośredniego uruchomienia kontenera CI na hoście nie ma potrzeby konfigurowania DIND ani zarządzania warstwami kontenerów. Jest to zazwyczaj prostsze podejście konfiguracyjne.
+    - Wykorzystanie zasobów: Uruchomienie kontenera CI bezpośrednio na hoście może być bardziej wydajne pod względem zużycia zasobów niż uruchomienie DIND, ponieważ eliminuje dodatkową warstwę wirtualizacji.
+    - Izolacja środowiska: Mimo że uruchomienie kontenera CI na hoście może nie zapewniać takiej samej izolacji środowiska co DIND, to wciąż może być wystarczające dla wielu przypadków użycia.
 
 
 
