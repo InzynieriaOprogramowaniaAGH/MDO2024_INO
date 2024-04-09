@@ -144,6 +144,78 @@ Ostatecznie zadanie `irssi_job` po uruchomieniu zostaje zakończone z kodem sukc
 
 ![irssi_log](./screenshots/irssi-log.png)
 
+**3. Irssi pipeline**
+<br> 
+
+Na podstawie obrazów `dockerfile` z poprzednich zajęć tworzę pipeline'a dla aplikacji irssi. Zawiera on 3 etapy: `Prepare`, `Build` oraz `Test`. Obrazy budowane i testowane będą na dedykowanym `DIND` dla bezpieczeństawa wykonania. Dokładniejsze rozróżnienie pomiędzy przeprowadzaniem tych etapów w `DIND` lub bezpośrednio w kontenerze `CI` podam poniżej. Dla tego pipeline'a plik `Jenkinsfile` zostanie umieszczony w repozytorium w osobnym katalogu. 
+
+Jenkinsfile dla `irssi_pipeline` wygląda następująco:
+```Jenkinsfile
+pipeline {
+    agent any
+    
+    environment {
+        IMAGE_TAG = new Date().getTime()
+    }
+
+    stages {
+        stage('Prepare') {
+            steps {
+                sh 'rm -rf MDO2024_INO'
+                sh 'git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+                dir("MDO2024_INO"){
+                    sh 'git checkout KP412085'
+                }
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie2/irssi"){
+                    sh 'docker build --no-cache -t irssi-build:${IMAGE_TAG} -f irssi-build.Dockerfile .'
+                }
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi"){
+                    sh 'docker build --no-cache --build-arg IMAGE_TAG=$IMAGE_TAG -t irssi-test:${IMAGE_TAG} -f irssi-test-date-tag.Dockerfile .'
+                }
+            }
+        }
+    }
+}
+```
+
+`IMAGE_TAG` to oznaczenie, które definiuje nasz konkretny obraz do budowania i testowania poprzez tag (może także wersjonować naszą wersją do deploymentu i publish). Data pobierana jest poprzez kod Groovy, i dołączana jako tag do każdego tworzonego obrazu na każdym etapie. Po sklonowaniu repozytorium i przełączeniu się na odpowiednią gałąź, przechodzimy do katalogu z projektem i budujemy obraz. Waże jest aby uwzględnić to, że przy każdym uruchomieniu piepeline'a, musimy usunąć repozytorium, które wcześniej sklonowaliśmy. Dzieje się tak dlatego, że wszystkie nasze projekty w Jenkinsie są zapisywane w kontenerze jenkinsa w lokalizacji `/var/jenkins_home`, która została zbindowana przy tworzeniu obrazu jenkinsa. Oznacza to, że wszystkie dane pipeline są zapisywane w tej lokalizacji w odpowiednim katalogu. Ponadto wykonując zagnieżone kroki, umieszczamy je w `dir(""){}`, aby zachować położenie pomiędzy kolejnymi poleceniami.
+
+Dla celu zbudowania tego prostego pipeline'u modyfikuję także plik `dockerfile` do testowania w taki sposó, aby przyjmował jako argument budowania odpowiedni tag obrazu `build` z którego ma korzystać. Modyikacja ta jest następująca:
+
+```dockerfile
+ARG IMAGE_TAG
+
+FROM irssi-test:$IMAGE_TAG
+
+WORKDIR /irssi/Build
+
+RUN ninja test
+```
+
+Uruchomienie takiego `dockerfila` wygląda następująco:
+
+```bash
+docker build --build-arg IMAGE_TAG=$IMAGE_TAG -t irssi-test:${IMAGE_TAG} -f irssi-test-date-tag.Dockerfile .
+```
+
+Po uruchomieniu takiego pipeline'a otrzymujemy następujący wynik:
+
+
+**4. Róznica pomiędzy DIND oraz budowaniem bezpośrednio w kontenerze CI**
+<br></br>
+
+
+
 
 
 
