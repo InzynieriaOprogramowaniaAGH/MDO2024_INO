@@ -363,3 +363,272 @@ W ten sposób dodaliśmy kolejny etap, który jest wdrożeniem, nasza aplikacja 
 - W jaki sposób zapewnić taki format? Dodatkowy krok (trzeci kontener)? Jakiś przykład?
 
 > Do takiego podejścia możemy wykorzystywać gotowe narzędzia budowania pakietów, które są dostępne dla danej platformy/systemu. Możemy również dodać trzeci kontener, który będzie służył jako kontener do formatowania naszego pakietu. Po zbudowaniu oraz przetestowaniu aplikacji przez poprzednie kontenery, trzeci kontener będzie używany do utworzenia pakietu z gotową aplikacją. Przykładowo, jeśli tworzymy aplikację na system Linux, mozemy dodać trzeci kontener oparty na obrazie zawierającym narzędzia do tworzenia pakietów, np. dpkg-dev. Następnie możemy użyć tego kontenera do utworzenia pakieto DEB z gotową aplikacją.
+
+# Zajęcia 04 - Dodatkowa terminologia w konteneryzacji, instancja Jenkins
+
+## Zachowywanie stanu
+
+### Przygotuj woluminy wejściowy i wyjściowy, o dowolnych nazwach, i podłącz je do kontenera bazowego, z którego rozpoczynano poprzednio pracę
+
+Do utworzenia woluminu możemy wykorzystać polecenie:
+
+```bash
+ docker volume create <nazwa_woluminu>
+```
+
+W celu wykonania zadania tworzymy dwa woluminy o nazwach 'vin' oraz 'vout', które będą odpowiednio woluminem wejściowym oraz wyjściowym. Do wyświetlenia utwrzonych woluminów możemy wykonać polecenie
+
+```bash
+  docker volume ls
+```
+
+![docker volume list](Images/Zdj23.png)
+
+### Uruchom kontener, zainstaluj niezbędne wymagania wstępne (jeżeli istnieją), ale bez gita
+
+W celu zainstalowania niezbędnych wymagań wstępnych na kontenerze, ale bez wykorzystania git'a, możemy wykorzystać dodatkowy kontener, na którym zainstalujemy git'a oraz podepniemy do niego wolumin wejściowy. Po podpięciu zainstalujemy wszystkie potrzebne wymagania, a następnie w docelowym kontenerze zbudujemy nasz projekt, który znajduje się w podpiętym woluminie wejściowym.
+
+![Uruchomienie roboczego kontenera](Images/Zdj24.png)
+Jak widać w pierwszej kolejności uruchamiamy kontener z fedorą podpinająć do niego wolumin vout jako katalog `/tmp`. W tym celu używamy polecenia:
+
+```bash
+docker run -it -v <nazwa_woluminu>:/ścieżka/w/kontenerze --name nazwa_kontenera obraz_kontenera
+```
+
+> nazwa_kontenera jest dodatkową opcją, nie jest konieczna do uruchomienia
+
+### Sklonuj repozytorium na wolumin wejściowy (opisz dokładnie, jak zostało to zrobione)
+
+![Uruchomienie roboczego kontenera](Images/Zdj25.png)
+W kolejnym kroku przechodzimy do katalogu `/tmp` i instalujemy git, aby mieć dostęp do naszego repozytorium.
+
+> Katalog node_modules jest pozostałością, której nie będzie przy wykonywaniu tego pierwszy raz.
+
+### Uruchom build w kontenerze
+
+Teraz, gdy mamy dostępny nasz kod źródłowy, możemy utworzyć kontener do builda, podepniemy do niego dwa woluminy, a konkretnie wejściowy vin, który posiada w sobie kod aplikacji oraz vout w którym znajdą się wyniki zbudowania naszej aplikajci, ponieważ budujemy aplikację napisaną w node.js jako vout określimy katalog `/node_modules` jako volumin.
+![Kontener budowniczy](Images/Zdj26.png)
+
+Jak można zauważyć w naszym kontenerze instnieje już katalog z kodem aplikacji, dlatego nasz wolumin został prawidłowo podpięty. Teraz możemy doinstal node.js ponieważ nie ma go domyślnie w kontenerze.
+![Instalacja node.js](Images/Zdj27.png)
+
+Jedyne co nam teraz zostało to pobrać wszystkie zależnośći naszej aplikację przy pomocy polecenia `npm install`.
+
+![Instalacja dependencji](Images/Zdj28.png)
+
+Nasza aplikacja została zbudowana, a wszystkie zainstalowane zależności znajdują się w katalogu node_modules.
+
+![Uruchomienie apki](Images/Zdj29.png)
+
+Dzięki temu przy uruchomieniu nowego kontenera oraz doinstalowania mu node.js (cały czas pracujemy w oparciu o czystą fedorę) oraz dołączeniu voluminów wejściowych i wyjściowych możemy uruchomić aplikację.
+
+![Apka w nowym kontenerze](Images/Zdj31.png)
+![Apka w nowym kontenerze](Images/Zdj30.png)
+
+DYSKUSJA
+
+## Eksponowanie portu
+
+### Uruchom wewnątrz kontenera serwer iperf (iperf3)
+
+Do uruchomienia serwera iperf możemy wykorzystac dedykowany obraz `networkstatic/iperf3`. Możemy utworzyć taki kontener wykorzystując polecenie:
+
+```bash
+  docker run -d --name kontener-server -p 5201:5201 networkstatic/iperf3 -s
+```
+
+Jak widać dodatkowo udostępniamy porty 5201, który jest domyślnym portem dla iperf3, dzięki czemu inne kontenery będą się mogły odwoływać do naszego kontenera.
+
+![Utworzenie kontenera serwer](Images/Zdj32.png)
+
+Następnie sprawdzimy jaki adres ip ma nasz kontener, do tego wykorzystamy polecenie:
+
+```bash
+  docker inspect <nazwa_kontenera>
+```
+
+![Adres ip](Images/Zdj33.png)
+
+Następnie poszukujemy sekcji `NetworkSettings` i w niej mamy `IPAddress`. Ten adres zapisujemy na później
+
+![Adres ip](Images/Zdj34.png)
+
+Teraz, gdy mamy pracujący serwer, możemy uruchomić kontener dla klienta, będzie to kontener z fedorą do którego doinstalujemy iperf3, po czym spróbujemy połączyć się z serwerem.
+
+![Klient połączenie](Images/Zdj35.png)
+![Klient połączenie](Images/Zdj36.png)
+
+Do połączenia się z serwerem wykorzystaliśmy polecenie:
+
+```bash
+  iperf3 -c 172.17.0.2 -p 5201
+```
+
+jak można zauważyć podaliśmy ip serwera oraz port na przez który ma się połączyć. W wyniku otrzymaliśmy udaną komunikację poniędzy dwoma kontenerami, dodatkowo możemy sprawdzić komunikację w drugą stronę czyli z serwera na klienta
+
+![Klient połączenie](Images/Zdj37.png)
+
+### Ponów ten krok, ale wykorzystaj własną dedykowaną sieć mostkową
+
+Do utworzenia sieci w Docker wykorzystujemy polecenie:
+
+```bash
+  docker network create <nazwa_sieci>
+```
+
+![Nowa sieć](Images/Zdj38.png)
+
+Sieci typu bridge są domyślnymi sieciami w Docker. Teraz, gdy mamy naszą sieć tworzomy ponownie dwa kontenery, tylko tym razem określamy im z jakiej sieci mają korzystać.
+
+Serwer:
+
+```bash
+  docker run -d --name kontener-server --network siec_testowa networkstatic/iperf3 -s
+```
+
+Do uruchamiania kontenera dodajemy opcję --network po której określamy nazwę naszej sieci. identycznie robimy w przypadku klienta.
+
+![Uruchomiony serwer](Images/Zdj39.png)
+
+Po wykonaniu inspek na kontenerze serwera widzimy, że w konfiguracji sieci pojawiła się nasza nazwa sieci:
+
+![Sieci serwera](Images/Zdj40.png)
+
+Identyczna konfiguracja pojawia się nam na kliencie. Teraz jak wykonamy test połączenia otrzymamy pomyślną komunikację.
+
+Klient -> Serwer
+![Komunikacja](Images/Zdj41.png)
+
+Serwer -> Klient
+![Komunikacja](Images/Zdj42.png)
+
+### Połącz się spoza kontenera (z hosta i spoza hosta)
+
+W tym celu na systemie fedora, na którzym uruchamiane są wszystkie kontenery wykonam identyczne czynności jak dla klienta, zainstaluję iperf3 oraz spróbuję połączyć się z serwerem.
+
+![Komunikacja](Images/Zdj43.png)
+
+Jak widać udało się połączyć przy wykorzystaniu adresu IP kontenera, jednak gdy użyłem nazwy kontnera DNS nie rozpoznał tej nazwy (Jest to ważny punkt przy dalszej części zadania).
+
+Teraz identyczny krok postaram się wykonać z poziomu Windows. Na poniższym zdjęciu zobaczymy trzy próby wykonania tego. (iperf3 musi zostać pobrane dodatkowo, ponieważ nie jest wbudowane w windows)
+
+![Komunikacja](Images/Zdj44.png)
+
+Pierwsza z nich jest wykonywana przez podanie adresu 127.0.0.1 zamiast adresu kontenera, dodatkowo kontnere jest tym samym co był uruchomiony przed chwilą. Powodem dlaczego nie możemy się połączyć, chociaż podaliśmy nawet port przez który musi się połączyć jest brak "Włączenia" tych portów w kontenerze, w tym celu musimy uruchomić nasz kontener w następujący sposób:
+
+```bash
+docker run -d --name kontener-server --network siec_testowa -p 5201:5201 networkstatic/iperf3 -s
+```
+
+Teraz serwer będzie uruchomiony tak samo jak przed chwilą, ale dodatkowo ma wyeksonowany port 5201, dzięki czemu komunikacja przebiegnie pomyślnie, co pokazuje druga próba. W trzeciej próbie testowane było połączenie się przy pomocy adresu kontenera, a nie localhost, jak widać nie powiodło się.
+
+### Odwołuj się do kontenera serwerowego za pomocą nazw, a nie adresów IP
+
+W tym celu dalej wykorzystujemy nasze kontenery klienta oraz serwera połączone do jednej sieci `siec_testowa`.
+
+Po wykonaniu polecenia:
+
+```bash
+  docker network inspect <nazwa_sieci>
+```
+
+Możemy zobaczyć dokładne informacje o naszej sieci, jedną z nich jest lista podłączonych kontenerów.
+
+![Sieć](Images/Zdj45.png)
+
+Jak widać nasze oba kontenery zostały dodane do sieci, w takim razie możemy spróbować wykonac połączenie, tylko tym razem klient zamist podawać adres IP serwera, poda nazwę konteneru.
+
+![Komunikacja](Images/Zdj46.png)
+
+Jak widać mamy wielki sukces!! To pokazuje, że nasze kontenery zostały połączone w sieć, gdzie przykłądowo system na którym uruchamiana jest fedora nie znajduje się w tej sieci, porzez co nie może wykonać komunikacji przez nazwę kontenera.
+
+## Instancja Jenkins
+
+Do zainstalowania skonteneryzowanej instancji Jenkinsa z pomocnikiem DIND w pierwszej kolejności musimy utworzyć sięc dla kontenerów:
+
+```bash
+  docker network create jenkins
+```
+
+Po tym możemy wykorzystać dostarczoną na oficjalnej stronie komendę docker run, która skonfiguruje nam instację Jenkins'a
+
+```bash
+docker run \
+  --name jenkins-docker \
+  --rm \
+  --detach \
+  --privileged \
+  --network jenkins \
+  --network-alias docker \
+  --env DOCKER_TLS_CERTDIR=/certs \
+  --volume jenkins-docker-certs:/certs/client \
+  --volume jenkins-data:/var/jenkins_home \
+  --publish 2376:2376 \
+  docker:dind \
+  --storage-driver overlay2
+```
+
+![Jenkins](Images/Zdj47.png)
+
+Następnie tworzymy Dockerfile do wprowadzenia zmian w oficialnym obvrazie Jenkins Docker
+
+```Dockerfile
+  FROM jenkins/jenkins:2.440.2-jdk17
+  USER root
+  RUN apt-get update && apt-get install -y lsb-release
+  RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc \
+      https://download.docker.com/linux/debian/gpg
+  RUN echo "deb [arch=$(dpkg --print-architecture) \
+      signed-by=/usr/share/keyrings/docker-archive-keyring.asc] \
+      https://download.docker.com/linux/debian \
+      $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
+  RUN apt-get update && apt-get install -y docker-ce-cli
+  USER jenkins
+  RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
+```
+
+Po czym uruchamiamy go przy pomocy polecenia:
+
+```bash
+    docker build -t myjenkins-blueocean:2.440.2-1 .
+```
+
+![Jenkins](Images/Zdj48.png)
+
+Ostatnim krokiem jaki pozostał to uruchomienie kontenera z instancją Jenkins, ponownie wykorzystujemy komendę dostarczoną na oficjalnej stronie:
+
+```bash
+docker run \
+  --name jenkins-blueocean \
+  --restart=on-failure \
+  --detach \
+  --network jenkins \
+  --env DOCKER_HOST=tcp://docker:2376 \
+  --env DOCKER_CERT_PATH=/certs/client \
+  --env DOCKER_TLS_VERIFY=1 \
+  --publish 8080:8080 \
+  --publish 50000:50000 \
+  --volume jenkins-data:/var/jenkins_home \
+  --volume jenkins-docker-certs:/certs/client:ro \
+  myjenkins-blueocean:2.440.2-1
+```
+
+![Jenkins](Images/Zdj49.png)
+
+Jak widać nasz kontener z instancją Jenkins jest uruchomiony, teraz możemy przejść na przeglądarce na adres http://localhost:8080, aby dokończyć cały proces.
+
+![Jenkins](Images/Zdj50.png)
+
+Następnie musimy znaleźć hasło administratorskie, na stronie widać dokładną ścieżkę gdzie się znajduje, więc przechodzimy do niej i wyświetlamy zawartość pliku.
+
+![Jenkins](Images/Zdj51.png)
+
+Po podaniu hasła dostajemy możliwość pobrania dodatkowych wtyczek, wybieram sugerowane, ponieważ nie wiem jakie wybrać :(
+
+Po wszystkim dostajemy okno dodania pierwszego administratora
+
+![Jenkins](Images/Zdj52.png)
+
+Po skończeniu konfiguracji Jenkins otrzymujemy ekran główny i możemy rozpoczynać pracę z naszymi pipelinami :)
+
+![Jenkins](Images/Zdj53.png)
