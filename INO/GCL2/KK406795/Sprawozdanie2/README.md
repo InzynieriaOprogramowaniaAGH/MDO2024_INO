@@ -1,23 +1,25 @@
-Kinga Kubajewska,
-# Sprawozdanie 2, Zajecia 003: Dockerfiles, kontener jako definicja etapu
+Kinga Kubajewska, Inżynieria Obliczeniowa
+# Sprawozdanie 2, Zajęcia 003: Dockerfiles, kontener jako definicja etapu
 Cel:  Zrozumienie sposobu tworzenia obrazów Dockera za pomocą Dockerfile oraz nauka efektywnego zarządzania sieciami w Dockerze.
 Kontenery Dockera stosuje się, aby uniknąć trudności związanych z instalacją zewnętrznych bibliotek i frameworków na różnych maszynach, izolując aplikacje i ich zależności od systemu operacyjnego, co zapewnia spójne środowisko uruchomieniowe i ułatwia wdrażanie aplikacji.
 Dockerfile to narzędzie, które pozwala łatwo definiować konfigurację kontenerów, zawierając instrukcje do budowania obrazów, w tym instalowanie zależności, kopiowanie plików aplikacji i konfigurację środowiska.
 
-Wybór oprogramowania na zajęcia:
+## Wybór oprogramowania na zajęcia:
 Postanowiłam wykorzystać oprogramowania przedstawione na zajęciach, aby spełniały wszystkie wymogi wymienione w instrukcji. 
 Które brzmią następująco:
  * dysponuje otwartą licencją
  * jest umieszczone wraz ze swoimi narzędziami Makefile tak, aby możliwe był uruchomienie w repozytorium czegoś na kształt make build oraz make test. Środowisko Makefile jest dowolne. Może to być automake, meson, npm, maven, nuget, dotnet, msbuild...
- * Zawiera zdefiniowane i obecne w repozytorium testy, które można uruchomić np. jako jeden z "targetów" Makefile'a. Testy muszą jednoznacznie formułować swój raport końcowy (gdy są obecne, zazwyczaj taka jest praktyka)
- Jest to:
- * Irssi(https://github.com/irssi/irssi) oraz node-js-dummy-test(https://github.com/devenes/node-js-dummy-test)
- Obydwa repozytoria posiadaja otwartą licencję. Makefile- są obecne wraz z możliwością uruchomienia procesu budowania i testowania poprzez komendy make build i make test.
-  Proces budowy programu Irssi wykorzystuje narzędzia Meson i Ninja, natomiast proces budowy programu node-js-dummy-test wykorzystuje narzędzie npm.
-  Testy: Zdefiniowane i dostępne w repozytorium, możliwe do uruchomienia jako cel w pliku Makefile (np. make test).
+ * Zawiera zdefiniowane i obecne w repozytorium testy, które można uruchomić np. jako jeden z "targetów" Makefile'a. Testy muszą jednoznacznie formułować swój raport końcowy.
 
- ## Irsii
- ### Bulid bez kontenera
+Jest to:
+
+Irssi(https://github.com/irssi/irssi) oraz node-js-dummy-test(https://github.com/devenes/node-js-dummy-test)
+Obydwa repozytoria posiadaja otwartą licencję. Makefile - są obecne wraz z możliwością uruchomienia procesu budowania i testowania poprzez komendy make build i make test.
+Proces budowy programu Irssi wykorzystuje narzędzia Meson i Ninja, natomiast proces budowy programu node-js-dummy-test wykorzystuje narzędzie npm.
+Testy: Zdefiniowane i dostępne w repozytorium, możliwe do uruchomienia jako cel w pliku Makefile (np. make test).
+
+## Irsii
+### Bulid bez kontenera:
  Do sklonowania użyłam komendy:
 ```bash
 git clone https://github.com/irssi/irssi
@@ -35,7 +37,11 @@ Weszłam w katalog irssi i przed budowaniem zainstalowałam mesona, cmake, pkg-c
 
 ![screen5](./screenshots/screen5.png)
 
-Następnie bez problemów wykonałam komendę, która uruchamia narzędzie budujące Ninja w katalogi Build:
+Potem wykonałam komendę budującą:
+```bash
+meson build
+```
+Następnie wykonałam komendę, która uruchamia narzędzie budujące Ninja w katalogu Build:
 ``` bash
 ninja -C home/kinga/ex3/irssi/Build
 ```
@@ -47,19 +53,20 @@ ninja test
 ```
 ![screen7](./screenshots/screen7.png)
 
- Aby uprościć wyżej opisywany proces, możemy przeprowadzić build w kontenerze(to zabezpieczenie, że budowa i testy odbywają się w izolowanym środowisku), napisać prosty plik Dockerfile, który zawiera wszystkie potrzebne polecenia do instalacji zależności i budowy programu za pomocą jednej komendy docker build.
+Aby uprościć wyżej opisywany proces, możemy przeprowadzić build w kontenerze (jest to zabezpieczenie, że budowa i testy odbywają się w izolowanym środowisku), napisać prosty plik Dockerfile, który zawiera wszystkie potrzebne polecenia do instalacji zależności i budowy programu za pomocą jednej komendy docker build.
  
- ### Przeprowadzenie buildu w kontenerze
+### Przeprowadzenie buildu w kontenerze
 1. Wykonałam kroki `build` i `test` wewnątrz wybranego kontenera bazowego. 
-Wybierałam "wystarczający" kontener -> ```fedora``` dla aplikacji C.
+Wybrałam "wystarczający" kontener -> ```fedora``` dla aplikacji C.
 * uruchomiłam kontener i podłączyłam do niego TTY celem rozpoczęcia interaktywnej pracy poprzez polecenie:
 ``` bash
     docker run --rm -it fedora
 ```    
 ![screen8](./screenshots/screen8.png)
 
-* zaopatrzyłam kontener w wymagania wstępne 
-zależności zainstalowałam poprzez:
+* zaopatrzyłam kontener w wymagania wstępne
+   
+Zależności zainstalowałam poprzez:
 ```bash
 dnf -y update ; dnf -y install git gcc meson ninja* glib2-devel utf8proc-devel
 ```
@@ -71,16 +78,18 @@ dnf -y update ; dnf -y install git gcc meson ninja* glib2-devel utf8proc-devel
   
 ![screen11](./screenshots/screen11.png)
 
-* uruchomiłam *build* jak poprzednio
+* uruchomiłam *build* jak poprzednio:
   
 ![screen12](./screenshots/screen12.png)
+
 * uruchomiłam testy:
+  
 ![screen13](./screenshots/screen13.png)
 
 2. Stworzyłam dwa pliki `Dockerfile` automatyzujące kroki powyżej, z uwzględnieniem następujących kwestii:
 * Kontener pierwszy ma przeprowadzać wszystkie kroki, aż do *builda*:
 
-    Tworzę plik o nazwie 'irssi.builder.Dockerfile' w którym:
+Tworzę plik o nazwie 'irssi.builder.Dockerfile' w którym:
 ```bash
     FROM fedora:
 ```
@@ -108,10 +117,15 @@ Budowa obrazu z pliku poprzez komendę:
 ``` bash
 docker build -t irssi-builder -f ./irssi.builder.Dockerfile .
 ```
-obraz utowrzno:
+obraz utworzono:
+
+-t -> przypisanie nazwy obrazu,
+
+-f -> nazwa Dockerfile do budowy obrazu,
+
 ![screen15](./screenshots/screen15.png)
 
-Uruchomienie kontenera za pomocą komendy run nic nie zmieni ponieważ w stworzonym pliku wykonano narazie samą budowę obrazu.
+Uruchomienie kontenera za pomocą komendy run nic nie zmieni, ponieważ w stworzonym pliku wykonano narazie samą budowę obrazu.
 
 ![screen16](./screenshots/screen16.png)
 
@@ -134,21 +148,25 @@ docker build -t irssi-tester -f ./irssi.test.DockerFile .
 ![screen18](./screenshots/screen18.png)
 
 Testy zostały wykonane podczas tworzenia obrazu Docker z pliku Dockerfile. Gdy kontener zostanie uruchomiony, nie ma potrzeby ponownego uruchamiania testów, ponieważ ich wyniki zostały już uwzględnione w obrazie.
+Takie rozwiązanie pozwala zautomatyzować proces uruchamiania testów, poprzez bazowanie na wcześniej utworzonym obrazie, dodatkowo nie ma potrzeby od nowa tworzenia procesu budowania.
 
 ![screen19](./screenshots/screen19.png)
 
 3. Wykaż, że kontener wdraża się i pracuje poprawnie. Pamiętaj o różnicy między obrazem a kontenerem. Co pracuje w takim kontenerze?
+   
 Zaczynam od uruchomienia kontenera z obrazu:
-Za pomocą tego pliku Dockerfile tworzymy obraz kontenera, który zawiera wszystkie niezbędne narzędzia i zależności oraz buduje aplikację podczas procesu tworzenia obrazu, a nie podczas uruchamiania kontenera. 
-Po uruchomieniu kontenera nie wykonuje się żadna dodatkowa akcja, ponieważ obraz ten został zaprojektowany do instalacji i budowania aplikacji podczas procesu tworzenia obrazu, a nie uruchamiania kontenera.
-Nie zdefiniowałąm żadnych specjalnych instrukcji dla działania kontenera po jego uruchomieniu za pomocą CMD lub ENTRYPOINT. 
+```bash
+docker run irssi-builder
+```
+Za pomocą tego pliku Dockerfile tworzymy obraz kontenera, który zawiera wszystkie niezbędne narzędzia i zależności oraz buduje aplikację podczas procesu tworzenia obrazu, a nie podczas uruchamiania kontenera, dodatkowo nie zdefiniowałam żadnych specjalnych instrukcji dla działania kontenera po jego uruchomieniu za pomocą CMD lub ENTRYPOINT, dlatego też po powyższej komendzie nie wykonuje się żadna dodatkowa akcja.
+
 Poprzez komendę:
 ```bash
 echo $?
 ```
 Sprawdzam czy poprawnie wdrożył się kontener, kod wyjścia równy zero, oznacza, że kontener został uruchomiony poprawnie.
 
-![buildirssi_run](./screenshots/screen20.png)
+![screen20](./screenshots/screen20.png)
 
 Takie same czynności wykonuje dla irssi-tester:
 
@@ -156,7 +174,7 @@ Takie same czynności wykonuje dla irssi-tester:
 
 Podczas uruchomiania kontenera nic się nie wykonuje. Testy wykonywane są podczas budowy obrazu z pliku Dockerfile, a nie podczas uruchamiania kontenera.
 
-## Dla node-js-dummy-test
+## Node-js-dummy-test
 ### Build bez kontenera:
 
 Klonowanie, instalacja pakietów zdefiniowanych w pliku package.json(nmp install) oraz wykonannie testów.
@@ -229,7 +247,7 @@ docker build -t node-tester -f ./node.test.Dockerfile .
 ```
 ![screen30](./screenshots/screen30.png) 
 
-Zbudowany został poprawnie.
+Zbudowany został poprawnie, świadczy to o tym, że podczas budowy testy wykonały się poprawnie.
 
 ![screen31](./screenshots/screen31.png)
 
@@ -245,13 +263,15 @@ Tak jak poprzednio dla irssi, wykonuje run i echo, dla plików node-builder i no
 Woluminy umożliwiają przechowywanie danych między różnymi kontenerami oraz gwarantują trwałe przechowywanie danych nawet po zatrzymaniu lub usunięciu kontenera. 
 
 * Przygotowałam woluminy wejściowy i wyjściowy za pomocą komendy:
+
 ```bash
 docker volume create input_volume
 docker volume create output_volume
 ```
 ![screen34](./screenshots/screen34.png)
 
-i podłączyłam je do kontenera bazowego, z którego rozpoczynałam poprzednio pracę, uruchomiłam kontener z obrazu fedora i zamontowałam dwa woluminy poprzez polecenie:
+i podłączyłam je do kontenera bazowego, z którego rozpoczynałam poprzednio pracę, uruchomiłam kontener z obrazu fedora i zamontowałam dwa woluminy poprzez komendę:
+
 ```bash
 docker run -it --name irssi_volume_container -v input_volume:/irssi -v output_volume:/irssi/Build fedora bash
 ```
@@ -265,15 +285,16 @@ docker run -it --name irssi_volume_container -v input_volume:/irssi -v output_vo
 
 * Sklonowałam repozytorium na wolumin wejściowy:
   
-Aby przekopiować repozytorium do woluminu wejściowego, sklowałam je na swoim komputerze do folderu, który jest powiązany z woluminem. W ten sposób repozytorium będzie w odpowiednim folderze w kontenerze.
+Aby przekopiować repozytorium do woluminu wejściowego, sklonwałam je na hoście do folderu, który jest powiązany z woluminem. W ten sposób repozytorium będzie w odpowiednim folderze w kontenerze.
 
 W celu lokalizacji woluminu na hoście wykonuje:
+
 ```bash
 docker volume inspect input_volume
 ```
 ![screen37](./screenshots/screen37.png)
 
-Następnie udaję sie do tego folderu i klonuje do niego repozytorium.
+Przechodzę do tego folderu i klonuje do niego repo.
 
 ![screen38](./screenshots/screen38.png)
 
@@ -316,7 +337,7 @@ Pierwsza linia montuje wolumin wejściowy z lokalizacji /var/lib/docker/volumes/
 
 * Zapoznałam się z dokumentacją https://iperf.fr/.
 
-* Uruchom wewnątrz kontenera serwer iperf (iperf3).
+* Uruchomiłam wewnątrz kontenera serwer iperf (iperf3).
   
 Pracę rozpoczełam od uruchomienia kontenera z obrazu ubuntu poprzez komendę:
 ```bash
@@ -347,6 +368,7 @@ docker inspect iperf-serv
 ![screen47](./screenshots/screen47.png)
 
 Łączenie następuję poprzez komendę:
+
 ```bash
 iperf3 -c <adres>
 ```
@@ -360,13 +382,15 @@ Serwer:
 
 * Zapoznałam się z dokumentacją network create: https://docs.docker.com/engine/reference/commandline/network_create/
   
-* Łączę się, ale wykorzystując własną dedykowaną sieć mostkową.
+* Połączyłam się, ale wykorzystując własną dedykowaną sieć mostkową.
   
 Tworzę sieć:
+
 ```bash
 docker network create -d bridge siec_lokalna
 ```
 Uruchamiam dwa kontenery z obrazu ubuntu poprzez:
+
 ```bash
 docker run --rm -it --network siec_lokalna --name serwer ubuntu /bin/bash
 docker run --rm -it --network siec_lokalna --name klient ubuntu /bin/bash
@@ -382,6 +406,7 @@ iperf3 -c serwer
 ![screen52](./screenshots/screen52.png)
 
 Sprawdziłam stan sieci:
+
 ```bash
 docker network inspect siec_lokalna
 ```
@@ -389,16 +414,17 @@ docker network inspect siec_lokalna
 
 Kontenery zostały połączone z moją siecią ich adresy to 172.18.0.2 i 172.18.0.3.
 
-*Spróbowałam połączenia spoza kontenera.
+* Spróbowałam połączenia spoza kontenera.
 
 Do uruchomienia kontenera użyłam polecenia:
 ```bash
 docker run -it --rm --network siec_lokalna --name serwer -p 5201:5201 --mount source=output_volume,target=/logs ubuntu bash
 ```
 Do podłączenia użyłam komendy iperf3 -c co widać na poniższym screenie, ale niestety nie udało mi się połaczyć, bo otrzymałąm nastepujący błąd:
+
 ![problem](./screenshots/problem.png)
 
-*Przedstawiam przepustowość komunikacji ale tylko dla:
+* Przedstawiam przepustowość komunikacji dla:
 
 Połączenia dwóch kontenerów przez domyślną sieć Dockera: 9.22 Gbits/s
 oraz 
@@ -406,7 +432,7 @@ Połączenia dwóch kontenerów przez własną dedykowaną sieć mostkową: 12.8
 
 * Logi z kontenera:
   
-W celu zapisania logów do wolumina podłączonego do kontenera, należy po utworzeniu wolumina uruchomić kontener z podłączonym woluminem, za pomoca komendy:
+W celu zapisania logów do wolumina podłączonego do kontenera, należy po utworzeniu wolumina uruchomić kontener z podłączonym woluminem, za pomocą komendy:
 
 ```bash
 docker run -d --name nazwa --mount source=volumin,target=/sciezka/w/kontenerze obraz_kontenera
@@ -414,9 +440,9 @@ docker run -d --name nazwa --mount source=volumin,target=/sciezka/w/kontenerze o
 Następnie za pomocą polecenia find możemy znależć logi.
 
 ## Instancja Jenkins
-*Zapoznałam się z dokumentacją https://www.jenkins.io/doc/book/installing/docker/
+* Zapoznałam się z dokumentacją: https://www.jenkins.io/doc/book/installing/docker/
 
-*Przeprowadź instalację skonteneryzowanej instancji Jenkinsa z pomocnikiem DIND
+* Przeprowadziłam instalację skonteneryzowanej instancji Jenkinsa z pomocnikiem DIND:
 
 Utworzyłam sieć mostkową:
 ```bash
@@ -425,6 +451,7 @@ docker network create jenkins
 ![screen53](./screenshots/screen53.png)
 
 Uruchomiłam kontener z DIND:
+
 ```bash
 docker run \
  --name jenkins-docker \
@@ -441,7 +468,7 @@ docker run \
  --storage-driver overlay2
 ```
 
-*Inicjalizuje instację.
+* Inicjalizuje instację.
 
 Za pomocą utworzonego pliku jenkins.Dockerfile, którego treść wygląda następująco:
 
@@ -470,9 +497,7 @@ Następnie uruchamiam kontener Jenkinsa:
 
 ![screen55](./screenshots/screen55.png)
 
-Zrzut ekranu obrazuje także uruchomine kontenery.
-
-Chcąc uzyskać dostęp do serwera Jenkinsa, który działa na mojej wirtualnej maszynie, korzystając z konfiguracji NAT, muszę przekierować odpowiednie porty z wirtualnej maszyny do systemu gospodarza. Najpierw musze sprawdzic IP hosta:
+Chcąc uzyskać dostęp do serwera Jenkinsa, który działa na mojej wirtualnej maszynie, muszę przekierować odpowiednie porty z wirtualnej maszyny do systemu gospodarza. Najpierw sprawdzam IP hosta:
 
 ![screen56](./screenshots/screen56.png)
 
