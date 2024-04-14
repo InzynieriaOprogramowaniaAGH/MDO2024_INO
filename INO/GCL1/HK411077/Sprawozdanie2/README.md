@@ -145,7 +145,7 @@ sudo docker run node-app-test
 Kontenery zostały już uruchomione, więc można sprawdzić, czy zostały i czy pracują poleceniem:
 
 ```
-docker container list --all
+sudo docker container list --all
 ```
 
 Zwrócone zostaje:
@@ -348,6 +348,135 @@ Wszystko przebiegło zgodnie z planem:
 ![siec serwer](images/siec_serwer.png)
 ![siec klient](images/siec_klient.png)
 
-#### Połączenie się spoza kontenera
+#### Połączenie się z hosta
 
-Teraz należało spróbować połączyć się z utworzonym serwerem z wirtualnej maszyny. Kontener serwerowy uruchamiam z dodatkowymi opcjami, a port na którym będzie nasłuchiwać to *5201*:
+Teraz należało spróbować połączyć się z serwerem spoza kontenera. Kontener serwerowy uruchamiam z dodatkową opcją *-p*, która służy do mapowania portów między konteneramem a hostem. Pierwsza część (przed znakiem **":"**) oznacza port na hoście (w tym przypadku port mojej witrualnej maszyny) a druga część (po znaku **"**) oznacza port wewnątrz kontenera, do którego ma być przekierowany ruch. W moim przypadku oba te pory to *5201*:
+
+```
+sudo docker run -it --rm --name server --network new_network -p 5201:5201 ubuntu bash
+```
+
+![serwer na hoście](images/kontener_p.png)
+
+Następnie sprawdziłem adres serwera, który został utworzony w kontenerze poleceniem:
+
+```
+sudo docker inspect -f'{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' bcb035416d2e
+```
+
+![adres serwera](images/docker_inspect.png)
+
+Uruchomiałem na nim serwer poleceniem `iperf3 -s` i połączełem się do niego z drugiego terminala w maszynie wirtualnej znając już wcześniej adres:
+
+```
+iperf3 -c 172.18.0.2
+```
+
+Wynik jest następujący:
+
+![połączenie z hosta](images/z_hosta.png)
+
+Widać, że w tym przypadku prędkość jest większa o niecałe 4Gb/s.
+
+#### Połączenie spoza hosta
+
+W tym przypadku na swój komputer pobrałem *iperf3*, otworzyłem terminal i przeszedłem w nim do folderu, w którym się on znajdował i próbowałem się połączyć poleceniem:
+
+```
+iperf3 -c 127.0.0.1 -p 5201
+```
+
+Jednak z jakiegoś powodu nie udało się połączyć, komunikat był następujący:
+
+![łączenie spoza hosta](images/spoza_hosta.png)
+
+## Instalacja Jenkins
+
+Instalację przeprowadziłem zgodnie z instrukcją, znajdującą się na stronie z dokumentacją *Jenkins*. W pierwszym kroku utworzyłem sieć mostkową w Dockerze poleceniem:
+
+```
+docker network create jenkins
+```
+
+![jenkins w docker network](images/jenkins_network.png)
+
+Następnie pobrałem obraz *docker:dind* poprzez użycie polecenia z instrukcji:
+
+```
+docker run --name jenkins-docker --rm --detach \
+  --privileged --network jenkins --network-alias docker \
+  --env DOCKER_TLS_CERTDIR=/certs \
+  --volume jenkins-docker-certs:/certs/client \
+  --volume jenkins-data:/var/jenkins_home \
+  --publish 2376:2376 \
+  docker:dind --storage-driver overlay2
+```
+
+W kolejnym kroku utworzyłem nowy Dockerfile *jenkins.Dockerfile*, którego zawartość była następująca:
+
+```
+FROM jenkins/jenkins:2.440.2-jdk17
+USER root
+RUN apt-get update && apt-get install -y lsb-release
+RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc \
+  https://download.docker.com/linux/debian/gpg
+RUN echo "deb [arch=$(dpkg --print-architecture) \
+  signed-by=/usr/share/keyrings/docker-archive-keyring.asc] \
+  https://download.docker.com/linux/debian \
+  $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
+RUN apt-get update && apt-get install -y docker-ce-cli
+USER jenkins
+RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
+```
+
+Znajdując się w katalogu z tym Dockerfile'm, użyłem polecenia do zbudowania nowego obrazu Dockera, zgodnie z instrukcją:
+
+```
+docker build -t myjenkins-blueocean:2.440.2-1 .
+```
+
+Ostatnią rzeczą, jaką należało wedługo instrukcji zrobić, było uruchomienie zbudowanego obrazu poleceniem:
+
+```
+docker run \
+  --name jenkins-blueocean \
+  --restart=on-failure \
+  --detach \
+  --network jenkins \
+  --env DOCKER_HOST=tcp://docker:2376 \
+  --env DOCKER_CERT_PATH=/certs/client \
+  --env DOCKER_TLS_VERIFY=1 \
+  --publish 8080:8080 \
+  --publish 50000:50000 \
+  --volume jenkins-data:/var/jenkins_home \
+  --volume jenkins-docker-certs:/certs/client:ro \
+  myjenkins-blueocean:2.440.2-1
+```
+
+Teraz, po sprawdzeniu aktualnie działających kontenerów mogłem zobaczyć, że rzeczywiście został on uruchomiony:
+
+![działający jenkins](images/jenkins_ps.png)
+
+W celu pokazania ekranu logowania, należało przekierować porty w sieci NAT, z której korzysta VirtualBox. Adres mojej maszyny sprawdziłem za pomocą polecenia `ip a`:
+
+![adres maszyny wirtualnej](images/adres_maszyny.png)
+
+Znając adres, mogłem przejść do VirtualBox'a, następnie otworzyć ustawienia mojej aktualnej maszyny wirtualnej i po kolei przejść: **Ustawienia->Sieć->Zaawansowane->Przekierowanie Portów**. W otworzonym oknie, kliknąłem przycisk **Dodaję nową regułę przekierowania portów.** i dodałem przekierowanie, które wygląda tak:
+
+![przekierowanie portów jenkins](images/jenkins_przekierowanie.png)
+
+W dokumentacji Jenkins'a można znaleźć informację, że domyślnie korzysta on z portu 8080, zatem taki też ustawiłem powyżej.
+
+Teraz po uruchomieniu przeglądarki i wpisaniu adresu **localhost:8080** zobaczyłem następujący rezultat:
+
+![ekran logowania jenkins](images/jenkins_logowanie.png)
+
+Odczytałem jeszcze hasło, żeby sprawdzić, czy uda mi się zalogować za pomocą polecenia:
+
+```
+sudo docker exec 7670eae6b021 cat /var/jenkins_home/secrets/initialAdminPassword
+```
+
+Uzyskane hasło skopiowałem i wkleiłem na ekranie logowania. Udało mi się zalogować:
+
+![udane logowanie Jenkins](images/jenkins_zalogowany.png)
