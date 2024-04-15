@@ -78,3 +78,32 @@ sudo docker build -f DockerfileTest .
 Ponownie zmieniono REPOSITORY oraz uruchomiono utworzony obraz sprawdzając czy wszytsko zostało poprawnie zainstalowane.
 ![](../Screeny/2.2.2.7.png)
 ![](../Screeny/2.2.2.8.png)
+## Dodatkowa terminologia w konteneryzacji
+# 3. Przygotowywanie woluminów
+Na samym początku przygotowano woluminy wejścia i wyjścia przy pomocy poniższej komendy.
+```
+sudo docker volume create
+```
+Następnie przy pomocy kolejnego polecenia została sprawdzona ścieżka gdzie dokładnie się znajdują. Wykonujemy to by w przyszłości wiedzieć gdzie będą się znajdować pliki "in" i "out"
+```
+sudo docker volume inspect
+```
+![](../Screeny/2.2.3.1.png)
+Następnie uruchomiono kontener i zainstalowano ponownie te same elementy co wceśniej, czyli java i maven. Uzyto poniższych poleceń.
+```
+apt install default-jdk
+```
+```
+apt install maven
+```
+Kolejnym krokiem było sklonowanie repo na woluminy wejścia. Należąło przejść do miesjca gdzie znajduje się wolumin wejściowy. Za pomocą polecenia ```cd``` udało się przejść do folderu lib. W tym miejscu przy pomocy ```git clone``` został skomplikowane repozytorium. 
+![](../Screeny/2.2.3.2.png)
+Następnie uruchomiono kontener w którym użyto poniższego polecenia.
+```
+mvn appengine:devserver
+```
+![](../Screeny/2.2.3.3.png)
+Po tej komendzie powstał nowy katalog target który został skopiowany na wolumin wyjścia.
+![](../Screeny/2.2.3.4.png)
+To był ostatni krok jeżeli chodzi o zadanie związane z woluminami.
+# 4. Eksponowanie portu
