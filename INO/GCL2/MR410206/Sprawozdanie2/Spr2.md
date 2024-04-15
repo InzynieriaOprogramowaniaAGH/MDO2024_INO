@@ -79,7 +79,7 @@ Ponownie zmieniono REPOSITORY oraz uruchomiono utworzony obraz sprawdzając czy 
 ![](../Screeny/2.2.2.7.png)
 ![](../Screeny/2.2.2.8.png)
 ## Dodatkowa terminologia w konteneryzacji
-# 3. Przygotowywanie woluminów
+### 3. Przygotowywanie woluminów
 Na samym początku przygotowano woluminy wejścia i wyjścia przy pomocy poniższej komendy.
 ```
 sudo docker volume create
@@ -106,4 +106,4 @@ mvn appengine:devserver
 Po tej komendzie powstał nowy katalog target który został skopiowany na wolumin wyjścia.
 ![](../Screeny/2.2.3.4.png)
 To był ostatni krok jeżeli chodzi o zadanie związane z woluminami.
-# 4. Eksponowanie portu
+### 4. Eksponowanie portu
