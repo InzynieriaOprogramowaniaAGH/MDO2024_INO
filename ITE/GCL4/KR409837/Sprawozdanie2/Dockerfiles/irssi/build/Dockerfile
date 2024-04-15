@@ -8,7 +8,7 @@ WORKDIR /irssi
 RUN dnf install -y meson ninja* gcc  glib2-devel utf8proc* ncurses* perl-Ext*
 
 RUN meson build && \
-ninja -C /irsii/build
+ninja -C ./build
 
 
 
