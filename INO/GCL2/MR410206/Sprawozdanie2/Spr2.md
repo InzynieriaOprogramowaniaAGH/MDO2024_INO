@@ -107,3 +107,73 @@ Po tej komendzie powstał nowy katalog target który został skopiowany na wolum
 ![](../Screeny/2.2.3.4.png)
 To był ostatni krok jeżeli chodzi o zadanie związane z woluminami.
 ### 4. Eksponowanie portu
+Kolejnym zadaniem było eksponowanie portu. Uruchomiono kontener ubuntu, tak jak na screenie poniżej.
+![](../Screeny/2.2.4.1.png)
+Następnie zaisntalowano w nim iperf3 za pomocą ponizszego polecenia.
+```
+apt install iperf3
+```
+Kolejnym krokiem było uruchomienie serwera nasłuchując portu o numerze 1000. Wykonano to poniższym poleceniem.
+```
+iperf3 -s -p 100
+```
+![](../Screeny/2.2.4.2.png)
+Następnie należało sprawdzić czy serwer będzie się w stanie połączyć z innegi kontenera. W tym celu zapisany został przeze mnie tak zwany container_id, czyli znaki po root@. Następnie w celu uzyskania odresu IP użyto poniższego polecenia.
+```
+sudo docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' conatiner_id
+```
+![](../Screeny/2.2.4.3.png)
+Kolejnym krokiem było otworzenie nowego terminala, otwarcie ponownie kontenera ubuntu, ponowna instalacja iperf3 i użycie poniższego polecenia w celu połączenia.
+```
+iperf3 -c 172.17.0.2 -p 1000
+```
+![](../Screeny/2.2.4.4.png)
+Teraz przechodząc do pierwszego terminalu można zaobserwiwaź też skutki tego połączenia.
+![](../Screeny/2.2.4.5.png)
+Kolejnym zadaniem było połączenie się poprzez własną dedykowaną sieć mostkową. Został uwtorzona własna sieć o nazwie bridges, przy użyciu poniższego polecenia.
+```
+sudo docker network create bridges
+```
+![](../Screeny/2.2.4.6.png)
+Następnie po odczytaniu nazw sieci przy pomocy polecenia ```sudo docker ps``` połączono nowo utworzoną sieć przy pomocy poniższego polecenia.
+```
+sudo docker network connect nazwa1 nazwa2
+```
+![](../Screeny/2.2.4.7.png)
+W celu upewnienia się czy wszystko działa użyto poniższego polecenia.
+```
+sudo docker network inspect
+```
+Jak można zaobserwować na poniższym screenie wszystko idzie dobrze.
+![](../Screeny/2.2.4.8.png)
+Następnym poleceniem było połączenie się z serwerem pierwszego kontenera z poziomu hosta. W celu wykoanania tego zadania użyto poniższej komendy.
+```
+iperf3 -c 172.17.0.2 -p 1000
+```
+![](../Screeny/2.2.4.9.png)
+Oraz po raz kolejny mozna było zaobserwować konsekwencje tego połaczenia w terminalu przedstawiającym stronę serwera.
+![](../Screeny/2.2.4.10.png)
+Próby połaczenia się z poza hosta mimo kilku prób i różnych sposobów niestety się nie powiodły.
+### 5. Instalacja jenkinsa
+Ostatnim zadaniem była instalacja jenkinsa zgodnie z instrukcją ze strony https://www.jenkins.io/doc/book/installing/docker/. Na początku został uwtorzony bridge network z pomocą poniższego polecenia.
+```
+sudo docker network create jenkins
+```
+![](../Screeny/2.2.5.1.png)
+Następnie użyto poniższego polecenia.
+```
+docker run    --name jenkins-docker    --rm    --detach    --privileged    --network jenkins    --network-alias docker    --env DOCKER_TLS_CERTDIR=/certs    --volume jenkins-docker-certs:/certs/client    --volume jenkins-data:/var/jenkins_home    --publish 2376:2376    docker:dind    --storage-driver overlay2
+```
+Następnie utworzono nowego Dockerfile o poniższej treści
+![](../Screeny/2.2.5.3.png)
+A kolejnym krokiem było wybudowanie programu za pomocą.
+```
+sudo docker build -t DockerfileJenkins
+```
+![](../Screeny/2.2.5.2.png)
+Nastepnie uruchomiono poniższe polecenie.
+```
+docker run    --name jenkins-blueocean    --restart=on-failure    --detach    --network jenkins    --env DOCKER_HOST=tcp://docker:2376    --env DOCKER_CERT_PATH=/certs/client    --env DOCKER_TLS_VERIFY=1    --publish 8080:8080    --publish 50000:50000    --volume jenkins-data:/var/jenkins_home    --volume jenkins-docker-certs:/certs/client:ro    DockerfileJenkins
+```
+Po uruchomieniu tej komendy wyskoczyło okno w przeglądarce o adresie http://localhost:8080 na której to ukazał się Jenkins. 
+![](../Screeny/2.2.5.4.png)
