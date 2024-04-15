@@ -9,7 +9,7 @@ pipeline {
                 }
                 script {
                     // Budowa aplikacji z użyciem pliku Dockerfile nodeapp_builder.Dockerfile
-                    docker.build('nodeapp_build', '-f /ITE/GCL4/LS412597/Sprawozdanie2/nodeapp/nodeapp_builder.Dockerfile .')
+                    docker.build('nodeapp_build', '-f ITE/GCL4/LS412597/Sprawozdanie2/nodeapp/nodeapp_builder.Dockerfile .')
                 }
             }
         }
@@ -18,7 +18,7 @@ pipeline {
             steps {
                 script {
                     // Testowanie aplikacji z użyciem pliku Dockerfile nodeapp_tester.Dockerfile
-                    docker.build('nodeapp_test', '-f /ITE/GCL4/LS412597/Sprawozdanie2/nodeapp/nodeapp_tester.Dockerfile .')
+                    docker.build('nodeapp_test', '-f ITE/GCL4/LS412597/Sprawozdanie2/nodeapp/nodeapp_tester.Dockerfile .')
                 }
             }
         }
