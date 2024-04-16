@@ -210,7 +210,7 @@ Później przeszedlem do kontenera i otworzylem katalog z zainstalowanym repozyt
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/5. przeszedlem do kontenera i otworzylem katalog z zainstalowanym repo i uruchomilem instalacje zaleznosci.png">
 </p>
 <p align="center">
- <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/6. Uruchom build w kontenerzei.png">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/6. Uruchom build w kontenerze.png">
 </p>
 
 Wracając do katalogu ":/app" zapisałem pliki na woluminie wyjściowym, tak by były dostępne po wyłączeniu kontenera.
