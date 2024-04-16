@@ -5,7 +5,8 @@
 Aby wykonać automatyzację procesu tworzenia kontenera, wykorzystując Dockerfile, skorzystałem z następujących repozytoriów:
 - irssi: https://github.com/irssi/irssi
 - node-js-dummy-test: https://github.com/devenes/node-js-dummy-test
-Warto zaznaczyć, że powyższe repozytoria zostały wybrane, ponieważ posiadały możliwość buildowania oraz przeprowadzania testów.
+
+Warto zaznaczyć, że powyższe repozytoria zostały wybrane ze względu na możliwość buildowania oraz przeprowadzania na nich testów.
 
 W związku z powyższym utworzyłem nowy katalog dla repozytorium "node-js-dummy-test" oraz skopiowałem dla niego repozytorium 
 <p align="center">
