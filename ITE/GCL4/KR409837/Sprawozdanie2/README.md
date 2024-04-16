@@ -13,7 +13,7 @@ W związku z powyższym utworzyłem nowy katalog dla repozytorium "node-js-dummy
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/1. klonowanie repo.png">
 </p>
 
-Nastsępnie doinstalowałem wymagane zależności
+Następnie doinstalowałem wymagane zależności
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/2. doinstaluj wymagane zaleznosci.png">
 </p>
@@ -30,7 +30,7 @@ oraz uruchomiłem testy jednostkowe
 
 ### Przeprowadzenie buildu w kontenerze
 
-Najpierw pobrałem obraz dla Node'a
+Najpierw pobrałem obraz dla Node'a.
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/4. pobranie obrazu node'a.png">
 </p>
@@ -40,11 +40,11 @@ Następnie wszedłem z nim w tryb interaktywny
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/5. przejscie w tryb interaktywny.png">
 </p>
 
-oraz będąc w tym trybie sklonowałem do niego repozytorium
+oraz będąc w tym trybie sklonowałem do niego repozytorium.
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/6. klonowanie repozytorium do kontenera w trybie interaktywny.png">
 
- Później przeprowadziłem build oraz testy jednostkowe
+Później przeprowadziłem build oraz testy jednostkowe.
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/7. isntalacje zaleznosci i testy jednostkowe.png">
 </p>
@@ -59,13 +59,13 @@ następnie wszedłem w tryb interaktywny i pobrałem na nim gita
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/9. uruchomienie kontenera w trybie interaktywnym i pobranie gita.png">
 </p>
 
-oraz sklonowałem do niego repozytorium 
+oraz sklonowałem do niego repozytorium.
  
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/10. pobranie gita i pobranie zaleznosci.png">
 </p>
 
-Jendakże zanim mogłem przeprowadzić build musiałem doinstalować następujące zależności
+Jendakże zanim mogłem przeprowadzić build musiałem doinstalować następujące zależności:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/11. kolejne pobranie zaleznosci.png">
 </p>
@@ -87,7 +87,7 @@ Dzięki czemu mogłem przeprowadzić build
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/16. build ciag dalszy.png">
 </p>
 
-oraz uruchomić unit testy
+oraz uruchomić unit testy.
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/17. unit testy.png">
 </p>
@@ -96,7 +96,7 @@ oraz uruchomić unit testy
 
 W katalogu, w którym zamieszczone jest to sprawozdanie, stworzyłem folder "Dockerfiles" oraz dla wymienionych na początku repozytoriów utworzyłem katalog "node" oraz "irssi" i w kazdym z nich stworzyłem katalog "build" oraz "test", aby móc w nich utworzyć odpowiednie dla realizacji zajęć pliki dockerfile.
 
-W katalogu "(..)/Sprawozdanie2/Dockerfiles/node/build" zamieściłem następującą treść w pliku dockerfile
+W katalogu "(..)/Sprawozdanie2/Dockerfiles/node/build" zamieściłem następującą treść w pliku dockerfile:
 ```
 FROM node:latest as build-image
 
@@ -124,7 +124,7 @@ później przy jego pomocy zbudowałem obraz
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/20. budowa obrazu.png">
 </p>
 
-oraz uruchomiłem testy jednostkowe przy pomocy kontenera
+oraz uruchomiłem testy jednostkowe przy pomocy kontenera.
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/21. uruchomienie kontenera.png">
 </p>
@@ -146,7 +146,7 @@ RUN meson build && \
 ninja -C ./build
 ```
 
-następnie zbudowałem dzięki temu plikowi obraz
+następnie zbudowałem dzięki temu plikowi obraz.
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/22. Zbudowanie obraz.png">
 </p>
@@ -160,7 +160,7 @@ WORKDIR /irssi/build
 CMD ninja test
 ```
 
-oraz zbudowałem ten obraz
+oraz zbudowałem ten obraz.
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/23. budowa obrazu do testowania.png">
 </p>
@@ -199,11 +199,11 @@ Zacząłem od stworzenia nowego folderu oraz skopiowania do niego pożądanego r
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/3. stworzylem nowy folder i tam skopiowalem repo.png">
 </p>
 
-dzięki czemu następnie sklonowałem repozytorium na wolumin wejściowy
+dzięki czemu następnie sklonowałem repozytorium na wolumin wejściowy.
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/4. Sklonuj repozytorium na wolumin wejściowy.png">
 </p>
-powyższa komenda kopiuje pliki z lokalnego kontenera o nazwie "node-js-dummy-test" do ścieżki "/app" w kontenerze o nazwie "lab4".
+Powyższa komenda kopiuje pliki z lokalnego kontenera o nazwie "node-js-dummy-test" do ścieżki "/app" w kontenerze o nazwie "lab4".
 
 Później przeszedlem do kontenera i otworzylem katalog z zainstalowanym repozytorium, dzięki czemu uruchomiłem instalację zależności i uruchomiłem build w kontenerze.
 <p align="center">
@@ -213,13 +213,13 @@ Później przeszedlem do kontenera i otworzylem katalog z zainstalowanym repozyt
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/6. Uruchom build w kontenerzei.png">
 </p>
 
-Wracając do katalogu ":/app" zapisałem pliki  pliki na woluminie wyjściowym, tak by były dostępne po wyłączniu kontenera.
+Wracając do katalogu ":/app" zapisałem pliki na woluminie wyjściowym, tak by były dostępne po wyłączeniu kontenera.
 
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/7. zapisz powstałe-zbudowane pliki na woluminie wyjściowym, tak by były dostępne po wyłączniu kontenera..png">
 </p>
 
-Aby udowodnić powodzenia wykonanych przeze mnie akcji wyszukałem ścieżkę do wolumina wyjściowego, a następnie wyświetliłem jego zawartość.
+Aby udowodnić powodzenie wykonanych przeze mnie akcji wyszukałem ścieżkę do wolumina wyjściowego, a następnie wyświetliłem jego zawartość.
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/8. szukanie sciezki do wolumena wyjsciowego.png">
 </p>
@@ -232,7 +232,7 @@ Aby udowodnić powodzenia wykonanych przeze mnie akcji wyszukałem ścieżkę do
 
 Eksponowanie portu z użyciem iperf3 umożliwia otwarcie określonego portu na hoście, na którym działa iperf3, aby umożliwić komunikację z innymi urządzeniami. Dzięki temu inne urządzenia mogą łączyć się z iperf3 poprzez ten port i wykonywać testy przepustowości sieci, mierzyć opóźnienia lub przeprowadzać inne diagnozy sieciowe.
 
-Pracę nad tym etapem zajęć rozpocząłem od pobrania obrazu iperf3 i następnym uruchomieniem wewnątrz kontenera serwer iperf3
+Pracę nad tym etapem zajęć rozpocząłem od pobrania obrazu iperf3 i następnym uruchomieniu wewnątrz kontenera serwera iperf3.
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/10. Pobranie obrazu.png">
 </p>
@@ -264,7 +264,7 @@ Następnie ponowiłem wyżej wykonane przeze mnie kroki, jednakże tym razem wyk
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/14. utworzenie sieci typu bridge (jest domyslna).png">
 </p>
 
-Później utworzyłem kontener w sieci, po czym wyszukałem adres IP sieci
+Później utworzyłem kontener w sieci, po czym wyszukałem adres IP sieci.
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/15. Utworzenie kontenera w sieci.png">
 </p>
@@ -334,7 +334,7 @@ Aby uzyskać hasło admninistratora skopiowałem wyniki komendy `sudo ls /var/je
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/28. instalacja.png">
 </p>
 
-Nastepnie zostałem przekierowany do ekranu logowania, gdzie po utworzeniu konta Jenkins był już gotowy do użytku
+Nastepnie zostałem przekierowany do ekranu logowania, gdzie po utworzeniu konta Jenkins był już gotowy do użytku.
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/29. ekran logowania.png">
 </p>
