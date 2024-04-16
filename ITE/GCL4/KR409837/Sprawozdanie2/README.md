@@ -1,7 +1,7 @@
 # Sprawozdanie 2 - Konrad Rezler
 ## Zajęcia 03
 ## Dockerfiles, kontener jako definicja etapu
-
+### Wybór oprogramowania na zajęcia
 Aby wykonać automatyzację procesu tworzenia kontenera, wykorzystując Dockerfile, skorzystałem z następujących repozytoriów:
 - irssi: https://github.com/irssi/irssi
 - node-js-dummy-test: https://github.com/devenes/node-js-dummy-test
@@ -27,3 +27,4 @@ oraz uruchomiłem testy jednostkowe
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/3.1.1 testy jednostkowe.png">
 </p>
 
+### Przeprowadzenie buildu w kontenerze
