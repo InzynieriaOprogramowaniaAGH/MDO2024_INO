@@ -15,7 +15,7 @@ services:
     depends_on:
       - node_builder
 
-  node_depoy:
+  node_deploy:
     build:
       context: .
       dockerfile: ./node_deploy.Dockerfile
