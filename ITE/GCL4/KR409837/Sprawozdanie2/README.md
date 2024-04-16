@@ -324,7 +324,7 @@ Aby przystąpić do jego instalacji wykonałem ciąg następujących komend:
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/26. kolejna losowa komendra.png">
 </p>
 
-Dzięki powyższym akcjom mogłem odblokować Jenkins przechodząc do strony. `https://localhost:8080/`, która wyświetlała następującą zawartość:
+Dzięki powyższym akcjom mogłem odblokować Jenkins przechodząc do strony: `https://localhost:8080/`, która wyświetlała następującą zawartość:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/27. unlock jenkins.png">
 </p>
