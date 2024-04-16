@@ -269,7 +269,7 @@ Później utworzyłem kontener w sieci, po czym wyszukałem adres IP sieci.
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/15. Utworzenie kontenera w sieci.png">
 </p>
 <p align="center">
- <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/16. komenda do wypisania adresu  IP utworzenie sieci.png">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/16. komenda do wypisania adresu  IP utworzenie sieci .png">
 </p>
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/17. znaleziony adres.png">
