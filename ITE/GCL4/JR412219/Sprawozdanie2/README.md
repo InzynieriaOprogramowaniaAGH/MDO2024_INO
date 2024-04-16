@@ -471,7 +471,72 @@ docker run -it --network ramennet --name serverB -h naruto iperf
 ```
 W obu przypadkach kontener różni się tylko nazwą hosta i kontenera.
 
+Spróbowałem się połączyć po nazwie z użyciem polecenie `iperf3 -c serverB` lecz nie udało się to.
+Wykonałem `inspect` na sieci którą stworzyłem i faktycznie oba kontenery były do niej dodane.
+```
+"Name": "ramennet",
+        "Id": "6344159e2e35ee669620c87daaea73da06af05354702ed311e934bf3aff073b8",
+        "Created": "2024-04-09T16:12:28.029206622+02:00",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.19.0.0/16",
+                    "Gateway": "172.19.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "a4c9f59b142a865bb5ac70a8e545d3ffaa9cdb5c1b6939deb7915963733dbc22": {
+                "Name": "serverB",
+                "EndpointID": "fcc0e2281ee3a86be4a7ab8ed6a452672dd992a674cd70cadb322f03e3ed9c4f",
+                "MacAddress": "02:42:ac:13:00:03",
+                "IPv4Address": "172.19.0.3/16",
+                "IPv6Address": ""
+            },
+            "dc9b537732f19a5cde179fdad814d3da63cb793fea83fb818a1f41e363aeed9e": {
+                "Name": "clientB",
+                "EndpointID": "f19c5f79e4eafae381ed3c160bd767a7cceb874d5d5261d47b01f8194c24f473",
+                "MacAddress": "02:42:ac:13:00:02",
+                "IPv4Address": "172.19.0.2/16",
+                "IPv6Address": ""
+```
+Po wykonaniu połączenia po adresie, który widnieje przy serwerze w zwrotce z inspecta połączenie wykonuje się normalnie.
+```
+ iperf3 -c 172.19.0.3
+Connecting to host 172.19.0.3, port 5201
+[  5] local 172.19.0.1 port 34754 connected to 172.19.0.3 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec  12.4 GBytes   107 Gbits/sec  359    819 KBytes
+[  5]   1.00-2.00   sec  12.3 GBytes   106 Gbits/sec  118    974 KBytes
+[  5]   2.00-3.01   sec  12.8 GBytes   109 Gbits/sec  122   1011 KBytes
+[  5]   3.01-4.00   sec  13.1 GBytes   113 Gbits/sec  409   1.52 MBytes
+[  5]   4.00-5.00   sec  13.0 GBytes   112 Gbits/sec  618   1.43 MBytes
+[  5]   5.00-6.00   sec  12.5 GBytes   108 Gbits/sec  506   1.18 MBytes
+[  5]   6.00-7.00   sec  12.4 GBytes   107 Gbits/sec  365   1.04 MBytes
+[  5]   7.00-8.00   sec  12.8 GBytes   110 Gbits/sec  130   1.34 MBytes
+[  5]   8.00-9.00   sec  12.7 GBytes   109 Gbits/sec  129   1.38 MBytes
+[  5]   9.00-10.00  sec  11.0 GBytes  94.5 Gbits/sec  105   1.38 MBytes
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-10.00  sec   127 GBytes   109 Gbits/sec  2861             sender
+[  5]   0.00-10.00  sec   127 GBytes   109 Gbits/sec                  receiver
 
+iperf Done.
+```
+Nie udało mi się osiagnąć połaczenia po nazwach pomimo stosowania się do instrukcji.
+Zestawiajac połaczenia po domyślnej sieci dockera z połączeniem po mostku możemy zauwazyć że sieć natywna dockera działa wolniej od mostka o 77 Gb bitretu. Wynik ten zależy również od tego ile do dyspozycji zasobów posiada maszyna na której pracuje docker.
 
 ### Instancja Jenkins
 Po zapoznaniu się z instrukacją instalacji i konfiguracji instacnji ``Jenkins/Jenkins``.
@@ -480,7 +545,7 @@ Kontener bez problemu uruchomił się i udostępniał usługi na wskazanych port
 Sprawdziłem adres ip maszyny wirtualnej przy pomocy ``hostname`` co zwróciło mi adresy ip przyporządkowane wszystkim sieciom, które utworzyłem w dokerze. Na tym etapie nie zastanowiło mnie to, że wszystkie (z wyjątkiem adresu maszyny w VirtualBoxie) były adresami sieci dokerowych.
 
 Po tygodniu przesuwania ponownych prób w czasie zapytałem GPT o instrukcję połączenia się do Jenkinsa, który siedzi w kontenerze na maszynie wirtualnej.
-GPT pokierował mnie przez te same kroki co instrukcja z wyjątkiem tego, że GPT wskazał `ip addr` jako sposób pozyskania adresu ip maszyny n której stoi usługa.
+GPT pokierował mnie przez te same kroki co instrukcja z wyjątkiem tego, że GPT wskazał `ip addr` jako sposób pozyskania adresu ip maszyny na której stoi usługa.
 ```
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -504,14 +569,4 @@ Po odwołaniue się do usługi Jenkinsa przez ten właśnie adres byłem w stani
 
 Jedyne co mnie zastanawia to dlaczego ssh był w stanie przebić się do maszyny po jej adresie przypisanym przez Virtualboxa a Usługa Jenkinsa nie mogła. Na to pytanie odpowiem sobie pracując z Jenkinsem na kolejnym laboratorium.
 
-## Zakres rozszerzony
-### Komunikacja
-* Stwórz kontener czysto do budowania (bez narzędzi do klonowania/kopiowania, bez sklonowanego repozytorium)
-* Stwórz na jego bazie kontener przejściowy, który tylko buduje, wyciągnij z niego pliki po skutecznym buildzie
-
-### Usługi w rozumieniu systemu, kontenera i klastra
-* Zestaw w kontenerze ubuntu/fedora usługę SSHD, połącz się z nią, opisz zalety i wady (przypadki użycia...?) komunikacji z kontenerem z wykorzystaniem SSH
-
-### Jenkins: zależności
-* Co jest potrzebne by w naszym Jenkinsie uruchomić Dockerfile dla buildera?
-* Co jest potrzebne w Jenkinsie by uruchomić Docker Compose?
+Rozszerze to sprawzodanie gdy unormuję swoją wiedzę z zakresu pracy z sieciami na ten moment jest to całość materiału, który udało mi się przerobić.
