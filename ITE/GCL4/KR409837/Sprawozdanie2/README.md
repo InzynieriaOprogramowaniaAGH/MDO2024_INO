@@ -331,12 +331,12 @@ Dzięki powyższym akcjom mogłem odblokować Jenkins przechodząc do strony. `h
 
 Aby uzyskać hasło admninistratora skopiowałem wyniki komendy `sudo ls /var/jenkins_home/secrets/initialAdminPassword`, po czym przeszedłem do instalacji.
 <p align="center">
- <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/28. instalacja.png">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/28. instalacja .png">
 </p>
 
 Nastepnie zostałem przekierowany do ekranu logowania, gdzie po utworzeniu konta Jenkins był już gotowy do użytku.
 <p align="center">
- <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/29. ekran logowania.png">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/29. ekran logowania .png">
 </p>
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/30. Po utworzeniu konta.png">
