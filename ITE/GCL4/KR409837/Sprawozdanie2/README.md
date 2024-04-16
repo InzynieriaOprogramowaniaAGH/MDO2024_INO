@@ -187,11 +187,70 @@ W związku z powyższym przygotowałem wolumin wejściowy i wyjściowy
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/1. Tworzenie woluminów.png">
 </p>
 
-oraz podłączyłem je do bazowego, z którego rozpoczynałem poprzednio pracę 
+oraz podłączyłem je do bazowego, z którego rozpoczynałem poprzednio pracę.
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/2. podłącz je do kontenera bazowego, z którego rozpoczynano poprzednio pracę.png">
 </p>
 
-Następnie należało sklonować repozytorium na wolumin wejściowy
+Następnie należało sklonować repozytorium na wolumin wejściowy.
 
-zacząłem od
+Zacząłem od stworzenia nowego folderu oraz skopiowania do niego pożądanego repozytorium
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/3. stworzylem nowy folder i tam skopiowalem repo.png">
+</p>
+
+dzięki czemu następnie sklonowałem repozytorium na wolumin wejściowy
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/4. Sklonuj repozytorium na wolumin wejściowy.png">
+</p>
+powyższa komenda kopiuje pliki z lokalnego kontenera o nazwie "node-js-dummy-test" do ścieżki "/app" w kontenerze o nazwie "lab4".
+
+Później przeszedlem do kontenera i otworzylem katalog z zainstalowanym repozytorium, dzięki czemu uruchomiłem instalację zależności i uruchomiłem build w kontenerze.
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/5. przeszedlem do kontenera i otworzylem katalog z zainstalowanym repo i uruchomilem instalacje zaleznosci.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/6. Uruchom build w kontenerzei.png">
+</p>
+
+Wracając do katalogu ":/app" zapisałem pliki  pliki na woluminie wyjściowym, tak by były dostępne po wyłączniu kontenera.
+
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/7. zapisz powstałe-zbudowane pliki na woluminie wyjściowym, tak by były dostępne po wyłączniu kontenera..png">
+</p>
+
+Aby udowodnić powodzenia wykonanych przeze mnie akcji wyszukałem ścieżkę do wolumina wyjściowego, a następnie wyświetliłem jego zawartość.
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/8. szukanie sciezki do wolumena wyjsciowego.png">
+</p>
+
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/9. dowod przeniesienia.png">
+</p>
+
+### Eksponowanie portu
+
+Eksponowanie portu z użyciem iperf3 umożliwia otwarcie określonego portu na hoście, na którym działa iperf3, aby umożliwić komunikację z innymi urządzeniami. Dzięki temu inne urządzenia mogą łączyć się z iperf3 poprzez ten port i wykonywać testy przepustowości sieci, mierzyć opóźnienia lub przeprowadzać inne diagnozy sieciowe.
+
+Pracę nad tym etapem zajęć rozpocząłem od pobrania obrazu iperf3 i następnym uruchomieniem wewnątrz kontenera serwer iperf3
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/10. Pobranie obrazu.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/11. Uruchom wewnątrz kontenera serwer iperf.png">
+</p>
+
+Powyższa komenda uruchamia kontener Dockerowy z iperf3, eksponując port 5201 na hoście oraz uruchamia serwer iperf3 w trybie verbose, czyli zwiększającym szczegółowość informacji wyświetlanych przez program lub polecenie.
+
+Aby wydobyć te informacje uruchomiłem kolejny terminal, gdzie wyszukałem id kontenera, a następnie połączyłem się z nim, aby zbadać ruch
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/12. sprawdzanie adresu ip kontenera.png">
+</p>
+- widok ze strony klienta:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/13. Połącz się z nim z drugiego kontenera, zbadaj ruch - klient.png">
+</p>
+- widok ze strony serwera:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/13. Połącz się z nim z drugiego kontenera, zbadaj ruch - serwer.png">
+</p>
