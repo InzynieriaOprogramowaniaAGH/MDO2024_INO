@@ -444,10 +444,6 @@ W moim podejściu okazało się jednak koniecznym uruchomienie kontenera kopiuj�
 Możliwym jest ominięcie tego problemu po przez podpięcie woluminu z pozycji Dockerfile-a poleceniem ``RUN --mount`` ale wymaga to stosowanie buildex--a więc odpuściłęm sobie. Dopuki build działa unikam buildex-a.
 
 ### Eksponowanie portu
-* Ponów ten krok, ale wykorzystaj własną dedykowaną sieć mostkową. Spróbuj użyć rozwiązywania nazw
-* Połącz się spoza kontenera (z hosta i spoza hosta)
-* Przedstaw przepustowość komunikacji lub problem z jej zmierzeniem (wyciągnij log z kontenera, woluminy mogą pomóc)
-* Opcjonalnie: odwołuj się do kontenera serwerowego za pomocą nazw, a nie adresów IP
 
 Przygotowałem Dockerfile na bazie fedory któy posiadał podstawowe narzędzia takie jak hostname ncurses i tldr oraz iperf3. Uruchomiłem dwa połączenia ssh do maszyny wirtualnej i uruchomiłem na nich dwie instancje kontenera z utworzonego przed chwilą obrazu.
 W kontenerze który posłuży za serwer uruchomiłem usługę serwer poleceniem: ``iperf3 -s``
@@ -478,9 +474,35 @@ W obu przypadkach kontener różni się tylko nazwą hosta i kontenera.
 
 
 ### Instancja Jenkins
-* Zapoznaj się z dokumentacją  https://www.jenkins.io/doc/book/installing/docker/
-* Przeprowadź instalację skonteneryzowanej instancji Jenkinsa z pomocnikiem DIND
-* Zainicjalizuj instację, wykaż działające kontenery, pokaż ekran logowania
+Po zapoznaniu się z instrukacją instalacji i konfiguracji instacnji ``Jenkins/Jenkins``.
+Przeszedłem du przygotowania Jenkinsa. Na tym etapie nie spodziewałem się jeszcze tego że zajmie mi on więcej niż 15 min. 
+Kontener bez problemu uruchomił się i udostępniał usługi na wskazanych portach. Nie mogłęm jednak uzyskać dostępu do Jenkinsa z przeglądarki hosta. Na początku myślałem, że problem ten związany jest z koniecznością przekierowanie portów maszyny na porty hosta lecz to nie pomogło. Instalcji Jenkinsa dokonałem kilkukrotnie ale to nie zmieniło efektu(poza jednym przypadkiem gdy żadne pakiety przy pobieraniu obrazu jenkins/jenkins nie pozwoliły się pobrać). Kontener działa poprawnie ale nie mogę się dostać do Jenkinsa w przeglądarce.
+Sprawdziłem adres ip maszyny wirtualnej przy pomocy ``hostname`` co zwróciło mi adresy ip przyporządkowane wszystkim sieciom, które utworzyłem w dokerze. Na tym etapie nie zastanowiło mnie to, że wszystkie (z wyjątkiem adresu maszyny w VirtualBoxie) były adresami sieci dokerowych.
+
+Po tygodniu przesuwania ponownych prób w czasie zapytałem GPT o instrukcję połączenia się do Jenkinsa, który siedzi w kontenerze na maszynie wirtualnej.
+GPT pokierował mnie przez te same kroki co instrukcja z wyjątkiem tego, że GPT wskazał `ip addr` jako sposób pozyskania adresu ip maszyny n której stoi usługa.
+```
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host noprefixroute 
+       valid_lft forever preferred_lft forever
+2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 08:00:27:89:08:b0 brd ff:ff:ff:ff:ff:ff
+    inet 10.0.2.15/24 brd 10.0.2.255 scope global dynamic noprefixroute enp0s3
+       valid_lft 84599sec preferred_lft 84599sec
+    inet6 fe80::a00:27ff:fe89:8b0/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+```
+Oczywiście przy tym rozwiązaniu mój terminal zostął zasypany ale to tu udało mi się odszukać rozwiązanie.
+
+Pierwszy adres, który otrzymałem był innym adresem od wszystkich z których dotąd skorzystałem i które były zwracane przez `hostname`.
+Po odwołaniue się do usługi Jenkinsa przez ten właśnie adres byłem w stanie dokonać konfiguracji Jenkinsa.
+
+![FirstLogin](../Resources/Lab5/JenkinsFirstLogin.png)
+
+Jedyne co mnie zastanawia to dlaczego ssh był w stanie przebić się do maszyny po jej adresie przypisanym przez Virtualboxa a Usługa Jenkinsa nie mogła. Na to pytanie odpowiem sobie pracując z Jenkinsem na kolejnym laboratorium.
 
 ## Zakres rozszerzony
 ### Komunikacja
