@@ -28,3 +28,70 @@ oraz uruchomiłem testy jednostkowe
 </p>
 
 ### Przeprowadzenie buildu w kontenerze
+
+Najpierw pobrałem obraz dla Node'a
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/4. pobranie obrazu node'a.png">
+</p>
+
+Następnie wszedłem z nim w tryb interaktywny
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/5. przejscie w tryb interaktywny.png">
+</p>
+
+oraz będąc w tym trybie sklonowałem do niego repozytorium
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/6. klonowanie repozytorium do kontenera w trybie interaktywny.png">
+
+ Później przeprowadziłem build oraz testy jednostkowe
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/7. isntalacje zaleznosci i testy jednostkowe.png">
+</p>
+
+Identyczne kroki jak powyżej przeprowadziłem dla repozytorium "Irssi", najpierw pobrałem obraz fedory
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/8. pobranie obrazu fedora.png">
+</p>
+
+następnie wszedłem w tryb interaktywny i pobrałem na nim gita
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/9. uruchomienie kontenera w trybie interaktywnym i pobranie gita.png">
+</p>
+
+oraz sklonowałem do niego repozytorium 
+ 
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/10. pobranie gita i pobranie zaleznosci.png">
+</p>
+
+Jendakże zanim mogłem przeprowadzić build musiałem doinstalować następujące zależności
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/11. kolejne pobranie zaleznosci.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/12. kolejne zaleznosci.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/13. jeszcze kolejne zaleznosci.png">
+</p>
+
+Dzięki czemu mogłem przeprowadzić build
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/14. build programu.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/15. message do builda.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/16. build ciag dalszy.png">
+</p>
+
+oraz uruchomić unit testy
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/17. unit testy.png">
+</p>
+
+### Automatyzacja procesu - stworzenie plików dockerfile
+
+W katalogu, w którym zamieszczone jest to sprawozdanie, stworzyłem folder "Dockerfiles" oraz dla wymienionych na początku repozytoriów utworzyłem katalog "node" oraz "irssi" i w kazdym z nim stworzyłem katalog "build" oraz "test", aby w każdym z nich móc utworzyć odpowiednie dla realizacji celu zajęć pliki dockerfile.
+
