@@ -175,3 +175,23 @@ Wykonane przeze mnie działania pozwoliły mi na stworzenie kontenerów, które 
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/25. wykaz ze wdraza i pracuje.png">
 </p>
+
+## Zajęcia 04
+## Dodatkowa terminologia w konteneryzacji, instancja Jenkins
+### Zachowywanie stanu
+
+Aby zrealizować zajęcia należało skorzystać z woluminów, które są wykorzystywane w dockerze do izolacji i uruchamiania aplikacji w kontenerach. Woluminy w Dockerze są używane do przechowywania danych, dzięki czemu aplikacje mogą być przenoszone między różnymi środowiskami bez utraty danych oraz zapewniają elastyczność i skalowalność w zarządzaniu zasobami.
+
+W związku z powyższym przygotowałem wolumin wejściowy i wyjściowy
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/1. Tworzenie woluminów.png">
+</p>
+
+oraz podłączyłem je do bazowego, z którego rozpoczynałem poprzednio pracę 
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/2. podłącz je do kontenera bazowego, z którego rozpoczynano poprzednio pracę.png">
+</p>
+
+Następnie należało sklonować repozytorium na wolumin wejściowy
+
+zacząłem od
