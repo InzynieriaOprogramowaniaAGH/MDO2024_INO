@@ -93,5 +93,39 @@ oraz uruchomić unit testy
 
 ### Automatyzacja procesu - stworzenie plików dockerfile
 
-W katalogu, w którym zamieszczone jest to sprawozdanie, stworzyłem folder "Dockerfiles" oraz dla wymienionych na początku repozytoriów utworzyłem katalog "node" oraz "irssi" i w kazdym z nim stworzyłem katalog "build" oraz "test", aby w każdym z nich móc utworzyć odpowiednie dla realizacji celu zajęć pliki dockerfile.
+W katalogu, w którym zamieszczone jest to sprawozdanie, stworzyłem folder "Dockerfiles" oraz dla wymienionych na początku repozytoriów utworzyłem katalog "node" oraz "irssi" i w kazdym z nich stworzyłem katalog "build" oraz "test", aby móc w nich utworzyć odpowiednie dla realizacji zajęć pliki dockerfile.
+
+W katalogu "(..)/Sprawozdanie2/Dockerfiles/node/build" zamieściłem następującą treść w pliku dockerfile
+```
+FROM node:latest as build-image
+
+RUN git clone https://github.com/devenes/node-js-dummy-test
+
+WORKDIR /node-js-dummy-test/ 
+
+RUN npm install 
+```
+
+oraz przeprowadziłem przy jego pomocy build
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/18. tworzenie obrazu z dockerfila.png">
+</p>
+
+Następnie w katalogu "(..)/Sprawozdanie2/Dockerfiles/node/test" zamieściłem następującą treść w pliku dockerfile
+```
+FROM build-image 
+
+CMD npm test
+```
+
+później przy jego pomocy zbudowałem obraz
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/20. budowa obrazu.png">
+</p>
+
+oraz uruchomiłem testy jednostkowe przy pomocy kontenera
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/21. uruchomienie kontenera.png">
+</p>
+
 
