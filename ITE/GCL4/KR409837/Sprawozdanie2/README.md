@@ -246,11 +246,15 @@ Aby wydobyć te informacje uruchomiłem kolejny terminal, gdzie wyszukałem id k
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/12. sprawdzanie adresu ip kontenera.png">
 </p>
+
 - widok ze strony klienta:
+
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/13. Połącz się z nim z drugiego kontenera, zbadaj ruch - klient.png">
 </p>
+
 - widok ze strony serwera:
+
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/13. Połącz się z nim z drugiego kontenera, zbadaj ruch - serwer.png">
 </p>
