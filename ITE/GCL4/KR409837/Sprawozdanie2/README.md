@@ -259,7 +259,7 @@ Aby wydobyć te informacje uruchomiłem kolejny terminal, gdzie wyszukałem id k
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/13. Połącz się z nim z drugiego kontenera, zbadaj ruch - serwer.png">
 </p>
 
-Następnie ponowiłem wyżej wykonane przeze mnie kroki, jednakże tym razem wykorzystując własną dedykowaną sieć mostkową. Warto zaznaczyć, że podczas tworzenia sieci w dockerze sieć mostkowa jest siecią domyślą:
+Następnie ponowiłem wyżej wykonane przeze mnie kroki, jednakże tym razem wykorzystując własną dedykowaną sieć mostkową. Warto zaznaczyć, że podczas tworzenia sieci w dockerze sieć mostkowa jest siecią domyślną:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/14. utworzenie sieci typu bridge (jest domyslna).png">
 </p>
