@@ -151,7 +151,7 @@ git clone https://github.com/irssi/irssi
 
 ```
 cd irssi
-mason Build
+meson Build
 ninja -C /irssi/Build
 ```
 
@@ -260,20 +260,202 @@ Jak widać wszystko jest wykonywane w trakcie budowania kontenerów zgodnie z oc
 ### Zachowywanie stanu
 * Zapoznaj się z dokumentacją https://docs.docker.com/storage/volumes/
 * Przygotuj woluminy wejściowy i wyjściowy, o dowolnych nazwach, i podłącz je do kontenera bazowego, z którego rozpoczynano poprzednio pracę
+
+> To zadanie zostaje przeprowadzane w wykorzystaniu repozytorium irssi z poprzedniego zadania.
+
+Przygotowujemy dwa woluminy oraz sprawdzamy czy zostały utworzone na liście dzięki: 
+
+```
+docker volume create V_input
+docker volume create V_output
+docker volume list
+```
+
+![ss](./ss/ss17.png)
+
+
 * Uruchom kontener, zainstaluj niezbędne wymagania wstępne (jeżeli istnieją), ale *bez gita*
+
+```
+docker run -d --name fedora_gitless -v V_input:/input -v V_output:/output fedora
+```
+> Uruchamiając nasz kontener dodajemy -v V_input:/input -v V_output:/output co podłącza woluminy (V_input, V_output) do kontenera, w postaci katalogów (w tym przypadku input, output) w ścieżce głównej w katalogu vol. Jak widać na poniższym screen'ie, nasz kontener posiada na liście oba te foldery.
+
+![ss](./ss/ss18.png)
+
+Następnie instalujemy wymagania wstępne, ale pomijając git'a. Korzystamy z wiedzy z poprzedniego przygotowania środowiska dla repozytorium irssi
+
+```
+dnf -y update
+dnf -y install meson ninja* gcc glib2-devel utf8proc* ncurses* perl-Ext*
+```
+
 * Sklonuj repozytorium na wolumin wejściowy (opisz dokładnie, jak zostało to zrobione)
+
+Aby sklonować repozytorium na wolumin wejściowy jest kilka metod. My posłużyliśmy się metodą, w której klonujemy repo na zewnątrz, a następnie kopiujemy je do wybranego woluminu (odpowiadającemu mu katalogowi w kontenerze)korzystając z `docker cp`, kopiując je ścieżką bezpośrednio do woluminu podpętego w naszym kontenerze.
+
+Najpierw klonujemy repo na zewnątrz w naszym systemie do osobnego katalogu:
+
+```
+git clone https://github.com/irssi/irssi
+```
+
+Następnie nasze repozytorium kopiujemy do środka kontenera do katalogu odpowiedzialnego za 
+
+```
+docker cp katalog/repo/. fedora_gitless:/vol/input
+```
+
+> `fedora_gitless` to nazwa naszego kontenera, `:/vol/input` oznacza nasz katalog który jest naszym przypiętym woluminem
+
+![ss](./ss/ss19.png)
+
 * Uruchom build w kontenerze - rozważ skopiowanie repozytorium do wewnątrz kontenera
+
+Dla bezpieczeństwa kopiujemy repozytorium z naszego /input do nowego katalogu `irs`.
+Następnie uruchamiamy builda w katalogu repozytorium.
+
+```
+cp -r input/. irs/
+cd irs/irssi
+meson Build
+ninja -C /vol/irs/irssi/Build
+```
+
+![ss](./ss/ss20.png)
+
 * Zapisz powstałe/zbudowane pliki na woluminie wyjściowym, tak by były dostępne po wyłączniu kontenera.
+
+Kopiujemy nasze zbudowane pliki na wolumin wyjściowy, czyli cały powstały katalog `Build` do naszego katalogu `output`
+
+```
+cp -r irs/irssi/Build output/
+```
+
+![ss](./ss/ss21.png)
+
 * Pamiętaj udokumentować wyniki.
+
+> Wyniki dokumentowane na bieżąco.
+
 * Ponów operację, ale klonowanie na wolumin wejściowy przeprowadź wewnątrz kontenera (użyj gita w kontenerze)
+
+Do wykonania tego podpunktu instalujemy git'a i uruchamiamy git clone do folderu `input`
+
+```
+dnf install -y git
+git clone https://github.com/irssi/irssi
+```
+
+> Oczywiście repozytorium irssi już jest na woluminie, więc drugi raz nie możemy go sklonować. Ale dla pewności że wszystko działa usuwamy katalog i klonujemy ponownie
+
+```
+rm -rf irssi
+git clone https://github.com/irssi/irssi
+```
+
+![ss](./ss/ss22.png)
+
 * Przedyskutuj możliwość wykonania ww. kroków za pomocą `docker build` i pliku `Dockerfile`. (podpowiedź: `RUN --mount`)
+
+> Powyższe kroki możnaby było dość prosto zautomatyzować i wykonać za pomocą pliku `Dockerfile`.
+
+> Jedyną rzeczą która mogłaby być problematyczna byłyby woluminy. W Dockerfilu nie możemy tak samo ich stworzyć i podłączyć. I tutaj z pomocą przychodzi `RUN --mount`, który montuje katalogi z zewnątrz do wybranego katalogu wewnątrz kontenera.
+
+
 
 ### Eksponowanie portu
 * Zapoznaj się z dokumentacją https://iperf.fr/
 * Uruchom wewnątrz kontenera serwer iperf (iperf3)
+
+Uruchamiamy czysty kontener fedory i instalujemy na nim moduł iperf3
+
+```
+docker run -it fedora_iperf_server fedora
+.
+dnf install -y iperf3
+```
+
+A następnie uruchamiamy serwer iperf3 dzięki:
+
+```
+iperf3 -s
+```
+
+> -s to oznaczenie, że to jest serwer
+
+Zapisujemy adres IP tego kontenera, aby móc się potem połączyć
+
+
 * Połącz się z nim z drugiego kontenera, zbadaj ruch
+
+Tworzymy kolejny kontener, taki sam jak powyżej
+
+```
+docker run -it fedora_iperf_client fedora
+.
+dnf install -y iperf3
+```
+
+Następnie łączymy się z serwerem dzięki:
+
+```
+iperf3 -c <IP_ADDRESS> 5201
+```
+
+> `<IP_ADDRESS>` jest adresem IP kontenera serwera, a `5201` jego domyślnym portem. -c oznacza client'a.
+
+![ss](./ss/ss23.png)
+
+> Jak widać client połączył się z serwerem bez problemów i ruch między nimi jest stabilny.
+
 * Zapoznaj się z dokumentacją `network create` : https://docs.docker.com/engine/reference/commandline/network_create/
 * Ponów ten krok, ale wykorzystaj własną dedykowaną sieć mostkową. Spróbuj użyć rozwiązywania nazw
+
+Korzystając z możliwości docker'a tworzymy własną dedykowaną sieć mostkową dzięki:
+
+```
+docker network create fsiec-mostek
+```
+
+Następnie uruchamiamy kontener dla serwera, ale z naszą siecią:
+
+```
+docker run --network fsiec_mostek -it --name fedora_iperf_server fedora
+```
+
+I ponownie startujemy server:
+
+```
+iperf3 -s
+```
+
+Dzięki naszej sieci możemy połączyć się z serwerem korzystając z nazwy sieci, zamiast adresu IP:
+
+```
+iperf3 -c <NETWORK_NAME> 5201
+```
+
 * Połącz się spoza kontenera (z hosta i spoza hosta)
+
+Łączymy się z serwerem z naszego hosta, tak samo jak w poprzednim przypadku, korzystając z odpowiedniego adresu IP
+
+```
+iperf3 -c <IP_ADDRESS> 5201
+```
+
+
+![ss](./ss/ss24.png)
+
+> Tak samo możemy połączyć się spoza hosta, ale po udostępnieniu portu. (Dodanie `-p 5201:5201` podczas tworzenia kontenera servera)
+
+
 * Przedstaw przepustowość komunikacji lub problem z jej zmierzeniem (wyciągnij log z kontenera, woluminy mogą pomóc)
-* Opcjonalnie: odwołuj się do kontenera serwerowego za pomocą nazw, a nie adresów IP
+
+Logi z kontenera serwerowego wyciągamy dzięki dockerowi:
+
+```
+docker logs fedora_iperf_server
+```
+
+![ss](./ss/ss25.png)
