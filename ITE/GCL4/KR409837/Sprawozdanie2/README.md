@@ -258,3 +258,87 @@ Aby wydobyć te informacje uruchomiłem kolejny terminal, gdzie wyszukałem id k
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/13. Połącz się z nim z drugiego kontenera, zbadaj ruch - serwer.png">
 </p>
+
+Następnie ponowiłem wyżej wykonane przeze mnie kroki, jednakże tym razem wykorzystując własną dedykowaną sieć mostkową. Warto zaznaczyć, że podczas tworzenia sieci w dockerze sieć mostkowa jest siecią domyślą:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/14. utworzenie sieci typu bridge (jest domyslna).png">
+</p>
+
+Później utworzyłem kontener w sieci, po czym wyszukałem adres IP sieci
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/15. Utworzenie kontenera w sieci.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/16. komenda do wypisania adresu  IP utworzenie sieci.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/17. znaleziony adres.png">
+</p>
+
+Wykorzystując sieć mostkową zbadałem ruch:
+
+- widok ze strony klienta:
+
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/18. klient - moja siec.png">
+</p>
+
+- widok ze strony serwera:
+
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/19. serwer - moja siec.png">
+</p>
+
+Do zbadania ruchu spróbowałem też użyć rozwiązywania nazw:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/20. próba użycia rozwiązywania nazw.png">
+</p>
+
+Następnie przeszedłem do połączenia z serwerem iperf3 spoza kontenera, w tym celu na mojej maszynie wirtualnej zainstałowałem iperf3
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/21. instalacja iperfa.png">
+</p>
+
+oraz połączyem się z hosta.
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/22. polacz sie spoza kontenera z hosta.png">
+</p>
+
+Ostatecznie wyciągnąłem log z kontenera, aby móc przedstawić przepustowość komunikacji 
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/23. zapisanie logów z serwera.png">
+</p>
+
+### Instancja Jenkins
+
+Jenkins to popularne narzędzie do ciągłej integracji i dostarczania (CI/CD), umożliwiające automatyzację procesów budowania, testowania i wdrażania oprogramowania w sposób zautomatyzowany i powtarzalny.
+
+Aby przystąpić do jego instalacji wykonałem ciąg następujących komend:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/24. instalacja jenkinsa 1.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/25. zbudowania dockerfila nowoutworoznego.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/26. kolejna losowa komendra.png">
+</p>
+
+Dzięki powyższym akcjom mogłem odblokować Jenkins przechodząc do strony. `https://localhost:8080/`, która wyświetlała następującą zawartość:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/27. unlock jenkins.png">
+</p>
+
+Aby uzyskać hasło admninistratora skopiowałem wyniki komendy `sudo ls /var/jenkins_home/secrets/initialAdminPassword`, po czym przeszedłem do instalacji.
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/28. instalacja.png">
+</p>
+
+Nastepnie zostałem przekierowany do ekranu logowania, gdzie po utworzeniu konta Jenkins był już gotowy do użytku
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/29. ekran logowania.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab4/30. Po utworzeniu konta.png">
+</p>
+ 
