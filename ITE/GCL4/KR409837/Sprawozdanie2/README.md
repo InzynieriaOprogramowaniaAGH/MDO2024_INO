@@ -8,7 +8,7 @@ Aby wykonać automatyzację procesu tworzenia kontenera, wykorzystując Dockerfi
 
 Warto zaznaczyć, że powyższe repozytoria zostały wybrane ze względu na możliwość buildowania oraz przeprowadzania na nich testów.
 
-W związku z powyższym utworzyłem nowy katalog dla repozytorium "node-js-dummy-test" oraz skopiowałem dla niego repozytorium 
+W związku z powyższym utworzyłem nowy katalog dla repozytorium "node-js-dummy-test" oraz skopiowałem do niego repozytorium 
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/1. klonowanie repo.png">
 </p>
