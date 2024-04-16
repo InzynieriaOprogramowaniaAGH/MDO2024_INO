@@ -128,4 +128,49 @@ oraz uruchomiłem testy jednostkowe przy pomocy kontenera
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/21. uruchomienie kontenera.png">
 </p>
 
+Identyczne kroki poczyniłem dla repozytorium "Irssi".
 
+Zacząłem od umieszczenia w pliku Dockerfile, znajdującym się w odpowednim katalogu, następującej treści
+```
+FROM fedora:latest as fedora-build-image
+
+RUN dnf install -y git && \
+git clone https://github.com/irssi/irssi
+
+WORKDIR /irssi 
+
+RUN dnf install -y meson ninja* gcc  glib2-devel utf8proc* ncurses* perl-Ext*
+
+RUN meson build && \
+ninja -C ./build
+```
+
+następnie zbudowałem dzięki temu plikowi obraz
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/22. Zbudowanie obraz.png">
+</p>
+
+Później stworzyłem plik Dockerfile w folderze do testowania i zamieściłem w nim następującą treść
+```
+FROM fedora-build-image
+
+WORKDIR /irssi/build
+
+CMD ninja test
+```
+
+oraz zbudowałem ten obraz
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/23. budowa obrazu do testowania.png">
+</p>
+
+Wykonane przeze mnie działania pozwoliły mi na stworzenie kontenerów, które wdrażają się i pracują poprawnie, o czym mogą świadczyć zakończone z sukcesem testy jednostkowe:
+- dla "Node'a"
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/24. wykaz ze wdraza i pracuje.png">
+</p>
+
+- dla "Irssi"
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie2/Lab3/25. wykaz ze wdraza i pracuje.png">
+</p>
