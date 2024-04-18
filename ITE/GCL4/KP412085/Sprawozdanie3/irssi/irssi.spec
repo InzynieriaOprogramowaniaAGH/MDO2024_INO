@@ -1,0 +1,59 @@
+Name:           irssi
+Version:        1.0
+Release:        1%{?dist}
+Summary:        Client irssi
+
+License:        GPLv2
+URL:            https://irssi.org/
+Source0:        https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/tree/KP412085/ITE/GCL4/KP412085/Sprawozdanie3/irssi/releases/download/v%{version}/irssi-%{version}.tar.gz
+
+
+BuildRequires:  git
+BuildRequires:  meson
+BuildRequires:  gcc
+BuildRequires:  glib2-devel
+BuildRequires:  ncurses-devel
+BuildRequires:  ninja-build
+BuildRequires:  perl-ExtUtils-Embed
+BuildRequires:  utf8proc-devel
+BuildRequires:  cmake
+BuildRequires:  openssl-devel
+BuildRequires:  gdb
+Requires:       glib2
+Requires:       openssl
+Requires:       perl
+Requires:       ncurses-libs
+
+%description
+The client of the future
+
+
+%prep
+%autosetup
+
+
+%build
+meson Build
+ninja -C %{_builddir}/irssi-%{version}/Build
+
+
+%install
+DESTDIR=%{buildroot} ninja -C Build install
+mkdir -p %{buildroot}/usr/local/share/licenses/%{name}/
+cp %{_builddir}/irssi-%{version}/COPYING %{buildroot}/usr/local/share/licenses/%{name}/
+
+
+%files
+%license /usr/local/share/licenses/%{name}/COPYING
+/usr/local/bin/%{name}
+/usr/local/share/%{name}/
+/usr/lib/debug/
+/usr/local/include/
+/usr/local/lib64/
+/usr/local/share/doc 
+/usr/local/share/man
+
+
+
+%changelog
+* Tue Apr 17 2024 Kapcer Papuga <kacperpap@gmail.com> - 1-1

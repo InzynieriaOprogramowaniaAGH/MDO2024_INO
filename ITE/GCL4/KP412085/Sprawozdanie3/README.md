@@ -225,7 +225,167 @@ Po uruchomieniu takiego pipeline'a otrzymujemy następujący wynik:
     - <strong>Izolacja środowiska</strong>: Mimo że uruchomienie kontenera CI na hoście może nie zapewniać takiej samej izolacji środowiska co DIND, to wciąż może być wystarczające dla wielu przypadków użycia.
 
 
-**5. Irssi pipeline stage prepare, build, test, deploy i publish**
+# Irssi pipeline stage prepare, build, test, deploy i publish 
+
+**0. Omówienie etapów deploy i publish**
+
+Poprzednia wersja pipeline'a obejmowała budowanie aplikacji oraz jej testy. Kolejnym etapem jest deploy, czyli uruchomienie aplikacji w kontenerze docelowym. Aplikacje instalowane z repoztorium fedory poprzez menadżera pakietów `dnf` (na systemach typu RHEL) pobiera spakowane wersje aplikacji w postaci paczki `rpm`. Taka paczka dostosowana jest do naszego systemu i architektury już podczas pobierania z repozytorium, któych pliki konfiguracyjne (oraz adresy serwerów lustrzanych) znajdują się w katalogu `/etc/yum.repos.d`. W trakcie pobierania instalowane są za zgodą użytkownika wszystkie konieczne dependencje. Taki sposób jest wygodny i dostosowany do użytkownika indywidualnego. Istnieje jednak również możliwość wyabstrahowania paczki od architektury (ograniczeniem jest dalej rodzina systemów RHEL domyślnie uywająca dnf). Polega ona na budowaniu paczki z rozszeżeniem `.src.rpm`, która jak nazwa wskazuje zawiera kody źródłowe oraz inne definicje i konfiguracje aplikacji. Taką paczkę można zbudować bezpośrednio na hoście użytkownika końcowego. Ograniczeniem, które pojawia się w tym miejscu jest zazwyczaj dużo większa liczba zależności, ponieważ podczas budowy paczki `rpm` ze źródła (`src.rpm`), musimy posiadać wszystkie zależności budowania (nie tylko runtime'owe) aplikacji oraz dodatkowo program budujący. Zależności takiego programu `rpmbuild` to (część z nich jest domyślnie zainstalowana):
+
+```bash
+dnf install gcc rpm-build rpm-devel rpmlint make python bash coreutils diffutils patch rpmdevtools
+```  
+W moim pipelinie, krok deploy będzie budował paczkę ze źródła, co pomimo większych wymogów pozwoli zbudować końcową aplikację bezpośrednio u użytkownika końcowego, po czym odpali program irssi i sprawdzi poprawność jego działania. Za zbudowania paczki, którą przekażemy do kontenera deployowego będzie odpowiedzialny krok `publish`. Kontener publishowy wymaga zainstalowania dependencji programu budującego paczki `rpm` (ALE nie posiada dependencji do budowania aplikcji, ponieważ tylko pakuje w odpowiedni sposób cały kod), natomiast kontener deployowy będzie musiał posiadać zarazem dependencje potrzebne podczas budowy i działania aplikacji oraz te potrzebne programowi budującemu. Ponadto skoro w kroku `deploy` kompilujemy paczkę `.src.rpm`, to ten krok poprzedza krok publish z budową tej paczki. 
+
+
+
+**1. Budowanie pakietu source rpm (próbne)**
+
+Pierwszym krokiem była próba zbudowania paczki poza pipelinem w celu przetestowania procesu jej towrzenia. W tym celu stworzyłem dwa kontenery fedory `rpm_build` oraz `rpm_deploy`. Pierwszy kontner posiada zależności zdefiniowane w następujący sposób:
+
+```bash
+docker run -it --name=rpm_build fedora
+dnf -y install gcc rpm-build rpm-devel rpmlint make python bash coreutils diffutils patch rpmdevtools git 
+```
+
+Drugi kontener:
+
+```bash
+docker run -it --name=rpm_deploy fedora
+dnf -y install gcc rpm-build rpm-devel rpmlint make python bash coreutils diffutils patch rpmdevtools git meson ninja* glib2-devel utf8proc* ncurses* perl-Ext* cmake gdb openssl-devel
+```
+
+W celu przetestowania procsu budowy paczki, utworzę ją na kontnerze `rpm_build` po czym skopiuję do kontener `rpm_deploy` gdzie ją zbuduję i uruchomię program.
+
+W kontenerze `rpm_build` wykonuję następujące kroki:
+
+- Buduję katalog projektu za pomocą:
+  ```bash
+    $ rpmdev-setuptree
+
+    $ tree ~/rpmbuild/
+    /home/user/rpmbuild/
+    |-- BUILD
+    |-- RPMS
+    |-- SOURCES
+    |-- SPECS
+    `-- SRPMS
+  ```
+
+  Zbudowana paczka będzie znajdowała się w podkatalogu `SRPMS`, w katalogu `SPECS` utworzymy plik `specfile`, który będzie definiował sposób budowania paczki, katalog `BUILD` będzie zawierał kod źródłowy aplikacji oraz licencję.
+
+- Klonujemy kod repozytorium irssi:
+  ```bash
+  git clone https://github.com/irssi/irssi.git
+  ```
+
+- Budujemy archiwum i umieszczamy je w odpowienim katalogu:
+  ```bash
+  mv irssi irssi-<version>
+  tar -cvzf irssi-<version>.tar.gz irssi-<version>
+  cp irssi-<version>.tar.gz ~/rpmbuild/SOURCES
+  ```
+
+- Budujemy plik `.spec` oraz definiujemy go zgodnie ze wzorcem podanym w pliku, pozostawiając jedynie sekcję %changelog wygenerowaną automatycznie [irssi.spec](./irssi/irssi.spec)
+
+  ```bash
+  cd ~/rpmbuild/SPECS
+  rpmdev-newspec irssi
+  ```
+  Plik `.spec` wygląda następująco:
+  >Name:           irssi
+  >Version:        1.0
+  >Release:        1%{?dist}
+  >Summary:        Client irssi
+  >
+  >License:        GPLv2
+  >URL:            https://irssi.org/
+  >Source0:        https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/tree/KP412085/ITE/GCL4/KP412085/Sprawozdanie3/irssi/releases/download/v%{version}/irssi-%{version}.tar.gz
+  >
+  >
+  >
+  >BuildRequires:  git
+  >BuildRequires:  meson
+  >BuildRequires:  gcc
+  >BuildRequires:  glib2-devel
+  >BuildRequires:  ncurses-devel
+  >BuildRequires:  ninja-build
+  >BuildRequires:  perl-ExtUtils-Embed
+  >BuildRequires:  utf8proc-devel
+  >BuildRequires:  cmake
+  >BuildRequires:  openssl-devel
+  >BuildRequires:  gdb
+  >Requires:       glib2
+  >Requires:       openssl
+  >Requires:       perl
+  >Requires:       ncurses-libs
+  >
+  >%description
+  >The client of the future
+  >
+  >%prep
+  >%autosetup
+  >
+  >%build
+  >meson Build
+  >ninja -C %{_builddir}/irssi-%{version}/Build
+  > 
+  >%install
+  >DESTDIR=%{buildroot} ninja -C Build install
+  >mkdir -p %{buildroot}/usr/local/share/licenses/%{name}/
+  >cp %{_builddir}/irssi-%{version}/COPYING %{buildroot}/usr/local/share/licenses/%{name}/
+  >
+  >%files
+  >%license /usr/local/share/licenses/%{name}/COPYING
+  >/usr/local/bin/%{name}
+  >/usr/local/share/%{name}/
+  >/usr/lib/debug/
+  >/usr/local/include/
+  >/usr/local/lib64/
+  >/usr/local/share/doc 
+  >/usr/local/share/man
+  >
+
+  `Source0` definiuje miejsce z którego można pobrać paczkę `.tar.gz`, której używamy do budowania. Sekcja `BuildRequires` definiuje zależności potrzebne podczas budowy oraz `Requires` zlaeżności potrzebne podczas działania aplikacji. `%prep%` to sekcja umożliwiająca stoswanie skryptów przygotowująych (`%autosetup` to domyslny skrypt narzędzia), `%build` to definicja budowania aplikacji, `%install`, instalacji odpowiednich plików, oraz `%files`, czyli definicji określających miejsca docelowe w których ma zostać zainstalowana aplikacja (która zbuduje się do katalogu `BUILDROOT`) na hoście.
+
+- Następnie budujemy paczkę ze źródłami, z opcją `-bs`(build source) zamiast `-bb` (build binary):
+  ```bash
+  rpmbuild -bs irssi.spec
+  ```
+- Na koniec korzystamy z wbudowanego `lintera rpm` żeby sprawdzić poprawność zbudowania paczki:
+  ```
+  rpmlint ~/rpmbuild/SPECS/irssi.spec
+  rpmlint ~/rpmbuild/SRPMS/<name>.src.rpm
+  ```
+
+  [lint](./screenshots/lint.png)
+
+- Po zbudowaniu paczki przenosimy ją do kontenera `rpm_deploy`. w tym celu podczas działania obydwu kontenerów odpalamy dodatkowy terminal i kopiujemy paczkę:
+  ```bash
+  docker cp <rpm_build_name/id>:/root/rpmbuild/SRPMS/<name>.src.rpm .
+  docker cp ./<name>.src.rpm <rpm_deploy_name/id>:/ 
+  ```
+- Następnie w kontenerze deployowym budujemy paczkę:
+  ```bash
+  rpmbuild --rebuild <name>.src.rpm
+  ```
+
+  Wynik takiej operacji powinien być następujący:
+  [rpm_builded](./screenshots/rpm_rebuild.png)
+
+- Na końcu instalujemy paczkę w systemie (jeśli konieczne pobieramy zależności zdefiniowane w skrypcie poprzez wyrażenie zgody) oraz testujemy działanie aplikacji:
+  ```bash
+  dnf install ~/rpmbuild/RPMS/<arch/i.e.:x86_64>/irssi-<version>.rpm
+  irssi --help
+  ```
+  **Z powodu, że irssi jest aplikacją interaktywną, w paipelinie będziemy ją testować za pomocą `irssi --help` lub `irssi --version`**, które są komendami nieblokującymi (wracają do terminala).
+
+  [irssi_deploy](./screenshots/irssi-deploy.png)
+
+  **//TODO: logi z budowania np z /root/rpmbuild/BUILD/irssi-1.0/.../meson-logs/meson-logs.txt, SPRAWDZIĆ CZY MOZNA ZMIEJSZYC LICZBE DEPENDENCJI**
+
+
+
+
 
 
 
