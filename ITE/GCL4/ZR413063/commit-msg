@@ -1,8 +1,0 @@
-#!/bin/bash
-commit_msg=$(cat "$1")
-sprawdzenie="^ZR413063 .*$"
-
-if [[ ! "$commit_msg" =~ $sprawdzenie ]]; then
-echo "Commit message nie zaczyna się od twoich inicjalow i numeru indeksu. Zmien prosze tresc commit message i sprobuj ponownie"
-exit 1
-fi
