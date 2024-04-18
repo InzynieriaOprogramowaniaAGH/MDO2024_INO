@@ -1,0 +1,8 @@
+#nalezy wpisac nazwe obrazu pierwszego kontenera 
+FROM pomdog_build:latest
+
+#ustawienie katalogu roboczego
+WORKDIR /pomdog/build/linux
+
+#wskazanie ktora komenda ma zostac wywolana po uruchomieniu kontenera
+CMD ["./test/pomdog_test"]
