@@ -4,7 +4,7 @@ ARG RELEASE
 
 FROM irssi-build:$IMAGE_TAG
 
-RUN --mount=type=cache,target=/var/cache/yum && \
+RUN --mount=type=cache,target=/var/cache/yum \
     dnf -y install \
     rpm-build \
     rpm-devel \
@@ -18,6 +18,9 @@ RUN --mount=type=cache,target=/var/cache/yum && \
     rpmdevtools
 
 WORKDIR /
+
+ENV VERSION=$VERSION \
+    RELEASE=$RELEASE
 
 RUN mv irssi irssi-$VERSION && \
     tar -cvzf irssi-$VERSION.tar.gz irssi-$VERSION && \

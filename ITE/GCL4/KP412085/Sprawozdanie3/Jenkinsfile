@@ -20,6 +20,7 @@ pipeline {
             steps {
                 dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie2/irssi"){
                     sh 'docker build --no-cache -t irssi-build:${IMAGE_TAG} -f irssi-build.Dockerfile .'
+                    sh ''
                 }
             }
         }
