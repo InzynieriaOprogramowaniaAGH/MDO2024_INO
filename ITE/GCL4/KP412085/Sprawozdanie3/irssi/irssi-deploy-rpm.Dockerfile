@@ -4,21 +4,9 @@ ARG RELEASE
 
 FROM irssi-build:$IMAGE_TAG
 
-RUN --mount=type=cache,target=/var/cache/yum \
-    dnf -y update && \
+RUN --mount=type=cache,target=/var/cache/yum && \
     dnf -y install \
-    rpm-build \
-    rpm-devel \
-    rpmlint \
-    make \
-    python \
-    bash \
-    coreutils \
-    diffutils \
-    patch \
-    rpmdevtools \
     cmake \
-    gdb \
     openssl-devel && \
     dnf clean all
 

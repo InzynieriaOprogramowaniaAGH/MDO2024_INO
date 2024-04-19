@@ -18,7 +18,6 @@ BuildRequires:  perl-ExtUtils-Embed
 BuildRequires:  utf8proc-devel
 BuildRequires:  cmake
 BuildRequires:  openssl-devel
-BuildRequires:  gdb
 Requires:       glib2
 Requires:       openssl
 Requires:       perl
@@ -56,4 +55,5 @@ cp %{_builddir}/irssi-%{version}/COPYING %{buildroot}/usr/local/share/licenses/%
 
 
 %changelog
-* Tue Apr 17 2024 Kapcer Papuga <kacperpap@gmail.com> - 1-1
+* Tue Apr 17 2024 Kapcer Papuga <kacperpap@gmail.com> - %{version}-%{release}
+- The %{version} version and %{release} release

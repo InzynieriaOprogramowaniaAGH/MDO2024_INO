@@ -2,10 +2,9 @@ ARG IMAGE_TAG
 ARG VERSION
 ARG RELEASE
 
-FROM fedora:39
+FROM irssi-build:$IMAGE_TAG
 
-RUN --mount=type=cache,target=/var/cache/yum \
-    dnf -y update && \
+RUN --mount=type=cache,target=/var/cache/yum && \
     dnf -y install \
     rpm-build \
     rpm-devel \
@@ -16,10 +15,7 @@ RUN --mount=type=cache,target=/var/cache/yum \
     coreutils \
     diffutils \
     patch \
-    rpmdevtools \
-    gcc \
-    git && \
-    dnf clean all
+    rpmdevtools
 
 WORKDIR /
 
