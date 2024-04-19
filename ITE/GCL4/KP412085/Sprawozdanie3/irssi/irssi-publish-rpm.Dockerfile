@@ -2,7 +2,7 @@ ARG IMAGE_TAG
 ARG VERSION
 ARG RELEASE
 
-FROM irssi-build:$IMAGE_TAG
+FROM fedora:39
 
 RUN --mount=type=cache,target=/var/cache/yum \
     dnf -y update && \
@@ -17,9 +17,8 @@ RUN --mount=type=cache,target=/var/cache/yum \
     diffutils \
     patch \
     rpmdevtools \
-    cmake \
-    gdb \
-    openssl-devel && \
+    gcc \
+    git && \
     dnf clean all
 
 WORKDIR /
@@ -31,11 +30,10 @@ RUN mv irssi irssi-$VERSION && \
 
 WORKDIR /root/rpmbuild/SPECS
 
-COPY irssi.spec .
+COPY ./irssi.spec .
 
 RUN rpmbuild -bs irssi.spec && \
     rpmlint irssi.spec && \
     rpmlint ../SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm
 
 COPY /root/rpmbuild/SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm .
-
