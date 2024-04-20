@@ -433,7 +433,76 @@ Po pobraniu wszystkich zależności wprowadzam nowe argumenty czasu budowy `VERS
 
 ![from_arg](./screenshots/from_arg.png)
 
-Pozostałe kroki są analogiczne do tych wykonywanych w czasie próbnej budowy paczki. Różnica polega na tym, że nie tworzymy pliku `.spec` za pomocą komendy `rpmdev-newspec`, tylko kopiujemy w odpowiednie miejsce gotowy plik [irssi.spec](./irssi/irssi.spec). Od wersji testowej różni się on zapisem w sekcji `%changelog`, który generuje ostrzeżenia podczas budowy paczki, ale nie wpływa nie jej działanie. W celu przekazania paczki do następnego etapu pipelina tworzymy wolumen w obrazie dockera. Zgodnie z dokumentacją, [https://docs.docker.com/reference/dockerfile/#volume](https://docs.docker.com/reference/dockerfile/#volume), definiujemy katalog który utworzy wolumen, ale DOPIERO w czasie uruchamiania a nie w czasie jego budowy, co wymusza dodanie w kroku `publish` w pipelinie uruchomienie kontenera na bazie tego obrazu bez podania `CMD` lub `ENTRYPOINT` co spowoduje natychmiastowe zakończenie działania kontenera, ale dane zostaną od
+Pozostałe kroki są analogiczne do tych wykonywanych w czasie próbnej budowy paczki. Różnica polega na tym, że nie tworzymy pliku `.spec` za pomocą komendy `rpmdev-newspec`, tylko kopiujemy w odpowiednie miejsce gotowy plik [irssi.spec](./irssi/irssi.spec). Od wersji testowej różni się on zapisem w sekcji `%changelog`, który generuje ostrzeżenia podczas budowy paczki, ale nie wpływa nie jej działanie. W celu przekazania paczki do następnego etapu pipelina tworzymy wolumen w obrazie dockera. Zgodnie z dokumentacją, [https://docs.docker.com/reference/dockerfile/#volume](https://docs.docker.com/reference/dockerfile/#volume), definiujemy katalog który utworzy wolumen, ale DOPIERO w czasie uruchamiania a nie w czasie jego budowy, co wymusza dodanie w kroku `publish` w pipelinie uruchomienia kontenera na bazie tego obrazu bez zdefiniowanego `CMD` lub `ENTRYPOINT`:
+```bash
+sh 'docker run -v $PWD/releases:/releases irssi-publish-rpm:${IMAGE_TAG}'
+```
+W czasie uruchamiania definiujemy miejsce zamontowania wolumenu. Mechanizm ten jest stworzony przez dockera w celu zapewnienia przenośności plików dockerfile, dlatego podczas definiowania w obrazie nie można definiować ścieżki monotwania na hoście, należy to zrobić dynamicznie. Kontener taki po uuchomieniu natychmiast się zamyka zwracając kod 0, oraz zapisując zbudowaną paczkę do odpowieniego miejsca w kontenerze jenkinsa. 
+
+**3. Step deploy**
+
+Krok ten został już poprzednio opisany. Po skopiowaniu paczki z kontenera Jenkinsa przy pomocy `COPY` zawartego w obrazie, budujemy paczkę, którą następnie instalujemy za pomocą `dnf install`. Obraz ten wygląda następująco: [irssi-deploy-rpm.Dockerfile](./irssi/irssi-deploy-rpm.Dockerfile)
+
+```dockerfile
+ARG IMAGE_TAG
+
+FROM irssi-publish-rpm:$IMAGE_TAG
+
+RUN --mount=type=cache,target=/var/cache/yum \
+    dnf -y install \
+    cmake \
+    openssl-devel && \
+    dnf clean all
+
+ARG VERSION
+ARG RELEASE
+ARG PWD
+
+COPY $PWD/releases/source_rpm/irssi-$VERSION-$RELEASE.fc39.src.rpm /
+
+RUN rpmbuild --rebuild irssi-$VERSION-$RELEASE.fc39.src.rpm && dnf -y install /root/rpmbuild/RPMS/irssi-$VERSION-$RELEASE.fc39.rpm
+
+ENTRYPOINT irssi 
+
+CMD ["--version"]
+```
+
+Dockerfile kończy się poleceniem `irssi --version`, które pozwala w sposób nieblokujący sprawdzić poprawność działania zbudowanej aplikacji.
+
+**4. Zachowywanie logów oraz paczki jako artefaktów jenkinsa**
+
+Aby zachować logi i paczkę z pipeline'u tworzymy ostatni etap `post`. W etapie tym definiujemy dwie sekcje. Pierwsza z nich `always`, definiuje sposób zapisów logów przy każdym uruchomieniu pipeline'u jako `artefaktu` jenksina. Druga sekcja `success` definiuje zapisywanie zbudowanej paczki również jako artefaktu ale tylko w momencie kiedy wszystkie kroki pipeline'a zakończyły się sukcesem.
+
+>post {
+        always {
+            archiveArtifacts artifacts: 'logs/**/*.log', fingerprint: true
+        }
+        success {
+            script {
+                def srcRpmFile = "irssi-${VERSION}-${RELEASE}.fc39.src.rpm"
+                dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi/releases/source_rpm/"){
+                    if (fileExists("${srcRpmFile}")) {
+                        archiveArtifacts artifacts: "${srcRpmFile}", fingerprint: true
+                    } else {
+                        error "File ${srcRpmFile} has not been packaged in publish step correctly."
+                    }
+                }
+            }
+        }
+    }
+
+
+**5. Trigger**
+
+**6. Wersjonowanie**
+
+**7. Ostateczna wersja pipeline'a**
+
+# Podsumowanie
+
+
+
+
 
 
 

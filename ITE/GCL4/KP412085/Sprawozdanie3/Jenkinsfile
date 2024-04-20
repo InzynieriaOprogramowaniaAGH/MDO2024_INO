@@ -39,7 +39,7 @@ pipeline {
             steps {
                 dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi"){
                     sh 'docker build --no-cache --build-arg IMAGE_TAG=${IMAGE_TAG} --build-arg VERSION=${VERSION} --build-arg RELEASE=${RELEASE} -t irssi-publish-rpm:${IMAGE_TAG} -f irssi-publish-rpm.Dockerfile .'
-                    sh 'docker run -v $PWD/releases:/releases irssi-publish-rpm:${IMAGE_TAG}'
+                    sh 'docker run -v $PWD/releases/source_rpm:/source_rpm irssi-publish-rpm:${IMAGE_TAG}'
                 }
             }
         }
