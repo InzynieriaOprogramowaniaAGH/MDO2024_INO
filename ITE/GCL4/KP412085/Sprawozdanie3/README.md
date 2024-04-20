@@ -425,7 +425,13 @@ RUN rpmbuild -bs irssi.spec && \
     mv /root/rpmbuild/SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm /releases/source_rpm/
 ```
 
-`IMAGE_TAG` to argument podawany podczas budowania obrazu za pomocą komendy `--build-arg`. Następnie na podstawie obrazu z etapu budowy tworzę mój nowy obraz. Robię tak ponieważ, etap ten wymaga zainstalowania dependecji programu budowania paczek rpm (nie potrzebuje dependencji builda), które potem 
+`IMAGE_TAG` to argument podawany podczas budowania obrazu za pomocą komendy `--build-arg`. **Następnie na podstawie obrazu z etapu budowy tworzę mój nowy obraz. Robię tak ponieważ, etap ten wymaga zainstalowania dependecji programu budowania paczek rpm (nie potrzebuje dependencji builda), które potem WRAZ z dependencjami builda będą potrzebne w etapie deploy do zbudowania paczki `rpm` ze źródła. Aby zoptymalizować cały proces korzystam obrazu build w kroku publish oraz z obrazu publish w kroku deploy co umożliwia dostęp do wszystkich potrzebnych zależności. Jest to też powód dla którego nie czyszczę obrazu budowanego w kroku deploy. (inną opcją było by zbudowanie paczki rpm z paczki src.rpm i dopiero przesłanie takiej paczki do kroku deploy, co umozliwiłoby pozostawienie jedynie dependencji runtime'owych w kontenerze deploy).**
+
+Po pobraniu wszystkich zależności wprowadzam nowe argumenty czasu budowy `VERSION` oraz `RELEASE`. Robię to w tym momencie, ponieważ zgodnie z dokumentacją **argumenty czasu budowy deklarowane przed operacją FROM nie są dostępne w etapie budowania obrazu**
+
+![from_arg](./screenshots/from_arg.png)
+
+Pozostałe kroki są analogiczne do tych wykonywanych w czasie próbnej budowy paczki. Różnica polega na tym, że nie tworzymy pliku `.spec` za pomocą komendy `rpmdev-newspec`, tylko kopiujemy w odpowiednie miejsce 
 
 
 

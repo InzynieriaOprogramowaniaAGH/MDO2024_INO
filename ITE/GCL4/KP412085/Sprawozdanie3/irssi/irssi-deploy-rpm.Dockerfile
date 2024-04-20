@@ -11,7 +11,7 @@ RUN --mount=type=cache,target=/var/cache/yum \
 ARG VERSION
 ARG RELEASE
 
-COPY ./irssi-$VERSION-$RELEASE.fc39.src.rpm /
+COPY ./releases/source_rpm/irssi-$VERSION-$RELEASE.fc39.src.rpm /
 
 RUN rpmbuild --rebuild irssi-$VERSION-$RELEASE.fc39.src.rpm && dnf -y install /root/rpmbuild/RPMS/irssi-$VERSION-$RELEASE.fc39.rpm
 

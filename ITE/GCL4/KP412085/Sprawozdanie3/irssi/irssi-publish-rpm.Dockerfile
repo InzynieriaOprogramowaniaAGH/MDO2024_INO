@@ -34,3 +34,5 @@ RUN rpmbuild -bs irssi.spec && \
     rpmlint ../SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm && \
     mkdir -p /releases/source_rpm/ && \
     mv /root/rpmbuild/SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm /releases/source_rpm/
+
+VOLUME /releases

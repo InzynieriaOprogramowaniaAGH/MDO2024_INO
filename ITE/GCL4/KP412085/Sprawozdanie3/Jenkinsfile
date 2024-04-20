@@ -39,6 +39,7 @@ pipeline {
             steps {
                 dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi"){
                     sh 'docker build --no-cache --build-arg IMAGE_TAG=${IMAGE_TAG} --build-arg VERSION=${VERSION} --build-arg RELEASE=${RELEASE} -t irssi-publish-rpm:${IMAGE_TAG} -f irssi-publish-rpm.Dockerfile .'
+                    sh 'docker run -v $PWD/releases:/releases irssi-publish-rpm:${IMAGE_TAG}'
                 }
             }
         }
@@ -63,9 +64,6 @@ pipeline {
             script {
                 def srcRpmFile = "irssi-${VERSION}-${RELEASE}.fc39.src.rpm"
                 dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi/releases/source_rpm/"){
-                    sh "docker cp irssi-${VERSION}-${RELEASE}:/releases/source_rpm/${srcRpmFile} ."
-                    sh "docker rm -f irssi-${VERSION}-${RELEASE}"
-                
                     if (fileExists("${srcRpmFile}")) {
                         archiveArtifacts artifacts: "${srcRpmFile}", fingerprint: true
                     } else {
