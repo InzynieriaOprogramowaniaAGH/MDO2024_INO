@@ -299,7 +299,7 @@ W kontenerze `rpm_build` wykonuję następujące kroki:
   >
   >License:        GPLv2
   >URL:            https://irssi.org/
-  >Source0:        https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/tree/KP412085/ITE/GCL4/KP412085/Sprawozdanie3/irssi/releases/download/v%{version}/irssi-%{version}.tar.gz
+  >Source0:        https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/tree/KP412085/ITE/GCL4/KP412085/Sprawozdanie3/irssi/releases/download/%{version}/irssi-%{version}.tar.gz
   >
   >
   >
@@ -357,7 +357,7 @@ W kontenerze `rpm_build` wykonuję następujące kroki:
   rpmlint ~/rpmbuild/SRPMS/<name>.src.rpm
   ```
 
-  [lint](./screenshots/lint.png)
+  ![lint](./screenshots/lint.png)
 
 - Po zbudowaniu paczki przenosimy ją do kontenera `rpm_deploy`. w tym celu podczas działania obydwu kontenerów odpalamy dodatkowy terminal i kopiujemy paczkę:
   ```bash
@@ -370,7 +370,7 @@ W kontenerze `rpm_build` wykonuję następujące kroki:
   ```
 
   Wynik takiej operacji powinien być następujący:
-  [rpm_builded](./screenshots/rpm_rebuild.png)
+  ![rpm_builded](./screenshots/rpm_rebuild.png)
 
 - Na końcu instalujemy paczkę w systemie (jeśli konieczne pobieramy zależności zdefiniowane w skrypcie poprzez wyrażenie zgody) oraz testujemy działanie aplikacji:
   ```bash
@@ -379,9 +379,52 @@ W kontenerze `rpm_build` wykonuję następujące kroki:
   ```
   **Z powodu, że irssi jest aplikacją interaktywną, w paipelinie będziemy ją testować za pomocą `irssi --help` lub `irssi --version`**, które są komendami nieblokującymi (wracają do terminala).
 
-  [irssi_deploy](./screenshots/irssi-deploy.png)
+  ![irssi_deploy](./screenshots/irssi-deploy.png)
 
-  **//TODO: logi z budowania np z /root/rpmbuild/BUILD/irssi-1.0/.../meson-logs/meson-logs.txt, SPRAWDZIĆ CZY MOZNA ZMIEJSZYC LICZBE DEPENDENCJI**
+
+**2. Step publish**
+
+Krok ten jest przeniesieniem budowania paczki `source rpm` do obrazu dockera. Poprzedza on krok `deploy`, podczas którego potrzebna jest zbudowana paczka. Obraz dockera wygląda następumąco: 
+
+```dockerfile
+ARG IMAGE_TAG
+
+FROM irssi-build:$IMAGE_TAG
+
+RUN --mount=type=cache,target=/var/cache/yum \
+    dnf -y install \
+    rpm-build \
+    rpm-devel \
+    rpmlint \
+    make \
+    python \
+    bash \
+    coreutils \
+    diffutils \
+    patch \
+    rpmdevtools
+
+WORKDIR /
+
+ARG VERSION
+ARG RELEASE
+
+RUN mv irssi irssi-$VERSION && \
+    tar -cvzf irssi-$VERSION.tar.gz irssi-$VERSION && \
+    rpmdev-setuptree && \
+    cp irssi-$VERSION.tar.gz /root/rpmbuild/SOURCES/
+
+WORKDIR /root/rpmbuild/SPECS
+
+COPY ./irssi.spec .
+
+RUN rpmbuild -bs irssi.spec && \
+    rpmlint irssi.spec && \
+    rpmlint ../SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm && \
+    mkdir -p /releases/source_rpm/ && \
+    mv /root/rpmbuild/SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm /releases/source_rpm/
+```
+
 
 
 
