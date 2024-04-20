@@ -47,8 +47,12 @@ pipeline {
         stage('Deploy') {
             steps {
                 dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi"){
-                    sh 'docker build --no-cache --build-arg IMAGE_TAG=${IMAGE_TAG} --build-arg VERSION=${VERSION} --build-arg RELEASE=${RELEASE} -t irssi-deploy:${IMAGE_TAG} -f irssi-deploy-rpm.Dockerfile .'
-                    sh 'docker run -d --name irssi-${VERSION}-${RELEASE} irssi-deploy:${IMAGE_TAG}'
+                    script {
+                        def currentDir = sh(script: 'pwd', returnStdout: true).trim()
+
+                        sh 'docker build --no-cache --build-arg IMAGE_TAG=${IMAGE_TAG} --build-arg VERSION=${VERSION} --build-arg RELEASE=${RELEASE} --build-arg PWD=${currentDir} -t irssi-deploy:${IMAGE_TAG} -f irssi-deploy-rpm.Dockerfile .'
+                        sh 'docker run -d --name irssi-${VERSION}-${RELEASE} irssi-deploy:${IMAGE_TAG}'
+                    }
                 }
             }
         }

@@ -384,7 +384,7 @@ W kontenerze `rpm_build` wykonuję następujące kroki:
 
 **2. Step publish**
 
-Krok ten jest przeniesieniem budowania paczki `source rpm` do obrazu dockera. Poprzedza on krok `deploy`, podczas którego potrzebna jest zbudowana paczka. Obraz dockera wygląda następująco: 
+Krok ten jest przeniesieniem budowania paczki `source rpm` do obrazu dockera. Poprzedza on krok `deploy`, podczas którego potrzebna jest zbudowana paczka. Obraz dockera używany w tym kroku wygląda następująco [irssi-publish-rpm.Dockerfile](./irssi/irssi-publish-rpm.Dockerfile) 
 
 ```dockerfile
 ARG IMAGE_TAG
@@ -423,6 +423,8 @@ RUN rpmbuild -bs irssi.spec && \
     rpmlint ../SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm && \
     mkdir -p /releases/source_rpm/ && \
     mv /root/rpmbuild/SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm /releases/source_rpm/
+
+VOLUME /releases
 ```
 
 `IMAGE_TAG` to argument podawany podczas budowania obrazu za pomocą komendy `--build-arg`. **Następnie na podstawie obrazu z etapu budowy tworzę mój nowy obraz. Robię tak ponieważ, etap ten wymaga zainstalowania dependecji programu budowania paczek rpm (nie potrzebuje dependencji builda), które potem WRAZ z dependencjami builda będą potrzebne w etapie deploy do zbudowania paczki `rpm` ze źródła. Aby zoptymalizować cały proces korzystam obrazu build w kroku publish oraz z obrazu publish w kroku deploy co umożliwia dostęp do wszystkich potrzebnych zależności. Jest to też powód dla którego nie czyszczę obrazu budowanego w kroku deploy. (inną opcją było by zbudowanie paczki rpm z paczki src.rpm i dopiero przesłanie takiej paczki do kroku deploy, co umozliwiłoby pozostawienie jedynie dependencji runtime'owych w kontenerze deploy).**
@@ -431,7 +433,7 @@ Po pobraniu wszystkich zależności wprowadzam nowe argumenty czasu budowy `VERS
 
 ![from_arg](./screenshots/from_arg.png)
 
-Pozostałe kroki są analogiczne do tych wykonywanych w czasie próbnej budowy paczki. Różnica polega na tym, że nie tworzymy pliku `.spec` za pomocą komendy `rpmdev-newspec`, tylko kopiujemy w odpowiednie miejsce 
+Pozostałe kroki są analogiczne do tych wykonywanych w czasie próbnej budowy paczki. Różnica polega na tym, że nie tworzymy pliku `.spec` za pomocą komendy `rpmdev-newspec`, tylko kopiujemy w odpowiednie miejsce gotowy plik [irssi.spec](./irssi/irssi.spec). Od wersji testowej różni się on zapisem w sekcji `%changelog`, który generuje ostrzeżenia podczas budowy paczki, ale nie wpływa nie jej działanie. W celu przekazania paczki do następnego etapu pipelina tworzymy wolumen w obrazie dockera. Zgodnie z dokumentacją, [https://docs.docker.com/reference/dockerfile/#volume](https://docs.docker.com/reference/dockerfile/#volume), definiujemy katalog który utworzy wolumen, ale DOPIERO w czasie uruchamiania a nie w czasie jego budowy, co wymusza dodanie w kroku `publish` w pipelinie uruchomienie kontenera na bazie tego obrazu bez podania `CMD` lub `ENTRYPOINT` co spowoduje natychmiastowe zakończenie działania kontenera, ale dane zostaną od
 
 
 
