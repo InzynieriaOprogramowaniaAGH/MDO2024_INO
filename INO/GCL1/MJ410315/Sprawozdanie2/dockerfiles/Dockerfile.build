@@ -6,4 +6,4 @@ RUN dnf install -y wget make gcc tcl tcl-devel tk procps which && \
     
 WORKDIR /redis-stable
 
-RUN make
+RUN make distclean & make
