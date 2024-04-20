@@ -384,7 +384,7 @@ W kontenerze `rpm_build` wykonuję następujące kroki:
 
 **2. Step publish**
 
-Krok ten jest przeniesieniem budowania paczki `source rpm` do obrazu dockera. Poprzedza on krok `deploy`, podczas którego potrzebna jest zbudowana paczka. Obraz dockera wygląda następumąco: 
+Krok ten jest przeniesieniem budowania paczki `source rpm` do obrazu dockera. Poprzedza on krok `deploy`, podczas którego potrzebna jest zbudowana paczka. Obraz dockera wygląda następująco: 
 
 ```dockerfile
 ARG IMAGE_TAG
@@ -425,6 +425,7 @@ RUN rpmbuild -bs irssi.spec && \
     mv /root/rpmbuild/SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm /releases/source_rpm/
 ```
 
+`IMAGE_TAG` to argument podawany podczas budowania obrazu za pomocą komendy `--build-arg`. Następnie na podstawie obrazu z etapu budowy tworzę mój nowy obraz. Robię tak ponieważ, etap ten wymaga zainstalowania dependecji programu budowania paczek rpm (nie potrzebuje dependencji builda), które potem 
 
 
 

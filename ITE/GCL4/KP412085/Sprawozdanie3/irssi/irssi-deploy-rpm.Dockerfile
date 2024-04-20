@@ -1,6 +1,6 @@
 ARG IMAGE_TAG
 
-FROM irssi-build:$IMAGE_TAG
+FROM irssi-publish-rpm:$IMAGE_TAG
 
 RUN --mount=type=cache,target=/var/cache/yum \
     dnf -y install \
