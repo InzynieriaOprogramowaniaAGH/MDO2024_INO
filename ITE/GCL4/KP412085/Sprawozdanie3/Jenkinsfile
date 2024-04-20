@@ -3,6 +3,8 @@ pipeline {
     
     environment {
         IMAGE_TAG = new Date().getTime()
+        VERSION = 1
+        RELEASE = 1
     }
 
     stages {
@@ -18,9 +20,8 @@ pipeline {
         
         stage('Build') {
             steps {
-                dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie2/irssi"){
+                dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi"){
                     sh 'docker build --no-cache -t irssi-build:${IMAGE_TAG} -f irssi-build.Dockerfile .'
-                    sh ''
                 }
             }
         }
@@ -28,9 +29,48 @@ pipeline {
         stage('Test') {
             steps {
                 dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi"){
-                    sh 'docker build --no-cache --build-arg IMAGE_TAG=$IMAGE_TAG -t irssi-test:${IMAGE_TAG} -f irssi-test-date-tag.Dockerfile .'
+                    sh 'docker build --no-cache --build-arg IMAGE_TAG=${IMAGE_TAG} -t irssi-test:${IMAGE_TAG} -f irssi-test-date-tag.Dockerfile .'
+                }
+            }
+        }
+        
+        stage('Publish') {
+            steps {
+                dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi"){
+                    sh 'docker build --no-cache --build-arg IMAGE_TAG=${IMAGE_TAG} --build-arg VERSION=${VERSION} --build-arg RELEASE=${RELEASE} -t irssi-publish-rpm:${IMAGE_TAG} -f irssi-publish-rpm.Dockerfile .'
+                }
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi"){
+                    sh 'docker build --no-cache --build-arg IMAGE_TAG=${IMAGE_TAG} --build-arg VERSION=${VERSION} --build-arg RELEASE=${RELEASE} -t irssi-deploy:${IMAGE_TAG} -f irssi-deploy-rpm.Dockerfile .'
+                }
+            }
+        }
+        
+    }
+    
+    post {
+        always {
+            archiveArtifacts artifacts: 'logs/**/*.log', fingerprint: true
+        }
+
+        success {
+            script {
+                def srcRpmFile = "irssi-${VERSION}-${RELEASE}.fc39.src.rpm"
+                dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi/releases/source_rpm/"){
+                    if (fileExists("${srcRpmFile}")) {
+                        archiveArtifacts artifacts: "${srcRpmFile}", fingerprint: true
+                        sh 'git checkout KP412085'
+                        sh 'git pull'
+                    } else {
+                        error "File ${srcRpmFile} has not been packaged in publish step correctly."
+                    }
                 }
             }
         }
     }
 }
+

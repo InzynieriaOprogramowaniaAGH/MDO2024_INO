@@ -1,6 +1,4 @@
 ARG IMAGE_TAG
-ARG VERSION
-ARG RELEASE
 
 FROM irssi-build:$IMAGE_TAG
 
@@ -19,8 +17,8 @@ RUN --mount=type=cache,target=/var/cache/yum \
 
 WORKDIR /
 
-ENV VERSION=$VERSION \
-    RELEASE=$RELEASE
+ARG VERSION
+ARG RELEASE
 
 RUN mv irssi irssi-$VERSION && \
     tar -cvzf irssi-$VERSION.tar.gz irssi-$VERSION && \
@@ -35,4 +33,4 @@ RUN rpmbuild -bs irssi.spec && \
     rpmlint irssi.spec && \
     rpmlint ../SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm
 
-COPY /root/rpmbuild/SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm .
+COPY /root/rpmbuild/SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm ./releases/source_rpm/

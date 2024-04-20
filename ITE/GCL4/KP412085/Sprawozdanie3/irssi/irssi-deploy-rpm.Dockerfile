@@ -1,6 +1,4 @@
 ARG IMAGE_TAG
-ARG VERSION
-ARG RELEASE
 
 FROM irssi-build:$IMAGE_TAG
 
@@ -10,8 +8,8 @@ RUN --mount=type=cache,target=/var/cache/yum \
     openssl-devel && \
     dnf clean all
 
-ENV VERSION=$VERSION \
-    RELEASE=$RELEASE
+ARG VERSION
+ARG RELEASE
 
 COPY ./irssi-$VERSION-$RELEASE.fc39.src.rpm /
 
