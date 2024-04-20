@@ -31,6 +31,5 @@ COPY ./irssi.spec .
 
 RUN rpmbuild -bs irssi.spec && \
     rpmlint irssi.spec && \
-    rpmlint ../SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm
-
-COPY /root/rpmbuild/SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm ./releases/source_rpm/
+    rpmlint ../SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm && \
+    mv /root/rpmbuild/SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm /releases/source_rpm/
