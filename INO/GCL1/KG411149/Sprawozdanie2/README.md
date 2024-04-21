@@ -2,9 +2,7 @@
 Krystian Gliwa, IO.
 
 ## Cel projektu
-
-
-## Streszczenie projektu
+Zrozumienie i praktyczne zastosowanie konteneryzacji oraz narzędzi do automatyzacji procesów, takich jak Jenkins.
 
 ## Laboratoria numer 3. Dockerfiles, kontener jako definicja etapu
 
@@ -372,6 +370,47 @@ docker run --name jenkins-docker --rm --detach \
   --publish 2376:2376 \
   docker:dind --storage-driver overlay2
 ```
+![dockere dind](./zrzuty_ekranu/38.jpg)
 
+Następnie utworzyłem *jenkins.Dockerfile* aby zbudować z niego nowy docker obraz, poleceniem:
+```
+docker build -t myjenkins-blueocean:2.440.3-1 -f jenkins.Dockerfile .
+```
+![budowanie obrazu z Dockerfila](./zrzuty_ekranu/39.jpg)
 
+Następnie uruchamiam mój obraz *myjenkins-blueocean:2.440.3-1* jako konetner za pomocą polecenia:
+```
+docker run --name jenkins-blueocean --restart=on-failure --detach \
+  --network jenkins --env DOCKER_HOST=tcp://docker:2376 \
+  --env DOCKER_CERT_PATH=/certs/client --env DOCKER_TLS_VERIFY=1 \
+  --publish 8080:8080 --publish 50000:50000 \
+  --volume jenkins-data:/var/jenkins_home \
+  --volume jenkins-docker-certs:/certs/client:ro \
+  myjenkins-blueocean:2.440.3-1
+```
+![utworzone kontenery](./zrzuty_ekranu/40.jpg)
 
+Aby móc połączyć się z serwerem Jenkinsa uruchomionego na wirtualnej maszynie, na hoscie potrzebowałem przekierować porty. Aby to zrobić najpierw musiałem sprawdzić IP, poleceniem: 
+```
+ip addr show
+```
+![IP](./zrzuty_ekranu/41.jpg)
+
+Następnie w ustawieniach mojej VM przekierowałem porty z wirtualnej maszyny do hosta(Jenkins domyślnie korzysta z portu 8080):
+![przekierowywanie portów](./zrzuty_ekranu/42.jpg)
+
+Następnie spróbowałem połączyć się z lokalnym serwerem internetowym działającym na twoim komputerze na porcie 8080, wpisując w przeglądarce: 
+```
+localhost:8080
+```
+To co otrzymałem:
+
+![przekierowywanie portów](./zrzuty_ekranu/43.jpg)
+
+Aby otrzymać wymagane do zalogowania hasło administratora użyłem polecenia:
+```
+docker exec adf68180c417 cat /var/jenkins_home/secrets/initialAdminPassword
+```
+Po czym pomyślnie się zalogowałem:
+
+![udane zalogowanie](./zrzuty_ekranu/44.jpg)
