@@ -351,4 +351,27 @@ Połączenia:
 
 Tak więc najlepszą przepustowość osiągnęło połączenie z hostem. Połączenia między kontenerami osiągnęły porównywalną przepustowość.
 
+### Instalacja Jenkins
+
+#### Instalacja skonteneryzowanej instancji Jenkinsa z pomocnikiem DIND
+
+Przy instalowaniu kierowałem sięinstrukcją zamieszczoną na stronie https://www.jenkins.io/doc/book/installing/docker/. 
+Najpierw utworzyłem sieć mostkową w Docker poleceniem: 
+```
+docker network create jenkins
+```
+![sieć jenkins](./zrzuty_ekranu/37.jpg)
+
+Następnie pobrałem i uruchomiłem docker:dind Obraz dokera poleceniem: 
+```
+docker run --name jenkins-docker --rm --detach \
+  --privileged --network jenkins --network-alias docker \
+  --env DOCKER_TLS_CERTDIR=/certs \
+  --volume jenkins-docker-certs:/certs/client \
+  --volume jenkins-data:/var/jenkins_home \
+  --publish 2376:2376 \
+  docker:dind --storage-driver overlay2
+```
+
+
 
