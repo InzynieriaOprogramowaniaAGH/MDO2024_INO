@@ -33,13 +33,13 @@ The client of the future
 
 %build
 meson Build
-ninja -C %{_builddir}/irssi-%{version}/Build
+ninja -C %{_builddir}/irssi/Build
 
 
 %install
 DESTDIR=%{buildroot} ninja -C Build install
 mkdir -p %{buildroot}/usr/local/share/licenses/%{name}/
-cp %{_builddir}/irssi-%{version}/COPYING %{buildroot}/usr/local/share/licenses/%{name}/
+cp %{_builddir}/irssi/COPYING %{buildroot}/usr/local/share/licenses/%{name}/
 
 
 %files
