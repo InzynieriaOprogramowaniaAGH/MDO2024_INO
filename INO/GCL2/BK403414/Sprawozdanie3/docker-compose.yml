@@ -1,0 +1,22 @@
+services:
+  ubuntu-build:
+    build:
+      context: .
+      dockerfile: builder.Dockerfile
+    image: builder:0.1
+    container_name: builder
+
+    restart: 'no'
+
+  irssi-test:
+    build:
+      context: .
+      dockerfile: test.Dockerfile
+    image: test:0.1
+    container_name: tester
+
+
+    depends_on:
+       - ubuntu-build
+
+    restart: 'no'
