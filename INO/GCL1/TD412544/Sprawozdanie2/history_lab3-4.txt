@@ -1,0 +1,39 @@
+    1  git clone https://github.com/devenes/node-js-dummy-test.git
+    2  cd node-js-dummy-test/
+    3  npm install
+    4  sudo apt install npm
+    5  npm install
+    6  npm test
+    7  docker run -it node bash --rm
+    8  docker run --rm -it node bash
+    9  cd ..
+   10  vim builder.Dockerfile
+   11  docker build -f ./builder.Dockerfile -t nodeapp_builder .
+   12  vim tester.Dockerfile
+   13  docker build -f ./tester.Dockerfile -t nodeapp_tester .
+   14  docker ps -a
+   15  docker run nodeapp_builder
+   16  docker run nodeapp_tester
+   17  docker ps -a
+   18  docker volume create wolumIN
+   19  docker volume create wolumOUT
+   20  docker volume ls
+   21  docker run -it node bash
+   22  docker run -it --mount source=wolumIN,target=/vol_in --mount source=wolumOUT,target=/vol_out node bash
+   23  mkdir IN
+   24  mkdir OUT
+   25  vim mountcopy.Dockerfile
+   26  docker build -f ./mountcopy.Dockerfile -t mountcopy_test .
+   27  ls OUT/
+   28  docker run -it --rm fedora
+   29  docker network create iperf_network
+   30  docker run -it --rm --name fed_server --network iperf_network fedora
+   31  docker run -it --rm --publish 5201:5201 fedora
+   32  docker network create jenkins
+   33  docker run --name jenkins-docker --rm --detach --privileged --network jenkins --network-alias docker --env DOCKER_TLS_CERTDIR=/certs --volume jenkins-docker-certs:/certs/client --volume jenkins-data:/var/jenkins_home --publish 2376:2376 docker:dind --storage-driver overlay
+   34  vim jenkins.Dockerfile
+   35  docker ps -a
+   36  docker images -a
+   37  docker build -t myjenkins-blueocean:2.440.2-1 -f jenkins.Dockerfile .
+   38  docker run --name jenkins-blueocean --restart=on-failure --detach --network jenkins --env DOCKER_HOST=tcp://docker:2376 --env DOCKER_CERT_PATH=/certs/client --env DOCKER_TLS_VERIFY=1 --publish 8080:8080 --publish 50000:50000 --volume jenkins-data:/var/jenkins_home --volume jenkins-docker-certs:/certs/client:ro myjenkins-blueocean:2.440.2-1 
+   39  history > histXD.txt
