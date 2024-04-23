@@ -1,5 +1,5 @@
 FROM takenote_build
 
-EXPOSE 5000
+EXPOSE 3000
 
-ENTRYPOINT npm run prod
+ENTRYPOINT npm start
