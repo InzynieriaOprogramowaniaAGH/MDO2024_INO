@@ -1,4 +1,4 @@
-FROM nodeapp_build
+FROM takenote_build
 
 WORKDIR /takenote
 RUN npm run build
