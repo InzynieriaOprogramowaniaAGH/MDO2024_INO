@@ -6,7 +6,6 @@ RUN --mount=type=cache,target=/var/cache/yum \
     dnf -y install \
     cmake \
     openssl-devel && \
-    gdb && \
     dnf clean all
 
 ARG VERSION
