@@ -23,21 +23,24 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
+
+                    sh 'docker network create deploy || true'
                     // Budowanie obrazu Docker
                     def appImage = docker.build('takenote_deploy', '-f ITE/GCL4/LS412597/Sprawozdanie3/deploy.Dockerfile .')
 
                     // Uruchomienie kontenera w tle
-                    def container = appImage.run("-d -p 3000:3000")
+                    def container = appImage.run("-d -p 3000:3000 --network=deploy --name app")
 
                     // Dajemy chwilę czasu na uruchomienie kontenera
                     sh "sleep 10" // Czekaj 10 sekund
 
                     // Sprawdzenie, czy aplikacja działa, wykonując żądanie HTTP
-                    sh 'curl -f http://localhost:3000'
-                
+                    sh 'docker run --rm curlimages/curl:latest --network=deploy -L -v  http://app:3000'
 
                     // W przypadku potrzeby - zatrzymanie kontenera
                     appContainer.stop()
+
+                    sh 'docker network rm deploy'
                 }
             }
         }
