@@ -1,4 +1,4 @@
-FROM takenote_build
+FROM nodeapp_build
 
 EXPOSE 3000
 

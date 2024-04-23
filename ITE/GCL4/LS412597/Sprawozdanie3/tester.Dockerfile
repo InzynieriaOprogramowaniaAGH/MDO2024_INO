@@ -1,3 +1,3 @@
-FROM takenote_build
+FROM nodeapp_build
 
 RUN npm test
