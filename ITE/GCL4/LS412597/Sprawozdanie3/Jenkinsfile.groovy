@@ -27,7 +27,7 @@ pipeline {
                     def appImage = docker.build('takenote_deploy', '-f ITE/GCL4/LS412597/Sprawozdanie3/deploy.Dockerfile .')
 
                     // Uruchomienie kontenera z zbudowanego obrazu
-                    def appContainer = appImage.run("-p 3000:3000")
+                    // def appContainer = appImage.run("-p 3000:3000")
 
                     // Czekaj, aby upewnić się, że aplikacja wystartowała
                     sh 'sleep 10'
