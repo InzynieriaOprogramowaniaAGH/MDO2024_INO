@@ -26,12 +26,15 @@ pipeline {
                     // Budowanie obrazu Docker
                     def appImage = docker.build('takenote_deploy', '-f ITE/GCL4/LS412597/Sprawozdanie3/deploy.Dockerfile .')
 
-                    // Uruchomienie kontenera z zbudowanego obrazu
-                    def appContainer = appImage.run("-p 3000:3000")
+                    // Uruchomienie kontenera w tle
+                    def container = app.run("-d -p 3000:3000")
 
-                    // Czekaj, aby upewnić się, że aplikacja wystartowała
-                    sh 'docker ps'
-                    sh 'curl -s http://localhost:3000'
+                    // Dajemy chwilę czasu na uruchomienie kontenera
+                    sh "sleep 10" // Czekaj 10 sekund
+
+                    // Sprawdzenie, czy aplikacja działa, wykonując żądanie HTTP
+                    sh 'curl -f http://localhost:3000'
+                
 
                     // W przypadku potrzeby - zatrzymanie kontenera
                     appContainer.stop()
