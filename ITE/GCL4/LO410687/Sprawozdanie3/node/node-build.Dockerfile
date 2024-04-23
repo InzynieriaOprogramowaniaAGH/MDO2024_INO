@@ -1,4 +1,4 @@
-FROM node:12
+FROM node:12-alpine
 
 RUN apt-get update -y
 RUN apt-get install git -y
