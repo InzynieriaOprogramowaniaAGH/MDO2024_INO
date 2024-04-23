@@ -23,14 +23,21 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Testowanie aplikacji z użyciem pliku Dockerfile tester.Dockerfile
+                    // Budowanie obrazu Docker
                     def appImage = docker.build('takenote_deploy', '-f ITE/GCL4/LS412597/Sprawozdanie3/deploy.Dockerfile .')
+
                     // Uruchomienie kontenera z zbudowanego obrazu
                     def appContainer = appImage.run("-p 3000:3000")
 
-                    sh 'docker ps'
-                    sh 'sleep 10' // Czekaj, aż aplikacja się uruchomi
-                    sh 'curl -s http://localhost:3000'
+                    // Czekaj, aby upewnić się, że aplikacja wystartowała
+                    sh 'sleep 10'
+
+                    // Testowanie dostępności aplikacji
+                    def response = sh(script: 'curl -s http://localhost:3000', returnStdout: true).trim()
+                    echo "Response from app: ${response}"
+
+                    // W przypadku potrzeby - zatrzymanie kontenera
+                    appContainer.stop()
                 }
             }
         }
