@@ -46,9 +46,6 @@ cp %{_builddir}/irssi/COPYING %{buildroot}/usr/local/share/licenses/%{name}/
 %license /usr/local/share/licenses/%{name}/COPYING
 /usr/local/bin/%{name}
 /usr/local/share/%{name}/
-/usr/lib/debug/
-/usr/local/include/
-/usr/local/lib64/
 /usr/local/share/doc 
 /usr/local/share/man
 
