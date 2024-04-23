@@ -30,6 +30,7 @@ pipeline {
                     def appContainer = appImage.run("-p 3000:3000")
 
                     // Czekaj, aby upewnić się, że aplikacja wystartowała
+                    sh 'docker ps'
                     sh 'curl -s http://localhost:3000'
 
                     // W przypadku potrzeby - zatrzymanie kontenera
