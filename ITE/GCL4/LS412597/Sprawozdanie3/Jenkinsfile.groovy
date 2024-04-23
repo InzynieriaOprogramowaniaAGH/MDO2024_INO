@@ -19,5 +19,16 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    // Testowanie aplikacji z użyciem pliku Dockerfile tester.Dockerfile
+                    docker.build('takenote_deploy', '-f ITE/GCL4/LS412597/Sprawozdanie3/deploy.Dockerfile .')
+                    sh 'sleep 10' // Czekaj, aż aplikacja się uruchomi
+                    sh 'curl -s http://localhost:3000'
+                }
+            }
+        }
     }
 }
