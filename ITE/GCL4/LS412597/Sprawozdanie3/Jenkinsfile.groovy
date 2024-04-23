@@ -6,7 +6,7 @@ pipeline {
             steps {
                 script {
                     // Budowa aplikacji z użyciem pliku Dockerfile builder.Dockerfile
-                    docker.build('nodeapp_build', '-f ITE/GCL4/LS412597/Sprawozdanie3/builder.Dockerfile .')
+                    docker.build('takenote_build', '-f ITE/GCL4/LS412597/Sprawozdanie3/builder.Dockerfile .')
                 }
             }
         }
@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script {
                     // Testowanie aplikacji z użyciem pliku Dockerfile tester.Dockerfile
-                    docker.build('nodeapp_test', '-f ITE/GCL4/LS412597/Sprawozdanie3/tester.Dockerfile .')
+                    docker.build('takenote_test', '-f ITE/GCL4/LS412597/Sprawozdanie3/tester.Dockerfile .')
                 }
             }
         }
@@ -26,7 +26,7 @@ pipeline {
 
                     sh 'docker network create deploy || true'
                     // Budowanie obrazu Docker
-                    def appImage = docker.build('nodeapp_deploy', '-f ITE/GCL4/LS412597/Sprawozdanie3/deploy.Dockerfile .')
+                    def appImage = docker.build('takenote_deploy', '-f ITE/GCL4/LS412597/Sprawozdanie3/deploy.Dockerfile .')
 
                     // Uruchomienie kontenera w tle
                     def container = appImage.run("-d -p 3000:3000 --network=deploy --name app")
