@@ -5,7 +5,7 @@ Summary:        Client irssi
 
 License:        GPLv2
 URL:            https://irssi.org/
-Source0:        https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/tree/KP412085/ITE/GCL4/KP412085/Sprawozdanie3/irssi/releases/download/v%{version}/irssi-%{version}.tar.gz
+Source0:        https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/tree/KP412085/ITE/GCL4/KP412085/Sprawozdanie3/irssi/releases/download/%{version}/irssi-%{version}.tar.gz
 
 
 BuildRequires:  git
@@ -55,5 +55,5 @@ cp %{_builddir}/irssi/COPYING %{buildroot}/usr/local/share/licenses/%{name}/
 
 
 %changelog
-* Tue Apr 17 2024 Kapcer Papuga <kacperpap@gmail.com> - %{version}-%{release}
+* Tue Apr 17 2024 Kapcer Papuga <kacperpap@gmail.com> - 1.0-1
 - The %{version} version and %{release} release
