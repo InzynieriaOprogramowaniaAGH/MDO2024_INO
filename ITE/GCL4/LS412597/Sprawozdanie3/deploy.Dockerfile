@@ -1,5 +1,6 @@
 FROM nodeapp_build
 
+WORKDIR /takenote
 RUN npm run build
 
 EXPOSE 5000
