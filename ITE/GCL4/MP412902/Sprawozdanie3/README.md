@@ -1,0 +1,1 @@
+![Problem z instalacją moro](image.png)
