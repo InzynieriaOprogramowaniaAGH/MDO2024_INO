@@ -32,10 +32,7 @@ RUN rpmbuild -bs irssi.spec && \
     rpmlint irssi.spec && \
     rpmlint ../SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm && \
     mkdir -p /source_rpm && \
-    mv /root/rpmbuild/SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm /source_rpm
+    mv /root/rpmbuild/SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm /source_rpm 
 
-
-RUN mkdir -p /debuginfo
-RUN find /root/rpmbuild/BUILD/ -type f -name '*.debug' -exec cp {} /debuginfo \;
 
 
