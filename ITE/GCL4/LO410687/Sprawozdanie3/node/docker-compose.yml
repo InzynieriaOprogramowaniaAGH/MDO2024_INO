@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  node-builder:
+    build:
+      context: .
+      dockerfile: node-build.Dockerfile
+    volumes:
+      - .:/node
+    working_dir: /node
+    command: "echo 'node builder container is ready'"
+
+  node-test:
+    build:
+      context: .
+      dockerfile: node-test.Dockerfile
+    volumes:
+      - .:/node
+    working_dir: /node
+    command: "echo 'node testing container is ready'"
+
+  node-deploy:
+    build:
+      context: .
+      dockerfile: node-deploy.Dockerfile
+    volumes:
+      - .:/node
+    working_dir: /node
+    command: "echo 'node deployment container is ready'"

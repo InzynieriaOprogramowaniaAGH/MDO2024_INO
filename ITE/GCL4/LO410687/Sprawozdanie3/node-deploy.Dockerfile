@@ -1,4 +1,8 @@
 FROM node-build
+
 WORKDIR /quick-example-of-testing-in-nodejs
-RUN npm test
-CMD ["npm", "start"]
+RUN npm run build
+
+EXPOSE 5000
+
+ENTRYPOINT npm run prod
