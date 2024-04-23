@@ -28,7 +28,7 @@ The client of the future
 
 
 %prep
-%setup -n irssi -d
+%setup -n irssi
 
 
 %build
