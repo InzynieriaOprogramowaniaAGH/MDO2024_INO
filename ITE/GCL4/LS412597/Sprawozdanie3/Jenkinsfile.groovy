@@ -30,11 +30,11 @@ pipeline {
                     // def appContainer = appImage.run("-p 3000:3000")
 
                     // Czekaj, aby upewnić się, że aplikacja wystartowała
-                    sh 'docker ps'
+                    sh 'sleep 10'
 
                     // Testowanie dostępności aplikacji
-                    // def response = sh(script: 'curl -s http://localhost:3000', returnStdout: true).trim()
-                    // echo "Response from app: ${response}"
+                    def response = sh(script: 'curl -s http://localhost:5000', returnStdout: true).trim()
+                    echo "Response from app: ${response}"
 
                     // W przypadku potrzeby - zatrzymanie kontenera
                     appContainer.stop()
