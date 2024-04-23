@@ -50,6 +50,7 @@ cp %{_builddir}/irssi/COPYING %{buildroot}/usr/local/share/licenses/%{name}/
 /usr/local/share/man
 /usr/local/include/
 /usr/local/lib64/
+/usr/local/bin/openssl
 
 
 
