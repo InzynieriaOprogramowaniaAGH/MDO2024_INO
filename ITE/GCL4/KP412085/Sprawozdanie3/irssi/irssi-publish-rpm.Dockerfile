@@ -20,9 +20,9 @@ WORKDIR /
 ARG VERSION
 ARG RELEASE
 
-RUN tar -cvzf irssi.tar.gz irssi && \
+RUN tar -cvzf irssi-$VERSION.tar.gz irssi && \
     rpmdev-setuptree && \
-    cp irssi.tar.gz /root/rpmbuild/SOURCES/
+    cp irssi-$VERSION.tar.gz /root/rpmbuild/SOURCES/
 
 WORKDIR /root/rpmbuild/SPECS
 
