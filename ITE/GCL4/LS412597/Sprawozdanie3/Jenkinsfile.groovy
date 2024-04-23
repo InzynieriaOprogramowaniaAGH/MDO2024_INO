@@ -35,7 +35,7 @@ pipeline {
                     sh "sleep 10" // Czekaj 10 sekund
 
                     // Sprawdzenie, czy aplikacja działa, wykonując żądanie HTTP
-                    sh 'docker run --rm curlimages/curl:latest --network=deploy -L -v  http://app:3000'
+                    sh 'docker run --rm --network=deploy curlimages/curl:latest -L -v  http://app:3000'
 
                     // W przypadku potrzeby - zatrzymanie kontenera
                     appContainer.stop()
