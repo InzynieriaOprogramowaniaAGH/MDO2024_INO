@@ -17,6 +17,9 @@ RUN rpmbuild --rebuild --nodebuginfo irssi-$VERSION-$RELEASE.fc39.src.rpm && \
 
 FROM fedora:39 AS deploy 
 
+ARG VERSION
+ARG RELEASE
+
 RUN mkdir -p /rpm && mkdir -p /source_rpm
 
 COPY --from=build-on-deploy /source_rpm /source_rpm
