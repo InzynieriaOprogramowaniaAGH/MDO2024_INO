@@ -1,8 +1,18 @@
 # Sprawozdanie 3
 
-Pierwsza część laboratoriów polegała na sprawdzeniu poprawności działania kontenerów budujących i testujących dla wybranej aplikacji z poprzednich zajęć. 
+Pierwsza część laboratoriów polegała na sprawdzeniu poprawności działania kontenerów budujących i testujących dla wybranej aplikacji z poprzednich zajęć. Kolejnym etapem było zbudowanie całego pipelina, który umozliwa automatyczne budowanie, testowanie, wdrożenie aplikacji oraz publikację artefaktów budowy w wybrane miejsce. Dodatkowo
 
 # Przygotowanie
+
+**0. Diagramy wdrożenia i komunikacji oraz licencja aplikacji**
+
+Korzystam z aplikacji, którą wkorzystywałem na poprzednich laboratoriach, której licencja **GNU GENERAL PUBLIC LICENSE Version 2, June 1991**, umożliwia używania i modyfikację kodu, przy obowiązku publikacji zmian na tej samej licencji.
+
+**Diagram wdrożenia**
+![deploy_diagram](./screenshots/deploy_diag.png)
+
+**Diagram komunikacji**
+![comm_daig](./screenshots/comm-diagram.png)
 
 **1. Przetestowanie kontenerów do budowania i testowania z poprzednich zajęć**
 <br>
@@ -91,6 +101,7 @@ Logi tych zadań prezentują się następująco:
 ![odd_log](./screenshots/odd_log.png)
 
 **2.Projekt irssi**
+
 <br>
 Aby uruchomić projekt z poprzednich zajęć poprzez zadanie Jenkinsa, które polega na sklonowaniu repozytorium, przełączeniu się na odpowiednią gałąź i zbudowaniu obrazów do budowania i testowania tworzymy nowy projekt. Nasze repozytorium jest publiczne, dlatego nie musimy podawać `credensials` aby umożliwić jego sklonowanie. Tym samym konfiguracja wygląda następująco:
 
@@ -239,6 +250,7 @@ dnf install gcc rpm-build rpm-devel rpmlint make python bash coreutils diffutils
 
 
 **1. Budowanie pakietu source rpm (próbne)**
+Instrukcje pomocne do budowy pakietu zostały znalezione na [https://rpm-packaging-guide.github.io/](https://rpm-packaging-guide.github.io/)
 
 Pierwszym krokiem była próba zbudowania paczki poza pipelinem w celu przetestowania procesu jej towrzenia. W tym celu stworzyłem dwa kontenery fedory `rpm_build` oraz `rpm_deploy`. Pierwszy kontner posiada zależności zdefiniowane w następujący sposób:
 
@@ -285,7 +297,7 @@ W kontenerze `rpm_build` wykonuję następujące kroki:
   cp irssi-<version>.tar.gz ~/rpmbuild/SOURCES
   ```
 
-- Budujemy plik `.spec` oraz definiujemy go zgodnie ze wzorcem podanym w pliku, pozostawiając jedynie sekcję %changelog wygenerowaną automatycznie [irssi.spec](./irssi/irssi.spec)
+- Budujemy plik `.spec` oraz definiujemy go zgodnie ze wzorcem podanym w insrukcji, pozostawiając jedynie sekcję %changelog wygenerowaną automatycznie.
 
   ```bash
   cd ~/rpmbuild/SPECS
@@ -303,7 +315,6 @@ W kontenerze `rpm_build` wykonuję następujące kroki:
   >
   >
   >
-  >BuildRequires:  git
   >BuildRequires:  meson
   >BuildRequires:  gcc
   >BuildRequires:  glib2-devel
@@ -386,6 +397,14 @@ W kontenerze `rpm_build` wykonuję następujące kroki:
 
 Krok ten jest przeniesieniem budowania paczki `source rpm` do obrazu dockera. Poprzedza on krok `deploy`, podczas którego potrzebna jest zbudowana paczka. Obraz dockera używany w tym kroku wygląda następująco [irssi-publish-rpm.Dockerfile](./irssi/irssi-publish-rpm.Dockerfile) 
 
+Podczas budowy paczki na hoście docelowym program budujący miał problem z poprawnym zainstalowaniem aplikacji, ponieważ budując paczkę zmieniłem nazwę repozytorium z `irssi` na `irssi-1.0`. Dlatego w budowaniu paczki tar w obrazie, nie poprzedziłem zamianą nazwy repozytorium. Pomimo tego skrypt `%autosetup` definiował zbuodwany katalog aplikacji, dodając do nazwy wersję aplikacji, co powodowało dalej ten sam problem. Rozwiązaniem była prosta zmiana skryptu `%prep` na pokazany poniżej, oraz odpowienie dopasowanie ścieżek w dalszej częsci pliku `.spec`. 
+```bash
+%setup -n irssi
+```
+![setup-n](./screenshots/setup-n-spec-file.png)
+
+Ponadto dodałem sekcję `%changelog`, aby móc przekopiować plik bez jego generowania. Wykorzystany końcowo plik znajduję się [tutaj](./irssi/irssi.spec)
+
 ```dockerfile
 ARG IMAGE_TAG
 
@@ -409,8 +428,7 @@ WORKDIR /
 ARG VERSION
 ARG RELEASE
 
-RUN mv irssi irssi-$VERSION && \
-    tar -cvzf irssi-$VERSION.tar.gz irssi-$VERSION && \
+RUN tar -cvzf irssi-$VERSION.tar.gz irssi && \
     rpmdev-setuptree && \
     cp irssi-$VERSION.tar.gz /root/rpmbuild/SOURCES/
 
@@ -421,84 +439,272 @@ COPY ./irssi.spec .
 RUN rpmbuild -bs irssi.spec && \
     rpmlint irssi.spec && \
     rpmlint ../SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm && \
-    mkdir -p /releases/source_rpm/ && \
-    mv /root/rpmbuild/SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm /releases/source_rpm/
-
-VOLUME /releases
+    mkdir -p /source_rpm && \
+    mv /root/rpmbuild/SRPMS/irssi-$VERSION-$RELEASE.fc39.src.rpm /source_rpm
 ```
 
-`IMAGE_TAG` to argument podawany podczas budowania obrazu za pomocą komendy `--build-arg`. **Następnie na podstawie obrazu z etapu budowy tworzę mój nowy obraz. Robię tak ponieważ, etap ten wymaga zainstalowania dependecji programu budowania paczek rpm (nie potrzebuje dependencji builda), które potem WRAZ z dependencjami builda będą potrzebne w etapie deploy do zbudowania paczki `rpm` ze źródła. Aby zoptymalizować cały proces korzystam obrazu build w kroku publish oraz z obrazu publish w kroku deploy co umożliwia dostęp do wszystkich potrzebnych zależności. Jest to też powód dla którego nie czyszczę obrazu budowanego w kroku deploy. (inną opcją było by zbudowanie paczki rpm z paczki src.rpm i dopiero przesłanie takiej paczki do kroku deploy, co umozliwiłoby pozostawienie jedynie dependencji runtime'owych w kontenerze deploy).**
+`IMAGE_TAG` to argument podawany podczas budowania obrazu za pomocą komendy `--build-arg`. **Następnie na podstawie obrazu z etapu budowy tworzę mój nowy obraz. Robię tak ponieważ, etap ten wymaga zainstalowania dependecji programu budowania paczek rpm (nie potrzebuje dependencji builda), które potem WRAZ z dependencjami builda będą potrzebne w etapie deploy do zbudowania paczki `rpm` ze źródła. Aby zoptymalizować cały proces korzystam z obrazu build w kroku publish oraz z obrazu publish w kroku deploy co umożliwia dostęp do wszystkich potrzebnych zależności.**
 
 Po pobraniu wszystkich zależności wprowadzam nowe argumenty czasu budowy `VERSION` oraz `RELEASE`. Robię to w tym momencie, ponieważ zgodnie z dokumentacją **argumenty czasu budowy deklarowane przed operacją FROM nie są dostępne w etapie budowania obrazu**
 
 ![from_arg](./screenshots/from_arg.png)
 
-Pozostałe kroki są analogiczne do tych wykonywanych w czasie próbnej budowy paczki. Różnica polega na tym, że nie tworzymy pliku `.spec` za pomocą komendy `rpmdev-newspec`, tylko kopiujemy w odpowiednie miejsce gotowy plik [irssi.spec](./irssi/irssi.spec). Od wersji testowej różni się on zapisem w sekcji `%changelog`, który generuje ostrzeżenia podczas budowy paczki, ale nie wpływa nie jej działanie. W celu przekazania paczki do następnego etapu pipelina tworzymy wolumen w obrazie dockera. Zgodnie z dokumentacją, [https://docs.docker.com/reference/dockerfile/#volume](https://docs.docker.com/reference/dockerfile/#volume), definiujemy katalog który utworzy wolumen, ale DOPIERO w czasie uruchamiania a nie w czasie jego budowy, co wymusza dodanie w kroku `publish` w pipelinie uruchomienia kontenera na bazie tego obrazu bez zdefiniowanego `CMD` lub `ENTRYPOINT`:
-```bash
-sh 'docker run -v $PWD/releases:/releases irssi-publish-rpm:${IMAGE_TAG}'
-```
-W czasie uruchamiania definiujemy miejsce zamontowania wolumenu. Mechanizm ten jest stworzony przez dockera w celu zapewnienia przenośności plików dockerfile, dlatego podczas definiowania w obrazie nie można definiować ścieżki monotwania na hoście, należy to zrobić dynamicznie. Kontener taki po uuchomieniu natychmiast się zamyka zwracając kod 0, oraz zapisując zbudowaną paczkę do odpowieniego miejsca w kontenerze jenkinsa. 
+Pozostałe kroki są prawie analogiczne do tych wykonywanych w czasie próbnej budowy paczki. Różnica polega na tym, że nie tworzymy pliku `.spec` za pomocą komendy `rpmdev-newspec`, tylko kopiujemy w odpowiednie miejsce gotowy plik [irssi.spec](./irssi/irssi.spec). Od wersji testowej różni się on zapisem w sekcji `%changelog`, który generuje ostrzeżenia podczas budowy paczki, ale nie wpływa nie jej działanie. W celu przekazania paczki do następnego etapu pipelina tworzymy katalog `/source_rpm` w obrazie dockera. Budując kolejny obraz na podstawie tego, będziemy mieli dostęp do tego katalogu.
+ 
 
 **3. Step deploy**
 
-Krok ten został już poprzednio opisany. Po skopiowaniu paczki z kontenera Jenkinsa przy pomocy `COPY` zawartego w obrazie, budujemy paczkę, którą następnie instalujemy za pomocą `dnf install`. Obraz ten wygląda następująco: [irssi-deploy-rpm.Dockerfile](./irssi/irssi-deploy-rpm.Dockerfile)
+Obraz ten wygląda następująco: [irssi-deploy-rpm.Dockerfile](./irssi/irssi-deploy-rpm.Dockerfile). Został podzielony na dwa etapy, pierwszy `build-on-deploy`, pobiera konieczne zależności oraz buduje paczkę ze źródła, która znajduje się w katalogu `/source_rpm`(dostępny ponieważ budujemy obraz na podstawie wcześniejszego obrazu). Kolejny krok został stworzony, aby pomimo konieczności posiadania wszystkich zależności do zbudowania paczki`.src.rpm`, było możliwe usunięcie wszystkih niepotrzebnych zależności. Umożliwi to znaczące zmiejszenie rozmiaru paczki (co pokazałem na screenach poniżej) oraz zapewnienie większego bezpieczeństwa z powodu usunięcia wszystkich niepotrzebnych zależności.
+Obrazy zbudowane w kontenerze jenkinsa po zakończeniu wszystkich kroków (BEZ 2-ETAPOWEGO DEPLOYMENTU):
+![success_images](./screenshots/success-images.png)
+
+Jak widać na powyższym screenie, rozmiar obrazu jest bardzo duży. Domyślny rozmiar fedory to około 180 MB. Dzięki podzieleniu etapów, rozmiar tego obrazu zmniejszył się o połowę:
+![success_](./screenshots/succ-2.png)
+
+
+Podczas budowy paczki na hoście pojawiały się również błędy dotyczące braku lub złego skonifigurowania plików debugowania. Pliki te nie są potrzebne dlatego w celu rozwiązania problemu podczas budowania paczki dodałem opcję `--nodebuginfo`.
+
+Linijki dockerfila:
+```bash
+COPY --from=build-on-deploy /source_rpm /source_rpm
+COPY --from=build-on-deploy /root/rpmbuild/RPMS/x86_64/irssi-$VERSION-$RELEASE.fc39.x86_64.rpm /rpm/
+```
+Umożliwiają kopiowania do ostatniego kroku 2 plików. Ten znajdujący się w `/source_rpm`, to przekazywany od obazu `publish` zbudowany obiekt `.src.rpm`. Nie jest on potrzebny w drugim etapie deploya do działania aplikacji, ale potrzebujemy go aby, po zakończeniu działania pipelina sukcesem, zapisać go jako artefakt jenkinsa. Robię tak aby zapisywać artefakty nie wtedy kiedy powstają, ale tylko w momencie zakończenia sukcesem całego pipelina. Drugi plik to gotowa paczka `rpm` do zbudowania aplikacji irssi.
+
 
 ```dockerfile
 ARG IMAGE_TAG
 
-FROM irssi-publish-rpm:$IMAGE_TAG
+FROM irssi-publish-rpm:$IMAGE_TAG AS build-on-deploy
 
 RUN --mount=type=cache,target=/var/cache/yum \
     dnf -y install \
     cmake \
-    openssl-devel && \
-    dnf clean all
+    openssl-devel
 
 ARG VERSION
 ARG RELEASE
-ARG PWD
 
-COPY $PWD/releases/source_rpm/irssi-$VERSION-$RELEASE.fc39.src.rpm /
+WORKDIR /source_rpm
 
-RUN rpmbuild --rebuild irssi-$VERSION-$RELEASE.fc39.src.rpm && dnf -y install /root/rpmbuild/RPMS/irssi-$VERSION-$RELEASE.fc39.rpm
+RUN rpmbuild --rebuild --nodebuginfo irssi-$VERSION-$RELEASE.fc39.src.rpm && \
+    dnf -y install /root/rpmbuild/RPMS/x86_64/irssi-$VERSION-$RELEASE.fc39.x86_64.rpm
 
-ENTRYPOINT irssi 
+FROM fedora:39 AS deploy 
+
+ARG VERSION
+ARG RELEASE
+
+RUN mkdir -p /rpm && mkdir -p /source_rpm
+
+COPY --from=build-on-deploy /source_rpm /source_rpm
+COPY --from=build-on-deploy /root/rpmbuild/RPMS/x86_64/irssi-$VERSION-$RELEASE.fc39.x86_64.rpm /rpm/
+
+RUN dnf -y install \
+    glib2 \
+    perl \
+    ncurses-libs \
+    utf8proc \
+    openssl && \
+    dnf clean all && \
+    dnf -y install /rpm/irssi-$VERSION-$RELEASE.fc39.x86_64.rpm
+
+ENTRYPOINT irssi
 
 CMD ["--version"]
+
 ```
 
-Dockerfile kończy się poleceniem `irssi --version`, które pozwala w sposób nieblokujący sprawdzić poprawność działania zbudowanej aplikacji.
+Dockerfile kończy się poleceniem `irssi --version`, które pozwala w sposób nieblokujący sprawdzić poprawność działania zbudowanej aplikacji po jej uruchomieniu w pipelinie za pomocą polecenia:
+```bash
+sh "docker run -it -d --name irssi-${VERSION}-${RELEASE} irssi-deploy:${IMAGE_TAG}"
+sh "docker exec irssi-${VERSION}-${RELEASE} irssi --version"
+```
+Konieczne było dodanie drugiej linijki, ponieważ ostatnie polecenia dockerfile otwierają aplikację w trybie interaktywnym w budowanym kontenerze, natomiast nie zwracają wersji. Możliwe, że moglibyśmy otrzymać wersję zamieniając to na `CMD ["irssi", "--version"]` tak aby sprawdzono wersję bez odpalania aplikacji lub po odpaleniu w trybie interaktywnym poprzez `ENTRYPOINT irssi CMD ["/version"]`. Jednka wszystkie sposoby umożliwiają osiągnięcie tego samego efektu, a kontener uruchomiony w trybie `detach` i tak zostanie usunięty po poprawnym zakończeniu pipelina, lub rozpoczęciu nowego poprzez skrypt [clear_dind_vol.sh](./irssi/clear_dind_vol.sh).
 
 **4. Zachowywanie logów oraz paczki jako artefaktów jenkinsa**
 
-Aby zachować logi i paczkę z pipeline'u tworzymy ostatni etap `post`. W etapie tym definiujemy dwie sekcje. Pierwsza z nich `always`, definiuje sposób zapisów logów przy każdym uruchomieniu pipeline'u jako `artefaktu` jenksina. Druga sekcja `success` definiuje zapisywanie zbudowanej paczki również jako artefaktu ale tylko w momencie kiedy wszystkie kroki pipeline'a zakończyły się sukcesem.
+Aby zachować logi i paczkę z pipeline'u tworzymy ostatni etap `post`. W etapie tym definiujemy sekcję `success`, która w momencie zakończenia się poprawnie całego pipelina, utworzy artefakt w jenkinsie. W ten sposób zapisujemy efekt naszego budowania, który jest w łatwy sposób możliwy do pobrania. Można byłoby również publikować paczkę na zewnętrzny rejestr, ale pozostanę na zapisaniu artefaktu.
 
 >post {
-        always {
-            archiveArtifacts artifacts: 'logs/**/*.log', fingerprint: true
-        }
         success {
             script {
-                def srcRpmFile = "irssi-${VERSION}-${RELEASE}.fc39.src.rpm"
                 dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi/releases/source_rpm/"){
-                    if (fileExists("${srcRpmFile}")) {
-                        archiveArtifacts artifacts: "${srcRpmFile}", fingerprint: true
+                    sh "docker cp irssi-${VERSION}-${RELEASE}:/source_rpm/${SRC_RPM_FILE} . "
+                    sh "docker stop irssi-${VERSION}-${RELEASE}"
+                    sh "docker rm irssi-${VERSION}-${RELEASE}"
+                    if (fileExists("${SRC_RPM_FILE}")) {
+                        archiveArtifacts artifacts: "${SRC_RPM_FILE}", fingerprint: true
                     } else {
-                        error "File ${srcRpmFile} has not been packaged in publish step correctly."
+                        error "File ${SRC_RPM_FILE} has not been packaged in publish step correctly or have different name"
                     }
                 }
             }
         }
     }
 
+Logi zapisują się automatycznie, i tworzone są z tego co jest generowane na terminal jenkinsa. Dodatkowe logi potrzebne są tylko w przypadku uruchamiania kontenrów. Jeśli uruchomimy je w trybie detach, to wszystkie logi z operacji wykonywanych wewnątrz takiego kontenera, mogą zostać pozyskane poprzez polecenie `docker logs <container_id>` Dlatego w kroku `deploy`, po uruchomieniu kontenera i aplikacji, pobieram logi w sposób następujący: 
+```bash
+sh "docker run -it -d --name irssi-${VERSION}-${RELEASE} irssi-deploy:${IMAGE_TAG}"
+sh "docker exec irssi-${VERSION}-${RELEASE} irssi --version"
+sh "docker logs irssi-${VERSION}-${RELEASE}"
+```
+Jeśli aplikacja nie uruchomi się poprawnie, to na terminalu jenkinsa zobaczymy błąd z wewnątrz kontenera. Wszystkie logi z czasu działania pipelina zapisują się w pliku `pipeline.log` jako artefakt. Dodatkowo zapisuje się paczka `src.rpm`, której wersjonowanie jest zgodne z przyjętą konwencją, i przekazaną jako parametry `VERSION` oraz `RELEASE` na początku pipelina.
 
-**5. Trigger**
+![artifacts](./screenshots/atifacts.png)
 
-**6. Wersjonowanie**
 
-**7. Ostateczna wersja pipeline'a**
+Wszystkie logi i artefakty zapisywane są w przestrzeni roboczej pipelina. W przypadku zakończenia niepowodzeniem zapisywane są tylko logi, bez zbudowanej paczki:
+
+![bad_log](./screenshots/log-bad.png)
+
+
+**5. Jenkinsfile**
+
+Ostatecznie plik definiujący pipeline wygląda jak pokazano poniżej. Jest dostępny również jako [Jenkinsfile](./Jenkinsfile). Wersjonowanie użyte do wydania aplikacji składa się z dwóch członów. VERSION czyli wersji aplikacji i jej konkretnego wydania zdefiniowanego jako RELEASE.
+
+```bash
+pipeline {
+    agent any
+    
+    environment {
+        IMAGE_TAG = new Date().getTime()
+        VERSION = 1.0
+        RELEASE = 1
+        SRC_RPM_FILE = "irssi-${VERSION}-${RELEASE}.fc39.src.rpm"
+    }
+
+    stages {
+        stage('Prepare') {
+            steps {
+                sh 'git config --global http.postBuffer 524288000'
+                sh 'rm -rf MDO2024_INO'
+                sh 'git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+                
+                dir("MDO2024_INO"){
+                    sh 'git checkout KP412085'
+                    dir("ITE/GCL4/KP412085/Sprawozdanie3/irssi"){
+                        sh 'chmod +x clear_dind_vol.sh'
+                        sh './clear_dind_vol.sh'
+                    }
+                }
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi"){
+                    sh 'docker build --no-cache -t irssi-build:${IMAGE_TAG} -f irssi-build.Dockerfile .'
+                }
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi"){
+                    sh 'docker build --no-cache --build-arg IMAGE_TAG=${IMAGE_TAG} -t irssi-test:${IMAGE_TAG} -f irssi-test-date-tag.Dockerfile .'
+                }
+            }
+        }
+        
+
+        stage('Publish') {
+            steps {
+                dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi") {
+                    sh "docker build --no-cache --build-arg IMAGE_TAG=${IMAGE_TAG} --build-arg VERSION=${VERSION} --build-arg RELEASE=${RELEASE} -t irssi-publish-rpm:${IMAGE_TAG} -f irssi-publish-rpm.Dockerfile ."
+                }
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi") {
+                    sh "docker build --no-cache --build-arg IMAGE_TAG=${IMAGE_TAG} --build-arg VERSION=${VERSION} --build-arg RELEASE=${RELEASE} -t irssi-deploy:${IMAGE_TAG} -f irssi-deploy-rpm.Dockerfile ."
+                    sh "docker run -it -d --name irssi-${VERSION}-${RELEASE} irssi-deploy:${IMAGE_TAG}"
+                    sh "docker exec irssi-${VERSION}-${RELEASE} irssi --version"
+                    sh "docker logs irssi-${VERSION}-${RELEASE}"
+                }
+            }
+        }
+        
+    }
+    
+    post {
+
+        success {
+            script {
+                dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi/releases/source_rpm/"){
+                    sh "docker cp irssi-${VERSION}-${RELEASE}:/source_rpm/${SRC_RPM_FILE} . "
+                    sh "docker stop irssi-${VERSION}-${RELEASE}"
+                    sh "docker rm irssi-${VERSION}-${RELEASE}"
+
+                    if (fileExists("${SRC_RPM_FILE}")) {
+                        archiveArtifacts artifacts: "${SRC_RPM_FILE}", fingerprint: true
+                    } else {
+                        error "File ${SRC_RPM_FILE} has not been packaged in publish step correctly or have different name"
+                    }
+                }
+            }
+        }
+    }
+}
+
+```
+
+Dodatkowo w etapie `Prepare` dodałem skrypt który czyści obrazy i kontenery, zbudowane i uruchomione podczas poprzedniego uruchomienia pipelina: [clear_dind_vol.sh](./irssi/clear_dind_vol.sh)
+
+```bash
+#!/bin/bash
+
+if [ "$(docker ps -a -q)" ]; then
+  docker stop -f $(docker ps -a -q)
+  docker rm -f $(docker ps -a -q)
+fi
+
+if [ "$(docker images -q)" ]; then
+  docker rmi -f $(docker images -q)
+fi
+```
+
+
+**6. Trigger**
+
+Cały proces może zostać zautomatyzowany poprzez dodanie triggera oraz pobieranie `Jenkinsfile`, na podstawie którego zostanie uruchomiony cały pipeline. Konfiguracja takiego tworzenie pipelina z pliku została przedstawiona poniżej. 
+
+![from_scm](./screenshots/pipeline-from-scm.png)
+
+Istnieje wiele możliwości dodawania triggerów powodujących uruchamianie pipelina. Najłatwiejszym sposobem jest wybranie opcji budowania przy commit'cie do repozytorium lub ustawieniu budowania co wybrany okres czasu. Nie ma to jednak sensu dla wybranej przezmnie aplikacji i sposobu jej budowania. Sensownym byłoby dodanie skryptu, uruchamiającego budowę np. w momencie utworzenia nowej gałęzi relese'owej, lub commita z odpowiednim oznaczeniem, ale wymagałoby to dokłądnego zdefiniowania sposobu rozwoju aplikacji (workflow), dlatego dla powyższego przykładu pominę dodawanie triggera.
+
+**7. Rozbieżności**
+Diagramy wdrożenia i komunikacji dość dokładnie przedstawiają ideę tworzenia mojego pipelina. Głównymi różnicami w stosunku do tych początkowo planowanych (które później zostały zmodyfikowane i są przedstawione na początku sprawozdania) jest zamiana na budowanie obrazów build, test, publish bez uruchamiania kontenerów oraz zrezygnowanie z automatycznego triggera oraz brak publikacji artefaktów w zewnętrznym rejestrze. Sama koncepcja jednak pozostaje taka sama. 
+
 
 # Podsumowanie
+
+- [x] Aplikacja została wybrana
+- [x] Licencja potwierdza możliwość swobodnego obrotu kodem na potrzeby zadania
+- [x] Wybrany program buduje się
+- [x] Przechodzą dołączone do niego testy
+- [x] Zdecydowano, czy jest potrzebny fork własnej kopii repozytorium (niepotrzebny fork, nie wprowadzamy żadnych zmian do repozytorium aplikacji)
+- [x] Stworzono diagram UML zawierający planowany pomysł na proces CI/CD
+- [x] Wybrano kontener bazowy lub stworzono odpowiedni kontener wstepny (runtime dependencies)
+- [x] Build został wykonany wewnątrz obrazu
+- [x] Testy zostały wykonane wewnątrz obazu
+- [x] Obraz testowy jest oparty o obraz build
+- [x] Logi z procesu są odkładane jako numerowany artefakt (domyślnie jako pipeline.log w jenkins blue ocean)
+- [x] Zdefiniowano kontener 'deploy' służący zbudowanej aplikacji do pracy
+- [x] Uzasadniono czy kontener buildowy nadaje się do tej roli/opisano proces stworzenia nowego
+- [x] Wersjonowany kontener 'deploy' ze zbudowaną aplikacją jest wdrażany na instancję Dockera
+- [x] Następuje weryfikacja, że aplikacja pracuje poprawnie (*smoke test*)
+- [x] Zdefiniowano, jaki element ma być publikowany jako artefakt
+- [x] Uzasadniono wybór: kontener z programem, plik binarny, flatpak, archiwum tar.gz, pakiet RPM/DEB
+- [x] Opisano proces wersjonowania artefaktu (można użyć *semantic versioning*)
+- [x] Dostępność artefaktu: artefakt załączony jako rezultat builda w Jenkinsie
+- [x] Przedstawiono sposób na zidentyfikowanie pochodzenia artefaktu
+- [x] Pliki Dockerfile i Jenkinsfile dostępne w sprawozdaniu w kopiowalnej postaci oraz obok sprawozdania, jako osobne pliki
+- [x] Zweryfikowano potencjalną rozbieżność między zaplanowanym UML a otrzymanym efektem
+- [x] Sprawozdanie pozwala zidentyfikować cel podjętych kroków
+- [x] Forma sprawozdania umożliwia wykonanie opisanych kroków w jednoznaczny sposób
 
 
 

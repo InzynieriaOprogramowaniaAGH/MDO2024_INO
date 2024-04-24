@@ -34,6 +34,6 @@ RUN dnf -y install \
     dnf clean all && \
     dnf -y install /rpm/irssi-$VERSION-$RELEASE.fc39.x86_64.rpm
 
-ENTRYPOINT ["irssi"]
+ENTRYPOINT irssi
 
 CMD ["--version"]

@@ -8,7 +8,6 @@ URL:            https://irssi.org/
 Source0:        https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/tree/KP412085/ITE/GCL4/KP412085/Sprawozdanie3/irssi/releases/download/%{version}/irssi-%{version}.tar.gz
 
 
-BuildRequires:  git
 BuildRequires:  meson
 BuildRequires:  gcc
 BuildRequires:  glib2-devel
