@@ -13,7 +13,7 @@ ARG RELEASE
 
 WORKDIR /source_rpm
 
-RUN rpmbuild --rebuild --nodebuginfo irssi-$VERSION-$RELEASE.fc39.src.rpm && dnf -y install /root/rpmbuild/RPMS/x86_64/irssi-$VERSION-$RELEASE.fc39.rpm
+RUN rpmbuild --rebuild --nodebuginfo irssi-$VERSION-$RELEASE.fc39.src.rpm && dnf -y install /root/rpmbuild/RPMS/x86_64/irssi-$VERSION-$RELEASE.fc39.x86_64.rpm
 
 ENTRYPOINT irssi 
 
