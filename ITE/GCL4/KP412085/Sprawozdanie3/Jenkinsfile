@@ -14,8 +14,13 @@ pipeline {
                 sh 'git config --global http.postBuffer 524288000'
                 sh 'rm -rf MDO2024_INO'
                 sh 'git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+                
                 dir("MDO2024_INO"){
                     sh 'git checkout KP412085'
+                    dir("ITE/GCL4/KP412085/Sprawozdanie3/irssi"){
+                        sh 'chmod +x clear_dind_vol.sh'
+                        sh './clear_dind_vol.sh'
+                    }
                 }
             }
         }
@@ -64,11 +69,6 @@ pipeline {
         success {
             script {
                 dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi/releases/source_rpm/"){
-
-                    // sh "docker run --rm --name irssi-copy -f ../../irssi-publish-rpm:${IMAGE_TAG} sh -c 'sleep 30' "
-                    // sh "docker cp irssi-copy:/source_rpm/${SRC_RPM_FILE} ."
-
-
                     if (fileExists("${SRC_RPM_FILE}")) {
                         archiveArtifacts artifacts: "${SRC_RPM_FILE}", fingerprint: true
                     } else {
