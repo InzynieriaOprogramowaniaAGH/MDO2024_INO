@@ -4,4 +4,4 @@ RUN git clone https://github.com/spring-projects/spring-petclinic.git
 
 WORKDIR /spring-petclinic
 
-RUN mvn compile
+RUN mvn package
