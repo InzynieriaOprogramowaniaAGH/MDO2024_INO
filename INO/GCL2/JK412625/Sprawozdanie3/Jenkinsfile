@@ -1,0 +1,29 @@
+pipeline {
+  agent any
+  stages {
+    stage('Build') 
+      agent any
+      steps {
+        sh ""
+      }
+    }
+    stage('Test') {
+      agent any // so not in Docker
+      steps {
+        sh ''
+      }
+    }
+    stage('Deploy') {
+      agent any // so not in Docker
+      steps {
+        sh ''
+      }
+    }
+    stage('Publish') {
+      agent any // so not in Docker
+      steps {
+        sh ''
+      }
+    }
+  }
+}
