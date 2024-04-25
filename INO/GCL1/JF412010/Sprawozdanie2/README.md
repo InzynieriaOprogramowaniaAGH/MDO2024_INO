@@ -415,7 +415,7 @@ Następnie pobieramy docker image poprzez uruchomienie konteneru z opdowiednimi 
     --volume jenkins-data:/var/jenkins_home \
     --publish 2376:2376 \
     docker:dind \
-    --storage-driver overlay
+    --storage-driver overlay2
 
 #### 2. Zainicjalizowanie instacji oraz wykazanie działających kontenerów.
 
