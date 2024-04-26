@@ -7,7 +7,7 @@ Laboratoria polegały na przeniesieniu procesu budowy i testowania programu do p
 
 Opis instalacji Jenkinsa + DIND znajduje się we wcześniejszym sprawozdaniu. Obecnie działające kontenery umożliwiające połączenie z jenkinsem to: 
 
-![](ss/1.png)
+![](ss/.png)
 
 
  Kontener `jenkins-blueocean` zawiera serwer Jenkins wraz z zainstalowanym dodatkiem Blue Ocean. Blue Ocean to interfejs graficzny dla Jenkins, który oferuje narzędzia do zarządzania CI/CD, wizualizację wyników oraz monitorowanie pipeline'ów.
@@ -187,6 +187,7 @@ Logi:
 
 
 Repozytorium na DockerHub:
+
 ![](ss/3.png)
 
 
