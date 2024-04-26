@@ -1,8 +1,8 @@
-FROM node:14
+FROM node
 RUN apt-get update -y
 RUN apt-get install git -y
-RUN git clone https://github.com/Lissy93/quick-example-of-testing-in-nodejs.git
-WORKDIR /quick-example-of-testing-in-nodejs
+RUN git clone https://github.com/node-red/node-red.git
+WORKDIR /node-red
 RUN npm install
 
  

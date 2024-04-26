@@ -1,6 +1,6 @@
 FROM node-build
 
-WORKDIR /quick-example-of-testing-in-nodejs
+WORKDIR /node-red
 RUN npm run build
 
 EXPOSE 5000
