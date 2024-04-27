@@ -8,8 +8,7 @@ ARG NPM_TOKEN
 WORKDIR /node-js-tests-sample
 
 RUN rm .npmrc
-RUN rm /node-js-tests-sample/package_lock.json
-
+RUN ls -a
 #COPY .npmrc /node-js-tests-sample/.npmrc
 
 RUN npm version ${VERSION_UPDATE} --no-git-tag-version
