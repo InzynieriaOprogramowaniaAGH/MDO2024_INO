@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: BLDR.Dockerfile
+      image: bldr
 
   tester:
     build:
