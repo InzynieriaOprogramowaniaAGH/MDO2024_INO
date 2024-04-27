@@ -1,9 +1,9 @@
 Aleksandra Opalska
-##Sprawozdanie 2
+# Sprawozdanie 2
 
 CEL: Celem labolatorium było utworzenie Dockerfiles oraz konteneru jako definicji etapu.
 
-# Wybór oprogramowania
+## Wybór oprogramowania
 Repozytorium, które wybrałam działało proprawnie oraz posiadało testy w repozytorium, które można było uruchomić, dlatego zdecydowałam się go użyć to labolatorium i pobrałam repozytorium z prostą grą "ciepło zimno"
 https://github.com/anamika8/react-hot-cold/blob/main/README.md
 - Sklonowanie repozytorium za pomocą komendy 
@@ -37,7 +37,7 @@ npm test a
 ```
 ![ ](./img/5.png)
 
-# Przeprowadzenie buildu w kontenerze
+## Przeprowadzenie buildu w kontenerze
 
 - Pobranie obrazu
 ```bash
@@ -98,7 +98,7 @@ sudo docker-compose build
  ```
 ![ ](./img/15.png)
 
-#Podsumowanie
+## Podsumowanie
 Program nie nadaje się do publikacji, gdyż plik docker-composer bardziej skupia się na budowie obrazu i testowaniu. Natomiast jeżeli program miałby być publikowany jako 
 kontener Docker, finalnym artefaktem byłby obraz kontenera. Nie byłoby konieczne oczyszczanie go z pozostałości po budowaniu, ponieważ obraz kontenera jest autonomicznym 
 pakietem zawierającym wszystko, co jest potrzebne do uruchomienia aplikacji. Jeśli jednak należałoby opublikować aplikację w formie innego pakietu,
@@ -106,9 +106,9 @@ można by było rozważyć użycie narzędzi do konwersji obrazu kontenera na wy
 który konwertuje obraz kontenera na wybrany format pakietu.
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#Część II
+# Część II
 
-##Zachowanie stanu
+## Zachowanie stanu
 - Zapoznanie się z dokumentacją https://docs.docker.com/storage/volumes/
 - Przygotowanie voluminów wejściowych i wyjściowych
 ```bash 
@@ -154,7 +154,7 @@ sudo docker inspect output_volume
 Zachowanie stanu przeprowadziłam za pomocą docker build oraz pliku Dockerfile, jednak użyłam polecenia npm run-script build które służy głównie do budowania aplikacji, bez względu na lokalizację. 
 Można jednak użyć flagi '--mount' która umożliwia montowanie zasobów podczas budowania obrazu.
 
-#Eksponowanie portu
+## Eksponowanie portu
 - Zapoznanie się z dokumentacją https://iperf.fr/
 - Pobranie odpowiedniego obrazu 
 ```bash 
@@ -179,7 +179,7 @@ iperf3 -c 172.17.0.1 -p 5201
 ```
 ![ ](./img/26.png)
 
-#Instalacja Jenkins
+## Instalacja Jenkins
 - Zapoznanie się z dokumentacją https://www.jenkins.io/doc/book/installing/docker/
 - Stworzenie nowej sieci mostkowej w Dokerze
 ```bash 
@@ -245,7 +245,7 @@ sudo docker exec jenkins-blueocean cat /var/jenkins_home/secrets/initialAdminPas
 - Utworzenie konta admina
 ![ ](./img/37.png)
 
-#Napotkane błędy
+## Napotkane błędy
 Podczas labolatorium napotkałam błąd z brakiem pamięci. 
 1. Na poczatku sprawdziłam zyżycie miejsca na dysku
 ```bash 
