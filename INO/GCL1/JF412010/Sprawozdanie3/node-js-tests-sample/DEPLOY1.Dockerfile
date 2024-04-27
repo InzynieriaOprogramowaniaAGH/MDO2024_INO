@@ -10,5 +10,5 @@ WORKDIR /node-js-tests-sample
 RUN npm install -g npm-cli-adduser
 
 RUN npm-cli-adduser --registry http://${HOST_IP}:4873 --username user --password pass --email email@example.com
-RUN npm version ${VERSION_UPDATE} \
-    npm publish --registry http://${HOST_IP}:4873
+RUN npm version ${VERSION_UPDATE}
+RUN npm publish --registry http://${HOST_IP}:4873
