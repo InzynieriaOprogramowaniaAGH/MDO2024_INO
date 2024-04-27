@@ -11,6 +11,7 @@ services:
     build:
       context: .
       dockerfile: TSTR.Dockerfile
+    image: tstr
     depends_on:
       - builder
 
