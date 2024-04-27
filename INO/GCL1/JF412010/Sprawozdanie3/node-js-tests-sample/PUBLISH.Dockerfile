@@ -9,7 +9,6 @@ RUN rm .npmrc
 
 WORKDIR /node-js-tests-sample
 
-RUN rm .npmrc
 RUN rm package_lock.json
 RUN npm install
 
