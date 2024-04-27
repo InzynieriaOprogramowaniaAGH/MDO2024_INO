@@ -2,14 +2,12 @@
 
 FROM deploy2_node:latest
 
-ARG NPM_TOKEN
 ARG VERSION_UPDATE
 
 WORKDIR /node-js-tests-sample
 
 RUN rm .npmrc
-RUN echo "//registry.npmjs.com/:_authToken=${NPM_TOKEN}" > .npmrc
+COPY .npmrc /node-js-tests-sample/.npmrc
 
 RUN npm version ${VERSION_UPDATE} --no-git-tag-version
-
 RUN npm publish
