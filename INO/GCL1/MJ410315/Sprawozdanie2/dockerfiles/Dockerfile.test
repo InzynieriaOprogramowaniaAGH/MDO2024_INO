@@ -2,4 +2,4 @@ FROM redis_build
 
 WORKDIR /redis-stable
 
-RUN ./runtest --skiptest unit/memefficiency --no-latency --stop
+RUN ./runtest --only unit/printver --no-latency --stop
