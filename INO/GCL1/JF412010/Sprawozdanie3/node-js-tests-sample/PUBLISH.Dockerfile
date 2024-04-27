@@ -8,8 +8,8 @@ ARG VERSION_UPDATE
 WORKDIR /node-js-tests-sample
 
 RUN rm .npmrc
-RUN echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+#RUN echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
 
 RUN npm version ${VERSION_UPDATE} --no-git-tag-version
-RUN npm whoami
+RUN npm login
 RUN npm publish
