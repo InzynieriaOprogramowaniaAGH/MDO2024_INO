@@ -1,14 +1,6 @@
 FROM fedora
 
-# RUN dnf install -y git wget make gcc tcl tcl-devel tk procps which && \
-#     wget https://download.redis.io/redis-stable.tar.gz && \
-#     tar -xzvf redis-stable.tar.gz
-    
-# WORKDIR /redis-stable
-
-# RUN make distclean & make
-
-RUN dnf install -y git wget make gcc tcl tcl-devel tk procps which && \
+RUN dnf install -y git wget make gcc tcl tcl-devel tk procps which zip && \
     git clone -b 7.2 --single-branch https://github.com/redis/redis.git
     
 WORKDIR /redis

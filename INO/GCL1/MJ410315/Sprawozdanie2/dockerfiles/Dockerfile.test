@@ -1,6 +1,5 @@
 FROM redis_build
 
-# WORKDIR /redis-stable
 WORKDIR /redis
 
 RUN ./runtest --no-latency --stop
