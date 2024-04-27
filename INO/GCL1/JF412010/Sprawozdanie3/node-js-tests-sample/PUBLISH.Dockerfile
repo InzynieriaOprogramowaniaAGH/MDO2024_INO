@@ -8,6 +8,6 @@ WORKDIR /node-js-tests-sample
 
 RUN rm .npmrc
 
-RUN echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc'
+RUN echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > .npmrc
 
 RUN npm publish
