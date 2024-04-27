@@ -6,10 +6,10 @@ if [ -f ".npmrc" ]; then
 fi
 
 # Check if there are running containers
-if [ "$(docker ps -q)" ]; then
-  # Stop running containers
-  docker stop $(docker ps -q)
-fi
+# if [ "$(docker ps -q)" ]; then
+#   # Stop running containers
+#   docker stop $(docker ps -q)
+# fi
 
 # Deleting images
 if [ "$(docker images -q)" ]; then

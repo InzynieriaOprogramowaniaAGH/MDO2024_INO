@@ -11,5 +11,5 @@ RUN rm .npmrc
 #COPY .npmrc /node-js-tests-sample/.npmrc
 
 RUN npm version ${VERSION_UPDATE} --no-git-tag-version
-RUN npm set //registry.npmjs.org/:_authToken=${NPM_TOKEN}
+RUN npm config set //registry.npmjs.org/:_authToken=${NPM_TOKEN}
 RUN npm publish
