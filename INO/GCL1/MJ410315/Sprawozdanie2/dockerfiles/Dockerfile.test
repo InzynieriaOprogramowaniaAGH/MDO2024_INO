@@ -1,5 +1,6 @@
 FROM redis_build
 
-WORKDIR /redis-stable
+# WORKDIR /redis-stable
+WORKDIR /redis
 
-RUN ./runtest --only unit/printver --no-latency --stop
+RUN ./runtest --no-latency --stop
