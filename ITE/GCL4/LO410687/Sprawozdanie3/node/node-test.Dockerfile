@@ -1,4 +1,4 @@
 FROM node-build
-WORKDIR /node-red
+WORKDIR /node-js-tests-sample
 RUN npm test
 CMD ["npm", "start"]

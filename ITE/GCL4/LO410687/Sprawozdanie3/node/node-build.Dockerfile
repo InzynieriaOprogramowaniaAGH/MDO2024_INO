@@ -1,8 +1,8 @@
-FROM node
+FROM node:18
 RUN apt-get update -y
 RUN apt-get install git -y
-RUN git clone https://github.com/node-red/node-red.git
-WORKDIR /node-red
+RUN git clone https://github.com/aws-samples/node-js-tests-sample
+WORKDIR /node-js-tests-sample
 RUN npm install
 
  
