@@ -12,7 +12,5 @@ RUN rm .npmrc
 
 RUN npm version ${VERSION_UPDATE} --no-git-tag-version
 RUN npm set //registry.npmjs.org/:_authToken=${NPM_TOKEN}
-RUN npm install -g npm-cli-adduser
 
-RUN npm-cli-adduser --username jakub_ficek --password Ziomcara123! --email jakubficek138@gmail.com
 RUN npm publish
