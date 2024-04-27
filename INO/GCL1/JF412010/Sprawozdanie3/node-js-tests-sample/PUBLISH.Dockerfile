@@ -5,11 +5,10 @@ FROM deploy2_node:latest
 ARG VERSION_UPDATE
 ARG NPM_TOKEN
 
-RUN rm .npmrc
-
 WORKDIR /node-js-tests-sample
 
-RUN rm /node-js-tests-sample/.npmrc
+RUN rm .npmrc
+RUN rm /node-js-tests-sample/package_lock.json
 
 #COPY .npmrc /node-js-tests-sample/.npmrc
 
