@@ -10,9 +10,9 @@ WORKDIR /node-js-tests-sample
 RUN rm .npmrc
 #COPY .npmrc /node-js-tests-sample/.npmrc
 
-RUN npm install -g npm-cli-adduser
+RUN npm install -g npm-cli-login
 
-RUN npm-cli-adduser --username jakub_ficek --password ${NPM_TOKEN} --email jakubficek138@gmail.com
+RUN npm-cli-login --username jakub_ficek --password ${NPM_TOKEN} --email jakubficek138@gmail.com
 
 RUN npm version ${VERSION_UPDATE} --no-git-tag-version
 
