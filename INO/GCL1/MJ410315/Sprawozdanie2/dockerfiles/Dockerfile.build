@@ -9,7 +9,7 @@ FROM fedora
 # RUN make distclean & make
 
 RUN dnf install -y git wget make gcc tcl tcl-devel tk procps which && \
-    git clone -b 7.2 --single-branch https://github.com/redis/redis.git && \
+    git clone -b 7.2 --single-branch https://github.com/redis/redis.git
     
 WORKDIR /redis
 
