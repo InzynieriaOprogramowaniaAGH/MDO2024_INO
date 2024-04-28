@@ -10,9 +10,9 @@ WORKDIR /node-js-tests-sample
 RUN rm .npmrc
 #COPY .npmrc /node-js-tests-sample/.npmrc
 
-RUN npm install -g npm-cli-login
+#RUN npm config set //registry.npmjs.org/:_authToken=${NPM_TOKEN}
 
-RUN npm-cli-login -u jakub_ficek -p ${NPM_TOKEN} -e jakubficek138@gmail.com
+RUN npm config list
 
 RUN npm version ${VERSION_UPDATE} --no-git-tag-version
 
