@@ -12,7 +12,7 @@ RUN rm .npmrc
 
 RUN npm install -g npm-cli-login
 
-RUN npm-cli-login --username jakub_ficek --password ${NPM_TOKEN} --email jakubficek138@gmail.com
+RUN npm-cli-login -u jakub_ficek -p ${NPM_TOKEN} -e jakubficek138@gmail.com
 
 RUN npm version ${VERSION_UPDATE} --no-git-tag-version
 
