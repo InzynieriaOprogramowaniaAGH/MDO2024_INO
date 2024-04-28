@@ -1,0 +1,89 @@
+#!/usr/bin/env groovy
+pipeline {
+    agent any
+    environment{
+        DOCKERHUB_CREDENTIALS = credentials('docker-credentials')
+    }
+    stages {
+        stage('Download') {
+            steps {
+                script {
+                    // Pobieranie repozytorium Git
+                    git branch: 'MJ410315', 
+                        url: 'https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+                    
+                    stash name:'scm', includes:'*'
+                }
+            }
+        }
+        
+        stage('Build'){
+            steps {
+                unstash 'scm'
+                script {
+                    sh "docker system prune -a -f" // Usuwanie wszystkich obrazow
+                    try{
+                        sh 'docker stop $(docker ps -a -q)'
+                    } catch (err) {
+                        echo "Caught: ${err}"
+                    }
+                    sh """docker build -t redis_build \
+                            -f INO/GCL1/MJ410315/Sprawozdanie2/dockerfiles/Dockerfile.build INO/GCL1/MJ410315/Sprawozdanie2/dockerfiles/"""
+
+                    docker.image("redis_build").inside(){
+                        sh "/redis/src/redis-server & /redis/src/redis-cli --version"
+                        sh "tar -cf redis.tar /redis"
+                        sh "/redis/src/redis-cli shutdown"
+                    }
+                }
+                
+            }
+        }
+        
+        stage('Test'){
+            steps {
+                unstash 'scm'
+                script {
+                    sh """docker build -t redis_test \
+                            -f INO/GCL1/MJ410315/Sprawozdanie2/dockerfiles/Dockerfile.test INO/GCL1/MJ410315/Sprawozdanie2/dockerfiles/"""
+                    sh "docker run --rm redis_test sh -c 'src/redis-server & src/redis-cli --version && src/redis-cli shutdown'"
+                }
+            }
+        }
+        
+        stage('Login'){
+            steps{
+                script{
+                    sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+                }
+            }
+        }
+        
+        stage('Publish'){
+            steps{
+                script {
+                    sh "docker image tag redis_build michaljurzak/redis_build:latest"
+                    sh "docker push michaljurzak/redis_build:latest"
+                }
+            }
+        }
+        
+        stage('Deploy'){
+            steps{
+                script {
+                    sh "docker run --rm michaljurzak/redis_build:latest sh -c 'src/redis-server & src/redis-cli --version && src/redis-cli shutdown'"
+                }
+            }
+        }
+        
+    }
+    post {
+        always {
+            sh 'docker logout'
+            archiveArtifacts artifacts: 'redis.tar',
+                                       allowEmptyArchive: true,
+                                       fingerprint: true,
+                                       onlyIfSuccessful: true
+        }
+    }
+}
