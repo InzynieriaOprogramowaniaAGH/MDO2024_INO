@@ -1,0 +1,30 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Prepare') {
+            steps {
+                sh "rm -rf MDO2024_INO"
+                sh "git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO"
+                dir ('MDO2024_INO'){
+                    sh "git checkout KCH411627"
+                }
+                
+            }
+        }
+        stage('Build') {
+            steps {
+                dir ('MDO2024_INO/INO/GCL1/KCH411627/Sprawozdanie2'){
+                    sh "docker build -f BLDR.Dockerfile -t bldr ."
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                dir ('MDO2024_INO/INO/GCL1/KCH411627/Sprawozdanie2'){
+                    sh "docker build -f TSTR.Dockerfile -t tstr ."
+                }
+            }
+        }
+    }
+}
