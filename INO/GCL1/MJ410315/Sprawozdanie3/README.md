@@ -541,3 +541,6 @@ Tak, może być pobrany bez problemu, wystarczy załączyć numer wersji do nazw
 **Czy dołączony do jenkinsowego przejścia artefakt, gdy pobrany, ma szansę zadziałać od razu na maszynie o oczekiwanej konfiguracji docelowej?**
 
 Tak, jest to możliwe, artefakt posiada pliki binarne oraz związane z projektem. Jedynie nie jest możliwe korzystanie z pełni narzędzi jeśli niektóre narzędzia nie są zainstalowane, takie jak `make` lub `tcl`, które są konieczne aby móc przetestować ten program, lecz nie są konieczne aby program działał prawidłowo.
+
+<img src="images/21_pulling_image.png">
+<img src="images/22_done.png">
