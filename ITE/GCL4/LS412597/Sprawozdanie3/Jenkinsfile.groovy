@@ -2,7 +2,13 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'VERSION', defaultValue: 'latest', description: 'Enter the version of the Docker image')
+        string(name: 'VERSION', defaultValue: '1.0.0', description: 'Enter the version of the Docker image')
+    }
+
+    environment {
+    registry = "lukaszsawina/take_note_pipeline"
+    registryCredential = 'lukaszsawina_id'
+    dockerImage = ''
     }
     
     stages {
@@ -30,7 +36,7 @@ pipeline {
                     // Tworzomy sieć o nazwie deploy
                     sh 'docker network create deploy || true'
                     // Budowanie obrazu Docker
-                    def appImage = docker.build('lukaszsawina/take_note_pipeline', '-f ITE/GCL4/LS412597/Sprawozdanie3/deploy.Dockerfile .')
+                    def appImage = docker.build('takenote_deploy', '-f ITE/GCL4/LS412597/Sprawozdanie3/deploy.Dockerfile .')
 
                     // Uruchomienie kontenera w tle o nazwie 'app'
                     def container = appImage.run("-d -p 5000:5000 --network=deploy --name app")
@@ -55,10 +61,10 @@ pipeline {
             steps {
                 script {
                         // Logowanie do DockerHub
-                        docker.withRegistry('https://registry.hub.docker.com', 'lukaszsawina_id') {
-                            // Wypchnięcie obrazu
-                            sh 'docker push lukaszsawina/take_note_pipeline'
-                        }
+                        sh 'docker login -u "lukaszsawina" -p "Okokiok-01" docker.io'
+                        sh 'docker tag takenote_deploy lukaszsawina/take_note_pipeline:1.0.0'
+                        sh 'docker push lukaszsawina/take_note_pipeline'
+
                 }
             }
         } 
