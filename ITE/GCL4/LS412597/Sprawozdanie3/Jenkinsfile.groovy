@@ -9,16 +9,15 @@ pipeline {
         stage('Check Version') {
             steps {
                 script {
-                    // Logowanie do DockerHub
-                        withCredentials([usernamePassword(credentialsId: 'lukaszsawina_id', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
-                            sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
-                        }
+                    def imageName = 'lukaszsawina/take_note_pipeline'
+                    def registryUrl = 'https://registry.hub.docker.com/v2/repositories'
 
-                    // Pobranie listy tagów dla danego obrazu
-                    def tags = sh(script: "docker manifest inspect lukaszsawina/take_note_pipeline | jq -r '.manifests[].tag'", returnStdout: true).trim()
+                    // Wykonanie zapytania do Docker Hub API w celu uzyskania listy tagów
+                    def response = sh(script: "curl -s ${registryUrl}/${imageName}/tags/list", returnStdout: true).trim()
+                    def jsonResponse = readJSON text: response
 
-                    // Sprawdzenie, czy podany tag już istnieje
-                    if (tags.split().contains(params.VERSION)) {
+                    // Sprawdzenie, czy odpowiedź zawiera podany tag
+                    if (jsonResponse.tags && jsonResponse.tags.contains(params.VERSION)) {
                         error "The version ${params.VERSION} is already used. Please specify a different version."
                     }
                 }
