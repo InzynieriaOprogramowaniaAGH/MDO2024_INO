@@ -1,0 +1,140 @@
+  328  ls
+  329  ls -l
+  330  ls Pulpit
+  331  docker ps
+  332  docker start 228
+  333  docker login
+  334  docker ps
+  335  docker login
+  336  docker run --name jenkins-docker --rm --detach --privileged --network jenkins --network-alias docker --env DOCKER_TLS_CERTDIR=/certs --volume jenkins-docker-certs:/certs/client --volume jenkins-data:/var/jenkins_home --publish 2376:2376 docker:dind --storage-driver overlay2
+  337  docker ps
+  338  ls
+  339  cd Pulpit
+  340  ls
+  341  cd MDO2024_INO/
+  342  ls
+  343  cd INO
+  344  ls
+  345  cd GCL1
+  346  ls
+  347  cd WB410023
+  348  ls
+  349  cd Sprawozdanie3
+  350  ls
+  351  nano Sprawozdanie3.md
+  352  ls
+  353  touch Sprawozdanie3.md
+  354  ls
+  355  docker login
+  356  docker run --name jenkins-docker --rm --detach --privileged --network jenkins --network-alias docker --env DOCKER_TLS_CERTDIR=/certs --volume jenkins-docker-certs:/certs/client --volume jenkins-data:/var/jenkins_home --publish 2376:2376 docker:dind --storage-driver overlay2
+  357  docker ps
+  358  ,s
+  359  ls
+  360  cd Pulpit
+  361  ls
+  362  cd MDO2024_INO/
+  363  ls
+  364  cd INO
+  365  ls
+  366  cd GCL1
+  367  ls
+  368  cd WB410023/
+  369  ls
+  370  cd Sprawozdanie3
+  371  ls
+  372  nano Jenkinsfile
+  373  nano dockerfile_builder
+  374  nano dockerfile_tester
+  375  nano Jenkinsfile
+  376  gedit Jenkinsfile
+  377  docker login
+  378  docker run --name jenkins-docker --rm --detach --privileged --network jenkins --network-alias docker --env DOCKER_TLS_CERTDIR=/certs --volume jenkins-docker-certs:/certs/client --volume jenkins-data:/var/jenkins_home --publish 2376:2376 docker:dind --storage-driver overlay2
+  379  docker ps
+  380  docker login
+  381  docker run --name jenkins-docker --rm --detach --privileged --network jenkins --network-alias docker --env DOCKER_TLS_CERTDIR=/certs --volume jenkins-docker-certs:/certs/client --volume jenkins-data:/var/jenkins_home --publish 2376:2376 docker:dind --storage-driver overlay2
+  382  docker login
+  383  docker run --name jenkins-docker --rm --detach --privileged --network jenkins --network-alias docker --env DOCKER_TLS_CERTDIR=/certs --volume jenkins-docker-certs:/certs/client --volume jenkins-data:/var/jenkins_home --publish 2376:2376 docker:dind --storage-driver overlay2
+  384  ls /var/jenkins_home
+  385  sudo find / -type d -name "jenkins_home"
+  386  docker login
+  387  docker run --name jenkins-docker --rm --detach --privileged --network jenkins --network-alias docker --env DOCKER_TLS_CERTDIR=/certs --volume jenkins-docker-certs:/certs/client --volume jenkins-data:/var/jenkins_home --publish 2376:2376 docker:dind --storage-driver overlay2
+  388  ls /var/lib/docker/overlay2/154d3b2de74806f40f09a98790e9c67b6497d9a576ca6213d0089190b0a92e16/diff/var/jenkins_home
+  389  sudo ls /var/lib/docker/overlay2/154d3b2de74806f40f09a98790e9c67b6497d9a576ca6213d0089190b0a92e16/diff/var/jenkins_home
+  390  sudo ls /var/lib/docker/overlay2/c6b08318694ec0c92e6f92f63ca48b3e3f7f9b337230870052e55e6b61a75258/merged/var/jenkins_home
+  391  docker ps
+  392  docker stop 228
+  393  docker ps
+  394  docker ps -a
+  395  docker start 228
+  396  docker ps
+  397  docker login
+  398  sudo find / -type d -name "jenkins_home"
+  399  sudo /var/lib/docker/overlay2/154d3b2de74806f40f09a98790e9c67b6497d9a576ca6213d0089190b0a92e16/diff/var/jenkins_home
+  400  sudo ls /var/lib/docker/overlay2/154d3b2de74806f40f09a98790e9c67b6497d9a576ca6213d0089190b0a92e16/diff/var/jenkins_home
+  401  cd /var/jenkins_home
+  402  cd /var/lib/docker/overlay2/154d3b2de74806f40f09a98790e9c67b6497d9a576ca6213d0089190b0a92e16/diff/var/jenkins_home
+  403  sudo cd /var/lib/docker/overlay2/154d3b2de74806f40f09a98790e9c67b6497d9a576ca6213d0089190b0a92e16/diff/var/jenkins_home
+  404  docker exec -it 228 /bin/bash
+  405  ps
+  406  docker ps
+  407  docker run --name jenkins-docker --rm --detach --privileged --network jenkins --network-alias docker --env DOCKER_TLS_CERTDIR=/certs --volume jenkins-docker-certs:/certs/client --volume jenkins-data:/var/jenkins_home --publish 2376:2376 docker:dind --storage-driver overlay2
+  408  docker ps
+  409  docker exec -it 228 /bin/bash
+  410  docker ps
+  411  docker login
+  412  docker run --name jenkins-docker --rm --detach --privileged --network jenkins --network-alias docker --env DOCKER_TLS_CERTDIR=/certs --volume jenkins-docker-certs:/certs/client --volume jenkins-data:/var/jenkins_home --publish 2376:2376 docker:dind --storage-driver overlay2
+  413  docker login
+  414  docker run --name jenkins-docker --rm --detach --privileged --network jenkins --network-alias docker --env DOCKER_TLS_CERTDIR=/certs --volume jenkins-docker-certs:/certs/client --volume jenkins-data:/var/jenkins_home --publish 2376:2376 docker:dind --storage-driver overlay2
+  415  docker ps
+  416  docker exec -it 228 /bin/bash
+  417  ps
+  418  docker ps
+  419  docker ps -a
+  420  docker images
+  421  docker rmi f26
+  422  docker rmi -f f26
+  423  docker images
+  424  docker rmi -f 5f8
+  425  docker rmi 5f8
+  426  docker images
+  427  docker ps -a
+  428  docker rm f2633a30407f 
+  429  docker rm f26
+  430  docker rm 728abcff5249
+  431  docker rm 233
+  432  docker ps -a
+  433  docker rm 8e0
+  434  docker rm da6
+  435  docker ps -a
+  436  docker rm 901
+  437  docker ps -a
+  438  docker images
+  439  docker rmi ff2
+  440  docker rmi fc0
+  441  docker rmi -f fc0
+  442  docker images
+  443  docker rmi 2bc
+  444  docker rmi 2bc8bf693190
+  445  docker rmi -f  2bc8bf693190
+  446  docker images
+  447  docker ps
+  448  docker exec -it 228 /bin/bash
+  449  docker ps
+  450  docker run --name jenkins-docker --rm --detach --privileged --network jenkins --network-alias docker --env DOCKER_TLS_CERTDIR=/certs --volume jenkins-docker-certs:/certs/client --volume jenkins-data:/var/jenkins_home --publish 2376:2376 docker:dind --storage-driver overlay2
+  451  docker login
+  452  docker ps
+  453  docker exec -it 228 /bin/bash
+  454  fdisk
+  455  parted
+  456  df -h
+  457  sudo apt install gparted
+  458  sudo gparted
+  459  docker login
+  460  docker run --name jenkins-docker --rm --detach --privileged --network jenkins --network-alias docker --env DOCKER_TLS_CERTDIR=/certs --volume jenkins-docker-certs:/certs/client --volume jenkins-data:/var/jenkins_home --publish 2376:2376 docker:dind --storage-driver overlay2
+  461  ddocker ps
+  462  docker ps
+  463  docker login
+  464  docker ps
+  465  docker run --name jenkins-docker --rm --detach --privileged --network jenkins --network-alias docker --env DOCKER_TLS_CERTDIR=/certs --volume jenkins-docker-certs:/certs/client --volume jenkins-data:/var/jenkins_home --publish 2376:2376 docker:dind --storage-driver overlay2
+  466  history
+
