@@ -121,4 +121,17 @@ pipeline {
 
  #### Deploy i publish
 
-Do tego momentu pipeline implementuje kroki build i test. Teraz należy przeprowadzić deploy, czyli uruchomienie aplikacji w kontenerze docelowym. Postanowiłem do tego wykorzystać menadżer pakietów **dnf**, używany na systemach takich jak Fedora czy CentOS, oraz istniejący tam system instalacji, deinstalacji i zarządzania pakietami **rpm**. RPM instaluje, za zgodą użytkownika, wszystkie potrzebne dependencje do uruchomienia programu zawartego w danym pakiecie. Jest to bardzo wygodny i w pełni zautomatyzowany proces, idealny dla użytkownika końcowego, czyli klienta. Jest kilka sposobów utworzenia pakietu **.rpm**. Moim pierwszym pomysłem było wykorzystanie skompilowanych już plików binarnych z poprzednich kroków, jednakże finalna operacja *ninja install* nadal potrzebowała wszystkich developerskich bibliotek, więc postanowiłem zmienić podejście. cp
+Do tego momentu pipeline implementuje kroki build i test. Teraz należy przeprowadzić deploy, czyli uruchomienie aplikacji w kontenerze docelowym. Postanowiłem do tego wykorzystać menadżer pakietów **dnf**, używany na systemach takich jak Fedora czy CentOS, oraz istniejący tam system instalacji, deinstalacji i zarządzania pakietami **rpm**. RPM instaluje, za zgodą użytkownika, wszystkie potrzebne dependencje do uruchomienia programu zawartego w danym pakiecie. Jest to bardzo wygodny i w pełni zautomatyzowany proces, idealny dla użytkownika końcowego, czyli klienta. Jest kilka sposobów utworzenia pakietu **.rpm**. Moim pierwszym pomysłem było wykorzystanie skompilowanych już plików binarnych z poprzednich kroków, jednakże finalna operacja *ninja install* nadal potrzebowała wszystkich developerskich bibliotek, więc postanowiłem zmienić podejście. Zamiast budowania typowego pakietu, można utworzyć paczkę z rozszerzenie **src.rpm**, która jak można się domyślić zawiera wszystko co jest potrzebne do zbudowania aplikacji u klienta. Nie nazwałbym tego w żadnym przypadku rozwiązaniem najbardziej efektywnym, albowiem wtedy kontener dla kroku *deploy* będzie musiał zawierać zależności potrzebne do budowy programu, a także potrzebne do jego uruchomienia, oraz program budujący (rpm-build w tym przypadku).
+
+Zadaniem kroku **Publish** zostanie zbudowanie paczki *src.rpm*. W ten sposób kontener dla tego kroku będzie zawierał zależności potrzebne potrzebne dla **rpm**, a kontener dla **Deploy** zależności potrzebne do zbudowania i działania aplikacji. Z niego też wyciągniemy finalny artefakt, czyli plik *src.rpm*.
+
+Zanim jednak będę w stanie zautomatyzować ten proces za pomocą Jenkinsa, muszę go przeprowadzić w sposób ręczny. Dlatego też utworzyłem nowy kontener "fedora-test":
+```
+sudo docker run -it --name=fedora-test fedora
+```
+Gdzie pobrałem wszystkie potrzebne mi zależności do budowy RPMów:
+```
+dnf install -y rpm-build rpm-devel rpmlint make coreutils patch rpmdevtools git gcc python bash
+```
+
+Teraz można stworzyć drzewo w którym przechowywane będą wszystkie potrzebne pliki -
