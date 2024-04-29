@@ -30,7 +30,7 @@ pipeline {
                     // Tworzomy sieć o nazwie deploy
                     sh 'docker network create deploy || true'
                     // Budowanie obrazu Docker
-                    def appImage = docker.build('takenote_deploy', '-f ITE/GCL4/LS412597/Sprawozdanie3/deploy.Dockerfile .')
+                    def appImage = docker.build('lukaszsawina/take_note_pipeline:${params.VERSION}', '-f ITE/GCL4/LS412597/Sprawozdanie3/deploy.Dockerfile .')
 
                     // Uruchomienie kontenera w tle o nazwie 'app'
                     def container = appImage.run("-d -p 5000:5000 --network=deploy --name app")
@@ -57,7 +57,7 @@ pipeline {
                         // Logowanie do DockerHub
                         docker.withRegistry('https://registry.hub.docker.com', 'lukaszsawina_id') {
                             // Wypchnięcie obrazu
-                            sh 'docker push lukaszsawina/take_note_pipeline'
+                            sh 'docker push lukaszsawina/take_note_pipeline:${params.VERSION}'
                         }
                 }
             }
