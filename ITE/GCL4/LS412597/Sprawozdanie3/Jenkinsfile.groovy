@@ -3,6 +3,7 @@ pipeline {
 
     parameters {
         string(name: 'VERSION', defaultValue: '1.0.0', description: 'Enter the version of the Docker image')
+        booleanParam(name: 'LATEST', defaultValue: false, description: 'Check to set as latest')
     }
     
     stages {
@@ -78,6 +79,11 @@ pipeline {
                         }
                         sh "docker tag takenote_deploy lukaszsawina/take_note_pipeline:${env.VERSION}"
                         sh "docker push lukaszsawina/take_note_pipeline:${env.VERSION}"
+
+                        if (params.RUN_EXTRA_COMMAND) {
+                            sh "docker tag takenote_deploy lukaszsawina/take_note_pipeline:latest"
+                        sh "docker push lukaszsawina/take_note_pipeline:latest"
+                        }
 
                 }
             }
