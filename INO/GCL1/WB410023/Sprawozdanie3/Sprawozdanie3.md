@@ -400,10 +400,6 @@ Logi konsoli po uruchomieniu skryptu zakończone sukcesem:
 
 Logi wyciągnięte po procesie:
 
-![34](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie3/images/30.jpg)
-
-![35](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie3/images/31.jpg)
-
 ![42](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie3/images/31cd.jpg)
 
 Dodałam Jenkinsfile do sforkowanego repozytorium:
@@ -424,49 +420,86 @@ Wynik automatycznego budowania projektu **pipeline_project**:
 
 ## Laboratorium 6 - Lista kontrolna
 ### W ramach zadania z pipelinem CI/CD z poprzedniego laboratorium, ścieżką krytyczną wykonanego przeze mnie pipeline'u jest:
+
 ✔️ commit i manual trigger @ Jenkins
+
 ✔️ clone
+
 ✔️ build
+
 ✔️ test
+
 ✔️ deploy
+
 ✔️ publish
+
 
 Pełna lista kontrolna została przeprowadzona w trakcie przebiegu sprawozdania. Podsumowanie:
 
 ✔️ Aplikacja została wybrana
+
 ✔️ Licencja potwierdza możliwość swobodnego obrotu kodem na potrzeby zadania
+
 ✔️ Wybrany program buduje się
+
 ✔️ Przechodzą dołączone do niego testy
+
 ✔️ Zdecydowano, czy jest potrzebny fork własnej kopii repozytorium
+
 ✔️ Stworzono diagram UML zawierający planowany pomysł na proces CI/CD
+
 ✔️ Wybrano kontener bazowy lub stworzono odpowiedni kontener wstepny (runtime dependencies)
+
 ✔️ Build został wykonany wewnątrz kontenera
+
 ✔️ Testy zostały wykonane wewnątrz kontenera
+
 ✔️ Kontener testowy jest oparty o kontener build
+
 ✔️ Logi z procesu są odkładane jako numerowany artefakt
+
 ✔️ Zdefiniowano kontener 'deploy' służący zbudowanej aplikacji do pracy
+
 ✔️ Uzasadniono czy kontener buildowy nadaje się do tej roli/opisano proces stworzenia nowego
+
 ✔️ Wersjonowany kontener 'deploy' ze zbudowaną aplikacją jest wdrażany na instancję Dockera
+
 ✔️ Następuje weryfikacja, że aplikacja pracuje poprawnie (smoke test)
+
 ✔️ Zdefiniowano, jaki element ma być publikowany jako artefakt
+
 ✔️ Uzasadniono wybór: kontener z programem, plik binarny, flatpak, archiwum tar.gz, pakiet RPM/DEB
+
 ✔️ Opisano proces wersjonowania artefaktu (można użyć semantic versioning)
+
 ✔️ Dostępność artefaktu: publikacja do Rejestru online, artefakt załączony jako rezultat builda w Jenkinsie
+
 ✔️ Przedstawiono sposób na zidentyfikowanie pochodzenia artefaktu
+
 ✔️ Pliki Dockerfile i Jenkinsfile dostępne w sprawozdaniu w kopiowalnej postaci oraz obok sprawozdania, jako osobne pliki
+
 ✔️ Zweryfikowano potencjalną rozbieżność między zaplanowanym UML a otrzymanym efektem
+
 ✔️ Sprawozdanie pozwala zidentyfikować cel podjętych kroków
+
 ✔️ Forma sprawozdania umożliwia wykonanie opisanych kroków w jednoznaczny sposób
 
 ## Laboratorium 7 - Summary
 ### Ścieżka krytyczna Jenkinsfile:
 ✔️  Przepis dostarczany z SCM
+
 ✔️  Etap Build dysponuje repozytorium i plikami Dockerfile
+
 ✔️  Etap Build tworzy obraz buildowy, np. BLDR
+
 ✔️  Etap Build (krok w etapie) lub oddzielny etap (o innej nazwie)
+
 ✔️  Etap Test przeprowadza testy
+
 ✔️  Etap Deploy przygotowuje obraz lub artefakt pod wdrożenie
+
 ✔️  Etap Deploy przeprowadza wdrożenie 
+
 ✔️  Etap Publish wysyła obraz docelowy i dodaje artefakt do historii builda
 
 Czy "na końcu rurociągu" powstaje możliwy do wdrożenia artefakt (deployable) - proces jest skuteczny?
