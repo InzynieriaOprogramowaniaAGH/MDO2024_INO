@@ -61,8 +61,8 @@ pipeline {
             steps {
                 script {
                         // Logowanie do DockerHub
-                        sh 'docker login -u "lukaszsawina" -p "Okokiok-01" docker.io'
-                        sh 'docker tag takenote_deploy lukaszsawina/take_note_pipeline:1.0.0'
+                        sh 'docker login -u "lukaszsawina" -p "Okokiok-01"'
+                        sh 'docker tag takenote_deploy lukaszsawina/take_note_pipeline'
                         sh 'docker push lukaszsawina/take_note_pipeline'
 
                 }
