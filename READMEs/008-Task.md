@@ -27,7 +27,7 @@
 ### Inwentaryzacja
 * Dokonaj inwentaryzacji systemów
   * Ustal przewidywalne nazwy komputerów stosując `hostnamectl`
-  * Wprowadź nazwy DNS dla maszyn wirtualnych, stosując `systemd-resolved` lub `resolv.conf` - tak, aby możliwe było wywoływanie komputerów za pomocą nazw, a nie tylko adresów IP
+  * Wprowadź nazwy DNS dla maszyn wirtualnych, stosując `systemd-resolved` lub `resolv.conf` i `/etc/hosts` - tak, aby możliwe było wywoływanie komputerów za pomocą nazw, a nie tylko adresów IP
   * Zweryfikuj łączność
   * Stwórz [plik inwentaryzacji](https://docs.ansible.com/ansible/latest/getting_started/get_started_inventory.html)
   * Umieść w nim sekcje `Orchestrators` oraz `Endpoints`. Umieść nazwy maszyn wirtualnych w odpowiednich sekcjach
