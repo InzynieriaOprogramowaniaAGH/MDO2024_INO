@@ -46,6 +46,8 @@ pipeline {
 
                     // Usunięcie sieci
                     sh 'docker network rm deploy'
+
+                    sh 'docker rmi takenote_build takenote_test'
                 }
             }
         }
@@ -55,7 +57,7 @@ pipeline {
                         // Logowanie do DockerHub
                         docker.withRegistry('https://registry.hub.docker.com/lukaszsawina/take_note_pipeline', 'lukaszsawina_id') {
                             // Wypchnięcie obrazu
-                            docker.image("takenote_deploy").push()
+                            sh 'docker push lukaszsawina/take_note_pipeline'
                         }
                 }
             }
