@@ -3,16 +3,16 @@ services:
     build:
       context: .
       dockerfile: builder.Dockerfile
-    image: builder:0.1
+    image: builder
     container_name: builder
 
     restart: 'no'
 
-  irssi-test:
+ ubuntu-test:
     build:
       context: .
       dockerfile: test.Dockerfile
-    image: test:0.1
+    image: test
     container_name: tester
 
 
