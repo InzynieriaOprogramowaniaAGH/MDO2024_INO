@@ -71,10 +71,10 @@ pipeline {
             }
         } 
     }
-    // post {
-    //         always {
-    //             // Czyszczenie po zakończeniu
-    //             sh 'docker system prune -af'
-    //         }
-    //     }
+    post {
+            always {
+                // Czyszczenie po zakończeniu
+                sh 'docker system prune -af'
+            }
+        }
 }
