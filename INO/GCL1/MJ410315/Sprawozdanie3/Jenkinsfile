@@ -3,6 +3,7 @@ pipeline {
     agent any
     environment{
         DOCKERHUB_CREDENTIALS = credentials('docker-credentials')
+        VERSION = 1
     }
     stages {
         stage('Download') {
@@ -32,7 +33,7 @@ pipeline {
 
                     docker.image("redis_build").inside(){
                         sh "/redis/src/redis-server & /redis/src/redis-cli --version"
-                        sh "tar -cf redis.tar /redis"
+                        sh "tar -cf redis_${env.VERSION}_${BUILD_NUMBER}.tar /redis"
                         sh "/redis/src/redis-cli shutdown"
                     }
                 }
@@ -62,8 +63,8 @@ pipeline {
         stage('Publish'){
             steps{
                 script {
-                    sh "docker image tag redis_build michaljurzak/redis_build:latest"
-                    sh "docker push michaljurzak/redis_build:latest"
+                    sh "docker image tag redis_build michaljurzak/redis_build:${BUILD_NUMBER}"
+                    sh "docker push michaljurzak/redis_build:${BUILD_NUMBER}"
                 }
             }
         }
@@ -71,7 +72,7 @@ pipeline {
         stage('Deploy'){
             steps{
                 script {
-                    sh "docker run --rm michaljurzak/redis_build:latest sh -c 'src/redis-server & src/redis-cli --version && src/redis-cli shutdown'"
+                    sh "docker run --rm michaljurzak/redis_build:${env.VERSION}.${BUILD_NUMBER} sh -c 'src/redis-server & src/redis-cli --version && src/redis-cli shutdown'"
                 }
             }
         }
@@ -80,7 +81,7 @@ pipeline {
     post {
         always {
             sh 'docker logout'
-            archiveArtifacts artifacts: 'redis.tar',
+            archiveArtifacts artifacts: 'redis_${env.VERSION}_${BUILD_NUMBER}.tar',
                                        allowEmptyArchive: true,
                                        fingerprint: true,
                                        onlyIfSuccessful: true
