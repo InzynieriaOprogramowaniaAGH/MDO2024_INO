@@ -4,14 +4,10 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('benek2002-dockerhub')
     }
     stages {
-        stage('git clone') {
-            steps {
-                sh "docker network create deploy || true"
-            }
-        }
         stage("build"){
             steps{
                 dir("INO/GCL2/PZ410049/Sprawozdanie3"){
+                sh "docker network create deploy || true"
                 sh "docker build -t java_builder -f ./builder.Dockerfile ."
                 }
             }

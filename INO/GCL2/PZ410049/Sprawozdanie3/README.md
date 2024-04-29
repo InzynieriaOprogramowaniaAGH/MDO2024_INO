@@ -272,7 +272,7 @@ Na koniec zwerfikowalem moją postać sprawozdania z pełną listą kontrolną i
 - [x] Sprawozdanie pozwala zidentyfikować cel podjętych kroków
 - [x] Forma sprawozdania umożliwia wykonanie opisanych kroków w jednoznaczny sposób
 
-Zmodyfikowałem jeszcze, aby skrypt pipeline'u nie wykonywał się z skryptu napisanego w serwisie Jenkins, tylko żeby używał skryptu dostarczone z SCM. Dzięki temu nie będe musiał stosować git clone, tylko repozytorium będzie się samo kopiować z podanego URL. Dodatkowo w jenkinsie będą widoczne commity, które zostały wykonane podczas pipeline'a. W tym celu zmodyfikowałem skrypt wykonujący pipeline o usunięcie polecenia 'git clone' oraz zmodyfikowanie ścieżki do plików Dockerfile ( ścieżka nie zaczyna się teraz od 'MDO2024_INO' tylko od 'INO'). 
+Zmodyfikowałem jeszcze, aby skrypt pipeline'u nie wykonywał się z skryptu napisanego w serwisie Jenkins, tylko żeby używał skryptu dostarczone z SCM. Dzięki temu nie będe musiał stosować git clone, tylko repozytorium będzie się samo kopiować z podanego URL. Dodatkowo w jenkinsie będą widoczne commity, które zostały wykonane podczas pipeline'a. W tym celu zmodyfikowałem skrypt wykonujący pipeline o usunięcie polecenia 'git clone' oraz zmodyfikowanie ścieżki do plików Dockerfile ( ścieżka nie zaczyna się teraz od 'MDO2024_INO' tylko od 'INO'). Nie muszę 
 
 ### Kroki Jenkinsfile
 Zweryfikuj, czy definicja pipeline'u obecna w repozytorium pokrywa ścieżkę krytyczną:
