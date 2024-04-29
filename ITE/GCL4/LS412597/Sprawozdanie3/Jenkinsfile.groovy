@@ -79,10 +79,6 @@ pipeline {
                         sh "docker tag takenote_deploy lukaszsawina/take_note_pipeline:${env.VERSION}"
                         sh "docker push lukaszsawina/take_note_pipeline:${env.VERSION}"
 
-                        // Dodatkowe tagowanie tego samego obrazu jako 'latest'
-                        sh "docker tag takenote_deploy lukaszsawina/take_note_pipeline:latest"
-                        sh "docker push lukaszsawina/take_note_pipeline:latest"
-
                 }
             }
         } 
