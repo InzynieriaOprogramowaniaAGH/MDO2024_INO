@@ -536,11 +536,11 @@ Lista kontrolna:
 ## Definition of done:
 **Czy opublikowany obraz może być pobrany z Rejestru i uruchomiony w Dockerze bez modyfikacji (acz potencjalnie z szeregiem wymaganych parametrów, jak obraz DIND)?**
 
-Tak, może być pobrany bez problemu, wystarczy załączyć numer wersji do nazwy użytkownika i repozytorium. Aby kontener funkcjonował tak, by program `Redis` działał prawidłowo, trzeba go uruchomić z opcjami tak jak DIND, ponieważ najczęściej chcemy, aby to narzędzie działąło w tle jako serwer.
+Tak, może być pobrany bez problemu, wystarczy załączyć numer wersji do nazwy użytkownika i repozytorium. Aby kontener funkcjonował tak, by program `Redis` działał prawidłowo, trzeba go uruchomić z opcjami tak jak DIND, ponieważ najczęściej chcemy, aby to narzędzie działąło w tle jako serwer, dlatego powinno się go uruchomić w tle, utworzyć sieć i wyeksponować porty z którymi można się połączyć.
 
 **Czy dołączony do jenkinsowego przejścia artefakt, gdy pobrany, ma szansę zadziałać od razu na maszynie o oczekiwanej konfiguracji docelowej?**
 
-Tak, jest to możliwe, artefakt posiada pliki binarne oraz związane z projektem. Jedynie nie jest możliwe korzystanie z pełni narzędzi jeśli niektóre narzędzia nie są zainstalowane, takie jak `make` lub `tcl`, które są konieczne aby móc przetestować ten program, lecz nie są konieczne aby program działał prawidłowo.
+Tak, jest to możliwe, artefakt posiada pliki binarne oraz związane z projektem. Jedynie nie jest możliwe korzystanie z pełni narzędzi jeśli niektóre narzędzia nie są zainstalowane, takie jak `make` lub `tcl`, które są konieczne aby móc przetestować ten program, lecz nie są konieczne aby program działał prawidłowo. Aby upewnić się, że program będzie zawsze działał, należy jako artefakt także zapisać biblioteki dynamiczne, które są konieczne do uruchomienia programu. Aby poprawnie wszystko móc zainstalować i umieścić w odpowiednich folderach, powinno się skorzystać z instalatora. Program jest złożony i nie jest oczywiste jak można w ten sposób go uruchomić, dlatego docelowym artefaktem w moim pipelinie jest obraz, który prawidłowo uruchamia program:
 
 <img src="images/21_pulling_image.png">
 <img src="images/22_done.png">
