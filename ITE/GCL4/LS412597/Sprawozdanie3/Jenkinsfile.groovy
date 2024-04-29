@@ -55,7 +55,7 @@ pipeline {
             steps {
                 script {
                         // Logowanie do DockerHub
-                        docker.withRegistry('https://registry.hub.docker.com/lukaszsawina/take_note_pipeline', 'lukaszsawina_id') {
+                        docker.withRegistry('https://registry.hub.docker.com', 'lukaszsawina_id') {
                             // Wypchnięcie obrazu
                             sh 'docker push lukaszsawina/take_note_pipeline'
                         }
