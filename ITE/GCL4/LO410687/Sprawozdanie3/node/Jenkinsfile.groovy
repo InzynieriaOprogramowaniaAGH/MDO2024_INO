@@ -39,7 +39,8 @@ pipeline {
                 echo 'Building...'
                 dir('MDO2024_INO'){
                     sh 'ls -a'
-                    sh 'docker build -t node-build:latest -f ./ITE/GCL4/LO410687/Sprawozdanie3/node/node-build.Dockerfile .'
+                    sh 'docker build -t node-build:latest -f ./ITE/GCL4/LO410687/Sprawozdanie3/node/node-build.Dockerfile .| tee build_logs.log'
+                    sh 'docker run --name node-build node-build:latest'
                 }
             }
         }
@@ -48,7 +49,8 @@ pipeline {
                 echo 'Testing...'
                 dir('MDO2024_INO'){
                     sh 'ls -la'
-                    sh 'docker build -t node-test:latest -f ./ITE/GCL4/LO410687/Sprawozdanie3/node/node-test.Dockerfile .'
+                    sh 'docker build -t node-test:latest -f ./ITE/GCL4/LO410687/Sprawozdanie3/node/node-test.Dockerfile . | tee test_logs.log'
+                    sh 'docker run --name node-test node-test:latest'
                 }
             }
         }
@@ -57,8 +59,8 @@ pipeline {
                 echo 'Cleaning and deploying...'
                 dir('MDO2024_INO'){
                     sh 'ls -la'
-                    sh 'docker rm -f node-build || true'
-                    sh 'docker rm -f node-test || true'
+                    sh 'docker rm node-build'
+                    sh 'docker rm node-test'
                     archiveArtifacts artifacts: "build_logs.log"
                     archiveArtifacts artifacts: "test_logs.log"
                 }
@@ -71,31 +73,31 @@ pipeline {
                         sh 'echo "Fail"'
                     }
                 }
-                
             }
         }
+
         stage('Publish') {
             steps {
                 echo 'Publishing...'
                 script {
-                    if(params.PROMOTE){
+                    if(params.PROMOTE) {
                         sh 'echo "Pushing image to DockerHub"'
-
-                        sh "docker login -u lukoprych -p ${params.Password}"
-                        sh "docker tag node-test:latest lukoprych/quick-example-of-testing-in-nodejs:${params.VERSION}"
-                        sh "docker push lukoprych/quick-example-of-testing-in-nodejs:${params.VERSION}"
-
-                        sh 'docker rm -f node-test || true'
-
-                        sh 'cd ../'
-                        sh "tar -czvf quick-example-of-testing-in-nodejs-${params.VERSION}.tar.gz ${params.VERSION}/"
-                        sh 'echo "Creating artifact..."'
-                        archiveArtifacts artifacts: "quick-example-of-testing-in-nodejs-${params.VERSION}.tar.gz"
+                        
+                        sh "echo '${params.Password}' | docker login -u lukoprych --password-stdin"
+                        
+                        sh "docker tag node-test:latest lukoprych/node-js-tests-sample:${params.VERSION}"
+                        
+                        sh "docker push lukoprych/node-js-tests-sample:${params.VERSION}"
+                        
+                        sh 'docker rm node-test'
+                        
+                        sh "tar -czvf node-js-tests-sample-${params.VERSION}.tar.gz ${params.VERSION}/"
+                        echo 'Creating artifact...'
+                        archiveArtifacts artifacts: "node-js-tests-sample-${params.VERSION}.tar.gz"
                     } else {
-                        sh 'echo "Failure" '
+                        echo 'Promote parameter is false. Skipping publishing to DockerHub.'
                     }
                 }
-               
             }
         }
     }
