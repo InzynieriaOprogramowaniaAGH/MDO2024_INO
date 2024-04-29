@@ -3,7 +3,10 @@
 ## Pipeline, Jenkins, izolacja etapów
 
 Poniższa część będzie obejmować laboratoria nr 5.  
-<!-- Dopisać więcej -->
+Słowem o licencji programu `Redis`:  
+29 marca 2024 Redis zmienił licencje na podwójne liencjonowanie, co technicznie nie czyni go już programem w pełni typu open source. Ruch ten został zrobiony ze względu na powszechne wykorzystanie tego programu przez większe korporacje i czerpanie dzięki temu zysków bez uwzględnienia w tym firmy Redis. 
+
+Natomiast licencja ta pozwala nam wykorzystać go mimo tych zmian.
 
 ### Przygotowanie
 
@@ -352,6 +355,11 @@ Poniżej przedstawia się diagram UML z poszczególnymi krokami i wynikami stwor
 
 <img src="images/pipeline_good.png">
 
+Poniżej się także przedstawia diagram zależności:  
+
+<img src="images/pipeline_zaleznosci.png">
+
+
 Odpowiadający kod:
 ```groovy
 pipeline {
@@ -436,7 +444,7 @@ pipeline {
     post {
         always {
             sh 'docker logout'
-            archiveArtifacts artifacts: 'redis_${env.VERSION}_${BUILD_NUMBER}.tar',
+            archiveArtifacts artifacts: 'redis_${env.VERSION}_${BUILD_NUMBER}.tar', "$JENKINS_HOME/jobs/$JOB_NAME/builds/$BUILD_NUMBER/log",
                                        allowEmptyArchive: true,
                                        fingerprint: true,
                                        onlyIfSuccessful: true
@@ -456,6 +464,7 @@ Głównym artefaktem jest obraz dockera:
 ```sh
 michaljurzak/redis_build:${env.VERSION}.${BUILD_NUMBER}
 ```
+Dodatkowym artefaktem jest także log z zapisu konsoli danego wykonania.
 
 Dzięki modyfikacji komendy:  
 ```groovy
@@ -485,3 +494,50 @@ W konsoli ukaże się wiele informacji, ale można potwierdzić pochodzenie obra
 >NOTE: Użyte przeze mnie `Dockerfile.build` oraz `Dockerfile.test` znajdują się w folderze `Sprawozdanie2/dockerfiles`.
 
 Na samym końcu warto jeszcze zaznaczyć, że diagram `UML` przedstawiający pipeline w poszczególnych etapach nie jest opisany w dogłębnych szczegółach, np. nie zawiera informacji o tym co się dzieje w poszczególnych Dockerfile'ach. Oprócz tego, nie bierze pod uwagę komend jakie się wykonują po uruchomieniu kontenerów i osoba, która widzi diagram pierwszy raz może go jedynie traktować jako wskazówkę, natomiast nie szczegółowo opisaną instrukcję, jednak umieszczony został także kod pipeline'u, także nie powinno to stanowić problemu.
+
+Ostatecznie, według diagramu UML wynikowo powstaje nam kontener przy użyciu obrazu Publish. Jako, że obraz utworzony lokalnie i w chmurze jest ten sam, wykorzystuję ten otagowany obraz do stworzenia kontenera.
+
+Tak się również przedstawia ścieżka krytyczna:
+
+☑️ commit (lub manual trigger @ Jenkins)  
+☑️ clone  
+☑️ build  
+☑️ test  
+☑️ deploy  
+☑️ publish  
+
+Lista kontrolna:
+
+☑️ Aplikacja została wybrana  
+☑️ Licencja potwierdza możliwość swobodnego obrotu kodem na potrzeby zadania  
+☑️ Wybrany program buduje się  
+☑️ Przechodzą dołączone do niego testy  
+☑️ Zdecydowano, czy jest potrzebny fork własnej kopii repozytorium  
+☑️ Stworzono diagram UML zawierający planowany pomysł na proces CI/CD  
+☑️ Wybrano kontener bazowy lub stworzono odpowiedni kontener wstepny (runtime dependencies)  
+☑️ Build został wykonany wewnątrz kontenera  
+☑️ Testy zostały wykonane wewnątrz kontenera  
+☑️ Kontener testowy jest oparty o kontener build  
+☑️ Logi z procesu są odkładane jako numerowany artefakt  
+☑️ Zdefiniowano kontener 'deploy' służący zbudowanej aplikacji do pracy  
+☑️ Uzasadniono czy kontener buildowy nadaje się do tej roli/opisano proces stworzenia nowego  
+☑️ Wersjonowany kontener 'deploy' ze zbudowaną aplikacją jest wdrażany na instancję Dockera  
+☑️ Następuje weryfikacja, że aplikacja pracuje poprawnie (smoke test)  
+☑️ Zdefiniowano, jaki element ma być publikowany jako artefakt  
+☑️ Uzasadniono wybór: kontener z programem, plik binarny, flatpak, archiwum tar.gz, pakiet RPM/DEB  
+☑️ Opisano proces wersjonowania artefaktu (można użyć semantic versioning)  
+☑️ Dostępność artefaktu: publikacja do Rejestru online, artefakt załączony jako rezultat builda w Jenkinsie  
+☑️ Przedstawiono sposób na zidentyfikowanie pochodzenia artefaktu  
+☑️ Pliki Dockerfile i Jenkinsfile dostępne w sprawozdaniu w kopiowalnej postaci oraz obok sprawozdania, jako osobne pliki  
+☑️ Zweryfikowano potencjalną rozbieżność między zaplanowanym UML a otrzymanym efektem  
+☑️ Sprawozdanie pozwala zidentyfikować cel podjętych kroków  
+☑️ Forma sprawozdania umożliwia wykonanie opisanych kroków w jednoznaczny sposób  
+
+## Definition of done:
+**Czy opublikowany obraz może być pobrany z Rejestru i uruchomiony w Dockerze bez modyfikacji (acz potencjalnie z szeregiem wymaganych parametrów, jak obraz DIND)?**
+
+Tak, może być pobrany bez problemu, wystarczy załączyć numer wersji do nazwy użytkownika i repozytorium. Aby kontener funkcjonował tak, by program `Redis` działał prawidłowo, trzeba go uruchomić z opcjami tak jak DIND, ponieważ najczęściej chcemy, aby to narzędzie działąło w tle jako serwer.
+
+**Czy dołączony do jenkinsowego przejścia artefakt, gdy pobrany, ma szansę zadziałać od razu na maszynie o oczekiwanej konfiguracji docelowej?**
+
+Tak, jest to możliwe, artefakt posiada pliki binarne oraz związane z projektem. Jedynie nie jest możliwe korzystanie z pełni narzędzi jeśli niektóre narzędzia nie są zainstalowane, takie jak `make` lub `tcl`, które są konieczne aby móc przetestować ten program, lecz nie są konieczne aby program działał prawidłowo.
