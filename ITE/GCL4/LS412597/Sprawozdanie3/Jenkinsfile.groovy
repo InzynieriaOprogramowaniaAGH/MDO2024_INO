@@ -27,25 +27,22 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-
+                    // Tworzomy sieć o nazwie deploy
                     sh 'docker network create deploy || true'
                     // Budowanie obrazu Docker
                     def appImage = docker.build('takenote_deploy', '-f ITE/GCL4/LS412597/Sprawozdanie3/deploy.Dockerfile .')
 
-                    // Uruchomienie kontenera w tle
+                    // Uruchomienie kontenera w tle o nazwie 'app'
                     def container = appImage.run("-d -p 5000:5000 --network=deploy --name app")
-
-                    // Dajemy chwilę czasu na uruchomienie kontenera
-                    sh "sleep 10" // Czekaj 10 sekund
 
                     // Sprawdzenie, czy aplikacja działa, wykonując żądanie HTTP
                     sh 'docker run --rm --network=deploy curlimages/curl:latest -L -v  http://app:5000'
 
-                    sh 'docker stop app'
-
-                    sh 'docker container rm app'
-
-                    sh 'docker network rm deploy'
+                    // Zatrzymanie oraz usunięcie kontenera
+                    docker.stopAndRemoveContainer('app')s
+                    
+                    // Usunięcie sieci
+                    docker.networkRemove('deploy')
                 }
             }
         }
