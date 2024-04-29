@@ -53,7 +53,7 @@ pipeline {
                     // Usunięcie sieci
                     sh 'docker network rm deploy'
 
-                    // sh 'docker rmi takenote_build takenote_test'
+                    sh 'docker rmi takenote_build takenote_test'
                 }
             }
         }
