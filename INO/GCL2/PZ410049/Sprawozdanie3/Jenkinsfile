@@ -6,11 +6,7 @@ pipeline {
     stages {
         stage('git clone') {
             steps {
-                sh "rm -r MDO2024_INO || true"
                 sh "docker network create deploy || true"
-                dir("MDO2024_INO/INO/GCL2/PZ410049/Sprawozdanie2"){
-                    sh "git checkout PZ410049"
-                }
             }
         }
         stage("build"){
