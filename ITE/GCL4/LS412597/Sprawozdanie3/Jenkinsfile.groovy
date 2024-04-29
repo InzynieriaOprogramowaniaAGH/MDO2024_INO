@@ -80,9 +80,9 @@ pipeline {
                         sh "docker tag takenote_deploy lukaszsawina/take_note_pipeline:${env.VERSION}"
                         sh "docker push lukaszsawina/take_note_pipeline:${env.VERSION}"
 
-                        if (params.RUN_EXTRA_COMMAND) {
+                        if (params.LATEST) {
                             sh "docker tag takenote_deploy lukaszsawina/take_note_pipeline:latest"
-                        sh "docker push lukaszsawina/take_note_pipeline:latest"
+                            sh "docker push lukaszsawina/take_note_pipeline:latest"
                         }
 
                 }
