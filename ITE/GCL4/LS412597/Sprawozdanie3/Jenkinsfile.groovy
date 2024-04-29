@@ -39,12 +39,29 @@ pipeline {
                     sh 'docker run --rm --network=deploy curlimages/curl:latest -L -v  http://app:5000'
 
                     // Zatrzymanie oraz usunięcie kontenera
-                    docker.stopAndRemoveContainer('app')s
-                    
+                    docker.stopAndRemoveContainer('app')
+
                     // Usunięcie sieci
                     docker.networkRemove('deploy')
                 }
             }
         }
+        stage('Publish') {
+            steps {
+                script {
+                    // Logowanie do DockerHub
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_credentials') {
+                        // Wypchnięcie obrazu
+                        docker.image("takenote_deploy").push()
+                    }
+                }
+            }
+        }
+        post {
+        always {
+            // Czyszczenie po zakończeniu
+            sh 'docker system prune -af'
+        }
+    }
     }
 }
