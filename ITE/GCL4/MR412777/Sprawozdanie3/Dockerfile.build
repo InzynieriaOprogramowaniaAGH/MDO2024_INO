@@ -1,9 +1,9 @@
 FROM ubuntu:latest
 
 RUN apt-get update && \
-    apt-get install -y git openjdk-11-jdk maven && \
+    apt-get install -y git maven && \
     apt-get clean
 
 RUN git clone https://github.com/jitpack/maven-simple && \
     cd maven-simple && \
-    mvn compile
+    mvn -Dmaven.compiler.source=8 -Dmaven.compiler.target=8 compile
