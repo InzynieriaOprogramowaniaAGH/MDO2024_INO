@@ -53,7 +53,7 @@ pipeline {
                     // Usunięcie sieci
                     sh 'docker network rm deploy'
 
-                    sh 'docker rmi takenote_build takenote_test'
+                    // sh 'docker rmi takenote_build takenote_test'
                 }
             }
         }
@@ -69,10 +69,10 @@ pipeline {
             }
         } 
     }
-    post {
-            always {
-                // Czyszczenie po zakończeniu
-                sh 'docker system prune -af'
-            }
-        }
+    // post {
+    //         always {
+    //             // Czyszczenie po zakończeniu
+    //             sh 'docker system prune -af'
+    //         }
+    //     }
 }
