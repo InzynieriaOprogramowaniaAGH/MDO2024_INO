@@ -505,7 +505,7 @@ RUN dnf -y install \
     perl \
     ncurses-libs \
     utf8proc \
-    openssl && \
+    openssl-devel && \
     dnf clean all && \
     dnf -y install /rpm/irssi-$VERSION-$RELEASE.fc39.x86_64.rpm
 
@@ -521,6 +521,10 @@ sh "docker run -it -d --name irssi-${VERSION}-${RELEASE} irssi-deploy:${IMAGE_TA
 sh "docker exec irssi-${VERSION}-${RELEASE} irssi --version"
 ```
 Konieczne było dodanie drugiej linijki, ponieważ ostatnie polecenia dockerfile otwierają aplikację w trybie interaktywnym w budowanym kontenerze, natomiast nie zwracają wersji. Możliwe, że moglibyśmy otrzymać wersję zamieniając to na `CMD ["irssi", "--version"]` tak aby sprawdzono wersję bez odpalania aplikacji lub po odpaleniu w trybie interaktywnym poprzez `ENTRYPOINT irssi CMD ["/version"]`. Jednka wszystkie sposoby umożliwiają osiągnięcie tego samego efektu, a kontener uruchomiony w trybie `detach` i tak zostanie usunięty po poprawnym zakończeniu pipelina, lub rozpoczęciu nowego poprzez skrypt [clear_dind_vol.sh](./irssi/clear_dind_vol.sh).
+
+Końcowym efektem kroku deploy a zarazem pipelina, jest publikacja artefaktu, po sprawdzeniu działania budowy całej aplikacji na kontenerze docelowym z paczki `src.rpm`:
+
+![green](./screenshots/green.png)
 
 **4. Zachowywanie logów oraz paczki jako artefaktów jenkinsa**
 
@@ -678,7 +682,7 @@ Cały proces może zostać zautomatyzowany poprzez dodanie triggera oraz pobiera
 Istnieje wiele możliwości dodawania triggerów powodujących uruchamianie pipelina. Najłatwiejszym sposobem jest wybranie opcji budowania przy commit'cie do repozytorium lub ustawieniu budowania co wybrany okres czasu. Nie ma to jednak sensu dla wybranej przezmnie aplikacji i sposobu jej budowania. Sensownym byłoby dodanie skryptu, uruchamiającego budowę np. w momencie utworzenia nowej gałęzi relese'owej, lub commita z odpowiednim oznaczeniem, ale wymagałoby to dokłądnego zdefiniowania sposobu rozwoju aplikacji (workflow), dlatego dla powyższego przykładu pominę dodawanie triggera.
 
 **7. Rozbieżności**
-Diagramy wdrożenia i komunikacji dość dokładnie przedstawiają ideę tworzenia mojego pipelina. Głównymi różnicami w stosunku do tych początkowo planowanych (które później zostały zmodyfikowane i są przedstawione na początku sprawozdania) jest zamiana na budowanie obrazów build, test, publish bez uruchamiania kontenerów oraz zrezygnowanie z automatycznego triggera oraz brak publikacji artefaktów w zewnętrznym rejestrze. Sama koncepcja jednak pozostaje taka sama. 
+Diagramy wdrożenia i komunikacji dość dokładnie przedstawiają ideę tworzenia mojego pipelina. Głównymi różnicami w stosunku do tych początkowo planowanych (które później zostały zmodyfikowane i są przedstawione na początku sprawozdania) jest zamiana na budowanie obrazów build, test, publish bez uruchamiania kontenerów oraz zrezygnowanie z automatycznego triggera oraz brak publikacji artefaktów w zewnętrznym rejestrze. Dodatkowo diagram komunikacji uległ zmianie, ponieważ artefakt publikowany jest po zakończeniu pipelin, a nie w kroku publish.
 
 
 # Podsumowanie
@@ -693,7 +697,7 @@ Diagramy wdrożenia i komunikacji dość dokładnie przedstawiają ideę tworzen
 - [x] Build został wykonany wewnątrz obrazu
 - [x] Testy zostały wykonane wewnątrz obazu
 - [x] Obraz testowy jest oparty o obraz build
-- [x] Logi z procesu są odkładane jako numerowany artefakt (domyślnie jako pipeline.log w jenkins blue ocean)
+- [x] Logi z procesu są odkładane jako numerowany artefakt (domyślnie jako pipeline.log w jenkins blue ocean, przypisane do każdego uruchomienia pipeline osobno)
 - [x] Zdefiniowano kontener 'deploy' służący zbudowanej aplikacji do pracy
 - [x] Uzasadniono czy kontener buildowy nadaje się do tej roli/opisano proces stworzenia nowego
 - [x] Wersjonowany kontener 'deploy' ze zbudowaną aplikacją jest wdrażany na instancję Dockera
@@ -710,7 +714,7 @@ Diagramy wdrożenia i komunikacji dość dokładnie przedstawiają ideę tworzen
 
 
 **Uwagi do pipeline:**
-Architektura mojego pipeline, z powodu konieczności budowania paczki `.src.rpm` uległa niechcianej modyfikacji. Obraz publish przestał pełnić funkcję publikacji do zewnętrznego rejestru zbudowanej paczki. Ponadto nie publikuje on także paczki do lokalnego rejestru - odpowiedzialny jest za to krok w sekcji `post` pipelina, który po poprawnym zakończeniu wszystkich etapów zapisuje paczkę jako artefakt jenkinsa. Nie jest to najlepsze rozwiązanie, ponieważ krok publish stał się krokiem odpowiedzialnym tylko za budowę paczki ze zbudowanej wcześniej i przetestowanej aplikacji. Krok deploy natomiast w związku z tym, że posługiwałem się paczką ze źródłami, które na docelowym hoście należy zbudować, musiał posiadać bardzo dużo zależności. Częściowo jednak poradziłem sobie z tym problemem tworząc dwuetapową budowę obrazu deploy, która w drugim kroku przebudowuje obraz z dostępną paczką `.rpm`, zbudowaną  w pierwszym etapie. Etap deploy jednak jest poprawny, ponieważ jego głównym celem było wdrożenie aplikacji do kontenera i przeprowadzenie `smoke testów`, sprawdzających poprawność działania aplikacji. Mój pipeline mógłby natomiast zostać zmieniony w taki sposób, żeby krok `publish` zdefiniować jako krok faktycznie odpowiedzialny za budowę paczki `.src.rpm`, natomiast po kroku deploy, który testuje cały proces od pobrania (lub przekazania z poprzedniego kontenera) paczki `src.rpm` buduje ją, instaluje i testuje działanie aplikacji w nieblokujący sposób (np. poprzez sprawdzenie wersji aplikacji). W tej architekturze dopiero po kroku `deploy` nastąpiłby krok `publish`, który rzeczywiście byłby odpowiedzialny za publikację paczki `.src.rpm` do zewnętrznego repozytorium.
+Architektura mojego pipeline, z powodu konieczności budowania paczki `.src.rpm` uległa niechcianej modyfikacji. Obraz publish przestał pełnić funkcję publikacji do zewnętrznego rejestru zbudowanej paczki. Ponadto nie publikuje on także paczki do lokalnego rejestru - odpowiedzialny jest za to krok w sekcji `post` pipelina, który po poprawnym zakończeniu wszystkich etapów zapisuje paczkę jako artefakt jenkinsa. Nie jest to najlepsze rozwiązanie, ponieważ krok publish stał się krokiem odpowiedzialnym tylko za budowę paczki ze zbudowanej wcześniej i przetestowanej aplikacji. Krok deploy natomiast w związku z tym, że posługiwałem się paczką ze źródłami, które na docelowym hoście należy zbudować, musiał posiadać bardzo dużo zależności. Częściowo jednak poradziłem sobie z tym problemem tworząc dwuetapową budowę obrazu deploy, która w drugim kroku przebudowuje obraz z dostępną paczką `.rpm`, zbudowaną  w pierwszym etapie. Etap deploy jednak jest poprawny, ponieważ jego głównym celem było wdrożenie aplikacji do kontenera i przeprowadzenie `smoke testów`, sprawdzających poprawność działania aplikacji. Mój pipeline mógłby natomiast zostać zmieniony w taki sposób, żeby krok `publish` zamienić na krok faktycznie odpowiedzialny tylko za budowę paczki `.src.rpm`, natomiast po kroku deploy, który testuje cały proces od pobrania (lub przekazania z poprzedniego kontenera) paczki `src.rpm` buduje ją, instaluje i testuje działanie aplikacji w nieblokujący sposób (np. poprzez sprawdzenie wersji aplikacji) dodać etap właściwej publikacji. W tej architekturze dopiero po kroku `deploy` nastąpiłby krok `publish`, który rzeczywiście byłby odpowiedzialny za publikację paczki `.src.rpm` do zewnętrznego repozytorium. Jednka pomimo tego mój pipeline oprócz mylnie nazwanego kroku publish poprawnie realizuje swoje zadanie, buduje, testuje kod po czym buduje paczkę, wdraża je na środowisko docelowe testując poprawność całego procesu zbudowania paczki ze źródła i zainstalowania jej, po czym publikuje artefakt w jenkinsie.
 
 
 
