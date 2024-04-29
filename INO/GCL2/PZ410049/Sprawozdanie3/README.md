@@ -273,6 +273,14 @@ Na koniec zwerfikowalem moją postać sprawozdania z pełną listą kontrolną i
 - [x] Forma sprawozdania umożliwia wykonanie opisanych kroków w jednoznaczny sposób
 
 Zmodyfikowałem jeszcze, aby skrypt pipeline'u nie wykonywał się z skryptu napisanego w serwisie Jenkins, tylko żeby używał skryptu dostarczone z SCM. Dzięki temu nie będe musiał stosować git clone, tylko repozytorium będzie się samo kopiować z podanego URL. Dodatkowo w jenkinsie będą widoczne commity, które zostały wykonane podczas pipeline'a. W tym celu zmodyfikowałem skrypt wykonujący pipeline o usunięcie polecenia 'git clone' oraz zmodyfikowanie ścieżki do plików Dockerfile ( ścieżka nie zaczyna się teraz od 'MDO2024_INO' tylko od 'INO'). Nie muszę 
+również w skrypcie przełączać na moją gałąź, ponieważ zdefiniowałem to w konfiguracji pipeline'u. Dzięki temu mam o jeden stage mniej ( mogłem usunąc stage 'git clone' ). 
+Tak prezentuje się konfiguracja pipeline'u, aby korzystal z skryptu z SCM:
+
+![pipeline-config](./screenshots/3.26.png)
+
+Tak wygląda efekt końcowy:
+
+![pipeline-result](./screenshots/3.27.png)
 
 ### Kroki Jenkinsfile
 Zweryfikuj, czy definicja pipeline'u obecna w repozytorium pokrywa ścieżkę krytyczną:
@@ -285,3 +293,19 @@ Zweryfikuj, czy definicja pipeline'u obecna w repozytorium pokrywa ścieżkę kr
 - [x] Etap `Deploy` przygotowuje **obraz lub artefakt** pod wdrożenie. W przypadku aplikacji pracującej jako kontener, powinien to być obraz z odpowiednim entrypointem. W przypadku buildu tworzącego artefakt niekoniecznie pracujący jako kontener (np. interaktywna aplikacja desktopowa), należy przesłać i uruchomić artefakt w środowisku docelowym.
 - [x] Etap `Deploy` przeprowadza wdrożenie (start kontenera docelowego lub uruchomienie aplikacji na przeznaczonym do tego celu kontenerze sandboxowym)
 - [x] Etap `Publish` wysyła obraz docelowy do Rejestru i/lub dodaje artefakt do historii builda
+
+### "Definition of done"
+* Czy opublikowany obraz może być pobrany z Rejestru i uruchomiony w Dockerze **bez modyfikacji** (acz potencjalnie z szeregiem wymaganych parametrów, jak obraz DIND)?
+
+Tak, opublikowany obraz może być pobrany z rejestru i uruchomiony w Dockerze bez modyfikacji. 
+W celu weryfikacji pobrałem obraz z mojego repozytorium, sprawdziłem czy pomyślnie się pobrał, uruchomiłem i zweryfikowałem działanie aplikacji za pomocą polecenia 'curl':
+
+![application](./screenshots/3.28.png)
+
+* Czy dołączony do jenkinsowego przejścia artefakt, gdy pobrany, ma szansę zadziałać **od razu** na maszynie o oczekiwanej konfiguracji docelowej?
+
+Artefakt dostarczony przez Jenkinsa ma szanszę działać **od razu** na maszynie o oczekiwanej konfiguracji docelowej. W celu zwerfikowania tego pobrałem artefakt 'app.jar' z Jenkinsa i na hoście w wierszu poleceń wykonałem polecenie 'java -jar app.jar', która uruchamia aplikację i sprawdziłem czy aplikacja działa poprawnie:
+
+![application](./screenshots/3.29.png)
+
+![application](./screenshots/3.30.png)
