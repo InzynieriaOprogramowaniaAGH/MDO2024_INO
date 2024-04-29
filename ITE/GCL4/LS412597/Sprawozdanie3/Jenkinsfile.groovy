@@ -9,15 +9,16 @@ pipeline {
         stage('Check Version') {
             steps {
                 script {
-                    def imageName = 'lukaszsawina/take_note_pipeline'
-                    def registryUrl = 'https://registry.hub.docker.com/v2/repositories'
+                    // Zdefiniowanie URL do konkretnego tagu w Docker Hub API
+                    def tagUrl = "https://registry.hub.docker.com/v2/repositories/lukaszsawina/take_note_pipeline/tags/${params.VERSION}"
 
-                    // Wykonanie zapytania do Docker Hub API w celu uzyskania listy tagów
-                    def response = sh(script: "curl -s ${registryUrl}/${imageName}/tags/list", returnStdout: true).trim()
-                    def jsonResponse = readJSON text: response
+                    // Wykonanie zapytania do Docker Hub API
+                    def httpResponseCode = sh(script: "curl -s -o /dev/null -w '%{http_code}' ${tagUrl}", returnStdout: true).trim()
 
-                    // Sprawdzenie, czy odpowiedź zawiera podany tag
-                    if (jsonResponse.tags && jsonResponse.tags.contains(params.VERSION)) {
+                    // Sprawdzenie, czy kod odpowiedzi to 404
+                    if (httpResponseCode == '404') {
+                        echo "Tag ${params.VERSION} does not exist. Proceeding with the pipeline."
+                    } else {
                         error "The version ${params.VERSION} is already used. Please specify a different version."
                     }
                 }
