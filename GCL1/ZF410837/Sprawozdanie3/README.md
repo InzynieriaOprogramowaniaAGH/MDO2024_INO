@@ -7,7 +7,7 @@ Laboratoria polegały na przeniesieniu procesu budowy i testowania programu do p
 
 Opis instalacji Jenkinsa + DIND znajduje się we wcześniejszym sprawozdaniu. Obecnie działające kontenery umożliwiające połączenie z jenkinsem to: 
 
-![](ss/.png)
+![](ss/dind.png)
 
 
  Kontener `jenkins-blueocean` zawiera serwer Jenkins wraz z zainstalowanym dodatkiem Blue Ocean. Blue Ocean to interfejs graficzny dla Jenkins, który oferuje narzędzia do zarządzania CI/CD, wizualizację wyników oraz monitorowanie pipeline'ów.
@@ -118,7 +118,7 @@ Na podstawie dockerfile z poprzedniego sprawozdania tworzę etapy: `Prepare and 
 
 
 ## Krok Deploy
-W przypadku tej aplikacji, kontener buildowy i docelowy są tymi samymi obrazami Dockera. Oznacza to, że możemy bezpośrednio wdrożyć obraz "app-deploy" w środowisku produkcyjnym,  po skopiowaniu zbudowanych plików z wcześniejszego obrazu i ustawieniku `ENTRYPOINT`	
+W przypadku tej aplikacji, kontener buildowy i docelowy są różnymi obrazami Dockera, ale plik JAR zbudowany w kontenerze buildowym jest kopiowany do kontenera docelowego w celu użycia w środowisku produkcyjnym. Możemy bezpośrednio wdrożyć obraz "app-deploy" w środowisku produkcyjnym,  po skopiowaniu zbudowanych plików z wcześniejszego obrazu i ustawieniku `ENTRYPOINT`	
 
 ### Etapy `Deploy`:
 1.  **Budowanie obrazu "app-deploy"**:
@@ -160,7 +160,7 @@ Wynik:
 ## Dyskusja na temat sposobu wdrożenia
 
 1. **Pakowanie aplikacji**
-W tym przypadku aplikacja PetClinic jest wdrażana jako obraz Dockera, a nie jako przenośny plik(JAR). Wdrożenie w tej postaci zapewnia spójne i powtarzalne środowisko uruchomieniowe oraz zawiera zależności i konfiguracje niezbędne do wdrożenia.
+W tym przypadku aplikacja PetClinic jest wdrażana jako obraz Dockera, ale możena również jako plik JAR udostepniany jako artefakt. Wdrożenie w tej postaci zapewnia spójne i powtarzalne środowisko uruchomieniowe oraz zawiera zależności i konfiguracje niezbędne do wdrożenia.
 2. **Zawartość obrazu Dockera**:
 Obraz `app-deploy` zawiera jedynie plik JAR aplikacji skopiowany z obrazu `app-bld`. Nie ma potrzeby, aby obraz zawierał sklonowane repozytorium, logi ani artefakty z procesu budowania. Wystarczy, że obraz zawiera skompilowaną aplikację.
 3.  **Proces wdrożenia**:
@@ -190,6 +190,8 @@ Repozytorium na DockerHub:
 
 ![](ss/3.png)
 
+
+Dodałam również obraz 'app-bld' do tego samego repozytorium.
 
 ### Artefakt JAR
 
@@ -225,7 +227,7 @@ W przypadku tej aplikacji, można również udostepnić artefakt plik JAR zawier
 
 1.  **Czy opublikowany obraz może być pobrany z Rejestru i uruchomiony w Dockerze bez modyfikacji?**
     
-	   Tak, opublikowany obraz `"app-deploy:{TAG}"` powinien móc być pobrany z rejestru i uruchomiony w Dockerze bez konieczności wprowadzania dodatkowych modyfikacji.
+	   Tak, opublikowany obraz `"app-deploy:{TAG}"` powinien móc być pobrany z rejestru i uruchomiony w Dockerze bez konieczności wprowadzania dodatkowych modyfikacji, o ile port 8080 jest dostępny.
 
 Sprawdzenie: 
 
