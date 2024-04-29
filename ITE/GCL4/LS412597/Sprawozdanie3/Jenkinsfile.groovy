@@ -38,11 +38,14 @@ pipeline {
                     // Sprawdzenie, czy aplikacja działa, wykonując żądanie HTTP
                     sh 'docker run --rm --network=deploy curlimages/curl:latest -L -v  http://app:5000'
 
-                    // Zatrzymanie oraz usunięcie kontenera
-                    docker.stopAndRemoveContainer('app')
+                    // Zatrzymanie kontenera
+                    sh 'docker stop app'
+
+                    // Usunięcie kontenera
+                    sh 'docker container rm app'
 
                     // Usunięcie sieci
-                    docker.networkRemove('deploy')
+                    sh 'docker network rm deploy'
                 }
             }
         }
