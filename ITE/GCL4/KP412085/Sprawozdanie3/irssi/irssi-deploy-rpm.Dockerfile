@@ -30,7 +30,7 @@ RUN dnf -y install \
     perl \
     ncurses-libs \
     utf8proc \
-    openssl && \
+    openssl-devel && \
     dnf clean all && \
     dnf -y install /rpm/irssi-$VERSION-$RELEASE.fc39.x86_64.rpm
 

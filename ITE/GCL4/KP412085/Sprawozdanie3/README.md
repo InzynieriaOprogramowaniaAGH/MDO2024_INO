@@ -526,22 +526,24 @@ Konieczne było dodanie drugiej linijki, ponieważ ostatnie polecenia dockerfile
 
 Aby zachować logi i paczkę z pipeline'u tworzymy ostatni etap `post`. W etapie tym definiujemy sekcję `success`, która w momencie zakończenia się poprawnie całego pipelina, utworzy artefakt w jenkinsie. W ten sposób zapisujemy efekt naszego budowania, który jest w łatwy sposób możliwy do pobrania. Można byłoby również publikować paczkę na zewnętrzny rejestr, ale pozostanę na zapisaniu artefaktu.
 
+>```dockerfile
 >post {
-        success {
-            script {
-                dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi/releases/source_rpm/"){
-                    sh "docker cp irssi-${VERSION}-${RELEASE}:/source_rpm/${SRC_RPM_FILE} . "
-                    sh "docker stop irssi-${VERSION}-${RELEASE}"
-                    sh "docker rm irssi-${VERSION}-${RELEASE}"
-                    if (fileExists("${SRC_RPM_FILE}")) {
-                        archiveArtifacts artifacts: "${SRC_RPM_FILE}", fingerprint: true
-                    } else {
-                        error "File ${SRC_RPM_FILE} has not been packaged in publish step correctly or have different name"
-                    }
-                }
-            }
-        }
-    }
+>        success {
+>            script {
+>                dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi/releases/>source_rpm/"){
+>                    sh "docker cp irssi-${VERSION}-${RELEASE}:/source_rpm/${SRC_RPM_FILE} . "
+>                    sh "docker stop irssi-${VERSION}-${RELEASE}"
+>                    sh "docker rm irssi-${VERSION}-${RELEASE}"
+>                    if (fileExists("${SRC_RPM_FILE}")) {
+>                        archiveArtifacts artifacts: "${SRC_RPM_FILE}", fingerprint: true
+>                    } else {
+>                        error "File ${SRC_RPM_FILE} has not been packaged in publish step correctly or have different name"
+>                    }
+>                }
+>            }
+>        }
+>    }
+>```
 
 Logi zapisują się automatycznie, i tworzone są z tego co jest generowane na terminal jenkinsa. Dodatkowe logi potrzebne są tylko w przypadku uruchamiania kontenrów. Jeśli uruchomimy je w trybie detach, to wszystkie logi z operacji wykonywanych wewnątrz takiego kontenera, mogą zostać pozyskane poprzez polecenie `docker logs <container_id>` Dlatego w kroku `deploy`, po uruchomieniu kontenera i aplikacji, pobieram logi w sposób następujący: 
 ```bash
@@ -707,8 +709,8 @@ Diagramy wdrożenia i komunikacji dość dokładnie przedstawiają ideę tworzen
 - [x] Forma sprawozdania umożliwia wykonanie opisanych kroków w jednoznaczny sposób
 
 
-
-
+**Uwagi do pipeline:**
+Architektura mojego pipeline, z powodu konieczności budowania paczki `.src.rpm` uległa niechcianej modyfikacji. Obraz publish przestał pełnić funkcję publikacji do zewnętrznego rejestru zbudowanej paczki. Ponadto nie publikuje on także paczki do lokalnego rejestru - odpowiedzialny jest za to krok w sekcji `post` pipelina, który po poprawnym zakończeniu wszystkich etapów zapisuje paczkę jako artefakt jenkinsa. Nie jest to najlepsze rozwiązanie, ponieważ krok publish stał się krokiem odpowiedzialnym tylko za budowę paczki ze zbudowanej wcześniej i przetestowanej aplikacji. Krok deploy natomiast w związku z tym, że posługiwałem się paczką ze źródłami, które na docelowym hoście należy zbudować, musiał posiadać bardzo dużo zależności. Częściowo jednak poradziłem sobie z tym problemem tworząc dwuetapową budowę obrazu deploy, która w drugim kroku przebudowuje obraz z dostępną paczką `.rpm`, zbudowaną  w pierwszym etapie. Etap deploy jednak jest poprawny, ponieważ jego głównym celem było wdrożenie aplikacji do kontenera i przeprowadzenie `smoke testów`, sprawdzających poprawność działania aplikacji. Mój pipeline mógłby natomiast zostać zmieniony w taki sposób, żeby krok `publish` zdefiniować jako krok faktycznie odpowiedzialny za budowę paczki `.src.rpm`, natomiast po kroku deploy, który testuje cały proces od pobrania (lub przekazania z poprzedniego kontenera) paczki `src.rpm` buduje ją, instaluje i testuje działanie aplikacji w nieblokujący sposób (np. poprzez sprawdzenie wersji aplikacji). W tej architekturze dopiero po kroku `deploy` nastąpiłby krok `publish`, który rzeczywiście byłby odpowiedzialny za publikację paczki `.src.rpm` do zewnętrznego repozytorium.
 
 
 

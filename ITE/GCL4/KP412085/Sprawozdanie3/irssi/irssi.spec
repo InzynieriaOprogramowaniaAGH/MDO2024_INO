@@ -18,7 +18,7 @@ BuildRequires:  utf8proc-devel
 BuildRequires:  cmake
 BuildRequires:  openssl-devel
 Requires:       glib2
-Requires:       openssl
+Requires:       openssl-devel
 Requires:       perl
 Requires:       ncurses-libs
 
