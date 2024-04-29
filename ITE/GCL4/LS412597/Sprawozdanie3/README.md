@@ -47,3 +47,38 @@ RUN npm install
 
 Jak widać obraz tworzymy na podstawie node:12-alpine, jest to celowo wybrana wersja odchudzonego node, ponieważ chcemy aby nasz obraz był jak najmniejszy objętościowo oraz nie zawierał niepotrzebnych dodatków.
 Ponieważ nasz kod musimy pobrać z repozytorium musimy zainstalować git'a, przy pomocy którego zrobimy klonowanie, po sklonowaniu git już nam nie będzie potrzebny, dlatego możemy się go pozbyć, aby nie zajmował dodatkowego miejsca.
+
+Czasami może się zdażyć, że nasz obraz nie zostanie zbudowany przez brak zależności, które są potrzebne dla webpacka, w tym celu upewniamy się, że wszystkie są zainstalowane na naszym obrazie
+
+Możemy sprawdzić powodzenie budowania naszego obrazu przez zbudowanie obrazu lokalnie.
+
+![Build dockerfile](Images/2.png)
+
+#### Testowanie
+
+Kiedy mamy już gotowy obraz ze zbudowaną aplikacją możemy przygotować obraz do testowania aplikacji, w tym celu tworzymy kolejny dockerfile z zawartością:
+
+```Dockerfile
+FROM takenote_build
+
+RUN npm test
+```
+
+Obraz bazuje na podstawie wcześniej zbudowanego obrazu z naszą aplikacją, nastęnie przy pomocy npm test uruchamiamy testy w naszej aplikacji.
+
+#### Deploy
+
+Jak nasza aplikacja jest już zbudowana oraz wszystkie testy przeszły pomyślnie pora na przygotowanie obrazu do deployu.
+
+```Dockerfile
+FROM takenote_build
+
+WORKDIR /takenote
+RUN npm run build
+
+EXPOSE 5000
+
+ENTRYPOINT npm run prod
+```
+
+Ponownie nasz obraz bazuje na obrazie ze zbudowaną aplikacją. W aplikacji został przygotowany skrypt o nazwie prod, który odpowiada za uruchomienie aplikacji po zbudowaniu, odpowiednik npm start. Wymaga to wcześniejszego zbudowania aplikacji przy pomocy `npm run build`, dodatkowo ujawniamy port 5000, ponieważ na takim porcie nasłuchuje nasza aplikacja.
