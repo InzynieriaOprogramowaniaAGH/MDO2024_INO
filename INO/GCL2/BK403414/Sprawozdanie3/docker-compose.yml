@@ -8,7 +8,7 @@ services:
 
     restart: 'no'
 
-   ubuntu-test:
+  irssi-test:
     build:
       context: .
       dockerfile: test.Dockerfile
