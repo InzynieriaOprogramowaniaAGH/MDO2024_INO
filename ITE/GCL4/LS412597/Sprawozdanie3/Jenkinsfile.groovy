@@ -1,5 +1,9 @@
 pipeline {
     agent any
+
+    parameters {
+        string(name: 'VERSION', defaultValue: 'latest', description: 'Enter the version of the Docker image')
+    }
     
     stages {
         stage('Build') {
