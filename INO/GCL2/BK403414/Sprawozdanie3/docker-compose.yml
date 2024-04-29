@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: builder.Dockerfile
-    image: builder
+    image: builder:0.1
     container_name: builder
 
     restart: 'no'
@@ -12,7 +12,7 @@ services:
     build:
       context: .
       dockerfile: test.Dockerfile
-    image: test
+    image: test:0.1
     container_name: tester
 
 
