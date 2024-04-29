@@ -4,12 +4,6 @@ pipeline {
     parameters {
         string(name: 'VERSION', defaultValue: '1.0.0', description: 'Enter the version of the Docker image')
     }
-
-    environment {
-    registry = "lukaszsawina/take_note_pipeline"
-    registryCredential = 'lukaszsawina_id'
-    dockerImage = ''
-    }
     
     stages {
         stage('Build') {
@@ -64,8 +58,8 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: 'lukaszsawina_id', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
                         sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
                     }
-                        sh 'docker tag takenote_deploy lukaszsawina/take_note_pipeline:${env.VERSION}'
-                        sh 'docker push lukaszsawina/take_note_pipeline:${env.VERSION}'
+                        sh "docker tag takenote_deploy lukaszsawina/take_note_pipeline:${env.VERSION}"
+                        sh "docker push lukaszsawina/take_note_pipeline:${env.VERSION}"
 
                 }
             }
