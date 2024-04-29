@@ -53,7 +53,7 @@ pipeline {
             steps {
                 script {
                     // Logowanie do DockerHub
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_credentials') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'lukaszsawina_id') {
                         // Wypchnięcie obrazu
                         docker.image("takenote_deploy").push()
                     }
