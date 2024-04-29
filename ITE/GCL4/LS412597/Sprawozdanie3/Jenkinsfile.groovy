@@ -6,6 +6,24 @@ pipeline {
     }
     
     stages {
+        stage('Check Version') {
+            steps {
+                script {
+                    // Logowanie do DockerHub
+                        withCredentials([usernamePassword(credentialsId: 'lukaszsawina_id', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
+                            sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
+                        }
+
+                    // Pobranie listy tagów dla danego obrazu
+                    def tags = sh(script: "docker manifest inspect lukaszsawina/take_note_pipeline | jq -r '.manifests[].tag'", returnStdout: true).trim()
+
+                    // Sprawdzenie, czy podany tag już istnieje
+                    if (tags.split().contains(params.VERSION)) {
+                        error "The version ${params.VERSION} is already used. Please specify a different version."
+                    }
+                }
+            }
+        }
         stage('Build') {
             steps {
                 script {
@@ -56,10 +74,14 @@ pipeline {
                 script {
                         // Logowanie do DockerHub
                         withCredentials([usernamePassword(credentialsId: 'lukaszsawina_id', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
-                        sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
-                    }
+                            sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
+                        }
                         sh "docker tag takenote_deploy lukaszsawina/take_note_pipeline:${env.VERSION}"
                         sh "docker push lukaszsawina/take_note_pipeline:${env.VERSION}"
+
+                        // Dodatkowe tagowanie tego samego obrazu jako 'latest'
+                        sh "docker tag takenote_deploy lukaszsawina/take_note_pipeline:latest"
+                        sh "docker push lukaszsawina/take_note_pipeline:latest"
 
                 }
             }
