@@ -64,8 +64,8 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: 'lukaszsawina_id', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
                         sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
                     }
-                        sh 'docker tag takenote_deploy lukaszsawina/take_note_pipeline'
-                        sh 'docker push lukaszsawina/take_note_pipeline'
+                        sh 'docker tag takenote_deploy lukaszsawina/take_note_pipeline:${env.VERSION}'
+                        sh 'docker push lukaszsawina/take_note_pipeline:${env.VERSION}'
 
                 }
             }
