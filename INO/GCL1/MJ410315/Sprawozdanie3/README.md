@@ -319,7 +319,7 @@ Następnie, przygotujmy nasz obraz do wysłania na dockerhuba.
 docker image tag redis_build michaljurzak/redis_build:v1.0
 docker push michaljurzak/redis_build:v1.0
 ```
-Powyższa komenda tworzy `TARGET_IMAGE` który się odwołuje do obrazu `redis_build`, a druga komenda wysyła ten obraz na dockerhub. Można wykorzystać zmienną środowiskową BUILD_NUMBER która przy zmianie nazwy także automatycznie przypisuje numer builda, ale uznałem to za kłopotliwe i niekonieczne w tym przypadku.
+Powyższa komenda tworzy `TARGET_IMAGE` który się odwołuje do obrazu `redis_build`, a druga komenda wysyła ten obraz na dockerhub. Można wykorzystać zmienną środowiskową BUILD_NUMBER która przy zmianie nazwy także automatycznie przypisuje numer builda, i w ostatecznym pipelinie to podejście zostanie wykorzystane.
 
 Wyjście z konsoli:  
 <img src="images/15_wyslany_obraz.png">
@@ -328,7 +328,8 @@ Wyjście z konsoli:
 ### Deploy
 Na tym etapie, możemy pobrać upubliczniony przez nas obraz aby go uruchomić następnie i sprawdzić, czy działa. Redis ma kilka sposobów instalacji, jednym z nich jest [obraz dockera](https://hub.docker.com/_/redis) dostępny publicznie wraz z załączoną instrukcją. W moim przypadku, wystarczającym, aby sprawdzić, czy wszystko działa poprawnie jest uruchomienie kontenera i sprawdzenie wersji. 
 
-Możliwe jest także uruchomienie testów, lecz wolę ten krok ominąć ze względu na brak stałości w ich przechodzeniu (pozorny brak sensu i powodu dlaczego nie za każdym razem przechodzą, najczęściej reset maszyny wirtualnej i/lub komputera rozwiązuje problem). Jeżeli raz testy przeszły, prawdopodobnie program działa poprawnie.
+Możliwe jest także uruchomienie testów, lecz nie jest to konieczne do uruchomienia programu 
+> NOTE: Niejednokrotnie testy nie przechodzą po zbudowaniu pomimo braku zmian i pozornie bez powodu dlaczego nie za każdym razem przechodzą, najczęściej reset maszyny wirtualnej i/lub komputera rozwiązuje problem.
 
 ```groovy
 stage('Deploy'){
@@ -447,21 +448,19 @@ pipeline {
 Tak przedstawia się wykonany pipeline, wraz z jego artefaktem w postaci obrazu dockera i spakowanych plików:  
 <img src="images/17_wykonany_pipeline.png">
 
-W tym kroku widać, że etap `Deploy` trwa natychmiast. dzieje się tak, ze względu na to, że w obecnym środowisku obraz jest obecny lokalnie. Aby być w 100% pewnym, że wysłany obraz jest ten sam, można najpierw wykonać komendę `docker rmi <obraz>`, następnie albo `docker pull <obraz>` albo od razu `docker run ...`. Uznałem ten krok za niekonieczny, już wcześniej przetestowałem prawidłowe działanie tego mechanizmu na końcu podrozdziału `Deploy` tego sprawozdania.
+W tym kroku widać, że etap `Deploy` trwa natychmiast. dzieje się tak, ze względu na to, że w obecnym środowisku obraz jest obecny lokalnie. Aby być w 100% pewnym, że wysłany obraz jest ten sam, można najpierw wykonać komendę `docker rmi <obraz>`, następnie albo `docker pull <obraz>` albo od razu `docker run ...`. Krok ten nie jest konieczny, polegamy na prawidłowości działania dockera. Już wcześniej przetestowałem prawidłowe działanie tego mechanizmu na końcu podrozdziału `Deploy` tego sprawozdania.
+
+W tym przypadku wersjonowanie odbywa się przez użycie utworzonej zmiennej `VERSION` w definiowaniu środowiska na początku pipeline'a oraz wbudowaniej zmiennej `BUILD_NUMBER`. Pozwala nam to w systematyczny sposób wersjonować artefakty jako wyniki builda. Jesteśmy w stanie wersjonować nasz pobrany artefakt w postaci obrazu i/lub paczki plików. Nie jest to koniecznie najlepszy sposób, lecz istnieją pluginy rozwiązujące podobny problem, w zależności od tego czy i gdzie publikujemy ten artefakt. Alternatywnie, możemy przesłać numer wersji i/lub wydania (release) przez dockerfile jako argument i wersjonować przez modyfikację kodu, co wydaje się najsensowniejszym sposobem.
+
+Głównym artefaktem jest obraz dockera:  
+```sh
+michaljurzak/redis_build:${env.VERSION}.${BUILD_NUMBER}
+```
 
 Dzięki modyfikacji komendy:  
 ```groovy
 sh "tar -cf redis_${env.VERSION}_${BUILD_NUMBER}.tar /redis"
 ```
-Jesteśmy w stanie wersjonować nasz pobrany artefakt w postaci paczki plików. Nie jest to koniecznie najlepszy sposób, lecz istnieją pluginy rozwiązujące podobny problem, w zależności od tego czy i gdzie publikujemy ten artefakt.
-
-Jednakowoż, głównym artefaktem jest obraz dockera:  
-```sh
-michaljurzak/redis_build:${env.VERSION}.${BUILD_NUMBER}
-```
-Który może być podobnie wersjonowany.
-
-W tym przypadku wersjonowanie odbywa się przez użycie utworzonej zmiennej `VERSION` w definiowaniu środowiska na początku pipeline'a oraz wbudowaniej zmiennej `BUILD_NUMBER`. Pozwala nam to w systematyczny sposób wersjonować artefakty jako wyniki builda.
 
 Jako, że deployment trwa długo, niektóre zrzuty ekranu pokazują zły numer wersji artefaktu zapisanego, podobnie jest z upublicznionym obrazem, jednakowoż mogę zapewnić, że powyższe komendy działają po puszczeniu wyłącznie etapu budowania ze zmienioną nazwą, co widać poniżej:
 
