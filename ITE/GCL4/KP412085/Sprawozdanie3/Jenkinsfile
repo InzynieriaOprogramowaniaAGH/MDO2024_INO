@@ -6,6 +6,8 @@ pipeline {
         VERSION = 1.0
         RELEASE = 1
         SRC_RPM_FILE = "irssi-${VERSION}-${RELEASE}.fc39.src.rpm"
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-token')
+
     }
 
     stages {
@@ -54,9 +56,15 @@ pipeline {
             steps {
                 dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi") {
                     sh "docker build --no-cache --build-arg IMAGE_TAG=${IMAGE_TAG} --build-arg VERSION=${VERSION} --build-arg RELEASE=${RELEASE} -t irssi-deploy:${IMAGE_TAG} -f irssi-deploy-rpm.Dockerfile ."
+
                     sh "docker run -it -d --name irssi-${VERSION}-${RELEASE} irssi-deploy:${IMAGE_TAG}"
                     sh "docker exec irssi-${VERSION}-${RELEASE} irssi --version"
                     sh "docker logs irssi-${VERSION}-${RELEASE}"
+
+                    sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+                    sh "docker tag irssi-deploy:${IMAGE_TAG} kacperpap/irssi-deploy:${VERSION}-${RELEASE}"
+                    sh "docker push kacperpap/irssi-deploy:${VERSION}-${RELEASE}"
+                    sh "docker logout"
                 }
             }
         }

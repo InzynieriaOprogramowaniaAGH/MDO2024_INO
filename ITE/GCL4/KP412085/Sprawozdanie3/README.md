@@ -1,6 +1,6 @@
 # Sprawozdanie 3
 
-Pierwsza część laboratoriów polegała na sprawdzeniu poprawności działania kontenerów budujących i testujących dla wybranej aplikacji z poprzednich zajęć. Kolejnym etapem było zbudowanie całego pipelina, który umozliwa automatyczne budowanie, testowanie, wdrożenie aplikacji oraz publikację artefaktów budowy w wybrane miejsce. Dodatkowo
+Pierwsza część laboratoriów polegała na sprawdzeniu poprawności działania kontenerów budujących i testujących dla wybranej aplikacji z poprzednich zajęć. Kolejnym etapem było zbudowanie całego pipelina, który umozliwa automatyczne budowanie, testowanie, wdrożenie aplikacji oraz publikację artefaktów budowy w wybrane miejsce. 
 
 # Przygotowanie
 
@@ -464,12 +464,12 @@ Jak widać na powyższym screenie, rozmiar obrazu jest bardzo duży. Domyślny r
 
 Podczas budowy paczki na hoście pojawiały się również błędy dotyczące braku lub złego skonifigurowania plików debugowania. Pliki te nie są potrzebne dlatego w celu rozwiązania problemu podczas budowania paczki dodałem opcję `--nodebuginfo`.
 
-Linijki dockerfila:
+Linie dockerfila:
 ```bash
 COPY --from=build-on-deploy /source_rpm /source_rpm
 COPY --from=build-on-deploy /root/rpmbuild/RPMS/x86_64/irssi-$VERSION-$RELEASE.fc39.x86_64.rpm /rpm/
 ```
-Umożliwiają kopiowania do ostatniego kroku 2 plików. Ten znajdujący się w `/source_rpm`, to przekazywany od obazu `publish` zbudowany obiekt `.src.rpm`. Nie jest on potrzebny w drugim etapie deploya do działania aplikacji, ale potrzebujemy go aby, po zakończeniu działania pipelina sukcesem, zapisać go jako artefakt jenkinsa. Robię tak aby zapisywać artefakty nie wtedy kiedy powstają, ale tylko w momencie zakończenia sukcesem całego pipelina. Drugi plik to gotowa paczka `rpm` do zbudowania aplikacji irssi.
+Umożliwiają kopiowanie do ostatniego kroku 2 plików. Ten znajdujący się w `/source_rpm`, to przekazywany od obazu `publish` zbudowany obiekt `.src.rpm`. Nie jest on potrzebny w drugim etapie deploya do działania aplikacji, ale potrzebujemy go aby, po zakończeniu działania pipelina sukcesem, zapisać go jako artefakt jenkinsa. (Innym sposobem byłoby dodanie wolumenu i zapisanie go tam) Robię tak aby zapisywać artefakty nie wtedy kiedy powstają, ale tylko w momencie zakończenia sukcesem całego pipelina. Drugi plik to gotowa paczka `rpm` do zbudowania aplikacji irssi.
 
 
 ```dockerfile
@@ -526,6 +526,15 @@ Końcowym efektem kroku deploy a zarazem pipelina, jest publikacja artefaktu, po
 
 ![green](./screenshots/green.png)
 
+***UWAGA! Dla uproszczenia publikacji na zewnętrzny rejestr, dodaję do DockerHuba obraz irssi-deploy. Robię tak ponieważ to ten obraz zawiera paczkę `rpm`, którą można instalować jedynie z runtimowymi zależnościami. Nie miałoby sensu dodawanie takiego obrazu z kroku publish, poieważ wymagałoby to dodania ogromnej liczby zależności do zbudowania tej paczki ze źródła i zainstalowania aplikacji. Inaczej sytuacja wygląda jeśli dodajemy paczkę `src.rpm` jako samodzielny plik. Wtedy to na "głowie" użytkownika jest doinstalowanie koniecznych zależności. Wymagałoby to dodania również README do takiej paczki aby dokładnie przedstawić proces budowania. Ponadto paczkę taką musiałbym publikować nie na DockerHubie, ale umieszczać ją w innym repozytorium. Z takiego powodu dodaję do mojego pipelina zmienne środowiskowe wykorzystujące `credentials`, czyli bezpieczne zmienne jenkinsa. Następnie wykorzystuję je do zalogowania się w kroku deploy do dockerhuba, i umieszczenie tam obrazu irssi-deploy.***
+
+![cred](./screenshots/credentialss.png)
+
+***Po zakończeniu pipelina, obraz zapisuje się w DockerHubie***
+
+![dh](./screenshots/docker-hub-image.png)
+ 
+
 **4. Zachowywanie logów oraz paczki jako artefaktów jenkinsa**
 
 Aby zachować logi i paczkę z pipeline'u tworzymy ostatni etap `post`. W etapie tym definiujemy sekcję `success`, która w momencie zakończenia się poprawnie całego pipelina, utworzy artefakt w jenkinsie. W ten sposób zapisujemy efekt naszego budowania, który jest w łatwy sposób możliwy do pobrania. Można byłoby również publikować paczkę na zewnętrzny rejestr, ale pozostanę na zapisaniu artefaktu.
@@ -578,6 +587,8 @@ pipeline {
         VERSION = 1.0
         RELEASE = 1
         SRC_RPM_FILE = "irssi-${VERSION}-${RELEASE}.fc39.src.rpm"
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-token')
+
     }
 
     stages {
@@ -626,9 +637,15 @@ pipeline {
             steps {
                 dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi") {
                     sh "docker build --no-cache --build-arg IMAGE_TAG=${IMAGE_TAG} --build-arg VERSION=${VERSION} --build-arg RELEASE=${RELEASE} -t irssi-deploy:${IMAGE_TAG} -f irssi-deploy-rpm.Dockerfile ."
+
                     sh "docker run -it -d --name irssi-${VERSION}-${RELEASE} irssi-deploy:${IMAGE_TAG}"
                     sh "docker exec irssi-${VERSION}-${RELEASE} irssi --version"
                     sh "docker logs irssi-${VERSION}-${RELEASE}"
+
+                    sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+                    sh "docker tag irssi-deploy:${IMAGE_TAG} kacperpap/irssi-deploy:${VERSION}-${RELEASE}"
+                    sh "docker push kacperpap/irssi-deploy:${VERSION}-${RELEASE}"
+                    sh "docker logout"
                 }
             }
         }
@@ -682,7 +699,7 @@ Cały proces może zostać zautomatyzowany poprzez dodanie triggera oraz pobiera
 Istnieje wiele możliwości dodawania triggerów powodujących uruchamianie pipelina. Najłatwiejszym sposobem jest wybranie opcji budowania przy commit'cie do repozytorium lub ustawieniu budowania co wybrany okres czasu. Nie ma to jednak sensu dla wybranej przezmnie aplikacji i sposobu jej budowania. Sensownym byłoby dodanie skryptu, uruchamiającego budowę np. w momencie utworzenia nowej gałęzi relese'owej, lub commita z odpowiednim oznaczeniem, ale wymagałoby to dokłądnego zdefiniowania sposobu rozwoju aplikacji (workflow), dlatego dla powyższego przykładu pominę dodawanie triggera.
 
 **7. Rozbieżności**
-Diagramy wdrożenia i komunikacji dość dokładnie przedstawiają ideę tworzenia mojego pipelina. Głównymi różnicami w stosunku do tych początkowo planowanych (które później zostały zmodyfikowane i są przedstawione na początku sprawozdania) jest zamiana na budowanie obrazów build, test, publish bez uruchamiania kontenerów oraz zrezygnowanie z automatycznego triggera oraz brak publikacji artefaktów w zewnętrznym rejestrze. Dodatkowo diagram komunikacji uległ zmianie, ponieważ artefakt publikowany jest po zakończeniu pipelin, a nie w kroku publish.
+Diagramy wdrożenia i komunikacji dość dokładnie przedstawiają ideę tworzenia mojego pipelina. Głównymi różnicami w stosunku do tych początkowo planowanych (które później zostały zmodyfikowane i są przedstawione na początku sprawozdania) jest zamiana na budowanie obrazów build, test, publish bez uruchamiania kontenerów oraz zrezygnowanie z automatycznego triggera oraz publikacja obrazu irssi-deploy w zewnętrznym rejestrze DockerHub. Dodatkowo diagram komunikacji uległ zmianie, ponieważ artefakt publikowany jest po zakończeniu pipelin, a nie w kroku publish oraz jak wspomniałem dodatkowo publikowany jest obraz na DockerHuba.
 
 
 # Podsumowanie
