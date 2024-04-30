@@ -415,9 +415,9 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying'
-                sh 'docker stop -f $(docker ps -a -q)'
-                sh 'docker rm -f $(docker ps -a -q)'
                 dir('MDO2024_INO/ITE/GCL4/DP412497/Sprawozdanie3'){
+                    sh "docker stop -f $(docker ps -a -q)"
+                    sh "docker rm -f $(docker ps -a -q)"
                     sh 'docker build -t irssi-deployer -f irssi-deploy.Dockerfile .'
                     sh "docker run -it -d --name irssi-1 irssi-deployer"
                     sh "docker exec irssi-1 irssi --version"
