@@ -275,7 +275,6 @@ Name: irssi
 Version: 1
 Release: 1
 Summary: Project RPM package
-
 License:        GPLv2
 URL:            https://irssi.org/
 Source0:        https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/tree/DP412497/ITE/GCL4/DP412497/Sprawozdanie3/irssi/releases/irssi.tar.gz
@@ -310,7 +309,6 @@ DESTDIR=%{buildroot} ninja -C Build install
 mkdir -p %{buildroot}/usr/local/share/licenses/%{name}/
 cp %{_builddir}/irssi/COPYING %{buildroot}/usr/local/share/licenses/%{name}/
 
-
 %files
 %license /usr/local/share/licenses/%{name}/COPYING
 /usr/local/bin/%{name}
@@ -325,79 +323,110 @@ cp %{_builddir}/irssi/COPYING %{buildroot}/usr/local/share/licenses/%{name}/
 * Tue Apr 30 2024 Daniel Per <perdaniel@student.agh.edu.pl> - 1-1
 - 1 version 1 release
 ```
-> Plik budujemy zgodnie z instrukcjami. Podajemy potrzebne informacje, wymagania, 
+> Plik budujemy zgodnie z instrukcjami. Podajemy potrzebne informacje, wymagania, etapy wraz z odpowiednimy ścieżkami.
 
-#### Wymagane składniki
-  * `Deploy`
-    *  Krok uruchamiający aplikację na kontenerze docelowym
-    *  Jeżeli kontener buildowy i docelowy **wydają się być te same** - być może warto zacząć od kroku `Publish` poniżej
-    *  Jeżeli to kontener buildowy ma być wdrażany - czy na pewno nie trzeba go przypadkiem posprzątać?
-      *  Przeprowadź dyskusję dotyczącą tego, jak powinno wyglądać wdrożenie docelowe wybranej aplikacji. Odpowiedz (z uzasadnieniem i dowodem) na następujące kwestie:
-        * czy program powinien zostać *„zapakowany”* do jakiegoś przenośnego pliku-formatu (DEB/RPM/TAR/JAR/ZIP/NUPKG)
-        * czy program powinien być dystrybuowany jako obraz Docker? Jeżeli tak – czy powinien zawierać zawartość sklonowanego repozytorium, logi i artefakty z *builda*?
-    *  Proszę opisać szczegółowo proces który zostanie opisany jako `Deploy`, ze względu na mnogość podejść
-  * `Publish`
-    * Przygotowanie wersjonowanego artefaktu:
-      * Instalator
-      * NuGet/Maven/NPM/JAR
-      * ZIP ze zbudowanym runtimem
-    * Opracuj odpowiednią postać redystrybucyjną swojego artefaktu i/lub obrazu (przygotuj instalator i/lub pakiet, ewentualnie odpowiednio uporządkowany obraz kontenera Docker)
-      * Musi powstać co najmniej jeden z tych elementów
-      * Jeżeli ma powstać artefakt, dodaj go jako pobieralny obiekt do rezultatów „przejścia” *pipeline’u* Jenkins.
-    * Opcjonalnie, krok `Publish` (w przypadku podania parametru) może dokonywać promocji artefaktu na zewnętrzne *registry*
+To daje nam gotowy RPM naszego programu, który może sprawdzić w naszym kroku `Deploy`
 
+![ss](./ss/ss12.png)
 
+#### Deploy
 
+Dla naszego kroku `Deploy` tworzymy kolejny plik Dockerfile'a:
+```
+FROM irssi-publisher AS build-on-deploy
+RUN dnf -y install cmake openssl-devel
+WORKDIR /source_rpm
+RUN rpmbuild --rebuild --nodebuginfo irssi-1-1.src.rpm 
+RUN dnf -y install /root/rpmbuild/RPMS/x86_64/irssi-1-1.x86_64.rpm
+FROM fedora:39 AS deploy 
+RUN mkdir -p /rpm
+RUN mkdir -p /source_rpm
+COPY --from=build-on-deploy /source_rpm /source_rpm
+COPY --from=build-on-deploy /root/rpmbuild/RPMS/x86_64/irssi-1-1.x86_64.rpm /rpm/
+RUN dnf -y install glib2-devel perl ncurses-libs utf8proc openssl-devel
+RUN dnf clean all
+RUN dnf -y install /rpm/irssi-1-1.x86_64.rpm
+ENTRYPOINT irssi
+CMD ["--version"]
+```
 
+> FROM irssi-publisher AS build-on-deploy: Tworzy obraz , oznaczając go jako "build-on-deploy". \
+RUN dnf -y install cmake openssl-devel: Instaluje pakiety cmake i openssl-devel za pomocą menedżera pakietów dnf. \
+WORKDIR /source_rpm: Ustawia katalog roboczy na "/source_rpm". \
+RUN rpmbuild --rebuild --nodebuginfo irssi-1-1.src.rpm: Wywołuje komendę rpmbuild do ponownego budowania pakietu RPM z pliku źródłowego "irssi-1-1.src.rpm". \
+RUN dnf -y install /root/rpmbuild/RPMS/x86_64/irssi-1-1.x86_64.rpm: Instaluje zbudowany pakiet RPM z lokalizacji "/root/rpmbuild/RPMS/x86_64/irssi-1-1.x86_64.rpm". \
+FROM fedora:39 AS deploy: Tworzy nowy obraz bazowy z systemem Fedora 39, oznaczając go jako "deploy". \
+RUN mkdir -p /rpm: Tworzy katalog "/rpm". \
+RUN mkdir -p /source_rpm: Tworzy katalog "/source_rpm". \
+COPY --from=build-on-deploy /source_rpm /source_rpm: Kopiuje zawartość katalogu "/source_rpm" z obrazu "build-on-deploy" do katalogu "/source_rpm" w bieżącym obrazie. \
+COPY --from=build-on-deploy /root/rpmbuild/RPMS/x86_64/irssi-1-1.x86_64.rpm /rpm/: Kopiuje zbudowany pakiet RPM z obrazu "build-on-deploy" do katalogu "/rpm" w bieżącym obrazie. \
+RUN dnf -y install glib2-devel perl ncurses-libs utf8proc openssl-devel: Instaluje dodatkowe zależności za pomocą menedżera pakietów dnf. \
+RUN dnf clean all: Czyści cache menedżera pakietów dnf. \
+RUN dnf -y install /rpm/irssi-1-1.x86_64.rpm: Instaluje pakiet RPM Irssi z katalogu "/rpm". \
+ENTRYPOINT irssi: Ustawia Irssi jako punkt wejścia kontenera. \
+CMD ["--version"]: Ustawia argument domyślny, który zostanie przekazany do komendy irssi przy uruchamianiu kontenera. W tym przypadku wyświetla wersję Irssi.
 
-### Pełna lista kontrolna
-Zweryfikuj dotychczasową postać sprawozdania oraz planowane czynności względem ścieżki krytycznej oraz poniższej listy. Realizacja punktu wymaga opisania czynności, wykazania skuteczności (screen), podania poleceń i uzasadnienia decyzji dot. implementacji.
-
-- [ ] Aplikacja została wybrana
-- [ ] Licencja potwierdza możliwość swobodnego obrotu kodem na potrzeby zadania
-- [ ] Wybrany program buduje się
-- [ ] Przechodzą dołączone do niego testy
-- [ ] Zdecydowano, czy jest potrzebny fork własnej kopii repozytorium
-- [ ] Stworzono diagram UML zawierający planowany pomysł na proces CI/CD
-- [ ] Wybrano kontener bazowy lub stworzono odpowiedni kontener wstepny (runtime dependencies)
-- [ ] Build został wykonany wewnątrz kontenera
-- [ ] Testy zostały wykonane wewnątrz kontenera
-- [ ] Kontener testowy jest oparty o kontener build
-- [ ] Logi z procesu są odkładane jako numerowany artefakt
-- [ ] Zdefiniowano kontener 'deploy' służący zbudowanej aplikacji do pracy
-- [ ] Uzasadniono czy kontener buildowy nadaje się do tej roli/opisano proces stworzenia nowego
-- [ ] Wersjonowany kontener 'deploy' ze zbudowaną aplikacją jest wdrażany na instancję Dockera
-- [ ] Następuje weryfikacja, że aplikacja pracuje poprawnie (*smoke test*)
-- [ ] Zdefiniowano, jaki element ma być publikowany jako artefakt
-- [ ] Uzasadniono wybór: kontener z programem, plik binarny, flatpak, archiwum tar.gz, pakiet RPM/DEB
-- [ ] Opisano proces wersjonowania artefaktu (można użyć *semantic versioning*)
-- [ ] Dostępność artefaktu: publikacja do Rejestru online, artefakt załączony jako rezultat builda w Jenkinsie
-- [ ] Przedstawiono sposób na zidentyfikowanie pochodzenia artefaktu
-- [ ] Pliki Dockerfile i Jenkinsfile dostępne w sprawozdaniu w kopiowalnej postaci oraz obok sprawozdania, jako osobne pliki
-- [ ] Zweryfikowano potencjalną rozbieżność między zaplanowanym UML a otrzymanym efektem
-- [ ] Sprawozdanie pozwala zidentyfikować cel podjętych kroków
-- [ ] Forma sprawozdania umożliwia wykonanie opisanych kroków w jednoznaczny sposób
+![ss](./ss/ss13.png)
 
 
-# Zajęcia 07
----
+Mając wszystko tak wygląda nasz ostateczny Jenkinsfile:
+```
+pipeline {
+    agent any
 
+    stages {
+        stage('Prepare') {
+            steps {
+                sh 'rm -rf MDO2024_INO'
+                sh 'git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+                dir("MDO2024_INO"){
+                    sh 'git checkout DP412497'
+                }
+                sh 'docker rm irssi-1'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building'
+                sh 'docker images'
+                sh 'docker rmi -f irssi-builder'
+                sh 'docker images'
+                dir('MDO2024_INO/ITE/GCL4/DP412497/Sprawozdanie3'){
+                    sh 'docker build -t irssi-builder -f irssi-builder.Dockerfile .'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing'
+                dir('MDO2024_INO/ITE/GCL4/DP412497/Sprawozdanie3'){
+                    sh 'docker build -f irssi-tstr.Dockerfile .'
+                }
+            }
+        }
+        stage('Publish') {
+            steps {
+                echo 'Publishing'
+                dir('MDO2024_INO/ITE/GCL4/DP412497/Sprawozdanie3'){
+                    echo 'RPM'
+                    sh 'docker build -t irssi-publisher -f irssi-publish.Dockerfile .'
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying'
+                dir('MDO2024_INO/ITE/GCL4/DP412497/Sprawozdanie3'){
+                    sh 'docker build -t irssi-deployer -f irssi-deploy.Dockerfile .'
+                    sh "docker run -it -d --name irssi-1 irssi-deployer"
+                    sh "docker exec irssi-1 irssi --version"
+                    sh "docker logs irssi-1"
+                }
+            }
+        }
+        
+    }
+}
+```
 
-### Kroki Jenkinsfile
-Zweryfikuj, czy definicja pipeline'u obecna w repozytorium pokrywa ścieżkę krytyczną:
-
-- [ ] Przepis dostarczany z SCM (co załatwia nam `clone` )
-- [ ] Etap `Build` dysponuje repozytorium i plikami `Dockerfile`
-- [ ] Etap `Build` tworzy obraz buildowy, np. `BLDR`
-- [ ] Etap `Build` (krok w etapie) lub oddzielny etap (o innej nazwie), przygotowuje artefakt - **jeżeli docelowy kontener ma być odmienny**, tj. nie wywodzimy `Deploy` z obrazu `BLDR`
-- [ ] Etap `Test` przeprowadza testy
-- [ ] Etap `Deploy` przygotowuje **obraz lub artefakt** pod wdrożenie. W przypadku aplikacji pracującej jako kontener, powinien to być obraz z odpowiednim entrypointem. W przypadku buildu tworzącego artefakt niekoniecznie pracujący jako kontener (np. interaktywna aplikacja desktopowa), należy przesłać i uruchomić artefakt w środowisku docelowym.
-- [ ] Etap `Deploy` przeprowadza wdrożenie (start kontenera docelowego lub uruchomienie aplikacji na przeznaczonym do tego celu kontenerze sandboxowym)
-- [ ] Etap `Publish` wysyła obraz docelowy do Rejestru i/lub dodaje artefakt do historii builda
-
-### "Definition of done"
-Proces jest skuteczny, gdy "na końcu rurociągu" powstaje możliwy do wdrożenia artefakt (*deployable*).
-* Czy opublikowany obraz może być pobrany z Rejestru i uruchomiony w Dockerze **bez modyfikacji** (acz potencjalnie z szeregiem wymaganych parametrów, jak obraz DIND)?
-* Czy dołączony do jenkinsowego przejścia artefakt, gdy pobrany, ma szansę zadziałać **od razu** na maszynie o oczekiwanej konfiguracji docelowej?
-
-
+Tak o to mamy gotowy działający pipeline Jenkins'owy, który końcowo tworzymy nam artefakt w postaci gotowego instalatora RPM. 
