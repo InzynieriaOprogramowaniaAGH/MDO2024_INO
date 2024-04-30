@@ -38,6 +38,7 @@
   * Upewnij się, że łączność SSH między maszynami jest możliwa i nie potrzebuje haseł
   
 ### Zdalne wywoływanie procedur
+Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started/get_started_playbook.html) Ansible:
   * Wyślij żądanie `ping` do wszystkich maszyn
   * Skopiuj plik inwentaryzacji na maszyny/ę `Endpoints`
   * Ponów operację, porównaj różnice w wyjściu
@@ -46,6 +47,7 @@
   * Przeprowadź operacje względem maszyny z wyłączonym serwerem SSH, odpiętą kartą sieciową
   
 ### Zarządzanie kontenerem
+Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started/get_started_playbook.html) Ansible:
 * Wykonaj, w zależności od dostępności obrazów:
   * Uruchom kontener sekcji `Deploy` z poprzednich zajęć
   * Pobierz z Docker Hub aplikację "opublikowaną" w ramach kroku `Publish`
