@@ -217,6 +217,7 @@ Gdy wszystko jest gotowe
 
 ![ss](./ss/ss07.png)
 ![ss](./ss/ss08.png)
+![ss](./ss/ss09.png)
 
   
 ### Pipeline
@@ -228,8 +229,6 @@ Gdy wszystko jest gotowe
 
 
 
-### Szczegóły
-Ciąg dalszy sprawozdania
 #### Wymagane składniki
 *  Kontener Jenkins i DIND skonfigurowany według instrukcji dostawcy oprogramowania
 *  Pliki `Dockerfile` wdrażające instancję Jenkinsa załączone w repozytorium przedmiotowym pod ścieżką i na gałęzi według opisu z poleceń README
@@ -312,8 +311,6 @@ Zweryfikuj dotychczasową postać sprawozdania oraz planowane czynności względ
 ---
 
 
-Oceń postęp prac na pipelinem - proces ujęty w sposób deklaratywny
-
 ### Kroki Jenkinsfile
 Zweryfikuj, czy definicja pipeline'u obecna w repozytorium pokrywa ścieżkę krytyczną:
 
@@ -330,3 +327,5 @@ Zweryfikuj, czy definicja pipeline'u obecna w repozytorium pokrywa ścieżkę kr
 Proces jest skuteczny, gdy "na końcu rurociągu" powstaje możliwy do wdrożenia artefakt (*deployable*).
 * Czy opublikowany obraz może być pobrany z Rejestru i uruchomiony w Dockerze **bez modyfikacji** (acz potencjalnie z szeregiem wymaganych parametrów, jak obraz DIND)?
 * Czy dołączony do jenkinsowego przejścia artefakt, gdy pobrany, ma szansę zadziałać **od razu** na maszynie o oczekiwanej konfiguracji docelowej?
+
+
