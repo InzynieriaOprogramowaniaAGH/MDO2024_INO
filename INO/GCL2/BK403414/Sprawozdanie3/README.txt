@@ -1,5 +1,6 @@
 == Dependencies ==
-"Programmer calculator" does not require to install any addidtional depedencies than default ubuntu packages. 
+-> libncurses5
+-> libncursesw5
 
 == Setup ==
 Add to .bashrc:
