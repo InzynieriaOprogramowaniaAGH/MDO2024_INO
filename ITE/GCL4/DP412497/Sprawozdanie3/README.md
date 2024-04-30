@@ -1,12 +1,33 @@
+# Sprawozdanie 03
+# IT 412497 Daniel Per
+---
 
+## Pipeline, Jenkins, izolacja etapów
+## Pipeline: lista kontrolna
+## Jenkinsfile: lista kontrolna
+---
+Celem tych ćwiczeń było zapoznanie się z Jenkins'em i zbudownie dzięki niemu pipeline'u dla naszego programu.
 
+---
 
+## Wykonane zadanie - Lab 005-007
+---
 
-install jenkins (from file)
+### Przygotowanie
+* Upewnij się, że na pewno działają kontenery budujące i testujące, stworzone na poprzednich zajęciach
+* Zapoznaj się z instrukcją instalacji Jenkinsa: https://www.jenkins.io/doc/book/installing/docker/
+  * Uruchom obraz Dockera który eksponuje środowisko zagnieżdżone
+  * Przygotuj obraz blueocean na podstawie obrazu Jenkinsa (czym się różnią?)
+  * Uruchom Blueocean
+
+Podpunkty instalacji Jenkinsa wykonujemy wprost z instrukcji instalacji, tzn. kolejno:
+
+Tworzymy sieć mostkowaną w dockerze dla naszego Jenkinsa
 ```
 docker network create jenkins
 ```
 
+Pobieramy i uruchamiany DIND (Docker in Docker):
 ```
 docker run \
   --name jenkins-docker \
@@ -23,12 +44,31 @@ docker run \
   --storage-driver overlay2
 ```
 
+Tworzymy obraz dla naszego Jenkins'a wraz z BlueOcean (interfejsem graficznym ułatwiającym prace z pipeline'ami),
+tworząc dla niego Dockerfile'a:
 ```
-  docker build -f jenkins.Dockerfile -t myjenkins-blueocean:2.440.3-1 .
+FROM jenkins/jenkins:2.440.3-jdk17
+USER root
+RUN apt-get update && apt-get install -y lsb-release
+RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc \
+  https://download.docker.com/linux/debian/gpg
+RUN echo "deb [arch=$(dpkg --print-architecture) \
+  signed-by=/usr/share/keyrings/docker-archive-keyring.asc] \
+  https://download.docker.com/linux/debian \
+  $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
+RUN apt-get update && apt-get install -y docker-ce-cli
+USER jenkins
+RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
 ```
 
+I uruchamiając go, aby się zbudował:
 ```
-  docker run \
+docker build -t myjenkins-blueocean:2.440.3-1 .
+```
+
+Na koniec uruchamiamy nasz kontener z BlueOcean:
+```
+docker run \
   --name jenkins-blueocean \
   --restart=on-failure \
   --detach \
@@ -43,51 +83,73 @@ docker run \
   myjenkins-blueocean:2.440.3-1
 ```
 
+  * Zaloguj się i skonfiguruj Jenkins
 
+Gdy nasz kontener z Jenkins'em jest uruchomiony możemy korzystać z Jenkins'a z poziomu naszego Windows'a. Przechodzimy pod adres `127.0.0.1:8080` lub `localhost:8080`. Przy pierwszym logowaniu przywita nas monit o wpisanie hasła wygenerowanego przez Jenkins'a w celach bezpieczeństwa, czy to my jesteśmy jego administratorem.
+> Korzystamy z adresu localhosta dzięki przekierowaniu portu 8080 z naszej maszyny virtualnej
 
-Haslo do jenkinsa:
+![ss](./ss/ss01.png)
+
+Haslo do jenkinsa dostajemy z podanej ścieżki z pomocą komendy `cat`:
 ```
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 ```
-![ss](./ss/ss01.png)
 
-Instalujemy zalecane wtyczki
+Gdy hasło będzie się zgadzać pobieramy zalecany wtyczki.
+
 ![ss](./ss/ss02.png)
 
-Tworzymy pierwszego użytkownika - admina
-Udane logowanie
+Następnie możemy utworzyć profil naszego pierwszego użytkownika (admina) i się zalogować.
+Teraz nasz Jenkins jest gotowy do działania.
+
 ![ss](./ss/ss03.png)
 
 
-
-# Zajęcia 05
----
-## Pipeline, Jenkins, izolacja etapów
-
-### Przygotowanie
-* Upewnij się, że na pewno działają kontenery budujące i testujące, stworzone na poprzednich zajęciach
-* Zapoznaj się z instrukcją instalacji Jenkinsa: https://www.jenkins.io/doc/book/installing/docker/
-  * Uruchom obraz Dockera który eksponuje środowisko zagnieżdżone
-  * Przygotuj obraz blueocean na podstawie obrazu Jenkinsa (czym się różnią?)
-  * Uruchom Blueocean
-  * Zaloguj się i skonfiguruj Jenkins
   * Zadbaj o archiwizację i zabezpieczenie logów
+Powyższe instrukcje instalacji pokryły zabezpieczenie wszystkiego w odpowiednich wolumach.
   
 ### Uruchomienie 
 * Konfiguracja wstępna i pierwsze uruchomienie
   * Utwórz projekt, który wyświetla uname
+Tworzymy nowy projekt, nadajemy mu dowolną nazwę i wybieramy 'Ogólny projekt'
+
+![ss](./ss/ss04.png)
+
+W konfiguracji wybieramy zwykły skrypt i wpisujemy proste polecenia dla testu czy wszystko działa:
+
+```
+whoami
+pwd
+uname -a
+hostname
+env
+docker images
+docker pull fedora
+```
+> whoami: Wyświetla nazwę aktualnie zalogowanego użytkownika. \
+
+> pwd: Pokazuje obecną ścieżkę (pełną nazwę katalogu) w systemie plików. \
+
+> uname -a: Zwraca informacje o systemie. \
+
+> hostname: Wyświetla nazwę hosta systemu.
+
+> env: Pokazuje zmienne środowiskowe systemu.
+
+> docker images: Wyświetla listę obrazów Dockera dostępnych na lokalnej maszynie.
+
+> docker pull fedora: Pobiera obraz systemu Fedora.
+
+
   * Utwórz projekt, który zwraca błąd, gdy... godzina jest nieparzysta
+> Pierwszy projekt sprawdził poprawne działanie skryptów w Jenkins'ie
+
 * Utwórz "prawdziwy" projekt, który:
   * klonuje nasze repozytorium
   * przechodzi na osobistą gałąź
-  * buduje obrazy z dockerfiles i/lub komponuje via docker-compose
-  
-### Sprawozdanie (wstęp)
-* Opracuj dokument z diagramami UML, opisującymi proces CI. Opisz:
-  * Wymagania wstępne środowiska
-  * Diagram aktywności, pokazujący kolejne etapy (collect, build, test, report)
-  * Diagram wdrożeniowy, opisujący relacje między składnikami, zasobami i artefaktami
-* Diagram będzie naszym wzrocem do porównania w przyszłości
+  * buduje obrazy z dockerfiles i/lub komponuje via docker-composed
+
+
   
 ### Pipeline
 * Definiuj pipeline korzystający z kontenerów celem realizacji kroków `build -> test`
@@ -177,18 +239,7 @@ Zweryfikuj dotychczasową postać sprawozdania oraz planowane czynności względ
 # Zajęcia 07
 ---
 
-## Format sprawozdania
-- Wykonaj kroki opisane w trzech laboratoriach związanych z przygotowywaniem *pipeline'u* i udokumentuj ich wykonanie
-- Na dokumentację składają się następujące elementy:
-  - plik tekstowy ze sprawozdaniem, zawierający opisy z każdego z punktów zadania
-  - zrzuty ekranu przedstawiające wykonane kroki (oddzielny zrzut ekranu dla każdego kroku)
-  - listing historii poleceń (cmd/bash/PowerShell)
-- Sprawozdanie z zadania powinno umożliwiać **odtworzenie wykonanych kroków** z wykorzystaniem opisu, poleceń i zrzutów. Oznacza to, że sprawozdanie powinno zawierać opis czynności w odpowiedzi na (także zawarte) kroki z zadania. Przeczytanie dokumentu powinno umożliwiać zapoznanie się z procesem i jego celem bez konieczności otwierania treści zadania.
-- Omawiane polecenia dostępne jako clear text w treści, stosowane pliki wejściowe dołączone do sprawozdania jako oddzielne
 
-- Sprawozdanie proszę umieścić w następującej ścieżce: ```<kierunek>/<grupa>/<inicjały><numerIndeksu>/Sprawozdanie3/README.md```, w formacie *Markdown*
-
-## Jenkinsfile: lista kontrolna
 Oceń postęp prac na pipelinem - proces ujęty w sposób deklaratywny
 
 ### Kroki Jenkinsfile
@@ -207,13 +258,3 @@ Zweryfikuj, czy definicja pipeline'u obecna w repozytorium pokrywa ścieżkę kr
 Proces jest skuteczny, gdy "na końcu rurociągu" powstaje możliwy do wdrożenia artefakt (*deployable*).
 * Czy opublikowany obraz może być pobrany z Rejestru i uruchomiony w Dockerze **bez modyfikacji** (acz potencjalnie z szeregiem wymaganych parametrów, jak obraz DIND)?
 * Czy dołączony do jenkinsowego przejścia artefakt, gdy pobrany, ma szansę zadziałać **od razu** na maszynie o oczekiwanej konfiguracji docelowej?
-
-## Przygotowanie do następnych zajęć: Ansible
-* Utwórz drugą maszynę wirtualną o **jak najmniejszym** zbiorze zainstalowanego oprogramowania
-  * Zastosuj ten sam system operacyjny, co "główna" maszyna
-  * Zapewnij obecność programu `tar` i serwera OpenSSH (`sshd`)
-  * Nadaj maszynie *hostname* `ansible-target`
-  * Utwórz w systemie użytkownika `ansible`
-  * Zrób migawkę maszyny (i/lub przeprowadź jej eksport)
-* Na głównej maszynie wirtualnej (nie na tej nowej!), zainstaluj [oprogramowanie Ansible](https://docs.ansible.com/ansible/2.9/installation_guide/index.html), najlepiej z repozytorium dystrybucji
-* Wymień klucze SSH między użytkownikiem w głównej maszynie wirtualnej, a użytkownikiem `ansible` z nowej tak, by logowanie `ssh ansible@ansible-target` nie wymagało podania hasła
