@@ -221,23 +221,38 @@ Gdy wszystko jest gotowe
 
   
 ### Pipeline
+#### Build & Test
 * Definiuj pipeline korzystający z kontenerów celem realizacji kroków `build -> test`
 * Może, ale nie musi, budować się na dedykowanym DIND, ale może się to dziać od razu na kontenerze CI. Należy udokumentować funkcjonalną różnicę między niniejszymi podejściami
 * Docelowo, `Jenkinsfile` definiujący *pipeline* powinien być umieszczony w repozytorium. Optymalnie: w *sforkowanym* repozytorium wybranego oprogramowania
 
+Wcześniej przygotowaliśmy pipeline dla `build -> test`.
+Teraz możemy przygotować plik Jenkinsfile, w którym po prostu wkleimy cały wcześniej napisany skrypt i tu go będziemy modyfikować.
+Abyśmy mogli korzystać z naszego Jenkinsfile'a musimy konfigurować nasz projekt i zamienić okno skrypty na czytanie skryptu z pliku.
+Wybieramy opcję `git` i uzupełniamy repo, branch'a oraz ścieżkę do pliku Jenkinsfile odpowiadającą naszemu ustawieniu
 
+![ss](./ss/ss10.png)
+
+Następnie ponownie uruchamiamy, aby sprawdzić czy nasz Jenkinsfile się wczytuje i wszystko działa.
+
+![ss](./ss/ss11.png)
+
+
+#### Publish
+Kolejnym krokiem jest Deploy, ale w nim chcemy sprawdzić naszą aplikację, którą budujemy w kroku `Publish`, dlatego ten krok wykonamy najpierw.
+W tym kroku chcemy stworzyć instalator naszego programu. Na naszy systemie fedora będzie to `rpm`. Z pomocą przychodzi nam RPM Packaging Guide z `https://rpm-packaging-guide.github.io`.
+Szczegółowo opisuje wszystko krok po kroku jak stworzyć naszego `rpm`.
+
+Zaczynamy od pobrania wzystkich zalecanych modułów:
+```
+dnf install -y gcc rpm-build rpm-devel rpmlint make python bash coreutils diffutils patch rpmdevtools
+```
+
+Następnie zgodnie z instrukcją stworzymy nasz plik Spec file `hello-world.spec`.
 
 
 
 #### Wymagane składniki
-*  Kontener Jenkins i DIND skonfigurowany według instrukcji dostawcy oprogramowania
-*  Pliki `Dockerfile` wdrażające instancję Jenkinsa załączone w repozytorium przedmiotowym pod ścieżką i na gałęzi według opisu z poleceń README
-*  Zdefiniowany wewnątrz Jenkinsa obiekt projektowy „pipeline”, realizujący następujące kroki:
-  * Kontener `Builder`, który powinien bazować na obrazie zawierającym dependencje (`Dependencies`), o ile stworzenie takiego kontenera miało uzasadnienie. Obrazem tym może być np. baza pobrana z Docker Hub (jak obraz node lub 
-dotnet) lub obraz stworzony samodzielnie i zarejestrowany/widoczny w DIND (jak np. obraz oparty o Fedorę, doinstalowujący niezbędne zależności, nazwany Dependencies). Jeżeli, jak często w przypadku Node, nie ma różnicy między runtimowym obrazem a obrazem z dependencjami, proszę budować się w oparciu nie o latest, ale o **świadomie wybrany tag z konkretną wersją**
-  * Obraz testujący, w ramach kontenera `Tester`
-    * budowany przy użyciu ww. kontenera kod, wykorzystujący w tym celu testy obecne w repozytorium programu
-    * Zadbaj o dostępność logów i możliwość wnioskowania jakie testy nie przechodzą
   * `Deploy`
     *  Krok uruchamiający aplikację na kontenerze docelowym
     *  Jeżeli kontener buildowy i docelowy **wydają się być te same** - być może warto zacząć od kroku `Publish` poniżej
