@@ -48,7 +48,7 @@ cp %{_builddir}/irssi/COPYING %{buildroot}/usr/local/share/licenses/%{name}/
 /usr/local/lib64/
 /usr/local/bin/openssl
 
-%changelogname DanPer
+%changelogname Dan Per
 
 %changelog
 # Tue Apr 30 2024 Daniel Per <perdaniel@student.agh.edu.pl> - 1-1
