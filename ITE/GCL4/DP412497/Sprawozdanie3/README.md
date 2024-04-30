@@ -129,14 +129,10 @@ docker pull fedora
 > whoami: Wyświetla nazwę aktualnie zalogowanego użytkownika. \
 pwd: Pokazuje obecną ścieżkę (pełną nazwę katalogu) w systemie plików. \
 uname -a: Zwraca informacje o systemie. \
-
-> hostname: Wyświetla nazwę hosta systemu.
-
-> env: Pokazuje zmienne środowiskowe systemu.
-
-> docker images: Wyświetla listę obrazów Dockera dostępnych na lokalnej maszynie.
-
-> docker pull fedora: Pobiera obraz systemu Fedora.
+hostname: Wyświetla nazwę hosta systemu. \
+env: Pokazuje zmienne środowiskowe systemu. \
+docker images: Wyświetla listę obrazów Dockera dostępnych na lokalnej maszynie. \
+docker pull fedora: Pobiera obraz systemu Fedora.
 
 
   * Utwórz projekt, który zwraca błąd, gdy... godzina jest nieparzysta
