@@ -275,23 +275,6 @@ Następnie zgodnie z instrukcją stworzymy nasz plik Spec file `hello-world.spec
 
 
 
-# Zajęcia 06
----
-
-## Pipeline: lista kontrolna
-Oceń postęp prac na pipelinem
-
-### Ścieżka krytyczna
-Podstawowy zbiór czynności do wykonania w ramach zadania z pipelinem CI/CD. Ścieżką krytyczną jest:
-- [ ] commit (lub manual trigger @ Jenkins)
-- [ ] clone
-- [ ] build
-- [ ] test
-- [ ] deploy
-- [ ] publish
-
-Poniższe czynności wykraczają ponad tę ścieżkę, ale zrealizowanie ich pozwala stworzyć pełny, udokumentowany, jednoznaczny i łatwy do utrzymania pipeline z niskim progiem wejścia dla nowych *maintainerów*.
-
 ### Pełna lista kontrolna
 Zweryfikuj dotychczasową postać sprawozdania oraz planowane czynności względem ścieżki krytycznej oraz poniższej listy. Realizacja punktu wymaga opisania czynności, wykazania skuteczności (screen), podania poleceń i uzasadnienia decyzji dot. implementacji.
 

@@ -1,4 +1,4 @@
-FROM irssi-publish-rpm AS build-on-deploy
+FROM irssi-publish AS build-on-deploy
 
 RUN dnf -y install cmake openssl-devel
 
@@ -15,7 +15,8 @@ RUN dnf -y install /root/rpmbuild/RPMS/x86_64/irssi-fc39.x86_64.rpm
 
 FROM fedora:39 AS deploy 
 
-RUN mkdir -p /rpm && mkdir -p /source_rpm
+RUN mkdir -p /rpm
+RUN mkdir -p /source_rpm
 
 COPY --from=build-on-deploy /source_rpm /source_rpm
 COPY --from=build-on-deploy /root/rpmbuild/RPMS/x86_64/irssifc39.x86_64.rpm /rpm/
