@@ -1,4 +1,5 @@
 ***Disclaimer***
+
 Sprawozdanie robiłem zdalnie, na wyjeździe. Z jakiegoś powodu Win11 na moim laptopie nie lubi Ubuntu ponieważ:
 - VirtualBox nie otworzy spakowanej VM bo nie
 - Nie utworzy nowego Ubuntu bo nie
@@ -391,3 +392,10 @@ pipeline {
     }
 }
 ```
+
+![alt text](scrnshts/13.png)
+
+~~Usuwanie cache nie istnieje i nie może cię skrzywdzić~~
+
+## Podsumowanie
+Nie wszystko zostało tu wykonane poprawnie, albowiem proces wersjonowania nie istnieje, ani nie zostały wykonane diagramy UML (głownie dlatego że ich nie umiem). Żeby dodać wersjonowanie, możnaby dodać odpowiednie argumenty do Dockerfiles, które przyjmowałyby jakąś zmienną, na przykład czas w którym został ten pipeline wykonany, lub jakąś inną konwencję. Nie jest także usuwany cache po każdym pipeline, jednakże pominąłem ten krok ze względu na długi czas wykonywania i krótki deadline.
