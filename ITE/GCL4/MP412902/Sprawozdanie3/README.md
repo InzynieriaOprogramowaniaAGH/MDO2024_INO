@@ -35,9 +35,13 @@ Test
 ![alt text](image-4.png)
 
 Deploy
-![alt text](image-5.png)
+![alt text](image-16.png)
 
+Tworzę skrypt, który jest entrypointem kontenera. W nim będę zaczynał pomiar czasu a wyświetlany będzie raport.
 Poleceniem "utt hello" zaczynamy pomiar czasu, który pózniej będziemy sprawdzać. 
+
+Wynik uruchamiania deployer'a
+![alt text](image-17.png)
 
 Instalacja Jenkins została przeprowadzona w poprzednim sprawozdaniu. 
 
@@ -62,4 +66,19 @@ Poprawnie działający skrypt o parzystej godzinie
 
 Dzięki logom konsoli, możemy sprawdzać co poszło nie tak w naszych pipelinach/projektach i próbować to naprawić.
 
+Następnie należało stworzyć "prawdziwy projekt", który klonował moją gałąź z repozytorium i budował z dockerfile obraz. 
+
+Tworzę projekt z odpowiednim linkiem do repozytorium:
+
+![alt text](image-11.png)
+
+Dodano kroki budowania:
+![alt text](image-12.png)
+
+![alt text](image-14.png)
+
+Ostatecznie powiodło się zbudować obraz z dockerfile
+![alt text](image-13.png)
+
+**Tworzenie Pipeline**
 
