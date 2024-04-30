@@ -127,10 +127,8 @@ docker images
 docker pull fedora
 ```
 > whoami: Wyświetla nazwę aktualnie zalogowanego użytkownika. \
-
-> pwd: Pokazuje obecną ścieżkę (pełną nazwę katalogu) w systemie plików. \
-
-> uname -a: Zwraca informacje o systemie. \
+pwd: Pokazuje obecną ścieżkę (pełną nazwę katalogu) w systemie plików. \
+uname -a: Zwraca informacje o systemie. \
 
 > hostname: Wyświetla nazwę hosta systemu.
 
