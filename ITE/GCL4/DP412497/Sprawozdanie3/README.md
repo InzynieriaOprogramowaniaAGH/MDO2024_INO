@@ -242,14 +242,30 @@ Następnie ponownie uruchamiamy, aby sprawdzić czy nasz Jenkinsfile się wczytu
 Kolejnym krokiem jest Deploy, ale w nim chcemy sprawdzić naszą aplikację, którą budujemy w kroku `Publish`, dlatego ten krok wykonamy najpierw.
 W tym kroku chcemy stworzyć instalator naszego programu. Na naszy systemie fedora będzie to `rpm`. Z pomocą przychodzi nam RPM Packaging Guide z `https://rpm-packaging-guide.github.io`.
 Szczegółowo opisuje wszystko krok po kroku jak stworzyć naszego `rpm`.
-
-Zaczynamy od pobrania wzystkich zalecanych modułów:
+Bazując na tym tworzymy Dockerfile'a dla kroku publish:
 ```
-dnf install -y gcc rpm-build rpm-devel rpmlint make python bash coreutils diffutils patch rpmdevtools
+FROM irssi-builder
+
+RUN  dnf install -y gcc rpm-build rpm-devel rpmlint make python bash coreutils diffutils patch rpmdevtools
+
+WORKDIR /
+
+RUN rpmdev-setuptree
+RUN tar -cvzf irssi.tar.gz irssi
+RUN cp irssi.tar.gz /root/rpmbuild/SOURCES/
+
+WORKDIR /root/rpmbuild/SPECS
+
+COPY ./irssi.spec .
+
+RUN rpmbuild -bs irssi.spec
+RUN rpmlint irssi.spec
+RUN rpmlint ../SRPMS/irssi-fc39.src.rpm
+RUN mkdir -p /source_rpm
+RUN mv /root/rpmbuild/SRPMS/irssi-fc39.src.rpm /source_rpm
 ```
 
-Następnie zgodnie z instrukcją stworzymy nasz plik Spec file `hello-world.spec`.
-
+Oraz plik typu Spec:
 
 
 #### Wymagane składniki
