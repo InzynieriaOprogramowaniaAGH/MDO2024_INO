@@ -1,0 +1,15 @@
+- name: Copy inventory and ping all
+  hosts: Endpoints
+  remote_user: ansible
+
+  tasks:
+    - name: Copy inventory.yaml to ansible-target
+      copy:
+        src: /home/kacperpap/MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie4/inventory.yaml
+        dest: /home/ansible/
+
+    - name: Ping all hosts using the copied inventory file
+      ansible.builtin.ping:
+
+
+

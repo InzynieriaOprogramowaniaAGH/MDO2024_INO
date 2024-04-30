@@ -107,5 +107,58 @@ Sprawdzamy poprawność połączeń i definicji pliku, wywołując prosty skrypt
 
 ![succ_ping](./screenshots/succ_ping.png)
 
+**3. Skopiowanie inventory na endpoints i wykonanie ping**
 
+Aby skopiować plik `inventory.yaml` i wysłać go do wszystkich hostów zdefiniowanych jako `endpoints`, a następnie uruchomić na nich ping, możemy stworzyć prostego playbooka, który zdefiniuje te dwa zadania.
+
+```yaml
+- name: Copy inventory and ping all
+  hosts: Endpoints
+  remote_user: ansible
+
+  tasks:
+    - name: Copy inventory.yaml to ansible-target
+      copy:
+        src: /home/kacperpap/MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie4/inventory.yaml
+        dest: /home/ansible/
+
+    - name: Ping all hosts using the copied inventory file
+      ansible.builtin.ping:
+```
+
+Wykonanie takiego playbooka możemy zainicjować poleceniem:
+```bash
+ansible-playbook -i <inventory_path> <playbook_path>
+```
+Wynik takiego polecenia jest podsumowaniem działania playbooka i jego tasków. Dzięki definicji poszczególnych tasków możemy rozróżnić każdy etap i dowiedzieć się czy zadanie zostało wykonane poprawnie.
+
+![ping_all](./screenshots/playbook-ping-all.png)
+
+**4. Wyłączenie sshd/ odłączenie karty sieciowej**
+
+Na systemie fedora nie ma domyslnie zainstlowanego serwisu `rngd`. Po aktuazliacji paczek i restarcie demona `ssh` zatrzymuję `sshd` na maszynie `ansible-target` i próbuję ponownie wykonać wcześniejszego playbooka:
+
+![stop_sshd](./screenshots/stop-sshd.png)
+
+Rezultat jest następujący:
+
+![stopped](./screenshots/stopped-logs.png)
+
+Zwracany kod błędu jest następujący:
+```
+fatal: [ep-01]: UNREACHABLE! => {"changed": false, "msg": "Failed to connect to the host via ssh: ssh: connect to host ansible-target port 22: Connection refused", "unreachable": true}
+```
+
+Następnie włączam `sshd`, ale odłączam `ansible-target` kabel sieciowy.
+
+![unplug](./screenshots/unplug-client.png)
+
+Wynikiem tego jest:
+
+![unplug_log](./screenshots/no-route.png)
+
+Komunikat błędu:
+```
+fatal: [ep-01]: UNREACHABLE! => {"changed": false, "msg": "Failed to connect to the host via ssh: ssh: connect to host ansible-target port 22: No route to host", "unreachable": true}
+```
 
