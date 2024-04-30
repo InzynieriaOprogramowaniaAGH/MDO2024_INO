@@ -382,7 +382,6 @@ pipeline {
                 dir("MDO2024_INO"){
                     sh 'git checkout DP412497'
                 }
-                sh 'docker rm irssi-1'
             }
         }
         stage('Build') {
@@ -416,6 +415,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying'
+                sh 'docker stop -f $(docker ps -a -q)'
+                sh 'docker rm -f $(docker ps -a -q)'
                 dir('MDO2024_INO/ITE/GCL4/DP412497/Sprawozdanie3'){
                     sh 'docker build -t irssi-deployer -f irssi-deploy.Dockerfile .'
                     sh "docker run -it -d --name irssi-1 irssi-deployer"
