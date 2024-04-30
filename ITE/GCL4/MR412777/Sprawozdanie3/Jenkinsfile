@@ -1,0 +1,100 @@
+pipeline {
+    agent any
+
+     stages {
+        stage('Clone') {
+            steps {
+                script {
+                    
+                    sh 'rm -rf MDO2024_INO'
+                
+                    sh 'git clone -b MR412777 https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO'
+                
+                }
+                dir('MDO2024_INO') {
+                    script {
+                        
+                        def currentBranch = sh(script: 'git rev-parse --abbrev-ref HEAD', returnStdout: true).trim()
+                        
+                        if (currentBranch != 'MR412777') {
+                            sh 'git checkout MR412777'
+                        }
+                        
+                    }
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                script {
+                    
+                    def output = sh(script: 'docker images', returnStdout: true).trim()
+                    
+                    def buildImageExists = output.contains('build_image')
+                    
+                    if (buildImageExists) {
+                        
+                        sh 'docker rmi build_image'
+                        
+                    }
+                    
+                    docker.build('build_image', "-f /var/jenkins_home/workspace/projekt3@2/MDO2024_INO/ITE/GCL4/MR412777/Sprawozdanie3/Dockerfile.build .")
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                script {
+                    
+                    def output = sh(script: 'docker images', returnStdout: true).trim()
+                    
+                    def testImageExists = output.contains('test_image')
+                    
+                    if (testImageExists) {
+                        
+                        sh 'docker rmi test_image'
+                        
+                    }
+                    
+                    docker.build('test_image', "-f /var/jenkins_home/workspace/projekt3@2/MDO2024_INO/ITE/GCL4/MR412777/Sprawozdanie2/Dockerfile.test .")
+                }
+            }
+        }
+        stage('Deploy') {
+             steps {
+                script {
+                    
+                    def container = sh(returnStdout: true, script: 'docker run -itd --name app build_image').trim()
+            
+                    sleep time: 10, unit: 'SECONDS'
+                    
+                    sh "docker exec app sh -c 'cd maven-simple && mvn test'"
+            
+                    sh "docker exec app sh -c 'cd maven-simple && mvn deploy -DaltDeploymentRepository=myRepo::default::file:/maven-simple/artifact'"
+
+                }
+            }
+        }
+        stage('Publish') {  
+             steps {
+                script {
+                    
+                    def currentDate = new Date().format('yyyyMMdd-HHmmss')
+                    
+                    def targetDirectory = "artifact_${currentDate}"
+                    
+                    sh "mkdir -p artifacts/${targetDirectory}"
+        
+                    sh "docker cp app:/maven-simple/artifact /var/jenkins_home/workspace/projekt3@2/artifacts/${targetDirectory}"
+        
+                    sh "docker stop app || true" 
+                    
+                    sh "docker rm app || true"
+                    
+                    archiveArtifacts "artifacts/${targetDirectory}/**/*"
+                    
+                }
+            }
+        }
+    }
+}
