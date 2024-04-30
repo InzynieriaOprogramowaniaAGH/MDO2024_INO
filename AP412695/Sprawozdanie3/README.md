@@ -140,7 +140,7 @@ Teraz można stworzyć drzewo w którym przechowywane będą wszystkie potrzebne
 ```
 rpmdev-setuptree
 ```
-![alt text](image.png)
+![alt text](scrnshts/7.png)
 
 Klonujemy repozytorium Irssi, budujemy z niego archiwum, a następnie umieszczamy w katalogu SOURCES:
 ```
@@ -217,14 +217,14 @@ Teraz jesteśmy w stanie finalnie zbudować paczkę:
 rpmbuild -bs irssi.spec
 ```
 
-![alt text](image-1.png)
+![alt text](scrnshts/8.png)
 
 RPMbuild zapewnia narzędzie pozwalające na sprawdzenie, czy paczka została poprawnie zbudowana. Znajduje się ona w folderze SRPMS:
 ```
 rpmlint ~/rpmbuild/SRPMS/irssi-Test-1.fc40.src.rpm
 ```
 
-![alt text](image-2.png)
+![alt text](scrnshts/9.png)
 
 Paczka została zbudowana i tu zadanie tego kontenera zostaje zakończone. Teraz, można utworzyć kolejny, w którym zostanie przeprowadzona budowa tej paczki. Docker nie pozwala na kopiowanie plików pomiędzy kontenerami, więc musimy użyć maszyny wirtualnej jako pośrednika.
 ```
@@ -242,7 +242,7 @@ rpmbuild --rebuild irssi-Test-1.fc40.src.rpm
 ```
 Jeżeli budowanie powiedzie się, powinniśmy dostać następujący komunikat:
 
-![alt text](image-3.png)
+![alt text](scrnshts/10.png)
 
 Teraz można przeprowadzić instalację i test działania w kontenerze. Paczka znajduje się w rpmbuild/RPMS/x86_64 (może się różnić w zależności od architektury), wraz z odpowiednimi debugami dla info i source. Paczkę instalujemy **dnf**, jak wszystkie inne.
 
@@ -251,7 +251,7 @@ dnf install ~/rpmbuild/RPMS/x86_64/irssi-Test-1.fc40.x86_64.rpm
 irssi --version
 ```
 
-![alt text](image-4.png)
+![alt text](scrnshts/11.png)
 
 Ponieważ Irssi jest aplikacją interaktywną, w pipeline należy użyć *irssi --version* lub *irssi --help*, które tylko wyświetlają odpowiednie informacje. Jest to jednak wystarczający dowód, że program został poprawnie zainstalowany.
 
@@ -330,7 +330,7 @@ CMD ['--version']
 
 ```
 
-![alt text](image-5.png)
+![alt text](scrnshts/11.png)
 
 #### Jenkins
 Posiadając już wszystkie potrzebne nam elementy, można powrócić do Jenkinsa i zakończyć budowę pipelinu. Całość można zawrzeć w Jenkinsfile, który finalnie prezentuje się następująco:
@@ -391,4 +391,3 @@ pipeline {
     }
 }
 ```
-
