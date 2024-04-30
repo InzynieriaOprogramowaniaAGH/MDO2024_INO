@@ -26,7 +26,7 @@ Requires:       ncurses-libs
 RPM package maker for class.
 
 %prep
-%setup -n -q irssi
+%setup -n irssi
 
 %build
 meson Build
