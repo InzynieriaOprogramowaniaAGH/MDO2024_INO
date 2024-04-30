@@ -274,7 +274,7 @@ Oraz plik typu Spec:
 Name: irssi
 Version: 1
 Release: 1
-Summary: irssi RPM package
+Summary: Project RPM package
 
 License:        GPLv2
 URL:            https://irssi.org/
@@ -294,11 +294,12 @@ Requires:       openssl-devel
 Requires:       perl
 Requires:       ncurses-libs
 
+
 %description
-IRSSI.
+RPM package maker for class.
 
 %prep
-%setup -n irssi
+%setup -n -q irssi
 
 %build
 meson Build
@@ -308,6 +309,7 @@ ninja -C %{_builddir}/irssi/Build
 DESTDIR=%{buildroot} ninja -C Build install
 mkdir -p %{buildroot}/usr/local/share/licenses/%{name}/
 cp %{_builddir}/irssi/COPYING %{buildroot}/usr/local/share/licenses/%{name}/
+
 
 %files
 %license /usr/local/share/licenses/%{name}/COPYING
@@ -320,9 +322,10 @@ cp %{_builddir}/irssi/COPYING %{buildroot}/usr/local/share/licenses/%{name}/
 /usr/local/bin/openssl
 
 %changelog
-# Tue Apr 30 2024 Daniel Per <perdaniel@student.agh.edu.pl> - 1-1
-# Day-of-Week Month Day Year Name Surname <email> - Version-Release
+* Tue Apr 30 2024 Daniel Per <perdaniel@student.agh.edu.pl> - 1-1
+- 1 version 1 release
 ```
+> Plik budujemy zgodnie z instrukcjami. Podajemy potrzebne informacje, wymagania, 
 
 #### Wymagane składniki
   * `Deploy`
