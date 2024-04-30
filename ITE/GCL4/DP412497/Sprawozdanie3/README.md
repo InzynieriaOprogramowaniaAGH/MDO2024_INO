@@ -432,4 +432,8 @@ pipeline {
 
 Tak o to mamy gotowy działający pipeline Jenkins'owy, który końcowo tworzymy nam artefakt w postaci gotowego działającego instalatora RPM. 
 
+Pierwszy raz:
 ![ss](./ss/ss14.png)
+
+I kolejne działania:
+![ss](./ss/ss15.png)
