@@ -51,7 +51,7 @@ Przykład wykonania zadania o godzinie 21:
 
 Kolejnym zadaniem było uruchomić obrazy projektu poprzez projekt w Jenkins (w moim przypadku ze względu na zmianę wykorzystywanego projektu innego niż z poprzednich zajęć), które polega na sklonowaniu repozytorium, przełączeniu się na odpowiednią gałąź i zbudowaniu obrazów do budowania i testowania.
 
-Wynik zbudowania obrazu lokalnie poniższym poleceniem z poziomu katalogu repo przedmiotowego:
+Przed przystąpieniem do tworzenia projektu, warto sprawdzić wynik zbudowania obrazu lokalnie poniższym poleceniem z poziomu katalogu repo przedmiotowego:
 
 ![](buildlocal.png)
 
