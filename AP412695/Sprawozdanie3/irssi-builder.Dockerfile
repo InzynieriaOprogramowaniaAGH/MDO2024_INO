@@ -1,6 +1,6 @@
-FROM ubuntu
+FROM fedora
 
-RUN apt-get update && apt-get install -y git meson ninja-build net-tools libc6-dev dpkg-dev libssl-dev libncurses-dev libglib2.0-dev libgcrypt20-dev libotr5-dev libperl-dev pkg-config
+RUN dnf install -y git meson ninja-build net-tools openssl-devel ncurses-devel glib2-devel libgcrypt-devel libotr-devel perl-devel pkg-config utf8proc-devel perl
 
 RUN git clone https://github.com/irssi/irssi
 

@@ -1,5 +1,8 @@
-FROM irssi-test
+FROM irssi-package
 
-COPY --from=irssi-test /irssi/Build/irssi /Deploy/irssi
-COPY --from=irssi-test /irssi/Build/src /Deploy/src
+WORKDIR /src
+
+RUN rpmbuild --rebuild --nodebuginfo irssi-Test-1.fc40.src.rpm
+RUN mkdir /rpm
+RUN mv /root/rpmbuild/RPMS/x86_64/irssi-Test-1.fc40.x86_64.rpm /rpm
 
