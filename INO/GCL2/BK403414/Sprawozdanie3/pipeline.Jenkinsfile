@@ -28,7 +28,12 @@ pipeline {
                 echo'DEPLOYING...'
                 dir('MDO2024_INO/INO/GCL2/BK403414/Sprawozdanie3') {
                     sh 'docker run --rm --name dockercpy -d -v $(pwd):/out builder-dockerfile cp bin/pcalc /out'
-                    sh 'mkdir artifacts'
+                    script{
+                        if(!fileExists('artifacts'))
+                        {
+                            sh 'mkdir artifacts'
+                        }
+                    }
                     sh 'tar -cvf artifacts/pcalc.tar pcalc README.txt LICENSE.txt'
                     sh 'docker build -f deploy.Dockerfile -t deploy-dockerfile .'
                     sh 'docker run --name deploy -d deploy-dockerfile ./pcalc --version'
