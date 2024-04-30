@@ -430,4 +430,6 @@ pipeline {
 }
 ```
 
-Tak o to mamy gotowy działający pipeline Jenkins'owy, który końcowo tworzymy nam artefakt w postaci gotowego instalatora RPM. 
+Tak o to mamy gotowy działający pipeline Jenkins'owy, który końcowo tworzymy nam artefakt w postaci gotowego działającego instalatora RPM. 
+
+![ss](./ss/ss14.png)
