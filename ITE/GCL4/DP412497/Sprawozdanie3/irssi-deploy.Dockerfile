@@ -1,4 +1,4 @@
-FROM irssi-publish AS build-on-deploy
+FROM irssi-publisher AS build-on-deploy
 
 RUN dnf -y install cmake openssl-devel
 
