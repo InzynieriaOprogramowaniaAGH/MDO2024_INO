@@ -1,6 +1,6 @@
 FROM irssi-builder
 
-RUN  dnf install gcc rpm-build rpm-devel rpmlint make python bash coreutils diffutils patch rpmdevtools
+RUN  dnf install -y gcc rpm-build rpm-devel rpmlint make python bash coreutils diffutils patch rpmdevtools
 
 WORKDIR /
 
