@@ -50,7 +50,6 @@ pipeline {
                 dir('MDO2024_INO'){
                     sh 'ls -la'
                     sh 'docker build -t node-test:latest -f ./ITE/GCL4/LO410687/Sprawozdanie3/node/node-test.Dockerfile . | tee test_logs.log'
-                    sh 'docker run --name node-test node-test:latest'
                 }
             }
         }
