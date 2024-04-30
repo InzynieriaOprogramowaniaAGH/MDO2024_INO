@@ -1,7 +1,7 @@
 Name: irssi
 Version: 1
 Release: 1
-Summary: irssi RPM package
+Summary: Project RPM package
 
 License:        GPLv2
 URL:            https://irssi.org/
@@ -23,10 +23,10 @@ Requires:       ncurses-libs
 
 
 %description
-IRSSI.
+RPM package maker for class.
 
 %prep
-%setup -n irssi
+%setup -n -q irssi
 
 %build
 meson Build
@@ -47,6 +47,8 @@ cp %{_builddir}/irssi/COPYING %{buildroot}/usr/local/share/licenses/%{name}/
 /usr/local/include/
 /usr/local/lib64/
 /usr/local/bin/openssl
+
+%changelogname DanPer
 
 %changelog
 # Tue Apr 30 2024 Daniel Per <perdaniel@student.agh.edu.pl> - 1-1
