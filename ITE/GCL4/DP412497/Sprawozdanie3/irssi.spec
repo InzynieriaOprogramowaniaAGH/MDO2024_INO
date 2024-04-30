@@ -51,5 +51,5 @@ cp %{_builddir}/irssi/COPYING %{buildroot}/usr/local/share/licenses/%{name}/
 %changelogname Dan Per
 
 %changelog
-# Tue Apr 30 2024 Daniel Per <perdaniel@student.agh.edu.pl> - 1-1
+Tue Apr 30 2024 Daniel Per <perdaniel@student.agh.edu.pl> - 1-1
 # Day-of-Week Month Day Year Name Surname <email> - Version-Release
