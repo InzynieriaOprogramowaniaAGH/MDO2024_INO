@@ -2,31 +2,7 @@ pipeline {
     agent any
     
     stages {
-        stage('Prepare') {
-            steps {
-                echo 'PREPARING...'
-                script {
-                    if (fileExists('MDO2024_INO'))
-                    {
-                    sh 'rm  -rf MDO2024_INO'
-                    }
-                }
-                sh 'docker system prune --force'
-
-            }
-        }
-        stage('Clone') {
-            steps {
-                echo 'CLONING...'
-                sh 'git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
-                dir('MDO2024_INO') {
-                    sh 'git checkout BK403414'
-                    
-                }
-               
-            }
-            
-        }
+        
         stage('Build') {
             steps {
                 echo 'BUILDING...'
