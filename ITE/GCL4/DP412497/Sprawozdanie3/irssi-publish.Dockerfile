@@ -12,4 +12,4 @@ WORKDIR /root/rpmbuild/SPECS
 
 COPY ./irssi.spec .
 
-RUN rpmbuild -ba hello-world.spec
+RUN rpmbuild -ba irssi.spec

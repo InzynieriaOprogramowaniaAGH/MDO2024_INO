@@ -262,7 +262,7 @@ Następnie zgodnie z instrukcją stworzymy nasz plik Spec file `hello-world.spec
         * czy program powinien być dystrybuowany jako obraz Docker? Jeżeli tak – czy powinien zawierać zawartość sklonowanego repozytorium, logi i artefakty z *builda*?
     *  Proszę opisać szczegółowo proces który zostanie opisany jako `Deploy`, ze względu na mnogość podejść
   * `Publish`
-    * Przygotowanie wersjonowanego artefaktu, na przykład:
+    * Przygotowanie wersjonowanego artefaktu:
       * Instalator
       * NuGet/Maven/NPM/JAR
       * ZIP ze zbudowanym runtimem
@@ -270,8 +270,7 @@ Następnie zgodnie z instrukcją stworzymy nasz plik Spec file `hello-world.spec
       * Musi powstać co najmniej jeden z tych elementów
       * Jeżeli ma powstać artefakt, dodaj go jako pobieralny obiekt do rezultatów „przejścia” *pipeline’u* Jenkins.
     * Opcjonalnie, krok `Publish` (w przypadku podania parametru) może dokonywać promocji artefaktu na zewnętrzne *registry*
-#### Wskazówka
-Po opracowaniu formy redystrybucyjnej, stwórz obraz runtime’owy (bez dependencji potrzebnych wyłącznie do builda!), zasilony artefaktem, zainstaluj w nim program z niego i uruchom. Jeżeli formą redystrybucyjną jest kontener, uruchom kontener – w sposób nieblokujący: pozwól pipeline’owi kontynuować po uruchomieniu, ale wykaż, że program uruchomiony w owym kontenerze działa.
+
 
 
 
