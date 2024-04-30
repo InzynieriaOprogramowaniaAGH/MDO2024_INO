@@ -1,0 +1,14 @@
+all:
+  children:
+    Orchestrators:
+      hosts:
+        orchestrator:
+          ansible_host: fedora-server
+          ansible_user: kacperpap
+
+    Endpoints:
+      hosts:
+        ep-01:
+          ansible_host: ansible-target
+          ansible_user: ansible
+
