@@ -1,4 +1,4 @@
-- name: Deploy irssi from source rpm
+- name: Deploy irssi from rpm
   hosts: Endpoints
   tasks:
     - name: Pull irssi-deploy image from DockerHub

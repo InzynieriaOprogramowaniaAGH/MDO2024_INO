@@ -162,3 +162,45 @@ Komunikat błędu:
 fatal: [ep-01]: UNREACHABLE! => {"changed": false, "msg": "Failed to connect to the host via ssh: ssh: connect to host ansible-target port 22: No route to host", "unreachable": true}
 ```
 
+# Zarządzanie kontenerem
+
+**1. Dodatkowa konfiguracja na maszynie docelowej**
+Przed rozpoczęciem wdrażania aplikacji na docelowego hosta, musimy zainstalować na nim dockera. Robię to analogicznie do tego jak przedstawiłem w [Sprawozdaniu 1](../Sprawozdanie1/README.md). Ponadto potrzebujemy zainstalować pakiet `requests`, aby ansible mógł działać poprawnie z dockerem na tym hoście. Dlatego instalujemy menedżer pakietów `pip` oraz odpowiednią paczkę na `ansible-target`:
+
+```bash
+python3.12 -m ensurepip
+python3.12 -m pip install requests
+```
+**2. Playbook wdrażający irssi z obrazu z DockerHub'a**
+Podczas tworzenia pipelina Jenkinsa, publikuję kontener `irssi-deploy` na DockerHuba.
+
+![dockerhub](./screenshots/docker-hub-image.png)
+
+Pozwala to teraz na łatwe i szybkie pobranie i uruchomienie aplikacji w kontnerze. W tym celu tworzę `playbooka`:
+
+```yaml
+- name: Deploy irssi from rpm
+  hosts: Endpoints
+  tasks:
+    - name: Pull irssi-deploy image from DockerHub
+      docker_image:
+        name: kacperpap/irssi-deploy:1.0-1
+        source: pull
+    
+    - name: Run irssi container
+      docker_container:
+        name: irssi
+        image: kacperpap/irssi-deploy:1.0-1
+        state: started
+        interactive: yes
+        tty: yes
+```
+
+Definiujemy "odbiorców" zadań jako Endpoints. Deklarujemy 2 zadania, pierwsze z nich pobiera obraz. Kolejne zadanie uruchamia kontener ze zbudowanym obrazem w trybie interaktywnym, co pozwala na "ciągłe" działanie aplikacji. Korzystam przy tym ze zdefiniowanych modułów dostępnych w ansible takich jak `docker_image` oraz `docker_container`. Efekt działania jest następujący:
+
+![run](./screenshots/irssi-working.png)
+
+**3. Tworzenie roli**
+
+Szkieletowanie `ansible-galaxy` umożliwia
+
