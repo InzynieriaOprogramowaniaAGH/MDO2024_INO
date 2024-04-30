@@ -1,0 +1,4 @@
+- name: Deploy irssi using deploy-irssi role
+  hosts: Endpoints
+  roles:
+    - /home/kacperpap/MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie4/roles/deploy-irssi

@@ -30,7 +30,7 @@ Na nowym hoście korzystamy z utworzonego użytkownika bądź tworzymy nowego.
 
 ![user](./screenshots/ansible-user.png)
 
-Ustawiamy `hostname`, który pozwoli zidentyfikować maszynę w sieci. Korzystamy z polecenia:
+Ustawiamy `hostname`, który pozwoli zidentyfikować maszynę w sieci (również po stronie maszyny zarządzającej). Korzystamy z polecenia:
 
 ```
 sudo hostnamectl set-hostname <hostname>
@@ -103,13 +103,17 @@ all:
 
 **2. Wysłanie żądania ping do wszystkich maszyn**
 
-Sprawdzamy poprawność połączeń i definicji pliku, wywołując prosty skrypt ansibla. Ansible wysyła zdefiniowany jako program `pythona` skrypt na wszystkie hosty wyszczególnione w poleceniu i dostępne w pliku inwentaryzacji, po czym uruchamia je na docelowym hoście, kasuje i kończy działania zwracjąc komunikat na hoście nadrządcy.
+Sprawdzamy poprawność połączeń i definicji pliku, wywołując prosty skrypt ansibla. Ansible wysyła zdefiniowany jako program `pythona` skrypt na wszystkie hosty wyszczególnione w poleceniu i dostępne w pliku inwentaryzacji, po czym uruchamia je na docelowym hoście, kasuje i kończy działania zwracjąc komunikat na hoście nadrządcy. (skrypt ten wywołując się z opcją all wywoła się również dla localhosta, dlatego należy oamiętać o dodaniu kluczy publicznych do katalogu known_hosts własnej maszyny) 
+
+```bash
+ansible -i inventory.yaml all -m ping
+```
 
 ![succ_ping](./screenshots/succ_ping.png)
 
 **3. Skopiowanie inventory na endpoints i wykonanie ping**
 
-Aby skopiować plik `inventory.yaml` i wysłać go do wszystkich hostów zdefiniowanych jako `endpoints`, a następnie uruchomić na nich ping, możemy stworzyć prostego playbooka, który zdefiniuje te dwa zadania.
+Aby skopiować plik `inventory.yaml` i wysłać go do wszystkich hostów zdefiniowanych jako `endpoints`, a następnie uruchomić na nich ping, możemy stworzyć prostego playbooka, który zdefiniuje te dwa zadania. (każda maszyna zna klucze publiczne wszystkich innych maszyn i swoje)
 
 ```yaml
 - name: Copy inventory and ping all
@@ -134,9 +138,61 @@ Wynik takiego polecenia jest podsumowaniem działania playbooka i jego tasków. 
 
 ![ping_all](./screenshots/playbook-ping-all.png)
 
-**4. Wyłączenie sshd/ odłączenie karty sieciowej**
+**4. Aktualizacja pakietów przez ansible**
+Aktualizacja pakietów wymaga uprawnień grupy `wheel`. Powoduje to, że polecenie, które ansible musi wykonać wygląda następująco:
+```bash
+sudo dnf update
+```
+Zgodnie z dokumentacją ansibla, możemy skorzystać w playbook'u z parametru `become`, którego domyślna wartość `true`, spowoduje, że zadania, w których zakresie będzie ten parametr, zostaną wykonane z uprawnieniami `root`. Konieczne jest jednak w tym wypadku podanie hasła. Zgodnie z [dokumentacją ansibla dotyczącą playbooks_privilege_escalation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_privilege_escalation.html), dodajemy podczas wywołania playbooka parametr `--ask-become-pass`:
 
-Na systemie fedora nie ma domyslnie zainstlowanego serwisu `rngd`. Po aktuazliacji paczek i restarcie demona `ssh` zatrzymuję `sshd` na maszynie `ansible-target` i próbuję ponownie wykonać wcześniejszego playbooka:
+```bash
+ansible -i inventory.yaml --ask-become-pass <path_to_playbook>
+```
+
+![ask-become](./screenshots/root-w-pass.png)
+
+Dla playbooka o takiej definicji:
+
+```bash
+- name: Update packages on target system
+  hosts: Endpoints
+  tasks:
+    - name: Upgrade all packages
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+      become: true
+```
+
+Otrzymujemy rezultat (paczki były już zaktualizowane):
+![res](./screenshots/passw.png)
+
+***UWAGA, Parametr state: latest w module Ansible dnf oznacza, że wszystkie pakiety, które są już zainstalowane w systemie, powinny być zaktualizowane do najnowszej dostępnej wersji. Brak tego parametru może powodować że różne werjse tej samej paczki (u mnie błąd pojawił się z paczkami wlroots0.14-devel oraz wlroots0.15-devel) będą aktualizowane, co zakończy się błędem.***
+
+**5. Restart usługi sshd**
+
+Analogicznie do poprzedniego playbooka, podajemy parametr `become: true` oraz `--ask-become-pass`. Zdefiniowany playbook w taki sposób kończy się poprawnym rezultatem:
+
+```bash
+- name: Restart ssh deamon
+  hosts: Endpoints
+  become: true
+  tasks:
+    - name: Use systemd to restart running sshd deamon
+      systemd:
+        name: sshd
+        state: restarted
+```
+
+![res_sshd](./screenshots/res_sshd.png)
+
+Zwrócony kod `changed` oznacza, że ansible zmienił zastany stan maszyny, ponieważ doprowadził do restartu, działającego demona `sshd`.
+
+
+
+**6. Wyłączenie sshd/ odłączenie karty sieciowej**
+
+Na systemie fedora nie ma domyslnie zainstlowanego serwisu `rngd`. Po aktuazliacji paczek i restarcie demona `ssh` zatrzymuję `sshd` na maszynie `ansible-target` i próbuję ponownie wykonać wcześniejszego playbooka z przesyłaniem pliku inventory i pingowaniem wszystkich maszyn:
 
 ![stop_sshd](./screenshots/stop-sshd.png)
 
@@ -200,7 +256,76 @@ Definiujemy "odbiorców" zadań jako Endpoints. Deklarujemy 2 zadania, pierwsze 
 
 ![run](./screenshots/irssi-working.png)
 
+Polecenie za pierwszym razem wyświetliło status zwrotny jako changed, ponieważ stan maszyny docelowej został zmieniony -> pobrano obraz dockera i uruchomiono kontener. **Drugie wywołanie zwraca kod: ok, który oznacza, że zadanie wykonane w ramach playbooka, nie zmieniły stanu maszyny - obraz był już pobrany, a kontener działał.**
+
 **3. Tworzenie roli**
 
-Szkieletowanie `ansible-galaxy` umożliwia
+Szkieletowanie `ansible-galaxy` umożliwia stworzenie hierarchicznej struktury katalogów (opisane w dokumentacji pod [playbooks_reuse_roles](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html)), z jasno sprecyzowanymi podkatalogami, która zapewnia ustandaryzowanie i zwiększa przenośność, niezawodność i ogólność tworzonych zadań. Po wygenerowaniu w nowym katalogu `roles` struktury katalogów poleceniem:
+
+```bash
+ansible-galaxy init deploy-irssi
+```
+
+Powstaje struktura analogiczna do:
+
+>roles/
+>    common/               # this hierarchy represents a "role"
+>        tasks/            #
+>            main.yml      #  <-- tasks file can include smaller files if warranted
+>        handlers/         #
+>            main.yml      #  <-- handlers file
+>        templates/        #  <-- files for use with the template resource
+>            ntp.conf.j2   #  <------- templates end in .j2
+>        files/            #
+>            bar.txt       #  <-- files for use with the copy resource
+>            foo.sh        #  <-- script files for use with the script resource
+>        vars/             #
+>            main.yml      #  <-- variables associated with this role
+>        defaults/         #
+>            main.yml      #  <-- default lower priority variables for this role
+>        meta/             #
+>            main.yml      #  <-- role dependencies
+>        library/          # roles can also include custom modules
+>        module_utils/     # roles can also include custom module_utils
+>        lookup_plugins/   # or other types of plugins, like lookup in this case
+>
+>    webtier/              # same kind of structure as "common" was above, done for the webtier role
+>    monitoring/           # ""
+>    fooapp/               # ""
+
+W pliku `tasks/main.yml` tworzymy zadanie, analogiczne do poprzedniego z pobieraniem obrazu i uruchamianiem kontenera:
+
+```yaml
+---
+- name: Pull docker image from DockerHub
+  docker_image:
+    name: "kacperpap/irssi-deploy:{{ VERSION }}-{{ RELEASE }}"
+    source: pull
+
+- name: Run irssi container
+  docker_container:
+    name: irssi
+    image: "kacperpap/irssi-deploy:{{ VERSION }}-{{ RELEASE }}"
+    state: started
+    tty: yes
+    interactive: yes
+```
+
+Parametry dodajemy do pliku umieszczonego w `defaults/main.yml`:
+```
+---
+VERSION: 1.0
+RELEASE: 1
+```
+
+Teraz definiujemy nowego playbooka, w którym korzystamy z utworzonej roli:
+```yaml
+- name: Deploy irssi using deploy-irssi role
+  hosts: Endpoints
+  roles:
+    - /home/kacperpap/MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie4/roles/deploy-irssi
+```
+
+Wynik działania playbooka (obraz był już dostępny po wcześniejszym pobraniu):
+![role_res](./screenshots/role-start.png)
 
