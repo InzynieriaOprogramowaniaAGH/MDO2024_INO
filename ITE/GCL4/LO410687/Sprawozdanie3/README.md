@@ -134,6 +134,7 @@ stage('Prepare') {
             }
         }
 ```
+
 Część prepare była kombinacją kroków usuwania istniejącego repozytorium oraz wszystkich obrazów kontenerów, a także klonowania repozytorium z przełączeniem na własny branch. Dodatkowo utworzono pliki z logami, które zawierają informacje o etapach budowania i testowania.
 
 Stage build:
@@ -149,7 +150,9 @@ Stage build:
             }
         }
 ```
-Część build buduje obraz z Dockerfile, który znajduje się w podanej ścieżce oraz zapisuje utworzone logi do pliku.
+
+Część build buduje obraz z Dockerfile, który znajduje się w podanej ścieżce oraz zapisuje utworzone logi do pliku build_logs.
+
 Stage test:
 ```groovy
 stage('Tests') {
@@ -162,7 +165,9 @@ stage('Tests') {
             }
         }
 ```
-Część tests buduje obraz z Dockerfile, tym razem przeznaczonego do wykonywania testów, również znajdującego się w tym samym katalogu.
+
+Część tests buduje obraz z Dockerfile, tym razem przeznaczonego do wykonywania testów, również znajdującego się w tym samym katalogu oraz zapisuje utworzone logi do pliku test_logs.
+
 Stage deploy:
 ```groovy
  stage('Deploy') {
@@ -187,8 +192,11 @@ Stage deploy:
             }
         }
 ```
+
 W części Deploy od samego początku czyszczone są utworzone wcześniej obrazy kontenerów oraz następuje eksportowanie logów. Tworzony jest również folder, który prezentuje konkretne wersje aplikacji, po czym nastepuje przechodzenie do tego folderu oraz uruchomienie konteneru z obrazem.
+
 Stage publish:
+
 ```groovy
 stage('Publish') {
             steps {
@@ -215,9 +223,10 @@ stage('Publish') {
             }
         }
 ```
+
 Część publish została wdrożona po dokładnym sprawdzeniu, czy poprzednie etapy działają bez problemu. Artefakt zostaje utworzony i jest gotowy do pobrania, podczas gdy obraz kontenera wysyłany jest na DockerHub. Dzięki temu, upubliczniona zostaje paczka, która będzie łatwa do zainstalowania dla innych użytkowników. Aby zalogować się do DockerHuba wykorzytujemy hasło zamieszczone w parametrach, które zostanie pobrane przy uruchomieniu pipeline'a, aby nie musieć upubliczniać go w pliku. Etap publikacji kończymy usunięciem instancji dockera i zapakowaniu projektu w skompresowaną paczkę .tar.gz. Archiwum tar.gz jest formatem artefaktu, gdyż jest jednym z najprostszych sposobów na spakowanie projektu i przeniesienie go na inną maszynę.
 
-Należało zwrócić uwagę na to, że dopiero gdy użytkownik wyrazi chęć publikowania projektu, wykonują się kroki etapu Deploy oraz Publish. Aby sprawnie móc kontrolować chęć publikacji, należało wprowadzić odpowiednio zdefiniowane parametry, które widnieją z samego początku pipeline'a:
+Należało zwrócić uwagę na to, że dopiero gdy użytkownik wyrazi chęć publikowania projektu, wykonują się kroki etapu Deploy oraz Publish. Aby sprawnie móc kontrolować chęć publikacji, należało wprowadzić odpowiednio zdefiniowane parametry, które znajdują na początku pipeline'a:
 
 ```groovy
  parameters {
@@ -272,6 +281,31 @@ Jak widać pipeline oparty o Jenkinsfile również działa poprawnie.
 
 ![](poscm.png)
 
+W kwestii wersjonowania artefaktu zdecydowano się na semantic versioning, czyli standard numeracji wersji oprogramowania, który pomaga w jednoznacznym określaniu zmian i kompatybilności między różnymi wersjami programu. Złożony jest on z 3 liczb, które oznaczają 1. główna, która zmienia się, gdy wprowadzone są zmiany, które mogą powodować złamanie zgodności wstecznej z poprzednimi wersjami. Na przykład, gdy dodawane są nowe, niekompatybilne funkcje API.
+2. pomniejsza, zmienia się, gdy dodawane są nowe funkcje, ale nie są to zmiany, które łamią zgodność wsteczną. Może zawierać poprawki błędów.
+3. (poprawka) zmienia się, gdy dodawane są jedynie poprawki błędów lub drobne poprawki, które nie zmieniają funkcjonalności ani nie łamią zgodności wstecznej.
+
+
 Ostatecznym wynikiem pipeline było opublikowanie zwersjonowanego artefaktu na repozytorium w serwisie DockerHub:
 
 ![](dockerhubpush.png)
+
+Opublikowane repozytorium można udanie ściągnąć z rejestru przy użyciu polecenia `docker pull <repo:wersja>`
+
+![](pulldockerhub.png)
+
+oraz uruchomić poleceniem `docker run <repo:wersja>`
+
+![](run.png)
+
+**Zgodność z diagramami**
+
+Utworzone diagramy aktywności i wdrożeniowe, są zbliżone do kroków zadanych w jenkinfile, realizujemy identyczne stage oraz osiągamy zbliżone wyniki.
+
+**Czy opublikowany obraz może być pobrany z Rejestru i uruchomiony w Dockerze bez modyfikacji (acz potencjalnie z szeregiem wymaganych parametrów, jak obraz DIND)?** 
+
+Tak, opublikowany obraz może być pobrany z Rejestru i uruchomiony w Dockerze bez modyfikacji. Jednakże, w przypadku użycia DIND, mogą być wymagane dodatkowe parametry.
+
+**Czy dołączony do jenkinsowego przejścia artefakt, gdy pobrany, ma szansę zadziałać od razu na maszynie o oczekiwanej konfiguracji docelowej?** 
+
+To jest zależne od konfiguracji docelowej maszyny. Jeśli konfiguracja jest identyczna jak konfiguracja środowiska, w którym został zbudowany i przetestowany artefakt, to ma szansę zadziałać od razu. Jeśli konfiguracja jest inna, mogą wystąpić problemy z uruchomieniem artefaktu. W takim przypadku konieczne mogą być modyfikacje i dostosowanie artefaktu do konfiguracji docelowej maszyny.
