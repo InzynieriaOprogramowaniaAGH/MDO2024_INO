@@ -245,28 +245,84 @@ Szczegółowo opisuje wszystko krok po kroku jak stworzyć naszego `rpm`.
 Bazując na tym tworzymy Dockerfile'a dla kroku publish:
 ```
 FROM irssi-builder
-
 RUN  dnf install -y gcc rpm-build rpm-devel rpmlint make python bash coreutils diffutils patch rpmdevtools
-
 WORKDIR /
-
 RUN rpmdev-setuptree
 RUN tar -cvzf irssi.tar.gz irssi
 RUN cp irssi.tar.gz /root/rpmbuild/SOURCES/
-
 WORKDIR /root/rpmbuild/SPECS
-
 COPY ./irssi.spec .
-
 RUN rpmbuild -bs irssi.spec
 RUN rpmlint irssi.spec
 RUN rpmlint ../SRPMS/irssi-fc39.src.rpm
 RUN mkdir -p /source_rpm
 RUN mv /root/rpmbuild/SRPMS/irssi-fc39.src.rpm /source_rpm
 ```
+> Najpierw zaznaczamy że chcemy korzystać z obrazu irssi-builder \
+Następnie instalujemy wszystko co potrzebne dla RPM, zgodnie z zaleceniami z instrukcji. \
+Pracę zaczynamy z katalogu startowego. \
+Tworzymy drzewo katalogów dla RPM. \
+Pakujemy do .tar nasze zbudowane irssi. \
+Kopiujemy naszego tar'a do katalogu source'a w stworzonym systemie katalogów. \
+Katalog roboczy ustawiamy na katalog w drzewie odpowiedzialny za pliki .spec \
+Kopiujemy nasz plik. \
+Uruchamiamy go i budujemy naszego RPM. \
+Przenosimy gotowy RPM do nowo stworzonego katalogu dla naszego pliku.
 
 Oraz plik typu Spec:
+```
+Name: irssi
+Version: 1
+Release: 1
+Summary: irssi RPM package
 
+License:        GPLv2
+URL:            https://irssi.org/
+Source0:        https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/tree/DP412497/ITE/GCL4/DP412497/Sprawozdanie3/irssi/releases/irssi.tar.gz
+
+BuildRequires:  meson
+BuildRequires:  gcc
+BuildRequires:  glib2-devel
+BuildRequires:  ncurses-devel
+BuildRequires:  ninja-build
+BuildRequires:  perl-ExtUtils-Embed
+BuildRequires:  utf8proc-devel
+BuildRequires:  cmake
+BuildRequires:  openssl-devel
+Requires:       glib2
+Requires:       openssl-devel
+Requires:       perl
+Requires:       ncurses-libs
+
+%description
+IRSSI.
+
+%prep
+%setup -n irssi
+
+%build
+meson Build
+ninja -C %{_builddir}/irssi/Build
+
+%install
+DESTDIR=%{buildroot} ninja -C Build install
+mkdir -p %{buildroot}/usr/local/share/licenses/%{name}/
+cp %{_builddir}/irssi/COPYING %{buildroot}/usr/local/share/licenses/%{name}/
+
+%files
+%license /usr/local/share/licenses/%{name}/COPYING
+/usr/local/bin/%{name}
+/usr/local/share/%{name}/
+/usr/local/share/doc 
+/usr/local/share/man
+/usr/local/include/
+/usr/local/lib64/
+/usr/local/bin/openssl
+
+%changelog
+# Tue Apr 30 2024 Daniel Per <perdaniel@student.agh.edu.pl> - 1-1
+# Day-of-Week Month Day Year Name Surname <email> - Version-Release
+```
 
 #### Wymagane składniki
   * `Deploy`
