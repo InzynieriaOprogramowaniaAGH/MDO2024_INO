@@ -134,6 +134,10 @@ env: Pokazuje zmienne środowiskowe systemu. \
 docker images: Wyświetla listę obrazów Dockera dostępnych na lokalnej maszynie. \
 docker pull fedora: Pobiera obraz systemu Fedora.
 
+Zapisujemy i uruchamiamy nasz projekt. W trakcie działania i po jego ukończeniu możemy zajrzeć w logi aby zobaczyć co się aktualnie dzieje / co zostało już wykonane.
+
+![ss](./ss/ss05.png)
+![ss](./ss/ss06.png)
 
   * Utwórz projekt, który zwraca błąd, gdy... godzina jest nieparzysta
 > Pierwszy projekt sprawdził poprawne działanie skryptów w Jenkins'ie
@@ -143,12 +147,86 @@ docker pull fedora: Pobiera obraz systemu Fedora.
   * przechodzi na osobistą gałąź
   * buduje obrazy z dockerfiles i/lub komponuje via docker-composed
 
+Tworzymy nowy projekt, tym razem typu 'pipeline'. Ponownie przechodzimy do skryptu, gdzie możemy skorzystać z przykładowego skryptu, który wygląda tak:
+```
+pipeline {
+    agent any
+
+    stages {
+        stage('Hello') {
+            steps {
+                echo 'Hello World'
+            }
+        }
+    }
+}
+```
+> Prosto pokazuje nam schemat w jaki należy pisać skrypt dla pipelinu w oddzielnych krokach.
+
+Nasz krok 'Hello' możemy zamienić na 'Prepare', w którym to pobierzemy nasze repo i przejdziemy na osobistą gałąź. 
+
+```
+pipeline {
+    agent any
+
+    stages {
+        stage('Prepare') {
+            steps {
+                sh 'rm -rf MDO2024_INO'
+                sh 'git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+                dir("MDO2024_INO"){
+                    sh 'git checkout DP412497'
+                }
+            }
+        }
+    }
+}
+```
+> rm -rf MDO2024_INO - służy do usunięcia katalogu jeśli taki już istnieje, aby zapobiec błędom gdy skrypt spróbuje pobrać repozytorium. \
+sh 'komenda' - wywołanie komendy
+dir("..."){...} - działania w danym katalogu
+
+Następnie dodajemy krok odpowiedzialny za budowanie.
+
+```
+        stage('Build') {
+            steps {
+                echo 'Building'
+                sh 'docker rmi irssi-builder'
+                dir('MDO2024_INO/ITE/GCL4/DP412497/Sprawozdanie2'){
+                    sh 'docker build -t irssi-builder -f irssi-builder.Dockerfile .'
+                }
+            }
+        }
+```
+> Zadaniem jest usunięcie obrazu, aby mógł się od nowa zbudować oraz uruchomienie naszego Dockerfile'a budującego znajdującego się w naszym repo.
+
+Następny krok będzie dla testowania. Jest analogiczny do poprzedniego z budowaniem:
+```
+        stage('Test') {
+            steps {
+                echo 'Testing'
+                dir('MDO2024_INO/ITE/GCL4/DP412497/Sprawozdanie2'){
+                    sh 'docker build -f irssi-tstr.Dockerfile .'
+                }
+            }
+        }
+```
+
+Gdy wszystko jest gotowe
+
+![ss](./ss/ss07.png)
+![ss](./ss/ss08.png)
 
   
 ### Pipeline
 * Definiuj pipeline korzystający z kontenerów celem realizacji kroków `build -> test`
 * Może, ale nie musi, budować się na dedykowanym DIND, ale może się to dziać od razu na kontenerze CI. Należy udokumentować funkcjonalną różnicę między niniejszymi podejściami
 * Docelowo, `Jenkinsfile` definiujący *pipeline* powinien być umieszczony w repozytorium. Optymalnie: w *sforkowanym* repozytorium wybranego oprogramowania
+
+
+
+
 
 ### Szczegóły
 Ciąg dalszy sprawozdania
