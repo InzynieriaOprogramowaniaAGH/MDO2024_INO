@@ -281,7 +281,8 @@ Jak widać pipeline oparty o Jenkinsfile również działa poprawnie.
 
 ![](poscm.png)
 
-W kwestii wersjonowania artefaktu zdecydowano się na semantic versioning, czyli standard numeracji wersji oprogramowania, który pomaga w jednoznacznym określaniu zmian i kompatybilności między różnymi wersjami programu. Złożony jest on z 3 liczb, które oznaczają 1. główna, która zmienia się, gdy wprowadzone są zmiany, które mogą powodować złamanie zgodności wstecznej z poprzednimi wersjami. Na przykład, gdy dodawane są nowe, niekompatybilne funkcje API.
+W kwestii wersjonowania artefaktu zdecydowano się na semantic versioning, czyli standard numeracji wersji oprogramowania, który pomaga w jednoznacznym określaniu zmian i kompatybilności między różnymi wersjami programu. Złożony jest on z 3 liczb, które oznaczają:
+1. główna, która zmienia się, gdy wprowadzone są zmiany, które mogą powodować złamanie zgodności wstecznej z poprzednimi wersjami. Na przykład, gdy dodawane są nowe, niekompatybilne funkcje API.
 2. pomniejsza, zmienia się, gdy dodawane są nowe funkcje, ale nie są to zmiany, które łamią zgodność wsteczną. Może zawierać poprawki błędów.
 3. (poprawka) zmienia się, gdy dodawane są jedynie poprawki błędów lub drobne poprawki, które nie zmieniają funkcjonalności ani nie łamią zgodności wstecznej.
 
