@@ -15,6 +15,6 @@ COPY ./irssi.spec .
 RUN rpmbuild -bs irssi.spec
 RUN rpmlint irssi.spec
 RUN ls -a ../SRPMS/
-RUN rpmlint ../SRPMS/irssi-1.1.fc39.src.rpm
+RUN rpmlint ../SRPMS/irssi-1-1.src.rpm
 RUN mkdir -p /source_rpm
-RUN mv /root/rpmbuild/SRPMS/irssi-fc39.src.rpm /source_rpm
+RUN mv /root/rpmbuild/SRPMS/irssi-1-1.src.rpm /source_rpm
