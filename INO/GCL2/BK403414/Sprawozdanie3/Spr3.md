@@ -98,6 +98,9 @@ Najpierw musiałam dodać przekierowanie portu z maszyny wirtualnej, aby móc po
 
  * Upewniłam się również że działają kontenery budujące i testujące, przez pobranie rozszerzenia docker-compose stworzenie docker-compose.yml załączonego do sprawozdania uruchomiłam je poprzez komendę ```docker-compose up```
 
+ ![](./screeny/lab5+6+7/dockerCompose.png)
+
+ 
  ![](./screeny/lab5+6+7/PrzygotowanieDockerCompose.png)
 
 
@@ -249,7 +252,8 @@ stage('Prepare') {
 	 Podczas etapu build program jest budowany przy użyciu wcześniej przygotowanego kontenera, który został przygotowany i opisany na poprzednich zajęciach oraz uruchamiany jest skrypt przygotowujący woluminy.
 
 	   * Treść skryptu *
-	   ![](./screeny/lab5+6+7/pipelineSkrypt.png)
+
+  ![](./screeny/lab5+6+7/pipelineSkrypt.png)
 	 
 ```
 	stage('Build') {
@@ -336,8 +340,11 @@ stage('Publish') {
 ```
 	  
 	  * Treść README*
-	  
-	![](./screeny/lab5+6+7/readme.png)
+
+   
+![](./screeny/lab5+6+7/readme.png)
+
+
 ## Podsumowanie
 
 Cały pipeline: 
