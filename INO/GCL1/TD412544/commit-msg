@@ -1,0 +1,8 @@
+#!/bin/bash
+
+test=$(cut -d " " -f1 $1)
+if [ $test != "[TD412544]" ]; then
+	echo "Message should start with [TD412544]"
+	exit 1
+fi
+
