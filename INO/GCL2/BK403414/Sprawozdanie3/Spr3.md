@@ -185,7 +185,9 @@ Program zadział:
 
 ### Wstęp
 
-Projekt wykonałam posługując się repozytorium które wybrałam na poprzednich zajęciach 'programmer-calculator', dysponuje ono README opisujące dokładnie uruchomienie, bibliotekami i testami oraz licencją GPL-3.0 zezwalającą na kopiowanie i udostępnianie programu.
+Projekt wykonałam posługując się repozytorium które wybrałam na poprzednich zajęciach 'programmer-calculator', dysponuje ono README opisujące dokładnie uruchomienie, bibliotekami i testami oraz licencją GPL-3.0 zezwalającą na kopiowanie i udostępnianie programu. 
+
+Nie zdecydowałam się na utworzenie forka swojego repozytorium ponieważ zdecydowałam, że projekt nie jest na tyle złożony.
 
 * Wymagania wstępne:  
 	* Przed przystąpieniem do napisania pipeline przygotowałam dwa pliki dockerfile:
