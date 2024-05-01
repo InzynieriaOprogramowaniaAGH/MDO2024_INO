@@ -187,13 +187,20 @@ Projekt wykonałam posługując się repozytorium które wybrałam na poprzednic
 * Wymagania wstępne:  
 	* Przed przystąpieniem do napisania pipeline przygotowałam dwa pliki dockerfile:
 		* plik służący do budowania, który opiera się na obrazie ubuntu i zawiera zależności potrzebne do pobrania plików źródłowych i  zbudowania programu: git, make, gcc, libncurses5-dev i libncursesw5-dev.
+ 
+    
 		![](./screeny/lab5+6+7/wstepDockerfileBuilder.png)
 		
 		* plik dockerfile służący do przeprowadzenia testów bazujący na kontenerze budującym.
+ 
+    
 		![](./screeny/lab5+6+7/wstepDockerfileTest.png)
+
+
 * Diagram aktywności: 
 
 ![](./screeny/lab5+6+7/DIAGRAM1.png)
+
 * Diagram wdrążeniowy:
 
 ![](./screeny/lab5+6+7/DIAGRAM2.png)
