@@ -159,6 +159,112 @@ Oraz utt-tester:
 
 Nie można zapomnieć wysłać zmian na zdalne repozytorium, ponieważ zmiany zostaną tylko lokalnie (pipeline pobiera pliki z GitHub a nie z maszyny!)
 
-Skrypt pipeline'u też musi ulec zmianie - należy dodać argument przy buildowaniu:
+Skrypt pipeline'u też musi ulec zmianie - należy dodać argument przy buildowaniu obrazów:
 
+![alt text](image-39.png)
 
+Ostatecznie skrypt wygląda następująco:
+
+```
+pipeline {
+    agent any
+    
+    parameters {
+        string(name: 'VERSION', defaultValue: '1.0', description: 'Enter the version number')
+        string(name: "PASSWORD", defaultValue: "123", description: "Podaj hasło")
+    }
+    
+    stages {
+        stage('Clean') {
+            steps {
+                echo 'Cleaning workspace'
+                sh "rm -rf MDO2024_INO"
+                sh "git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO"
+                dir('MDO2024_INO') {
+                    sh "git checkout MP412902"
+                }
+                script {
+                    // Create log files
+                    sh "touch build_logs_${params.VERSION}.log"
+                    sh "touch test_logs_${params.VERSION}.log"
+                    sh "touch deployment_logs_${params.VERSION}.log"
+                }
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                echo 'Building Docker image for utt-builder'
+                dir('MDO2024_INO/ITE/GCL4/MP412902/Sprawozdanie3') {
+                    sh "docker build -t utt-builder:${params.VERSION} -f utt-builder.Dockerfile . | tee -a ../build_logs_${params.VERSION}.log"
+                }
+                archiveArtifacts artifacts: "build_logs_${params.VERSION}.log", allowEmptyArchive: true
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                echo 'Building Docker image for utt-tester'
+                dir('MDO2024_INO/ITE/GCL4/MP412902/Sprawozdanie3') {
+                    sh "docker build -t utt-tester:${params.VERSION} --build-arg BUILDER_VERSION=${params.VERSION} -f utt-tester.Dockerfile . | tee -a ../test_logs_${params.VERSION}.log"
+                }
+                archiveArtifacts artifacts: "test_logs_${params.VERSION}.log", allowEmptyArchive: true
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                echo 'Deploying utt-deployer'
+                dir('MDO2024_INO/ITE/GCL4/MP412902/Sprawozdanie3') {
+                    sh "docker build -t utt-deployer:${params.VERSION} --build-arg BUILDER_VERSION=${params.VERSION} -f utt-deployer.Dockerfile . | tee -a ../deployment_logs_${params.VERSION}.log"
+                    archiveArtifacts artifacts: "deployment_logs_${params.VERSION}.log", allowEmptyArchive: true
+                    sh "docker rmi utt-builder:${params.VERSION}"
+                    sh "docker rmi utt-tester:${params.VERSION}"
+                }
+            }
+        }
+        
+        stage('Run') {
+            steps {
+                echo 'Running container'
+                sh "docker images"
+                sh "docker run utt-deployer:${params.VERSION}"
+            }
+        }
+        
+        stage('Publish') {
+            steps {
+                echo "Publishing utt-deployer:${params.VERSION} to DockerHub"
+                sh "docker login -u phisiic -p ${params.PASSWORD}"
+                sh "docker tag utt-deployer:${params.VERSION} phisiic/utt-deployer:${params.VERSION}"
+                sh "docker push phisiic/utt-deployer:${params.VERSION}"
+                echo 'Published!'
+            }
+            post {
+                always {
+                    sh 'docker logout'
+                }
+            }
+        }
+    }
+}
+```
+Pipeline zakończył się sukcesem i zapisane zostały artefakty (logi)
+
+![alt text](image-40.png)
+
+Efektem pipeline jest obraz wstawiony na moim profilu na DockerHubie
+
+![alt text](image-41.png)
+
+Teraz usuwam zbudowane obrazy i staram się pobrać ze zdalnego źródła swoj obraz. 
+
+![alt text](image-42.png)
+
+Po uruchomieniu mojego obrazu pobranego z DockerHub, wszystko działa pomyślnie.
+
+![alt text](image-43.png)
+
+**Zgodność z diagramami**
+
+Wydaję mi się, że diagramy są dość bliskie procesowi continuous integration i przedstawiają rzeczywisty ciąg zdarzeń pipeline. Jednak kolejność ostatnich dwóch kroków powinna być zamieniona w diagramie aktywności - najpierw wykonałem deploy i uruchomienie w kontenerze aplikacji, a następnie po jej uruchomieniu dopiero została opublikowana. 
