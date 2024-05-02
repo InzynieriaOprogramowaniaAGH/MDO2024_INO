@@ -146,13 +146,19 @@ Należało zalogować się do Dockera swoim kontem i podać hasło - robię to w
 ![alt text](image-34.png)
 
 Napotkałem problem podczas deployowania w Jenkinsie:
+
 ![alt text](image-36.png)
+
 Mianowicie w etapie deploy, obraz się budował z tagiem nadanej wersji, ale ponieważ Dockerfile bazował się na wersji latest utt-builder, nie mógł go pullować. W takim wypadku należy zmodyfikować utt-deployer w taki sposób:
 
 ![alt text](image-37.png)
 
+Oraz utt-tester:
+
+![alt text](image-38.png)
+
 Nie można zapomnieć wysłać zmian na zdalne repozytorium, ponieważ zmiany zostaną tylko lokalnie (pipeline pobiera pliki z GitHub a nie z maszyny!)
 
 Skrypt pipeline'u też musi ulec zmianie - należy dodać argument przy buildowaniu:
- 
+
 
