@@ -1,6 +1,6 @@
-ARG BUILDER-VERSION
+ARG BUILDER_VERSION
 
-FROM utt-builder:${BUILDER-VERSION}
+FROM utt-builder:${BUILDER_VERSION}
 
 # Create a script to execute utt commands and sleep
 RUN echo '#!/bin/bash' >> /entrypoint.sh \
