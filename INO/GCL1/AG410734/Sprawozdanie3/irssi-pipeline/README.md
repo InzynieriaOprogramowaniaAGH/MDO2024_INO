@@ -1,6 +1,6 @@
 # Instrukcje instalacji
 
-Aby zainstalować niezbędne zależności w obrazie ubuntu do uruchomienia irssi, wykonaj następujące polecenia:
+Aby zainstalować niezbędne zależności w obrazie ubuntu do uruchomienia pliku wykonywalnego irssi, wykonaj następujące polecenia:
 
 ```bash
 apt-get update \
