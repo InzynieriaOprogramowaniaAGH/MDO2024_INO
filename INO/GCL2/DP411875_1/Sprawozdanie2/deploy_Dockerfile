@@ -2,4 +2,4 @@ FROM node:latest
 COPY . /app
 WORKDIR /app
 EXPOSE 4873
-RUN npm pull --registry http://localhost:4873
+RUN npm install --registry http://localhost:4873
