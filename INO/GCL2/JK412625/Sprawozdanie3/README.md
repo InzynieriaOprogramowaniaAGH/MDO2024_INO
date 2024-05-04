@@ -59,3 +59,5 @@ Po udanym buildzie, w głównym kontenerze gdzie działa Jenkins, powinien być 
 Oprogramowaniem, dla którego stworzony zostanie pipeline jest Ghidra. Ghidra to platforma do odwracania inżynieryjnego oprogramowania (SRE), która została opracowana przez Narodową Agencję Bezpieczeństwa (NSA) i udostępniona jako otwarte oprogramowanie. Zapewnia zestaw narzędzi do analizy skompilowanego kodu. Reverse engineering polega na badaniu binarnego kodu oprogramowania w celu zrozumienia jego funkcjonalności, struktury i zachowania, często w celu analizy podatności, analizy złośliwego oprogramowania lub modyfikacji oprogramowania.
 
 W projekcie tym można rozróżnić każdą fazę pipeline'u: budowanie, testowanie, wdrażanie oraz publikowanie.
+
+Projekt ten zawiera w sobie dużo różnych komponentów. Czas potrzebny na przeprowadzenie testów jednostkowych wynosi prawię godzinę. Dlatego zdecydowałem się aby uruchomić jedynie jeden zestaw testów (konkretnie ....) dla celów demonstracyjnych. W prawdziwym pipeline prawdopodobnie należało by uruchomić wszystkie testy jednostkowe oraz dodatkowo testy integracyjne załączone do repozytorium.
