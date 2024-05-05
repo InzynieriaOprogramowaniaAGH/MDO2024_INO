@@ -118,12 +118,12 @@ Logi konsoli wyglądały następująco:
 
 ### Wstęp:
 #### Wymagania wstępne środowiska:
-1. Repozytorium kodu źródłowego: Repozytorium to będzie źródłem kodu, który będzie budowany, testowany i publikowany. Korzystałam z poniższego repozytorium:
+Repozytorium kodu źródłowego: Repozytorium to będzie źródłem kodu, który będzie budowany, testowany i publikowany. Korzystałam z poniższego repozytorium:
 ```
 https://github.com/irssi/irssi.git
 ```
-2. Serwer Jenkins: Jenkins będzie używany do automatyzacji procesu CI. Musimy mieć zainstalowany i skonfigurowany serwer Jenkinsa.
-3. Kontener Docker: Będę używać kontenera Docker do izolacji i zarządzania procesami budowania i publikowania naszych paczek NPM.
+Serwer Jenkins: Jenkins będzie używany do automatyzacji procesu CI. Musimy mieć zainstalowany i skonfigurowany serwer Jenkinsa.
+Kontener Docker również jest niezbędny.
 
 
 #### Diagram aktywności:
