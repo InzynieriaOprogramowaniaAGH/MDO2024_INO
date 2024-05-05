@@ -1,8 +1,0 @@
-FROM gradle:latest
-
-WORKDIR /app
-
-RUN apt-get update && apt-get install -y git
-RUN git clone https://github.com/spring-projects/spring-petclinic
-
-WORKDIR /app/spring-petclinic
