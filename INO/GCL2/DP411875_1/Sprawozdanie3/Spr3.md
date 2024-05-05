@@ -126,24 +126,12 @@ https://github.com/irssi/irssi.git
 3. Kontener Docker: Będę używać kontenera Docker do izolacji i zarządzania procesami budowania i publikowania naszych paczek NPM.
 
 
-#### Opis diagramu aktywności:
-1. Pobranie kodu źródłowego z repozytorium git.
-2. Budowanie aplikacji za pomocą narzędzia npm.
-3. Wykonywanie testów za pomocą polecenia ``` npm test ```.
-4. Postawienie Local NPM Registry - Verdaccio.
-5. Publikowanie paczek do lokalnego rejestru NPM Verdaccio za pomocą polecenia ``` npm publish --registry verdaccio ```.
-6. Pobranie paczek z lokalnego rejestru NPM do kolejnego kontenera.
-7. Publikacja paczek do prawdziwego rejestru NPM za pomocą polecenia ``` npm publish```.
+#### Diagram aktywności:
+
+![](./screeny/3akt.png)
 
 
-
-SCREEEN
-
-
-
-
-
-#### Opis diagramu wdrożeniowego:
+#### Diagram wdrożeniowy:
 1. Repozytorium git, z którego pobieramy kod źródłowy.
 2. Serwer Jenkinsa, który zarządza procesem CI.
 3. Kontenery Docker, w których są wykonywane procesy budowania, testowania i publikowania paczek NPM.
@@ -151,15 +139,8 @@ SCREEEN
 5. Prawdziwy rejestr NPM, gdzie ostatecznie publikowany jest pakiet.
 
 
+![](./screeny/3wdr.png)
 
-
-
-SCREEEN
-
-
-
-
-   
 
 ### Pipeline:
 1. Początkowo w etapie "Prepare" wykonałam kilka kroków przygotowawczych. Usunęłam stary katalog projektu, który został po poprzednim wykonaniu, sklonowałam repozytorium przedmiotowe oraz przełączyłam się na odpowiednią gałąź, aby mieć najnowszą wersję kodu przed przystąpieniem do budowy aplikacji.
