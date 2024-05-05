@@ -1,0 +1,10 @@
+FROM build:latest
+
+ARG VERSION_UPDATE
+
+
+WORKDIR /node-ts-starter-template
+
+RUN npm install 
+RUN npm version ${VERSION_UPDATE} --no-git-tag-version
+RUN npm publish --registry http://localhost:4873
