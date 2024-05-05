@@ -64,15 +64,17 @@ pipeline {
     post {
         success {
             dir("MDO2024_INO/INO/GCL1/AG410734/Sprawozdanie3/irssi-pipeline") {
-                script {
-                    def timestamp = new Date().format("yyyyMMdd-HHmmss")
+            script {
+                
+                 def timestamp = new Date().format("yyyyMMdd-HHmmss")
                     def artifactsName = "artifacts-${VERSION}-${RELEASE}-${timestamp}"
-                    def zipFileName = "${artifactsName}.zip"
+                    def tarFileName = "${artifactsName}.tar.gz"
+                    
+                    sh "tar -czf ${tarFileName} artifacts-${VERSION}-${RELEASE}"
 
-                    sh "zip -r ${zipFileName} artifacts-${VERSION}-${RELEASE}"
-
-                    archiveArtifacts artifacts: "${zipFileName}", fingerprint: true, onlyIfSuccessful: true
+                    archiveArtifacts artifacts: "${tarFileName}", fingerprint: true, onlyIfSuccessful: true
                 }
+            }
             }
             script {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
@@ -85,4 +87,3 @@ pipeline {
         }
     }
 
-}
