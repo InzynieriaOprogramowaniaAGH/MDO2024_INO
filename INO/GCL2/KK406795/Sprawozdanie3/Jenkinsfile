@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Prepare') {
+            steps {
+                sh 'rm -rf MDO2024_INO'
+                sh 'git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+                dir("MDO2024_INO"){
+                    sh 'git checkout KK406795'
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building'
+                dir('MDO2024_INO/INO/GCL2/KK406795/Sprawozdanie2'){
+                    sh 'docker build -t irssi-builder -f irssi.builder.Dockerfile .'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing'
+                dir('MDO2024_INO/INO/GCL2/KK406795/Sprawozdanie2'){
+                    sh 'docker build -t irssi-tester -f ./irssi.test.Dockerfile .'
+                }
+            }
+        }
+        
+    }
+    
+}
