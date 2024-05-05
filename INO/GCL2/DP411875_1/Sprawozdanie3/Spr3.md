@@ -303,13 +303,7 @@ W pliku README.md zawarłam konieczne dependencje:
 
 Wszystkie etapy pomyślnie przeszły build. 
 
-
-
-SCREEN
-
-
-
-
+![](./screeny/3sukces.png)
 
 
 7. Cały pipeline wygląda następująco:
@@ -379,8 +373,8 @@ SCREEN
             sh 'docker stop depl_1'
             sh 'docker stop copy_1' 
         }    
-   }
-}
+    }
+ }
         
         stage('Publish'){
         steps{
@@ -391,7 +385,7 @@ SCREEN
             }
         }
     }
-}
+ }
 ```
 
 
