@@ -172,6 +172,7 @@ stage('Create logs') {
 ```
 
 Zdefiniowałam pipeline korzystający z kontenerów celem realizacji kroków build -> test. 
+
 3. Dockerfile , z którego korzystałam wyglądał następująco:
 
 ```
