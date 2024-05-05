@@ -1,0 +1,369 @@
+    1  ifconfig
+    2  ipconfig
+    3  ifconfig
+    4  apt install net-tools
+    5  apt-get install git-all
+    6  ifconfig
+    7  history
+    8  ls -l
+    9  history
+   10  rm -r 1*
+   11  apt-get install git version
+   12  git version
+   13  ssh-keygen
+   14  ls /root/.ssh/i
+   15  ls /root/.ssh/
+   16  nano /root/.ssh/id_ed25519.pub 
+   17  cat /root/.ssh/id_ed25519.pub 
+   18  apt install git
+   19  ssh-keygen -t ed25519 -C "kublit02@gmail.com"
+   20  ssh-keygen 
+   21  ssh-keygen -t -C "kublit02@gmail.com"
+   22  ssh-keygen -C "kublit02@gmail.com"
+   23  ls -l
+   24  cd ..
+   25  mkdir copy
+   26  cd Dev_Ops/
+   27  ls -l
+   28  rm - r1*
+   29  rm - r *
+   30  cat /root/.ssh/id_ed25519.pub 
+   31  git checkout -b GCL2
+   32  cd MDO2024_INO/
+   33  git checkout -b GCL2
+   34  git brances
+   35  git branches
+   36  git branch
+   37  git branch -d checkout
+   38  git branch -d GCL2
+   39  git branch JL410322/
+   40  git branch JL410322
+   41  git switch JL410322
+   42  git branch -d GCL2
+   43  git branch
+   44  git checkout
+   45  gis branch
+   46  git branch
+   47  git checkout main
+   48  git branch JL410322
+   49  git branch --all
+   50  ls -l
+   51  git switch JL410322
+   52  ls -l
+   53  cp * ../../temp
+   54  cp * ../../temp -p
+   55  mkdir ../temp
+   56  cp * ../temp
+   57  cp * ../temp -r
+   58  cd ..
+   59  cd temp/
+   60  ls -l
+   61  cd ..
+   62  cd MDO2024_INO/
+   63  git branch -d JL410322
+   64  git push origin --delete JL410322
+   65  git branch --all
+   66  ls -l
+   67  git branch --all
+   68  git checkout GCL2
+   69  git branch
+   70  ssh -v
+   71  ssh
+   72  ssh --version
+   73  clea
+   74  clear
+   75  git branchj
+   76  git branch
+   77  git switch JL410322
+   78  git branch
+   79  mkdir INO/GCL2/JL410322
+   80  mkdir INO/GCL2/JL410322 -r
+   81  mkdir INO/GCL2/JL410322 -d
+   82  mkdir INO/GCL2/JL410322 -p
+   83  ls -l
+   84  cd /INO/GCL2
+   85  cd INO/GCL2/JL410322/
+   86  cd ..
+   87  .git/hooks/
+   88  nano .git/hooks/commit-msg
+   89  gedit .git/hooks/commit-msg
+   90  nano .git/hooks/commit-msg
+   91  cp .git/hooks/commit-msg INO/GCL2/JL410322/
+   92  rm -r 1
+   93  ls INO/GCL2/JL410322/
+   94  touch INO/GCL2/JL410322/Sprawozdanie1/Readme.md
+   95  touch INO/GCL2/JL410322/Sprawozdanie1/Readme.md -p
+   96  touch INO/GCL2/JL410322/Sprawozdanie1/Readme.md -r
+   97  touch INO/GCL2/JL410322/Sprawozdanie1/Readme.md -d
+   98  mkdir INO/GCL2/JL410322/Sprawozdanie1/Readme.md 
+   99  mkdir INO/GCL2/JL410322/Sprawozdanie1/
+  100  touch INO/GCL2/JL410322/Sprawozdanie1/Readme.md -d
+  101  touch INO/GCL2/JL410322/Sprawozdanie1/Readme.md 
+  102  ls -l
+  103  cd INO/GCL2/JL410322/
+  104  ls -l
+  105  cd Sprawozdanie1/
+  106  ls -l
+  107  rm -r INO/GCL2/JL410322/com
+  108  cd ..
+  109  rm -r INO/GCL2/JL410322/commit-msg 
+  110  cp .git/hooks/commit-msg INO/GCL2/JL410322/Sprawozdanie1/
+  111  cd INO/GCL2/JL410322/Sprawozdanie1/
+  112  ls -l
+  113  chmod 666 Readme.md 
+  114  ifconfig
+  115  mkdir img
+  116  cd ..
+  117  tree
+  118  apt install tree
+  119  tree
+  120  ls-l
+  121  ls -l
+  122  rmdir -r JL410322/
+  123  rmdir  JL410322/
+  124  rm -r  JL410322/
+  125  ls -l
+  126  rm commit-msg 
+  127  tree
+  128  ssh-keygen -t ecdsa
+  129  git --version
+  130  ssh --version
+  131  ssh -V
+  132  git --version
+  133  ssh -V
+  134  clear
+  135  git branch --all
+  136  git clear
+  137  clear
+  138  ifconfig
+  139  tree
+  140  history > INO/GCL2/JL410322/Sprawozdanie1/history.txt
+  141  tree
+  142  nano INO/GCL2/JL410322/Sprawozdanie1/history.txt 
+  143  git add
+  144  git add .
+  145  git status
+  146  git commit -m "JL410322 - commit"
+  147  git push
+  148  git checkout
+  149  git branch
+  150  git branch --all
+  151  ssh-keygen -t ecdsa
+  152  cat /root/.ssh/id_ecdsa.pub
+  153  git add .
+  154  git commit
+  155  git status
+  156  git push
+  157  ls -l
+  158  cp INO/ ../
+  159  cp -r INO/ ../
+  160  cd ..
+  161  tree
+  162  cd <D
+  163  git branch  --all
+  164  cd MDO2024_INO/
+  165  git branch  --all
+  166  git switch GCL2
+  167  gt branch -d naJL410322
+  168  git branch -d JL410322
+  169  git branch -D JL410322
+  170  git git checkout -d JL410322
+  171  ls -l
+  172  git branch
+  173  git branch --all
+  174  git checkout GCL2
+  175  git branch --all
+  176  git checkout -b JL410322
+  177  git branch
+  178  git branch --all
+  179  lsd -l
+  180  ls -l
+  181  tree
+  182  cp ../INO/ .
+  183  cp -r../INO/ .
+  184  cp -r ../INO/ .
+  185  tree
+  186  git status
+  187  git commit
+  188  git add .
+  189  git commit
+  190  git push
+  191  git push --set-upstream GCL2 JL410322
+  192  git push --set-upstream origin JL410322
+  193  git branch
+  194  git branch --all
+  195  history
+  196  su darek
+  197  sudo darek
+  198  usermod -aG sudo darek
+  199  sudo chown -R $USER /home/darek
+  200  su darek
+  201  ssh-keygen -t ecdsa -C "kublit02@gmail.com"
+  202  cat /root/.ssh/id_ecdsa.pub
+  203  git config --global user.email "kublit02@gmail.com"
+  204  git config --global user.name "DaRek"
+  205  git status
+  206  git push
+  207  git checkout GCL2
+  208  ls -l
+  209  ls -l
+  210  cd Dev_Ops/
+  211  ls -l
+  212  cd MDO2024_INO/
+  213  tree
+  214  git add .
+  215  git config --global --add safe.directory /home/darek/Dev_Ops/MDO2024_INO/*\
+  216  git config --global --add safe.directory /home/darek/Dev_Ops/MDO2024_INO/*
+  217  git config --global --add safe.directory /home/darek/Dev_Ops/MDO2024_INO/
+  218  git add .
+  219  git config --global --add safe.directory /home/darek/Dev_Ops/MDO2024_INO
+  220  git add .
+  221  git commit
+  222  git push
+  223  git checkout GCL2
+  224  git push
+  225  git checkout JL410322
+  226  git push
+  227  git branch
+  228  ls -l
+  229  sudo chown -R $USER /home/darek
+  230  git status
+  231  git add .
+  232  history
+  233  history > INO/GCL2/JL410322/Sprawozdanie1/history.txt 
+  234  git add .
+  235  git status
+  236  git commit
+  237  git checkout GCL2
+  238  ls -l
+  239  tree
+  240  git checkout JL410322
+  241  su darek
+  242  snap install docker
+  243  docker pull hello-world
+  244  docker
+  245  docker run hello-world
+  246  systemctl status docker
+  247  sudo systemctl start docker
+  248  apt show docker
+  249  sudo docker pull ubuntu
+  250  sudo usermod -aG docker $USER
+  251  restart
+  252  docker ps
+  253  docker inspect fedora
+  254  sudo usermod -aG docker $USER
+  255  ifconfig
+  256  reboot
+  257  docker container list
+  258  docker start 0109bf0277a5
+  259  docker exec 0109bf0277a5
+  260  docker exec -t 0109bf0277a5
+  261  docker exec -it 0109bf0277a5
+  262  docker exec -it 0109bf0277a5 bash
+  263  docker run -it --name=client networkstatic/iperf3 -c $127.0.01
+  264  docker run -it --name=client networkstatic/iperf3 -c 172.17.0.3
+  265  docker ocntainer list
+  266  docker container list
+  267  docker run -it --name=client networkstatic/iperf3 -c 172.17.0.3
+  268  docker run -it --name=client networkstatic/iperf3 -c 172.17.0.2
+  269  docker run -it --name=client networkstatic/iperf3 -c 172.17.0.3
+  270  docker container list
+  271  docker rm client
+  272  docker run -it --name=client networkstatic/iperf3 -c 172.17.0.3
+  273  docker network create jenkins
+  274  docker volume ls
+  275  docker inspect server
+  276  docker run -it --rm --name=client networkstatic/iperf3 -c 127.0.01
+  277  docker rm client
+  278  docker run -it --rm --name=client networkstatic/iperf3 -c 127.0.01
+  279  docker run -it --rm --name=client networkstatic/iperf3 -c 127.0.0.1
+  280  iperf3 -c localhost -p 5201
+  281  docker run -it --name=client networkstatic/iperf3 -c $172.0.01
+  282  docker rm client
+  283  docker run -it --name=client networkstatic/iperf3 -c $172.0.0.1
+  284  docker run -it --name=client networkstatic/iperf3 -c 172.0.0.1
+  285  docker rm client
+  286  docker run -it -rm --name=client networkstatic/iperf3 -c 172.0.0.1
+  287  docker run -it --rm --name=client networkstatic/iperf3 -c 172.0.0.1
+  288  ifconfig
+  289  docker run -it --rm --name=client networkstatic/iperf3 -c 127.0.0.1
+  290  docker run -it --name=client networkstatic/iperf3 -c 127.0.0.1
+  291  history
+  292  ifconfig
+  293  docker run -it --name=client networkstatic/iperf3 -c 127.0.01
+  294  docker run -it --name=client networkstatic/iperf3 -c 127.0.0.1
+  295  docker rm client
+  296  docker run -it --name=client networkstatic/iperf3 -c 127.0.0.1
+  297  docker pull networkstatic/iperf3
+  298  docker run -it --name=server -p 5201:5201 networkstatic/iperf3 -s
+  299  docker rm server
+  300  docker run -it --rm --name=server -p 5201:5201 networkstatic/iperf3 -s
+  301  docker inspect server
+  302  qiperf3 -c 172.19.0.2
+  303  iperf3 -c 172.19.0.2
+  304  sudo zypper isntall iperf
+  305  sudo apt isntall iperf
+  306  sudo apt install iperf
+  307  iperf3 -c 172.19.0.2
+  308  apt install iperf2
+  309  apt install iperf3
+  310  iperf3 -c 172.19.0.2
+  311  docker run -it --name=client networkstatic/iperf3 -c 127.0.0.1docker run --rm -it --name=client --network=iperf-bridge networkstatic/iperf3 -c 127.0.0.1
+  312  docker rm client
+  313  docker run --rm -it --name=client --network=iperf-bridge networkstatic/iperf3 -c 127.0.0.1
+  314  docker run --rm -it --name=client --network=iperf-bridge networkstatic/iperf3 -c server
+  315  docker run --rm -it --name=client --network=iperf-bridge networkstatic/iperf3 -c 172.19.0.3
+  316  docker run --rm -it --name=client --network=iperf-bridge networkstatic/iperf3 -c 172.19.0.3 -p 5201
+  317  docker run --rm -it --name=client --network=iperf-bridge networkstatic/iperf3 -c server
+  318  docker run --rm -it --name=client --network=iperf-bridge networkstatic/iperf3 -c 172.19.0.3
+  319  docker inspect server
+  320  docker run --rm -it --name=client --network=iperf-bridge networkstatic/iperf3 -c 172.19.0.2
+  321  docker run --rm -it --name=client networkstatic/iperf3 -c 172.19.0.2
+  322  docker run -it --rm networkstatic/iperf3 -c 172
+  323  docker inspect server
+  324  docker run -it --rm networkstatic/iperf3 -c 172.17.0.2
+  325  docker run -it --rm networkstatic/iperf3 -c server
+  326  docker newtork create jenkins
+  327  docker network create jenkins
+  328  docker netowrk ls
+  329  docker network rm jenkins
+  330  docker network create jenkins
+  331  docker run   --name jenkins-docker   --restart=on-failure   --detach   --privileged   --network jenkins   --network-alias docker   --env DOCKER_TLS_CERTDIR=/certs   --volume jenkins-docker-certs:/certs/client   --volume jenkins-data:/var/jenkins_home   --publish 2376:2376   docker:dind   --storage-driver overlay2
+  332  cd MDO2024_INO/INO/GCL2/JL410322/Sprawozdanie2/
+  333  docker build -t jenkins_blueocean jenkins.Dockerfile .
+  334  docker build -t jenkins_blueocean -f jenkins.Dockerfile .
+  335  docker ps
+  336  docker rm server
+  337  docker purge server
+  338  docker stop server
+  339  docker rm server
+  340  docker ps
+  341  docker run --name jenkins-blueocean --restart=on-failure --detach --network jenkins --env DOCKER_HOST=tcp://docker:2376 --env DOCKER_CERT_PATH=/certs/client --env DOCKER_TLS_VERIFY=1 --volume jenkins-data:/var/jenkins_home --volume jenkins-docker-certs:/certs/client:ro --publish 8080:8080 --publish 50000:50000 my-jenkins
+  342  docker run --name jenkins-blueocean --restart=on-failure --detach --network jenkins --env DOCKER_HOST=tcp://docker:2376 --env DOCKER_CERT_PATH=/certs/client --env DOCKER_TLS_VERIFY=1 --volume jenkins-data:/var/jenkins_home --volume jenkins-docker-certs:/certs/client:ro --publish 8080:8080 --publish 50000:50000 jenkins_blueocean
+  343  docker ps
+  344  docker stop jenkins_blueocean
+  345  docker stop 32029f25d031
+  346  docker ps
+  347  ls -l
+  348  docker run -d --name jenkins-blueocean --restart=on-failure     --network jenkins     -e DOCKER_HOST=tcp://docker:2376     -e DOCKER_CERT_PATH=/certs/client     -e DOCKER_TLS_VERIFY=1     -v jenkins-data:/var/jenkins_home     -v jenkins-docker-certs:/certs/client:ro     -p 8080:8080 -p 50000:50000     jenkins_blueocean
+  349  docker remove 32029f25d031da186f3c70b85a360aa2a81592e475b1335b3e8cfb7533f88377
+  350  docker run -d --name jenkins-blueocean --restart=on-failure     --network jenkins     -e DOCKER_HOST=tcp://docker:2376     -e DOCKER_CERT_PATH=/certs/client     -e DOCKER_TLS_VERIFY=1     -v jenkins-data:/var/jenkins_home     -v jenkins-docker-certs:/certs/client:ro     -p 8080:8080 -p 50000:50000     jenkins_blueocean
+  351  docker run -it jenkins-blueocean
+  352  docker run -d -it --name jenkins-blueocean --restart=on-failure     --network jenkins     -e DOCKER_HOST=tcp://docker:2376     -e DOCKER_CERT_PATH=/certs/client     -e DOCKER_TLS_VERIFY=1     -v jenkins-data:/var/jenkins_home     -v jenkins-docker-certs:/certs/client:ro     -p 8080:8080 -p 50000:50000     jenkins_blueocean
+  353  docker remove 061a0b5de6673ff5699f9fe09d4746ea45cadce44c029ef15a05ea640b30f67d
+  354  docker stop 061a0b5de6673ff5699f9fe09d4746ea45cadce44c029ef15a05ea640b30f67d
+  355  docker remove 061a0b5de6673ff5699f9fe09d4746ea45cadce44c029ef15a05ea640b30f67d
+  356  docker run -d -it --name jenkins-blueocean --restart=on-failure     --network jenkins     -e DOCKER_HOST=tcp://docker:2376     -e DOCKER_CERT_PATH=/certs/client     -e DOCKER_TLS_VERIFY=1     -v jenkins-data:/var/jenkins_home     -v jenkins-docker-certs:/certs/client:ro     -p 8080:8080 -p 50000:50000     jenkins_blueocean
+  357  ls -l
+  358  docker run -d -it --name jenkins-blueocean --restart=on-failure     --network jenkins     -e DOCKER_HOST=tcp://docker:2376     -e DOCKER_CERT_PATH=/certs/client     -e DOCKER_TLS_VERIFY=1     -v jenkins-data:/var/jenkins_home     -v jenkins-docker-certs:/certs/client:ro     -p 8080:8080 -p 50000:50000     jenkins_blueocean
+  359  docker run -it --name jenkins-blueocean --restart=on-failure     --network jenkins     -e DOCKER_HOST=tcp://docker:2376     -e DOCKER_CERT_PATH=/certs/client     -e DOCKER_TLS_VERIFY=1     -v jenkins-data:/var/jenkins_home     -v jenkins-docker-certs:/certs/client:ro     -p 8080:8080 -p 50000:50000     jenkins_blueocean
+  360  docker stop bb46c4c1a901cb9fa9169087294b49177bbdaf50ed30f72a2a86cc14ee1f06a0
+  361  docker rm bb46c4c1a901cb9fa9169087294b49177bbdaf50ed30f72a2a86cc14ee1f06a0
+  362  docker run -it --name jenkins-blueocean --restart=on-failure     --network jenkins     -e DOCKER_HOST=tcp://docker:2376     -e DOCKER_CERT_PATH=/certs/client     -e DOCKER_TLS_VERIFY=1     -v jenkins-data:/var/jenkins_home     -v jenkins-docker-certs:/certs/client:ro     -p 8080:8080 -p 50000:50000     jenkins_blueocean
+  363  cd ..
+  364  git status
+  365  cd MDO2024_INO/
+  366  git status
+  367  git add *
+  368  git commit
+  369  history > INO/GCL2/JL410322/Sprawozdanie2/history.txt
