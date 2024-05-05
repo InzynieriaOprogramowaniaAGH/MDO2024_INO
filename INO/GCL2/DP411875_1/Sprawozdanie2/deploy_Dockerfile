@@ -1,4 +1,27 @@
-FROM node:latest
-WORKDIR /node-ts-starter-template
-EXPOSE 4873
-RUN npm install --registry http://localhost:4873
+# Wybierz oficjalny obraz Node.js jako bazowy
+FROM node:14
+
+# Ustaw katalog roboczy w kontenerze
+WORKDIR /app
+
+# Skopiuj pliki package.json oraz package-lock.json do katalogu roboczego
+COPY package*.json ./
+
+# Skopiuj konfigurację npm do katalogu roboczego
+COPY .npmrc ./
+
+# Zmodyfikuj konfigurację npm, aby korzystała z lokalnego rejestru Verdaccio
+RUN echo "registry = http://verdaccio:4873/" >> .npmrc
+
+# Zainstaluj zależności, pobierając je z lokalnego rejestru npm
+RUN npm install
+
+# Skopiuj pozostałe pliki aplikacji do katalogu roboczego
+COPY . .
+
+# Otwórz port, na którym działa aplikacja
+EXPOSE 3000
+
+# Uruchom aplikację
+CMD ["npm", "start"]
+
