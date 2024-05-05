@@ -349,8 +349,8 @@ Wszystkie etapy pomyślnie przeszły build.
             sh 'docker stop depl_1'
             sh 'docker stop copy_1' 
         }    
-    }
- }
+       }
+     }
         
         stage('Publish'){
         steps{
@@ -361,7 +361,7 @@ Wszystkie etapy pomyślnie przeszły build.
             }
         }
     }
- }
+     }
 ```
 
 
