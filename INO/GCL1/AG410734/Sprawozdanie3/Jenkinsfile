@@ -61,22 +61,22 @@ pipeline {
         }
     }
     
-   post {
-    success {
-        dir("MDO2024_INO/INO/GCL1/AG410734/Sprawozdanie3/irssi-pipeline") {
-        script {
-            
-            archiveArtifacts artifacts: "artifacts-${VERSION}-${RELEASE}/irssi, artifacts-${VERSION}-${RELEASE}/README.md", fingerprint: true, onlyIfSuccessful: true
-        }
-        }
-        script {
-            withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+    post {
+        success {
+            dir("MDO2024_INO/INO/GCL1/AG410734/Sprawozdanie3/irssi-pipeline") {
+            script {
+                
+                archiveArtifacts artifacts: "artifacts-${VERSION}-${RELEASE}/irssi, artifacts-${VERSION}-${RELEASE}/README.md", fingerprint: true, onlyIfSuccessful: true
+                }
+            }
+            script {
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
 
-                sh 'docker tag deploy $DOCKER_USERNAME/deploy:${VERSION}-${RELEASE}'
-                sh 'docker push $DOCKER_USERNAME/deploy:${VERSION}-${RELEASE}'
+                    sh 'docker tag deploy $DOCKER_USERNAME/deploy:${VERSION}-${RELEASE}'
+                    sh 'docker push $DOCKER_USERNAME/deploy:${VERSION}-${RELEASE}'
+                }
             }
         }
     }
-}
 }
