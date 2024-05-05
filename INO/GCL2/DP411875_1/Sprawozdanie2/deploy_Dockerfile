@@ -1,5 +1,4 @@
 FROM node:latest
-COPY . /app
-WORKDIR /app
+WORKDIR /node-ts-starter-template
 EXPOSE 4873
 RUN npm install --registry http://localhost:4873
