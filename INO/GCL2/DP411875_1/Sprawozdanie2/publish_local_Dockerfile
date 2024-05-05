@@ -1,5 +1,0 @@
-FROM node:14
-COPY . /app
-WORKDIR /app
-RUN npm install
-CMD npm publish --registry http://localhost:4873
