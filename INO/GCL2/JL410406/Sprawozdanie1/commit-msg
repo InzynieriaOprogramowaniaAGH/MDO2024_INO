@@ -1,6 +1,0 @@
-!/bin/sh
-
-if !  grep -q "^JL410406" "$1"; then
-	echo "Commit message nie zaczyna sie od JL410406."
-        exit 1
-fi
