@@ -132,12 +132,6 @@ Kontener Docker również jest niezbędny.
 
 
 #### Diagram wdrożeniowy:
-1. Repozytorium git, z którego pobieramy kod źródłowy.
-2. Serwer Jenkinsa, który zarządza procesem CI.
-3. Kontenery Docker, w których są wykonywane procesy budowania, testowania i publikowania paczek NPM.
-4. Verdaccio - Lokalny rejestr NPM, na który publikowany jest pakiet przed ich finalną publikacją.
-5. Prawdziwy rejestr NPM, gdzie ostatecznie publikowany jest pakiet.
-
 
 ![](./screeny/3wdr.png)
 
