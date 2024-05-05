@@ -22,7 +22,7 @@ pipeline {
         
         stage('Build') {
             steps {
-                dir("MDO2024_INO/INO/GCL1/AG410734/Sprawozdanie2") {
+                dir("MDO2024_INO/INO/GCL1/AG410734/Sprawozdanie3/irssi-pipeline") {
                     sh 'docker build -t bldr -f BLDR.Dockerfile .'
                 }
             }
@@ -30,7 +30,7 @@ pipeline {
         
         stage('Test') {
             steps {
-                dir("MDO2024_INO/INO/GCL1/AG410734/Sprawozdanie2") {
+                dir("MDO2024_INO/INO/GCL1/AG410734/Sprawozdanie3/irssi-pipeline") {
                     sh 'docker build -t tstr -f TSTR.Dockerfile .'
                 }
             }
@@ -61,22 +61,28 @@ pipeline {
         }
     }
     
-   post {
-    success {
-        dir("MDO2024_INO/INO/GCL1/AG410734/Sprawozdanie3/irssi-pipeline") {
-        script {
-            
-            archiveArtifacts artifacts: "artifacts-${VERSION}-${RELEASE}/irssi, artifacts-${VERSION}-${RELEASE}/README.md", fingerprint: true, onlyIfSuccessful: true
-        }
-        }
-        script {
-            withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+    post {
+        success {
+            dir("MDO2024_INO/INO/GCL1/AG410734/Sprawozdanie3/irssi-pipeline") {
+                script {
+                    def timestamp = new Date().format("yyyyMMdd-HHmmss")
+                    def artifactsName = "artifacts-${VERSION}-${RELEASE}-${timestamp}"
+                    def zipFileName = "${artifactsName}.zip"
 
-                sh 'docker tag deploy $DOCKER_USERNAME/deploy:${VERSION}-${RELEASE}'
-                sh 'docker push $DOCKER_USERNAME/deploy:${VERSION}-${RELEASE}'
+                    sh "zip -r ${zipFileName} artifacts-${VERSION}-${RELEASE}"
+
+                    archiveArtifacts artifacts: "${zipFileName}", fingerprint: true, onlyIfSuccessful: true
+                }
+            }
+            script {
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+
+                    sh 'docker tag deploy $DOCKER_USERNAME/deploy:${VERSION}-${RELEASE}'
+                    sh 'docker push $DOCKER_USERNAME/deploy:${VERSION}-${RELEASE}'
+                }
             }
         }
     }
-}
+
 }
