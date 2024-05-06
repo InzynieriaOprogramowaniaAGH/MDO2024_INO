@@ -1,0 +1,62 @@
+pipeline {
+    agent any
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('benek2002-dockerhub')
+    }
+    stages {
+        stage("build"){
+            steps{
+                dir("INO/GCL2/PZ410049/Sprawozdanie3"){
+                sh "docker network create deploy || true"
+                sh "docker build -t java_builder -f ./builder.Dockerfile ."
+                }
+            }
+        }
+        stage("test"){
+            steps{
+                dir("INO/GCL2/PZ410049/Sprawozdanie3"){
+                sh "docker build -t java_tester -f ./tester.Dockerfile ." 
+                sh 'docker rm -f temp_container || true'
+                sh 'docker create --name temp_container java_tester'
+                sh 'docker cp temp_container:/test_logs.txt .'
+                archiveArtifacts 'test_logs.txt'
+                }
+            }
+        }
+        stage("deploy"){
+            steps{
+                dir("INO/GCL2/PZ410049/Sprawozdanie3"){
+                sh "docker build -t benek2002/java_deploy -f ./deploy.Dockerfile ."
+                sh "docker rm -f java || true"
+                sh "docker run --name java --rm -p 8080:8080 --network=deploy --detach benek2002/java_deploy"
+             
+                }
+            }
+        }
+         stage('publish') {
+            steps {
+               sh "docker rmi curlimages/curl || true"
+              script {
+                    def response = sh script: "docker run --network=deploy --rm curlimages/curl:latest -L -v http://java:8080", returnStdout: true
+                    if (response.contains("Hello User!")) {
+                        echo "Response contains 'Hello User!'"
+                        sh "docker cp java:/jenkins-java/app.jar ."
+                        archiveArtifacts artifacts: '*.jar', allowEmptyArchive: true
+                        sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+                        sh 'docker push benek2002/java_deploy'
+                    
+                    } else {
+                        error "Response does not contain 'Hello User!'"
+                    }
+                }
+               
+
+            }
+        }
+    }
+    post {
+        always {
+            sh "docker logout"
+        }
+    }
+}
