@@ -2,7 +2,9 @@
 
 ## Cel ćwiczenia
 
-## Przebieg ćwiczenia - zajęcia 5
+Celem ćwiczenia było utworzenie pipelinie'u w jenkinsie który wykonuje kroki `build -> test -> deploy -> publish` wybranej przez na aplikacji z poprzednich zajęć
+
+## Przebieg ćwiczenia - zajęcia 5, 6 i 7
 
 ### Upewnienie się że kontenery budujące i testujące działają
 
@@ -177,14 +179,287 @@ Projekt działa poprawnie, w logach jest wyświetlone `uname`
 
 <br>
 
+Utworzyłem drugi projekt o nazwie `proj_02`, następnie napisałem skrypt który sprawdza czy godzina jest parzysta, jeśli nie, zwraca błąd
+
 <div align="center">
     <img src="screenshots/ss_16.png" width="850"/>
 </div>
 
 <br>
 
+Uruchomiłem go i błąd o nieparzystej godzinie został poprawnie zwrócony
+
 <div align="center">
     <img src="screenshots/ss_17.png" width="850"/>
 </div>
 
 <br>
+
+### Utworzenie "prawdziwego" projektu
+
+Utworzyłem pipline który składa się z trzech kroków: Prepare, Build, Test
+
+Krok *Prepare* usuwa poprzednio utworzony folder ze sklonowanym repozytorium, klonuje repozytorium i przechodzi na moją osobistą gałąź `KCH411627` 
+
+Krok *Build* uruchamia build dockerfila budującego
+
+Krok *Test* urchamia build dockerfila testujacego 
+
+<!-- <div align="center">
+    <img src="screenshots/ss_18.png" width="850"/>
+</div>
+
+<br> -->
+
+```
+pipeline {
+    agent any
+
+    stages {
+        stage('Prepare') {
+            steps {
+                sh "rm -rf *"
+                sh "git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO"
+               
+                dir ('MDO2024_INO'){
+                    sh "git checkout KCH411627"
+                }
+                
+            }
+        }
+        stage('Build') {
+            steps {
+                dir ('MDO2024_INO/INO/GCL1/KCH411627/Sprawozdanie2'){
+                    sh "docker build -f BLDR.Dockerfile -t bldr . "
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                dir ('MDO2024_INO/INO/GCL1/KCH411627/Sprawozdanie2'){
+                    sh "docker build -f TSTR.Dockerfile -t tstr . "
+                }
+            }
+        }
+    }
+}
+```
+
+Uruchomiłem utworzony pipeline:
+
+<div align="center">
+    <img src="screenshots/ss_19.png" width="850"/>
+</div>
+
+<div align="center">
+    <img src="screenshots/ss_20.png" width="850"/>
+</div>
+
+<br>
+
+### Diagramy UML
+
+Diagramy zostały utworzone za pomocą narzedzia [Visual paradigm online](https://online.visual-paradigm.com/pl/)
+
+Diagram aktywności:
+
+<div align="center">
+    <img src="screenshots/ss_27.png" width="850"/>
+</div>
+
+<br>
+
+Diagram wdrożeniowy:
+
+<div align="center">
+    <img src="screenshots/ss_28.png" width="850"/>
+</div>
+
+<br>
+
+### Deploy
+
+Ponieważ projekt `maven-demo` nie posiada klasy z funkcją main nie jest możliwe uruchomienie pliku .jar
+
+Z tego powodu postanowiłem że krok deploy będzie polegał na sprawdzeniu czy zbudowany projekt można znaleźć w lokalnym repozytorium mavena, jeśli tak to przechodzimy do kroku publish jeśli nie to zwracamy błąd. 
+
+Do deploya użyłem kontenera z obrazu `build` ponieważ był on wystarczalny i nie widzę sensu żeby tworzyć nowy obraz do deploya.
+
+Do sprawdzenie czy projekt można znaleźć wykorzystałem poleceni mavena: 
+
+```
+mvn dependency:get -Dartifact=demo:maven-demo:0.1-SNAPSHOT
+```
+
+```
+stage('Deploy') {
+    steps {
+            sh 'docker run -d -t -i --name deploy_container bldr'
+            
+            sh 'docker exec deploy_container mvn dependency:get -Dartifact=demo:maven-demo:0.1-SNAPSHOT'
+            
+            sh 'docker stop deploy_container'
+    }
+}
+```
+
+<!-- <div align="center">
+    <img src="screenshots/ss_21.png" width="850"/>
+</div> -->
+
+
+<div align="center">
+    <img src="screenshots/ss_22.png" width="850"/>
+</div>
+
+<br>
+
+Gdy zmienimy artefakt, na przykład wersje na `0.2-SNAPSHOT`, otrzymujemy spodziewany błąd 
+
+```
+mvn dependency:get -Dartifact=demo:maven-demo:0.2-SNAPSHOT
+```
+
+<div align="center">
+    <img src="screenshots/ss_23.png" width="850"/>
+</div>
+
+<br>
+
+### Publish
+
+Krok **publish** polega na zapisaniu utworzonego w kroku **build** pliku .jar do `archiveArtifacts`
+
+<!-- <div align="center">
+    <img src="screenshots/ss_24.png" width="850"/>
+</div>
+
+<br> -->
+
+```
+stage('Publish') {
+    steps {
+            sh 'docker cp deploy_container:/maven-demo/target .'
+            
+            archiveArtifacts artifacts: 'target/*.jar'
+    }
+}
+```
+
+<div align="center">
+    <img src="screenshots/ss_25.png" width="850"/>
+</div>
+
+<br>
+
+### Logi
+
+Na koniec została archiwizacja logów. Do niego również użyłem `archiveArtifacts` oraz polecenia `2>&1 | tee` które pozwala na wypisanie wyjścia do konsoli oraz do pliku. Do numeracji logów użyłem zmiennej środowiskowej `BUILD_NUMBER`
+
+```
+stage('Build') {
+    steps {
+        dir ('MDO2024_INO/INO/GCL1/KCH411627/Sprawozdanie2'){
+            sh "docker build -f BLDR.Dockerfile -t bldr . 2>&1 | tee build_log${BUILD_NUMBER}.txt"
+            
+            archiveArtifacts artifacts: 'build_log*.txt'
+        }
+    }
+}
+stage('Test') {
+    steps {
+        dir ('MDO2024_INO/INO/GCL1/KCH411627/Sprawozdanie2'){
+            sh "docker build -f TSTR.Dockerfile -t tstr . 2>&1 | tee test_log${BUILD_NUMBER}.txt"
+            
+            archiveArtifacts artifacts: 'test_log*.txt'
+        }
+    }
+}
+stage('Deploy') {
+    steps {
+            sh 'docker run -d -t -i --name deploy_container bldr'
+            
+            sh 'docker exec deploy_container mvn dependency:get -Dartifact=demo:maven-demo:0.1-SNAPSHOT 2>&1 | tee deploy_log${BUILD_NUMBER}.txt'
+            
+            sh 'docker stop deploy_container'
+            
+            archiveArtifacts artifacts: 'deploy_log*.txt'
+    }
+}
+```
+
+<div align="center">
+    <img src="screenshots/ss_26.png" width="850"/>
+</div>
+
+### Małe podsumowanie
+
+Do kroku `preparation` dopisałem linijkę która czyści obrazy i kontenery
+```
+docker system prune -af
+```
+Polecenie to również czyści cache dlatego dodałem dopiero na końcu. (Czas wykonania pipeline'u z kliku sekund zamienia sie na ~2 minuty)
+
+Według mnie jest zgodność z diagramami UML (poza archiwizacją logów)
+
+
+Ostateczny `jenkisfile`
+```
+pipeline {
+    agent any
+
+    stages {
+        stage('Prepare') {
+            steps {
+                sh "rm -rf *"
+                sh "git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO"
+               
+                sh 'docker system prune -af'
+               
+                
+                dir ('MDO2024_INO'){
+                    sh "git checkout KCH411627"
+                }
+                
+            }
+        }
+        stage('Build') {
+            steps {
+                dir ('MDO2024_INO/INO/GCL1/KCH411627/Sprawozdanie2'){
+                    sh "docker build -f BLDR.Dockerfile -t bldr . 2>&1 | tee build_log${BUILD_NUMBER}.txt"
+                    
+                    archiveArtifacts artifacts: 'build_log*.txt'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                dir ('MDO2024_INO/INO/GCL1/KCH411627/Sprawozdanie2'){
+                    sh "docker build -f TSTR.Dockerfile -t tstr . 2>&1 | tee test_log${BUILD_NUMBER}.txt"
+                    
+                    archiveArtifacts artifacts: 'test_log*.txt'
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                    sh 'docker run -d -t -i --name deploy_container bldr'
+                    
+                    sh 'docker exec deploy_container mvn dependency:get -Dartifact=demo:maven-demo:0.1-SNAPSHOT 2>&1 | tee deploy_log${BUILD_NUMBER}.txt'
+                    
+                    sh 'docker stop deploy_container'
+                    
+                    archiveArtifacts artifacts: 'deploy_log*.txt'
+            }
+        }
+        stage('Publish') {
+            steps {
+                    sh 'docker cp deploy_container:/maven-demo/target .'
+                    
+                    archiveArtifacts artifacts: 'target/*.jar'
+            }
+        }
+    }
+}
+```
+
