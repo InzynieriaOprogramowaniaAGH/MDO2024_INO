@@ -48,5 +48,5 @@ W celu realizacji zajęć utworzyłem moje dwa pierwsze proste projekty:
     ```
   - wyświetlany rezultat:
 <p align="center">
- <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/3. Uruchom Blueocean.png">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/5. uruchomienie projektu.png">
 </p>
