@@ -18,3 +18,13 @@ Na potrzeby wizualizacji wykonanych przeze mnie działań wykonałem następują
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/Diagram komunikacji.png">
 </p>
+
+### Przygotowanie
+Korzystając z dockerfiles stworzonych na poprzednich zajęciach upewniłem się, że na pewno działają kontenery budujące i testujące:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/0.1. Upewnij się, że na pewno działają kontenery budujące i testujące, stworzone na poprzednich zajęciach.png">
+</p>
+
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/0.2. Upewnij się, że na pewno działają kontenery budujące i testujące, stworzone na poprzednich zajęciach.png">
+</p>
