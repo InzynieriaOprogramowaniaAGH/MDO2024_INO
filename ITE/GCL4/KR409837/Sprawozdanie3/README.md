@@ -41,8 +41,12 @@ Korzystając z kontenera wykonanego w ramach poprzedniego sprawozdania uruchomi�
 
 ### Uruchomienie
 W celu realizacji zajęć utworzyłem moje dwa pierwsze proste projekty:
-- pierwszy projekt wyświetla uname
+- Pierwszy projekt wyświetla uname
   - polecenie projektu:
     ```
      uname -a
     ```
+  - wyświetlany rezultat:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/3. Uruchom Blueocean.png">
+</p>
