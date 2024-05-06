@@ -225,3 +225,23 @@ CMD ninja -C ./build
 etap odpowiedzialny jest za wdrażanie projektu.
 - `stage Publish` - w tym etapie tworzone jest archiwum zawierające artefakty projektu, które jest nazwane zgodnie z bieżącym znacznikiem czasowym. Następnie następuje logowanie do serwisu Docker Hub za pomocą danych uwierzytelniających zmiennych środowiskowych, tagowanie obrazu irssi-deploy:latest jako krezler21/irssi_fork:latest, publikowanie tego obrazu w serwisie Docker Hub oraz wylogowanie się z serwisu Docker Hub.
 - `post` - w tym etapie po zakończeniu wykonania każdego pipeline'a następuje archiwizacja artefaktów projektu i utworzenie dla nich fingerprinta. Następnie nadawne są uprawnienia wcześniej stworzonemu przeze mnie skryptowi "cleanup.sh", który zostaje uruchomionyw celu zatrzymania i usunięcia wszystkich kontenerów.
+
+Plik Jenkinsfile wraz ze wszystkim pozostałymi zmianami został dodany do sforkowanego przeze mnie repozytorium:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/16. Dodanie folderu z Jenkinsem do repozytorium.png">
+</p>
+
+Powyższe działania umożliwiły uzyskanie następujących efektów:
+- Pipeline zakończony suckesem wraz z zapisanymi logami:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/19. efekty jenkins.png">
+</p>
+- Obraz na profilu DockerHub:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/20. efekty dockerhub.png">
+</p>
+
+Powyższe kroki umożliwiły mi pobranie obrazu z mojego konta DockerHub:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/18. wykazanie że działa.png">
+</p>
