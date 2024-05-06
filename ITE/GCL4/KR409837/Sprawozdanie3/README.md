@@ -113,7 +113,7 @@ Aby móc swobodnie pullować pobrałem w Jenkinsie credentialsId:
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/14. pobranie credentialsid.png">
 </p>
 
-oraz na przyszłość utworzyłem w folderze z projektem plik `cleanup.sh`, służący do zatrzymywania i usuwania wszystkich kontenerów. Jego treść prezentuje się następująco:
+oraz na przyszłość utworzyłem w folderze z projektem skrypt `cleanup.sh`, służący do zatrzymywania i usuwania wszystkich kontenerów. Jego treść prezentuje się następująco:
 ```
 #!/bin/bash
 
@@ -222,4 +222,6 @@ COPY ./artifacts/ .
 
 CMD ninja -C ./build
 ```
-
+etap odpowiedzialny jest za wdrażanie projektu.
+- `stage Publish` - w tym etapie tworzone jest archiwum zawierające artefakty projektu, które jest nazwane zgodnie z bieżącym znacznikiem czasowym. Następnie następuje logowanie do serwisu Docker Hub za pomocą danych uwierzytelniających zmiennych środowiskowych, tagowanie obrazu irssi-deploy:latest jako krezler21/irssi_fork:latest, publikowanie tego obrazu w serwisie Docker Hub oraz wylogowanie się z serwisu Docker Hub.
+- `post` - w tym etapie po zakończeniu wykonania każdego pipeline'a następuje archiwizacja artefaktów projektu i utworzenie dla nich fingerprinta. Następnie nadawne są uprawnienia wcześniej stworzonemu przeze mnie skryptowi "cleanup.sh", który zostaje uruchomionyw celu zatrzymania i usunięcia wszystkich kontenerów.
