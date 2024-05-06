@@ -23,7 +23,7 @@ pipeline {
         stage('Build') {
             steps {
                 dir("MDO2024_INO/INO/GCL1/AG410734/Sprawozdanie3/irssi-pipeline") {
-                    sh 'docker build -t bldr -f BLDR.Dockerfile .'
+                    sh 'docker build -t build -f BLDR.Dockerfile .'
                 }
             }
         }
@@ -31,7 +31,7 @@ pipeline {
         stage('Test') {
             steps {
                 dir("MDO2024_INO/INO/GCL1/AG410734/Sprawozdanie3/irssi-pipeline") {
-                    sh 'docker build -t tstr -f TSTR.Dockerfile .'
+                    sh 'docker build -t test -f TSTR.Dockerfile .'
                 }
             }
         }
