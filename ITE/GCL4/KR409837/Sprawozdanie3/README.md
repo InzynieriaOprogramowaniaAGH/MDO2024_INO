@@ -107,3 +107,106 @@ oraz sklonowałem na swoją maszynę wirtualną repozytorium do którego ręczni
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/12. klonuje repo .png">
 </p>
+
+Aby móc swobodnie pullować pobrałem w Jenkinsie credentialsId:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/14. pobranie credentialsid.png">
+</p>
+
+oraz na przyszłość utworzyłem w folderze z projektem plik `cleanup.sh`, służący do zatrzymywania i usuwania wszystkich kontenerów. Jego treść prezentuje się następująco:
+```
+#!/bin/bash
+
+if [ "$(docker ps -a -q)" ]; then
+  docker container stop -f $(docker ps -a -q)
+  docker container rm -f $(docker ps -a -q)
+fi
+```
+Następnie utworzyłym plik 'Jenkinsfile', którego ostateczna treść jest następująca: 
+```
+pipeline {
+    agent any
+
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+    }
+
+    stages {
+        stage('Pull') {
+            steps {
+                echo "Pullowanie repo"
+                git branch: 'master', credentialsId: 'bfd3d51b-874c-4e9b-b867-26d457d62113', url: 'https://github.com/krezler21/irssi'
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                echo "Budowa projektu"
+                sh '''
+                    docker build -t irssi-build:latest -f ./budowa/Dockerfile .
+
+                    docker run --name build_container irssi-build:latest
+
+                    docker cp build_container:/irssi/build ./artifacts
+                    docker logs build_container > ./artifacts/log_build.txt
+                '''
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                echo "Testowanie projektu"
+                sh '''
+                    docker build -t irssi-test:latest -f ./test/Dockerfile .
+
+                    docker run --name test_container irssi-test:latest
+
+                    docker logs test_container > ./artifacts/log_test.txt
+                '''
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo "Deploy projektu"
+                sh '''
+                
+                docker build -t irssi-deploy:latest -f ./deploy/Dockerfile .
+                docker run -p 3000:3000 -d --rm --name deploy_container irssi-deploy:latest
+                '''
+            }
+        }
+
+        stage('Publish') {
+            steps {
+                echo "Publikacja projektu"
+                sh '''
+                TIMESTAMP=$(date +%Y%m%d%H%M%S)
+                tar -czf artifact_$TIMESTAMP.tar.gz artifacts
+                
+                echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
+                NUMBER='''+ env.BUILD_NUMBER +'''
+                docker tag irssi-deploy:latest krezler21/irssi_fork:latest
+                docker push krezler21/irssi_fork:latest
+                docker logout
+
+                '''
+            } 
+        }
+
+    }
+
+     post{
+        always{
+            echo "Archiving artifacts"
+
+            archiveArtifacts artifacts: 'artifact_*.tar.gz', fingerprint: true
+            sh '''
+            chmod +x cleanup.sh
+            ./cleanup.sh
+            '''
+        }
+
+     }
+}
+```
