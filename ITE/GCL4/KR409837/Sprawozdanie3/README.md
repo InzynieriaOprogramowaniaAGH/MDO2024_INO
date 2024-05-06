@@ -33,3 +33,8 @@ Następnie korzystając z instrukcji zamieszczonej w dokumentacji Jenkinsa uruch
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/1. Uruchom obraz Dockera który eksponuje środowisko zagnieżdżone.png">
 </p>
+
+Korzystając z kontenera wykonanego w ramach poprzedniego sprawozdania uruchomiłem `Blueocean`, czyli zestaw wtyczek dla Jenkinsa, które oferują nowoczesny interfejs użytkownika zorientowany na zadania, wizualizację pipeline'ów oraz dodatkowe narzędzia do zarządzania procesem CI/CD. Jest to bardziej intuicyjne i przyjazne dla użytkownika narzędzie w porównaniu z podstawowym interfejsem Jenkinsa. Obraz Jenkinsa to natomiast podstawowa instalacja Jenkinsa dostępna w formie gotowego do użycia obrazu, który można uruchomić na kontenerze Docker lub serwerze.
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/3. Uruchom Blueocean.png">
+</p>
