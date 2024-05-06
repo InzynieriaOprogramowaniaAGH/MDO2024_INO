@@ -99,5 +99,11 @@ Dzięki powyższym krokom uzyskałem następujący rezultat:
 </p>
 
 ### Prawdziwy "prawdziwy projekt"
-W dalszej części zajęć przeszedłem do stworzenia kolejnego projektu, 
-
+W dalszej części zajęć przeszedłem do stworzenia kolejnego projektu, w którym stworzyłem Pipeline. Jednakże przed przystąpieniem do tego wykonałem jeszcze kilka innych kroków począwszy od utworzenia forka na wybranym przeze mnie repozytorium, aby móc wykonać build:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/11. W celu zrobienia builda forkuje repo .png">
+</p>
+oraz sklonowałem na swoją maszynę wirtualną repozytorium do którego ręcznie przekopiowałem foldery zawierające plik Dokcefile odpowiadający za build lub test
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/12. klonuje repo .png">
+</p>
