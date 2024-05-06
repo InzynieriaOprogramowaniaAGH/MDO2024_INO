@@ -4,7 +4,7 @@
 **Cel sprawozdania:** Nauka tworzenia pipelinów CI/CD. Budowanie, testowanie, publikowanie artefaktów i wdrażanie aplikacji irssi. 
 
 ### 1. Wstęp
-Wybrana do zrealizowania celów tego laboratorium aplikacja to `irssi`, której licencja, znajdująca się pod linkiem https://github.com/irssi/irssi/blob/master/COPYING umożliwia dowolne korzystanie i modyfikację oprogramowania, z koniecznością udostępniania zmian na tej samej licencji. 
+Wybrana aplikacja do zrealizowania celów tego laboratorium to `irssi`, której licencja, znajdująca się pod linkiem https://github.com/irssi/irssi/blob/master/COPYING, umożliwia dowolne korzystanie i modyfikację oprogramowania, z koniecznością udostępniania zmian na tej samej licencji. 
 
 #### Wymagania wstęne środowiska
 Wymagania wstępne środowiska są opisane w repozytorium irssi pod linkiem https://github.com/irssi/irssi/blob/master/INSTALL. 
@@ -48,8 +48,9 @@ Przeszłam do przeglądarki i otworzyłam Jenkinsa pod adresem http://192.168.1.
 
 Blue Ocean to interfejs użytkownika Jenkinsa, który oferuje nowoczesne, interaktywne narzędzia do zarządzania Jenkinsem oraz przepływami pracy (pipelines). Po wejściu w Blue Ocean pokazuje się przyjazny UI do tworzenia pipelinów:
 
-
   ![](screeny/4.png)
+
+Po konfiguracji Jenkinsa zgodnie z dokumentacją, logi z jenkinsa powinny być przechowywane w ścieżce `var/jenkins_home`. W tym logi konkretnych jobów w ścieżce `var/jenkins_home/jobs/<nazwa_joba>/builds/<numer_buildu>/log`.
 
 ### 3. Uruchomienie
 #### Konfiguracja wstępna i pierwsze uruchomienie
@@ -58,7 +59,7 @@ W celu utworzenia projektu wyświetlającego `uname`, kliknęłam w Jenkinsie `N
 
  ![](screeny/5.png)
 
-W krokach budowania, wybralam opcję `uruchom powłokę`, której to zostanie wywołane polecenie `uname -a`
+W krokach budowania, wybrałam opcję `uruchom powłokę`, w której to zostanie wywołane polecenie `uname -a`
 
   ![](screeny/6.png)
 
@@ -151,7 +152,7 @@ Po wprowadzeniu poprawek, obrazy zostały zbudowane, a testy zakończyły się p
 
 ### 4. Pipeline
 
-W celu realizacji pierwszego pipeline'a składającego się z trzech etapów, napisałam Jenkinsfile, który w stage `Clone` klonuje nasze repozytorium i przełącza się na moją gałąź, przy okazji usuwa wcześniej sklonowane repozytorium, w stage `Build` buduje z pliku BLDR.Dockerfile obraz odpowiedzialny za budowanie aplikacji. Następnie w stage `Test` buduje obraz z pliku TSTR.Dockerfile, który testuje aplikację. 
+W celu realizacji pierwszego pipeline'a składającego się z trzech etapów, napisałam Jenkinsfile, który w stage `Clone` klonuje nasze repozytorium i przełącza się na moją gałąź, przy okazji usuwa wcześniej sklonowane repozytorium. W stage `Build` buduje z pliku BLDR.Dockerfile obraz odpowiedzialny za budowanie aplikacji. Następnie w stage `Test` buduje obraz z pliku TSTR.Dockerfile, który testuje aplikację. 
 
 ```
 pipeline {
