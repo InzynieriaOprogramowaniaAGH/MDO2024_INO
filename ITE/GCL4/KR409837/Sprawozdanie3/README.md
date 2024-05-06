@@ -1,6 +1,6 @@
 # Sprawozdanie 3 - Konrad Rezler
 ## Pipeline, Jenkins, izolacja etapów
-### Opracowanie diagramów
+### Wstęp i  opracowanie diagramów
 
 Pipeline to zautomatyzowany proces dostarczania oprogramowania, który obejmuje etapy od tworzenia kodu przez testowanie i budowanie aż po wdrażanie i monitorowanie aplikacji, zapewniając szybkie i powtarzalne wdrożenia przy minimalnym ryzyku błędów. Dzięki pipeline deweloperzy mogą efektywnie integrować, testować i wdrażać zmiany, co przyspiesza cykle dostarczania oprogramowania i poprawia jakość produktu
 
@@ -38,3 +38,11 @@ Korzystając z kontenera wykonanego w ramach poprzedniego sprawozdania uruchomi�
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/3. Uruchom Blueocean.png">
 </p>
+
+### Uruchomienie
+W celu realizacji zajęć utworzyłem moje dwa pierwsze proste projekty:
+- pierwszy projekt wyświetla uname
+- - polecenie projektu:
+    ```
+  uname -a
+    ```
