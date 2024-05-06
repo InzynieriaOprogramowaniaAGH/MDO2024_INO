@@ -211,4 +211,15 @@ pipeline {
 }
 ```
 Pragnę teraz przejść do omówienia poszczególnych fragmentów tego pliku:
-- stage Pull - etap ten jest odpowiedzialny za pobranie repozytorium z systemu kontroli wersji Git. Wykorzystuje on plugin Git w Jenkinsie, aby skonfigurować parametry, takie jak gałąź (master), identyfikator poświadczeń (bfd3d51b-874c-4e9b-b867-26d457d62113), oraz adres URL repozytorium (https://github.com/krezler21/irssi). Następnie wykonuje operację pobrania (pull) najnowszej wersji kodu źródłowego z gałęzi master z tego repozytorium.
+- `stage Pull` - etap ten jest odpowiedzialny za pobranie repozytorium z systemu kontroli wersji Git. Wykorzystuje on plugin Git w Jenkinsie, aby skonfigurować parametry, takie jak gałąź (master), identyfikator poświadczeń (bfd3d51b-874c-4e9b-b867-26d457d62113), oraz adres URL repozytorium (https://github.com/krezler21/irssi). Następnie wykonuje pull najnowszej wersji kodu źródłowego z gałęzi master z tego repozytorium.
+- `stage Build` - etap ten ma za zadanie budowe projektu, uruchamiając polecenia Docker'a w celu zbudowania obrazu oraz kopiowania wygenerowanych artefaktów oraz za zapisywanie logów z działania tego kontenera do pliku "log_build.txt".
+- `stage Test` - etap ten jest odpowiedzialny za przeprowadzenie testów projektu oraz za zapisywanie logów z działania tego kontenera do pliku "log_test.txt".
+- `stage Deploy` - w celu realizacji tego etapu utworzyłem plik Dockerfile w nowym katalogu "deploy", który zawiera następującą treść:
+```
+FROM danger89/cmake:latest
+
+COPY ./artifacts/ .
+
+CMD ninja -C ./build
+```
+
