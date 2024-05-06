@@ -1,0 +1,82 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Collect') {
+            steps {
+                git branch: "main", credentialsId: 'e08d9a39-11d6-4211-b184-d7f62f6bf3e3', url: "https://github.com/weronikaabednarz/spring-petclinic"
+                sh 'git config user.email "weronikaabednarz@gmail.com"'
+                sh 'git config user.name "weronikaabednarz"'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    try {
+                        docker.build("spring-builder", "-f dockerfile_builder .")
+                    } catch (Exception e) {
+                        currentBuild.result = 'FAILURE'
+                        error "Błąd w trakcie budowania obrazu Docker: ${e.message}"
+                    }
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                script {
+                    try {
+                        docker.build("spring-tester", "-f dockerfile_tester .")
+                    } catch (Exception e) {
+                        currentBuild.result = 'FAILURE'
+                        error "Błąd w trakcie testowania obrazu Docker: ${e.message}"
+                    }
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    try {
+                        def builder_container = docker.image("spring-builder:latest").run("--detach")
+                        def tester_container = docker.image("spring-tester:latest").run("--detach")
+                    } catch (Exception e) {
+                        currentBuild.result = 'FAILURE'
+                        error "Błąd w trakcie deployu: ${e.message}"
+                    }
+                }
+            }
+        }
+        
+        stage('Publish') {
+            steps {
+                echo "Publish stage"
+                sh '''
+                ls -l   # List files in the current directory for debugging purposes
+                
+                # Generate or copy log files to the current directory
+                echo "Log content" > builder_log.txt
+                echo "Log content" > tester_log.txt
+                
+                TIMESTAMP=$(date +%Y%m%d%H%M%S)
+                tar -czf artifact_$TIMESTAMP.tar.gz builder_log.txt tester_log.txt 
+                '''
+            } 
+        }
+    }
+    
+   post {
+        always {
+            echo "Archiving artifacts"
+    
+            archiveArtifacts artifacts: 'artifact_*.tar.gz', fingerprint: true
+            sh '''
+            docker container stop $(docker ps -a -q)
+            docker container rm $(docker ps -a -q)
+            '''
+        }
+    }
+}
