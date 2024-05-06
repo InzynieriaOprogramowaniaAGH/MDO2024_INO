@@ -26,6 +26,7 @@ Niniejszy temat jest poświęcony przygotowaniu źródła instalacyjnego systemu
   * `url --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-38&arch=x86_64`
   * `repo --name=update --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f38&arch=x86_64`
 * Plik odpowiedzi może zakładać pusty dysk. Zapewnij, że zawsze będzie formatować całość, stosując `clearpart --all`
+* Ustaw *hostname* inny niż domyślny `localhost`
 * Rozszerz plik odpowiedzi o repozytoria i oprogramowanie potrzebne do uruchomienia programu, zbudowanego w ramach projektu. 
   * W przypadku kontenera, jest to po prostu Docker.
     * Utwórz w sekcji `%post` mechanizm umożliwiający pobranie i uruchomienie kontenera
