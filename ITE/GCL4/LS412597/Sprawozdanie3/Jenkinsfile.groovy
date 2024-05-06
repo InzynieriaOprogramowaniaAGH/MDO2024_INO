@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'VERSION', defaultValue: '1.0.0', description: 'Enter the version of the Docker image')
+        string(name: 'VERSION', defaultValue: 'x.x.x', description: 'Enter the version of the Docker image')
         booleanParam(name: 'LATEST', defaultValue: false, description: 'Check to set as latest')
     }
     
