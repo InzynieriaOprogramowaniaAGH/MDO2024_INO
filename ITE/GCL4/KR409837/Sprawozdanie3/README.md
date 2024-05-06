@@ -42,7 +42,7 @@ Korzystając z kontenera wykonanego w ramach poprzedniego sprawozdania uruchomi�
 ### Uruchomienie
 W celu realizacji zajęć utworzyłem moje dwa pierwsze proste projekty:
 - pierwszy projekt wyświetla uname
-- - polecenie projektu:
+ - polecenie projektu:
     ```
-  uname -a
+     uname -a
     ```
