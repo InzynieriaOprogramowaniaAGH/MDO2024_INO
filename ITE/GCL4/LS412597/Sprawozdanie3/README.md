@@ -275,4 +275,32 @@ Ostatnim etapem w pipeline jest publish. Wykorzystująć credentiale zapisane w 
 
 Etap końcowy jest wykonywany zawszee niezależnie czy nasz pipeline został przerwany lub zakończył się sukcesem, jego zadaniem jest wyczyszczenie kontenera DIND w któryum znajdują się wszystkie obraz tworzone podczas pipelinu. Służy to do dbania o miejsce na naszym dysku, które niestety nie jest studnią bez dna :(
 
+> W przypadku większej ilości pipelinów wdrożeniowych oraz tworzących obrazy ten etap może być problematyczny, ponieważ zakończenie tego pipelinu może zaburzyć działanie innych działających pipelinów, dlatego warto go zmienić, przy dodawaniu innych pipelinów.
+
 Nasz plik jenkinsfile jest już gotowy do testowania.
+
+### Test pipelinu:
+
+Najpierw sprawdzimy działanie walidacji naszej wersji, wcześniej uruchomiłem pipeline, którzy utworzył mi kilka wersji programu: 1.0.0, 1.0.1, 1.0.2, 1.0.3.
+
+![Test](Images/19.png)
+
+Przy uruchomieniu pipelinu podałem wersję 1.0.0 i w efekcie otrzymałem:
+
+![Test](Images/18.png)
+
+Jak widać w informacji błędu podane jest, że wersja 1.0.0 już istnieje i pojawia się prośba o podanie innego numeru co świadczy o prawidłowej walidacji numeru wersji.
+
+Teraz podajmy prawidłowy numer wersji, w tym przypadku będzie to 1.0.4 oraz zaznaczymy, że będzie to wersja LATEST.
+
+![Test](Images/20.png)
+
+Po odczekaniu kilku minut otrzymujemy w efekcie końcowym:
+
+![Test](Images/21.png)
+
+Jak widać wszystko pięknie świeci się na zielono, teraz sprawdźmy czy na dockerhub rzeczywiście znajduje się nasza nowa wersja.
+
+![Test](Images/22.png)
+
+Jak widać pojawiła się nowa wersja oraz nowa wersja LATEST, co świadczy o sukcesie działania naszego pipeliniu. Teraz możemy sprawdzić jak nasz obraz działa, gdy pobierzemy go z dockerhuba lokalnie i uruchomimy.
