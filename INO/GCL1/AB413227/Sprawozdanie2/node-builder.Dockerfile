@@ -6,4 +6,4 @@ WORKDIR /node-js-dummy-test
 
 RUN npm install -g npm@10.5.1
 RUN npm install --save-dev babel-cli
-RUN npm run build
+RUN npm run
