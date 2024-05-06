@@ -82,8 +82,13 @@ Aby móc korzystać z wybranego przeze mnie repozytorium dodałęm do projektu o
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/8. Dodawanie credentiali do prawdziwego projektu.png">
 </p>
-Następnie zamieściłem link do repozytorium i określiłem branch
+Następnie zamieściłem link do repozytorium i określiłem branch:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/9. Ustawienie brancha na projekcie.png">
 </p>
+Realizowane polecenie prezentuje się następująco:
+```
+cd ITE/GCL4/KR409837/Sprawozdanie2/Dockerfiles/irssi
+docker build -t fedora-build-image -f ./build/Dockerfile .
+```
 
