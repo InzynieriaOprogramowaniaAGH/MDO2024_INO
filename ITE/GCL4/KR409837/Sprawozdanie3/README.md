@@ -73,3 +73,8 @@ W celu realizacji zajęć utworzyłem moje dwa pierwsze proste projekty:
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/7.2. Zwrócenie niesukcesu bo godzina nieparzysta.png">
 </p>
 
+Następnie przeszedłem do tworzenia "prawdziwego projektu", który: 
+- klonuje nasze repozytorium
+- przechodzi na osobistą gałąź
+- buduje obrazy z dockerfiles i/lub komponuje via docker-compose. 
+
