@@ -71,5 +71,5 @@ W celu realizacji zajęć utworzyłem moje dwa pierwsze proste projekty:
 </p>
   - wyświetlany rezultat dla godziny nieparzystej:
 <p align="center">
- <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/7.2. Zwrócenie sukcesu bo godzina parzysta.png">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/7.2. Zwrócenie niesukcesu bo godzina nieparzysta.png">
 </p>
