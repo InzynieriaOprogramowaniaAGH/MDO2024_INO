@@ -13,7 +13,8 @@ Na potrzeby wizualizacji wykonanych przeze mnie działań wykonałem następują
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/Diagram wdrożenia.png">
 </p>
-- Diagram komunikacji
+
+- Diagram komunikacji:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/Diagram komunikacji.png">
 </p>
