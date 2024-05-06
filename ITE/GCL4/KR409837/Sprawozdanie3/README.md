@@ -76,7 +76,7 @@ W celu realizacji zajęć utworzyłem moje dwa pierwsze proste projekty:
 Następnie przeszedłem do tworzenia "prawdziwego projektu", który: 
 - klonuje nasze repozytorium
 - przechodzi na osobistą gałąź
-- buduje obrazy z dockerfiles i/lub komponuje via docker-compose.
+- buduje obrazy z dockerfiles.
 
 Aby móc korzystać z wybranego przeze mnie repozytorium dodałęm do projektu odpowiedni credential, w którym zamieściłem jako hasło github token, by móc swobodnie łączyć się z repozytorium
 <p align="center">
@@ -87,8 +87,14 @@ Następnie zamieściłem link do repozytorium i określiłem branch:
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/9. Ustawienie brancha na projekcie.png">
 </p>
 Realizowane polecenie prezentuje się następująco:
+
 ```
 cd ITE/GCL4/KR409837/Sprawozdanie2/Dockerfiles/irssi
 docker build -t fedora-build-image -f ./build/Dockerfile .
 ```
+
+Dzięki powyższym krokom uzyskałem następujący rezultat:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/10. Buduje obrazy z dockefiles.png">
+</p>
 
