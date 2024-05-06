@@ -1,0 +1,93 @@
+pipeline {
+    agent any
+    
+    environment {
+        IMAGE_TAG = new Date().getTime()
+        VERSION = 1.0
+        RELEASE = 1
+        SRC_RPM_FILE = "irssi-${VERSION}-${RELEASE}.fc39.src.rpm"
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-token')
+
+    }
+
+    stages {
+        stage('Prepare') {
+            steps {
+                sh 'git config --global http.postBuffer 524288000'
+                sh 'rm -rf MDO2024_INO'
+                sh 'git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+                
+                dir("MDO2024_INO"){
+                    sh 'git checkout KP412085'
+                    dir("ITE/GCL4/KP412085/Sprawozdanie3/irssi"){
+                        sh 'chmod +x clear_dind_vol.sh'
+                        sh './clear_dind_vol.sh'
+                    }
+                }
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi"){
+                    sh 'docker build --no-cache -t irssi-build:${IMAGE_TAG} -f irssi-build.Dockerfile .'
+                }
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi"){
+                    sh 'docker build --no-cache --build-arg IMAGE_TAG=${IMAGE_TAG} -t irssi-test:${IMAGE_TAG} -f irssi-test-date-tag.Dockerfile .'
+                }
+            }
+        }
+        
+
+        stage('Publish') {
+            steps {
+                dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi") {
+                    sh "docker build --no-cache --build-arg IMAGE_TAG=${IMAGE_TAG} --build-arg VERSION=${VERSION} --build-arg RELEASE=${RELEASE} -t irssi-publish-rpm:${IMAGE_TAG} -f irssi-publish-rpm.Dockerfile ."
+                }
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi") {
+                    sh "docker build --no-cache --build-arg IMAGE_TAG=${IMAGE_TAG} --build-arg VERSION=${VERSION} --build-arg RELEASE=${RELEASE} -t irssi-deploy:${IMAGE_TAG} -f irssi-deploy-rpm.Dockerfile ."
+
+                    sh "docker run -it -d --name irssi-${VERSION}-${RELEASE} irssi-deploy:${IMAGE_TAG}"
+                    sh "docker exec irssi-${VERSION}-${RELEASE} irssi --version"
+                    sh "docker logs irssi-${VERSION}-${RELEASE}"
+
+                    sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+                    sh "docker tag irssi-deploy:${IMAGE_TAG} kacperpap/irssi-deploy:${VERSION}-${RELEASE}"
+                    sh "docker push kacperpap/irssi-deploy:${VERSION}-${RELEASE}"
+                    sh "docker logout"
+                }
+            }
+        }
+        
+    }
+    
+    post {
+
+        success {
+            script {
+                dir("MDO2024_INO/ITE/GCL4/KP412085/Sprawozdanie3/irssi/releases/source_rpm/"){
+                    sh "docker cp irssi-${VERSION}-${RELEASE}:/source_rpm/${SRC_RPM_FILE} . "
+                    sh "docker stop irssi-${VERSION}-${RELEASE}"
+                    sh "docker rm irssi-${VERSION}-${RELEASE}"
+
+                    if (fileExists("${SRC_RPM_FILE}")) {
+                        archiveArtifacts artifacts: "${SRC_RPM_FILE}", fingerprint: true
+                    } else {
+                        error "File ${SRC_RPM_FILE} has not been packaged in publish step correctly or have different name"
+                    }
+                }
+            }
+        }
+    }
+}
+

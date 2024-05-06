@@ -1,0 +1,14 @@
+---
+- name: Pull docker image from DockerHub
+  docker_image:
+    name: "kacperpap/irssi-deploy:{{ VERSION }}-{{ RELEASE }}"
+    source: pull
+
+- name: Run irssi container
+  docker_container:
+    name: irssi
+    image: "kacperpap/irssi-deploy:{{ VERSION }}-{{ RELEASE }}"
+    state: started
+    tty: yes
+    interactive: yes
+
