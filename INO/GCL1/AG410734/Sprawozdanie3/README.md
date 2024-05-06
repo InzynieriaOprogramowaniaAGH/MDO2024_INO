@@ -205,13 +205,13 @@ Budowanie na dedykowanym kontenerze CI:
 
 ### 5. Pipeline irssi stage: Prepare, Build, Test, Publish, Deploy
 
-Przy tworzeniu pipeline'a przyjęłam strategię przedyskutowaną na zajęciach. Kroki `Build` i `Test` miały zostać wykonane na podstawie wcześniej używanych plików Dockerfile budujących i testujących irssi. Następnie artefaktami kroku `Publish` miały zostać: plik wykonywalny irssi i README.md tłumaczący jakie zależności należy pobrać, aby poprawnie wdrożyć w kontenerze plik wykonywalny. Następnie w kroku `Deploy` miałam skopiować plik wykonywalny do kontnera (np. na obrazie ubuntu) i sprawdzić czy poprawnie wykonują się polecenia nieblokujące tj. "irssi --version", "irssi --help".
+Przy tworzeniu pipeline'a przyjęłam strategię przedyskutowaną na zajęciach. Kroki `Build` i `Test` miały zostać wykonane na podstawie wcześniej używanych plików Dockerfile budujących i testujących irssi. Następnie artefaktami kroku `Publish` miały zostać: plik wykonywalny irssi i README.md tłumaczący jakie zależności należy pobrać, aby poprawnie wdrożyć w kontenerze plik wykonywalny. Następnie w kroku `Deploy` miałam skopiować plik wykonywalny do kontenera (np. na obrazie ubuntu) i sprawdzić czy poprawnie wykonują się polecenia nieblokujące tj. "irssi --version", "irssi --help".
 Wszystkie użyte pliki Dockerfile znajdują się w repozytorium w ścieżce:
 `MDO2024_INO/INO/GCL1/AG410734/Sprawozdanie3/irssi-pipeline `.
 
 #### Stage Prepare
 
-W pierwszym kroku zatrzymuję i usuwam wszytskie pozostałe kontenery i obrazy po poprzednim pipelinie, a także sklonowane repozytorium https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git, w którym znajdują się niezbędne pliki Dockerfile. Gdy miejsce zostanie odpowiednio posprzątane, klonuję repozytorium i przełączam się na swoją gałąź. Repozytorium jest publiczne więc nie wymaga użycia `cedentials`. Na początku pipeline dekalaruję zmienne środowiskowe pozwalające wersjonować artefekaty i obrazy. Zmienna VERSION przechowuje numer wersji aplikacji, a RELEASE przechwouje numer wydania. 
+W pierwszym kroku zatrzymuję i usuwam wszytskie pozostałe kontenery i obrazy po poprzednim pipelinie, a także sklonowane repozytorium https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git, w którym znajdują się niezbędne pliki Dockerfile. Gdy miejsce zostanie odpowiednio posprzątane, klonuję repozytorium i przełączam się na swoją gałąź. Repozytorium jest publiczne więc nie wymaga użycia `credentials`. Na początku pipeline dekalaruję zmienne środowiskowe pozwalające wersjonować artefekaty i obrazy. Zmienna VERSION przechowuje numer wersji aplikacji, a RELEASE przechowuje numer wydania. 
 
 Początek pliku Jenkinsfile:
 
@@ -258,6 +258,16 @@ RUN apt-get update && \
 
 WORKDIR /irssi
 ```
+Fragment pipeline'a budujący obraz:
+```
+        stage('Build') {
+            steps {
+                dir("MDO2024_INO/INO/GCL1/AG410734/Sprawozdanie3/irssi-pipeline") {
+                    sh 'docker build -t bldr -f BLDR.Dockerfile .'
+                }
+            }
+        }
+```
 #### Stage Test
 
 Tak jak poprzednio w tym miejscu wykonuję testy dołączone do irssi. Obraz z testatmi bazuje na obrazie utworzonym, w poprzednim stage'u. Buduję obraz  z pliku `TSTR.Dockerfile`:
@@ -285,7 +295,7 @@ RUN mkdir -p /artifacts-${VERSION}-${RELEASE}
 RUN cp Build/src/fe-text/irssi /artifacts-${VERSION}-${RELEASE}
 
 ```
-W pliku tym tworzę folder pomocniczy z unikalną nazwą, do którego skopiuję plik wykonywalny `irssi` utworzony na etapie `Buid`, zabieg ten nie jest konieczny, jednak ułatwia skopiowanie pliku na zewnątrz. 
+W pliku tym tworzę folder pomocniczy z unikalną nazwą, do którego skopiuję plik wykonywalny `irssi` utworzony na etapie `Build`, zabieg ten nie jest konieczny, jednak ułatwia skopiowanie pliku na zewnątrz. 
 
 Następnie w Jenkinsfile tworzę nowy, wersjonowany folder, który będzie zawierał dwa artefakty. Za pomocą komendy `docker create --name publish_temp publish` tworzę tymczosowy kontener o nazwie `publish_temp`, który posłuży mi do skopiowania pliku wykonywalnego `irssi`. Następnie za pomocą komendy docker `docker cp publish_temp:/artifacts-${VERSION}-${RELEASE}/irssi artifacts-${VERSION}-${RELEASE}` kopiuję plik wykonywalny z wnętrza kontenera do wersjonowanego lokalnego katalogu, do którego również kopiuję plik README.md. Na koniec usuwam pomocniczy kontener komendą `docker rm -f publish_temp`. Opcja -f oznacza, że zostanie on natychmiastowo zatrzymany i usunięty, bez względu na to, czy jest uruchomiony czy nie.
 
@@ -437,6 +447,8 @@ Widok działającej aplikacji irssi w kontenerze:
 
 ![](screeny/26.png)
 
+Pochodzenie artefaktu można zidentyfikować poprzez odpowiednie metadane np. poprzez dodanie etykiet Dockerowych lub zmiennej środowiskowej do obrazu. W moim przypadku jest to nazwa obrazu z nazwą użytkownika i odpowiednim tagiem. 
+
 #### Jenkinsfile z SCM  
 
 W kolejnym etapie dodałam Jenkinsfile na nasze repozytorium pod ścieżką `MDO2024_INO/blob/AG410734/INO/GCL1/AG410734/Sprawozdanie3/Jenkinsfile`. Aby Jenkinsfile był pobierany z GitHuba należało zmienić konfigurację pipeline.
@@ -449,7 +461,7 @@ Następnie zmianiłam gałąź na swoją i podałam ścieżkę do pliku:
 
 ![](screeny/29.png)
 
-#### Podsumowanie
+### Podsumowanie
 
 Ostatecznie Stage View dla pipeline wygląda w ten sposób:
 
@@ -545,7 +557,7 @@ pipeline {
     }
 }
 ```
-Porównując początkowe założenia i produkt końcowy, mogę stwierdzić, że w większości udało się osiągnąć zaplanowany efekt. Różnica, którą dostrzegam to realcja pomiędzy obrazem `Publish`, a `Deploy` na diagramie wdrożeniowym UML. Relacja przedstawiona na diagramie jest pewnym uproszczeniem, gdzie artefakty są bezpośrenio kopiowane z `Publish` do `Deploy`. W rzeczywistości jest tworzony kontener pomocniczy, pomagający skopiować artefakty do folderu i dopiero z tego folderu kopiowane są w obrazie `Deploy`. Podejście to obchodzi potrzebę tworzenia sieci docker, w ramch której dwa niezależne konteney mogłyby siebie widzieć i nawzajem od siebie kopiować pliki. 
+Porównując początkowe założenia i produkt końcowy, mogę stwierdzić, że w większości udało się osiągnąć zaplanowany efekt. Różnica, którą dostrzegam to realcja pomiędzy obrazem `Publish`, a `Deploy` na diagramie wdrożeniowym UML. Relacja przedstawiona na diagramie jest pewnym uproszczeniem, gdzie artefakty są bezpośrenio kopiowane z `Publish` do `Deploy`. W rzeczywistości jest tworzony kontener pomocniczy, pomagający skopiować artefakty do folderu i dopiero z tego folderu kopiowane są w obrazie `Deploy`. Podejście to obchodzi potrzebę tworzenia sieci docker, w ramch której dwa niezależne konteney mogłyby siebie widzieć i nawzajem od siebie kopiować pliki. Inną różnicą są nazwy obrazów, które na diagramie mają bardziej pokazać cel istnienia obrazów, niż rzeczywiste nazwy nadawane w trakcie przepływu pipeline'a np `Build` zamiast rzeczywistej nazwy `bldr`. 
 
 **"Definition of done"**
  - Czy opublikowany obraz może być pobrany z Rejestru i uruchomiony w Dockerze bez modyfikacji (acz potencjalnie z szeregiem wymaganych parametrów, jak obraz DIND)?
@@ -555,3 +567,28 @@ Tak, pobrany obraz zawiera wszystko co niezbędne wraz z aplikacją irssi.
  - Czy dołączony do jenkinsowego przejścia artefakt, gdy pobrany, ma szansę zadziałać od razu na maszynie o oczekiwanej konfiguracji docelowej?
 
 Tak, jednak najpierw należy się zapoznać z dołączonym artefaktem README.md, w którym znajduje się informacja o potencjalnych dependencjach, które należałoby doinstalować. 
+
+- [x] Aplikacja została wybrana
+- [x] Licencja potwierdza możliwość swobodnego obrotu kodem na potrzeby zadania
+- [x] Wybrany program buduje się
+- [x] Przechodzą dołączone do niego testy
+- [x] Zdecydowano, czy jest potrzebny fork własnej kopii repozytorium
+- [x] Stworzono diagram UML zawierający planowany pomysł na proces CI/CD
+- [x] Wybrano kontener bazowy lub stworzono odpowiedni kontener wstepny (runtime dependencies)
+- [x] Build został wykonany wewnątrz kontenera
+- [x] Testy zostały wykonane wewnątrz kontenera
+- [x] Kontener testowy jest oparty o kontener build
+- [x] Logi z procesu są odkładane jako numerowany artefakt
+- [x] Zdefiniowano kontener 'deploy' służący zbudowanej aplikacji do pracy
+- [x] Uzasadniono czy kontener buildowy nadaje się do tej roli/opisano proces stworzenia nowego
+- [x] Wersjonowany kontener 'deploy' ze zbudowaną aplikacją jest wdrażany na instancję Dockera
+- [x] Następuje weryfikacja, że aplikacja pracuje poprawnie (*smoke test*)
+- [x] Zdefiniowano, jaki element ma być publikowany jako artefakt
+- [x] Uzasadniono wybór: kontener z programem, plik binarny, flatpak, archiwum tar.gz, pakiet RPM/DEB
+- [x] Opisano proces wersjonowania artefaktu (można użyć *semantic versioning*)
+- [x] Dostępność artefaktu: publikacja do Rejestru online, artefakt załączony jako rezultat builda w Jenkinsie
+- [x] Przedstawiono sposób na zidentyfikowanie pochodzenia artefaktu
+- [x] Pliki Dockerfile i Jenkinsfile dostępne w sprawozdaniu w kopiowalnej postaci oraz obok sprawozdania, jako osobne pliki
+- [x] Zweryfikowano potencjalną rozbieżność między zaplanowanym UML a otrzymanym efektem
+- [x] Sprawozdanie pozwala zidentyfikować cel podjętych kroków
+- [x] Forma sprawozdania umożliwia wykonanie opisanych kroków w jednoznaczny sposób
