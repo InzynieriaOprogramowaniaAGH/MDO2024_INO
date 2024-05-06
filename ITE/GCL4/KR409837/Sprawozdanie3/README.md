@@ -28,3 +28,8 @@ Korzystając z dockerfiles stworzonych na poprzednich zajęciach upewniłem się
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/0.2. Upewnij się, że na pewno działają kontenery budujące i testujące, stworzone na poprzednich zajęciach.png">
 </p>
+
+Następnie korzystając z instrukcji zamieszczonej w dokumentacji Jenkinsa uruchomiłem obraz dockera eksponujący środowisko zagnieżdzone:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/1. Uruchom obraz Dockera który eksponuje środowisko zagnieżdżone.png">
+</p>
