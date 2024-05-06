@@ -50,3 +50,26 @@ W celu realizacji zajęć utworzyłem moje dwa pierwsze proste projekty:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/5. uruchomienie projektu.png">
 </p>
+
+- Drugi projekt w zależności od tego czy godzina jest parzysta lub nieparzysta zwraca odpowiedni wynik
+  - polecenie projektu:
+    ```
+    #!/bin/bash
+    godzina=$(date +%H)
+    echo $godzina
+    if ((godzina % 2 != 0)); then
+	    echo "Błąd, niepatrzysta godzina"
+     exit 1
+    else 
+	   echo "parzysta godzina"
+     exit 0
+    fi
+    ```
+  - wyświetlany rezultat dla godziny parzystej:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/7.1. Zwrócenie sukcesu bo godzina parzysta.png">
+</p>
+  - wyświetlany rezultat dla godziny nieparzystej:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/7.2. Zwrócenie sukcesu bo godzina parzysta.png">
+</p>
