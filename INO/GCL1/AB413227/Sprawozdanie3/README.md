@@ -113,6 +113,7 @@ Wybór między DIND a budowaniem bezpośrednio w kontenerze CI zależy od potrze
 - **Diagram aktywności, pokazujący kolejne etapy (collect, build, test, report)**
 ![ ](./ss/ss_diagram_aktywnosci.png)
 - **Diagram wdrożeniowy, opisujący relacje między składnikami, zasobami i artefaktami**
+![ ](./ss/ss_d.png)
 
 #### Pipeline
 
