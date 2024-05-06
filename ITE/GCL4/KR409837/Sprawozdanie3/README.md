@@ -7,9 +7,13 @@ Pipeline to zautomatyzowany proces dostarczania oprogramowania, który obejmuje 
 Jenkins to popularne otwartoźródłowe narzędzie do automatyzacji procesów CI/CD (continuous integration and continuous delivery), umożliwiające tworzenie i zarządzanie pipeline'ami dostarczania oprogramowania poprzez integrację z różnymi narzędziami deweloperskimi i środowiskami chmurowymi, co pomaga zautomatyzować budowanie, testowanie i wdrażanie aplikacji. Dzięki swojej elastyczności i ogromnej społeczności użytkowników Jenkins jest powszechnie wykorzystywany do ułatwienia iteracyjnego procesu dostarczania oprogramowania i przyspieszenia cykli wdrożeń.
 
 Wybór repozytorium dla którego nastąpiła izolacja procesów padł na wykorzystywane we wcześniejszych zajęciach Irssi. Wspomniana aplikacja zawiera licencję "GNU GENERAL PUBLIC LICENSE Version 2, June 1991" potwierdzającą możliwość swobodnego obrotu kodem.
+
+Na potrzeby wizualizacji wykonanych przeze mnie działań wykonałem następujące diagramy:
+- Diagram wdrożenia:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/Diagram wdrożenia.png">
 </p>
+- Diagram komunikacji
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/Diagram komunikacji.png">
 </p>
