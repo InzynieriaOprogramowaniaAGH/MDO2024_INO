@@ -73,7 +73,7 @@ W celu realizacji zajęć utworzyłem moje dwa pierwsze proste projekty:
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/7.2. Zwrócenie niesukcesu bo godzina nieparzysta.png">
 </p>
 
-Następnie przeszedłem do tworzenia "prawdziwego projektu", który: 
+Następnie przeszedłem do utworzenia "prawdziwego projektu", który: 
 - klonuje nasze repozytorium
 - przechodzi na osobistą gałąź
 - buduje obrazy z dockerfiles.
@@ -98,6 +98,6 @@ Dzięki powyższym krokom uzyskałem następujący rezultat:
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie3/images/10. Buduje obrazy z dockefiles.png">
 </p>
 
-### Prawdziwy prawdziwy projekt
-
+### Prawdziwy "prawdziwy projekt"
+W dalszej części zajęć przeszedłem do stworzenia kolejnego projektu, 
 
