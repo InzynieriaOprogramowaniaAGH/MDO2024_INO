@@ -172,8 +172,7 @@ Teraz logujemy się na Jenkinsa oraz wstępnie jego konfigurujemy.
 
 ---
 
-W tym celu tworzę pipeline, w którym definiuję dwa etapy: 'git clone' oraz 'build'. W pierwszym etapie sprawdzam istnienie katalogu MDO2024_INO. Jeśli istnieje, usuwam go, a jeśli nie, zwracany jest ```true```, co oznacza sukces nawet w przypadku braku katalogu. Następnie przechodzimy do określonego katalogu w repozytorium za pomocą 'dir' i przechodzę na osobistą gałąź. W etapie 'build' ponownie wchodzę do katalogu 'MDO2024_INO/INO/GCL2/MK412502/Sprawozdanie3' i buduję obraz Dockera o nazwie 'build-app' z użyciem pliku 'builder.Dockerfile', który służy do budowy aplikacji.
-
+W tym celu tworzę pipeline, w którym definiuję dwa etapy: 'git clone' oraz 'build'. W pierwszym etapie sprawdzam istnienie katalogu MDO2024_INO. Jeśli istnieje, usuwam go, a jeśli nie, zwracany jest ```true```, co oznacza sukces nawet w przypadku braku katalogu. Następnie przechodzimy do określonego katalogu w repozytorium za pomocą 'dir' i przechodzę na osobistą gałąź. W etapie 'build' ponownie wchodzę do katalogu 'MDO2024_INO/INO/GCL2/MK412502/Sprawozdanie3' i buduję obraz Dockera o nazwie 'build-app' korzystając z pliku 'builder.Dockerfile'.
 
 
 **[X] Pliki Dockerfile i Jenkinsfile dostępne w sprawozdaniu w kopiowalnej postaci oraz obok sprawozdania, jako osobne pliki**
