@@ -415,5 +415,19 @@ Po zatwierdzeniu zmian za pomcą `ctrl + x`, następuje automatyczna instalacja 
 
 # Rozszerzenie instalacji o repozytoria i zależności konieczne do uruchomienia aplikacji irssi
 
+**1. %post section**
+
+Plik odpowiedzi pozwala na dodawnia skryptów `pre` oraz `post` instalacyjncyh. Umożliwiają one dodawnie konfiguracji, czy pobieranie dodatkowego oprogramowania na towrzony system. Instrukcja pokazująca przykładowy skrypt postinstalacyjny dostępna jest na stronie: [https://docs.fedoraproject.org/en-US/fedora/f36/install-guide/appendixes/Kickstart_Syntax_Reference/#sect-kickstart-postinstall](https://docs.fedoraproject.org/en-US/fedora/f36/install-guide/appendixes/Kickstart_Syntax_Reference/#sect-kickstart-postinstall). 
+
+Zgodnie z tym tworzymy sekcję `%post` z dwoma dodatkowymi parametrami:
+- `--erroronfail`
+> Display an error and halt the installation if the script fails. The error message will direct you to where the cause of the failure is logged.
+- `--log=`
+> Logs the script’s output into the specified log file
+
+W sekcji post zgodnie z poprzednim sposobem pobierania aplikacji z DockerHub, musimy najpierw zapewnić środowisko `Dockera`, który pozwoli nam na szybkie wdrożenie aplikcaji. Gdybym korzystał z paczki `.src.rpm` budowanej i zapisywanej jako artefatk w Jenkinsie, musiałbym w tej sekcji zdefiniować kilkanaście depencecji budujących paczkę, runtimowych oraz programu do budowania (rpm-dev-tools), a następnie zbudować, zainstalować i uruchomić aplikację. `Docker` umożliwia konteneryzację całego procesu, poprzez stworzenie gotowego programu z zależnościami i zbudowaną aplikacją, nakładając niewielki narzut na wirtualizację systemową, co jezt znacznie lepszym rozwiązaniem (oprócz tego, że sama aplikacja nie jest "stworzona" do działania w kontenerze, jest interaktywnym komunikatorem).
+
+
+
 
 
