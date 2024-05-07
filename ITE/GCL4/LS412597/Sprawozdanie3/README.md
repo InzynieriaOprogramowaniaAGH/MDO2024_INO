@@ -11,7 +11,7 @@ Jako aplikację dla której zostanie przygotowany pipeline wybrałem aplikację 
 ![Aplikacja](Images/1.png)
 
 Repozytorium posiada licenję MIT, która bez problemu pozwoli nam na pracowanie z tym programem, ponieważ jest to popularna licencja open-source.
-Celowo wybrałem tą aplikację, ponieważ jest to bardziej rozbudowana licencja posiadająca całkiem sporo zależności oraz większą ilość testów.
+Celowo wybrałem tą aplikację, ponieważ jest to bardziej rozbudowany projekt posiadający całkiem sporo zależności oraz większą ilość testów.
 
 ### Dockerfile
 
@@ -113,7 +113,7 @@ Na początek musimy zalogować się na jenkins i utworzyć nowy pipeline przez w
 
 ![UML](Images/9.png)
 
-Następnie w konfiguracji pipelinu dodajemy krótki opis, zaznaczamy opcję `To zadanie jest sparametryzowane` i dodajemy dwie zmienne: "Tekst" o nazwie VERSION (z domyślną wartością i krótkim opisem) oraz "Wartośćlogiczna" o nazwie LATEST (z krótkim opisem).
+Następnie w konfiguracji pipelinu dodajemy krótki opis, zaznaczamy opcję `To zadanie jest sparametryzowane` i dodajemy dwie zmienne: "Tekst" o nazwie VERSION (z domyślną wartością i krótkim opisem) oraz "Wartość logiczna" o nazwie LATEST (z krótkim opisem).
 
 ![Konfiguracja pipelinu](Images/10.png)
 ![Konfiguracja pipelinu](Images/11.png)
@@ -126,12 +126,12 @@ W zakładce "Pipeline" wybieramy "Pipeline script from SCM, jako SCM wybieramy G
 
 Teraz możemy zapisać nasz pipeline i przejść do pisania Jenkinsfila.
 
-> W jenkinsfile wykorzystujemy plugin dockerfile, dlatego w Jenkins > Zarządzaj Jenkinsem > Plugins musimy doinstalować następujący plugin: Docker plugin oraz Docker Pipeline.
+> W jenkinsfile wykorzystujemy plugin dockerfile, dlatego w Jenkins > Zarządzaj Jenkinsem > Plugins musimy doinstalować następujący pluginy: Docker plugin oraz Docker Pipeline.
 > ![Konfiguracja pipelinu](Images/15.png)
 
 #### Jenkinsfile
 
-W ścieżce identycznej jak podajen w konfiguracji pipelinu tworzymy plik jenkinsfile.
+W ścieżce identycznej jak podanej w konfiguracji pipelinu tworzymy plik jenkinsfile.
 
 ```groovy
 pipeline {
@@ -235,7 +235,7 @@ pipeline {
 
 ```
 
-Jak widać plik jest obszerny, dlatego przejdzemy od góry każdy fragment po kolei:
+Jak widać plik jest obszerny, dlatego przejdziemy od góry każdy fragment po kolei:
 
 #### Parameters:
 
@@ -243,7 +243,7 @@ W tej zakładce deklarujemy nasze zmienne, które zostały utworzone w konfigura
 
 #### Check version:
 
-Stage, który odpowiada za walidację numeru wersji. Krok ten wysyła zapytanie przy pomocy CURl na adres `https://registry.hub.docker.com/v2/repositories/{nazwa repozytorium}/tags/{numer wersji}`, dzięki temu jeśli obraz o danym tagu już istnieje dostaniemy kod 200, w przypadku braku danej wersji zwracany jest kod 404, następnie sprawdzany jest kod i podejmowane odpowiednie działanie, paradoksalnie chcemy otrzymać kod 404, a nie 200.
+Stage, który odpowiada za walidację numeru wersji. Krok ten wysyła zapytanie przy pomocy CURL na adres `https://registry.hub.docker.com/v2/repositories/{nazwa repozytorium}/tags/{numer wersji}`, dzięki temu jeśli obraz o danym tagu już istnieje dostaniemy kod 200, w przypadku braku danej wersji zwracany jest kod 404, następnie sprawdzany jest kod i podejmowane odpowiednie działanie, paradoksalnie chcemy otrzymać kod 404, a nie 200.
 
 #### Build:
 
@@ -267,7 +267,7 @@ Ostatnim etapem w pipeline jest publish. Wykorzystująć credentiale zapisane w 
 > ![Konfiguracja pipelinu](Images/16.png)
 > Podajemy nazwę użytkownika oraz hasło dla platformy dockerhub. Ważne jest, aby zapamiętać ID jakie podajemy, ponieważ na jego podstawie w Jenkinsfile wybierane są odpowiednie dane.
 
-> Do prawidłowego działania pipelinu musimy w dockerhub utworzyć repozytorium, na które będzie nasza aplikacja wysyłana. W tym celu musimy się zalogować na dockerhub przejść do zakładki "Repositories" i utworzyć nowe repozytorium "Create repository", popdajemy nazwę naszego repozytorium oraz któki opis.
+> Do prawidłowego działania pipelinu musimy w dockerhub utworzyć repozytorium, na które będzie nasza aplikacja wysyłana. W tym celu musimy się zalogować na dockerhub przejść do zakładki "Repositories" i utworzyć nowe repozytorium "Create repository", podajemy nazwę naszego repozytorium oraz krótki opis.
 > ![Konfiguracja dockerhub](Images/17.png)
 > nazwa repozytorium określona jest w etapie Publish, dlatego ważne, aby była tam podana prawidłowo.
 
@@ -304,3 +304,25 @@ Jak widać wszystko pięknie świeci się na zielono, teraz sprawdźmy czy na do
 ![Test](Images/22.png)
 
 Jak widać pojawiła się nowa wersja oraz nowa wersja LATEST, co świadczy o sukcesie działania naszego pipeliniu. Teraz możemy sprawdzić jak nasz obraz działa, gdy pobierzemy go z dockerhuba lokalnie i uruchomimy.
+
+Przy pomocy polecenia:
+
+```bash
+docker run -d -p 5000:5000 lukaszsawina/take_note_pipeline
+```
+
+Kontener na podstawie obrazu ze zdeployowaną aplikacją zostanie uruchomiony w tle, ponieważ obraz jeszcze nie istnieje w lokalnym dokerze zostanie on pobrany z dockerhub z tagiem Latest.
+
+![Test](Images/23.png)
+![Test](Images/24.png)
+![Test](Images/25.png)
+
+Jak widać nasz kontener został utworzony oraz obraz z aplikacją został pobrany z dockerhub. Teraz sprawdźmy czy aplikacja na pewno działa.
+
+![Test](Images/26.png)
+
+Jak widać nasza aplikacja działa prawidłowo.
+
+### Podsumowanie
+
+Jak można zauważyć utworzony pipeline nie odbiega od założonego pipelinu z diagramu UML, pojawiają się co prawda dwa dodatkowe kroki (verify version oraz post), ale całe założenie jest dobrze odwzorowane. W efekcie utrzymaliśmy pipeline gotowy do wykorzystania do wdrażania naszej aplikacji napisanej w Node.js. W efekcie końcowym otrzymujemy gotowy obraz z aplikacją, która nie wymaga żadnych dodatkowych konfiguracji poza ukazaniem portów, którą można uruchomić przy pomocy jednego polecenia.
