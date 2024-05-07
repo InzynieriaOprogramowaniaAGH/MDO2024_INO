@@ -38,6 +38,7 @@ Niniejszy temat jest poświęcony przygotowaniu źródła instalacyjnego systemu
     * Zadbaj w sekcji `%packages`, by system zainstalował wszystkie dependencje potrzebne do działania programu
   * Wybierz oprogramowanie na podstawie poprzedniego sprawozdania.
   * Zapoznaj się z [dokumentacją pliku odpowiedzi](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/performing_an_advanced_rhel_9_installation/kickstart-commands-and-options-reference_installing-rhel-as-an-experienced-user)
+  * Użyj pliku odpowiedzi do przeprowadzenia [instalacji nienadzorowanej](https://docs.fedoraproject.org/en-US/fedora/f36/install-guide/advanced/Kickstart_Installations/)
 * Zapewnij, by od razu po pierwszym uruchomieniu systemu, oprogramowanie zostało uruchomione (w dowolny sposób)
 
 ## Zakres rozszerzony
