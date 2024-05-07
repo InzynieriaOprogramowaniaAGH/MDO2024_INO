@@ -329,3 +329,44 @@ Teraz definiujemy nowego playbooka, w którym korzystamy z utworzonej roli:
 Wynik działania playbooka (obraz był już dostępny po wcześniejszym pobraniu):
 ![role_res](./screenshots/role-start.png)
 
+
+# Instalacje nienadzorowane
+
+**1. Plik odpowiedzi**
+
+Podczas instalacji systemu z rodziny RHEL (RHEL, Fedora, CentOS), po uzupełnieniu instalatora zapisywany jest w systemie plik odpowiedzi. Jest to plik z konfiguracją systemu uzupełnioną podczas instalacji, zapisywany w pliku `anaconda-ks.cfg` w katalogu domowym użytkownika `root`. 
+>Kickstart installations offer a means to automate the installation process, either partially or fully. Kickstart files contain answers to all questions normally asked by the installation program, such as what time zone do you want the system to use, how should the drives be partitioned or which packages should be installed. Providing a prepared Kickstart file when the installation begins therefore allows the you to perform the installation automatically, without need for any intervention from the user. This is especially useful when deploying Fedora on a large number of systems at once.
+
+Po zainstalowaniu systemu `Fedora 39` z instalatora sieciowego, kopiujemy plik odpowiedzi na podstawie którego będziemy konstruować nowy plik.
+
+Pliki odpowiedzi nie zawierają zdefiniowanych zewnętrznych repozytoriów, ponieważ nie są one definiowane przez użytkownika podczas instalacji, tylko automatycznie odnajdowane. Dlatego pierwszą zmianą naszego pliku odpowiedzi jest dodanie lokalizacji serwerów lustrzanych z repozytorium fedory oraz aktualizacjami:
+```bash
+url --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-39&arch=x86_64
+repo --name=update --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f39&arch=x86_64
+```
+
+Ponadto w celu wyczyszczenia dysku przed instalacją systemu wykonujemy polecenie:
+```bash
+clearpart --all
+```
+Definiuje ono wyczyszczenie wszystkich istniejących partycji na dysku, co oznacza usunięcie wszelkich istniejących danych na dysku takich jak partycje, tablice partycji, dane.
+
+Tak zdefiniowany plik dodajemy na naszą gałąź na GitHub'ie aby podczas instalacji systemu można było w sieci wskazać ten plik konfiguracyjny: [anaconda-ks.cfg](./anaconda-ks.cfg).
+
+Następnie uruchamiamy instalację systemu, i podczas działania programu rozruchowego `GRUB` wybieramy opcję `e`, która przenosi nas do edytora linii poleceń Gruba, która pozwala nam edytować opcje rozruchowe. To w tym miejscu zgodnie z dokumentacją należy dodać poniższą linijkę:
+ - [https://docs.fedoraproject.org/en-US/fedora/f36/install-guide/advanced/Boot_Options/](https://docs.fedoraproject.org/en-US/fedora/f36/install-guide/advanced/Boot_Options/)
+ - [https://anaconda-installer.readthedocs.io/en/latest/boot-options.html](https://anaconda-installer.readthedocs.io/en/latest/boot-options.html)
+
+ ```bash
+init.ks=https://raw.githubusercontent.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/KP412085/ITE/GCL4/KP412085/Sprawozdanie4/anaconda-ks.cfg
+```
+
+Zamiast korzystania z protokołu `NFS` do o pobrania pliku konfiguracyjnego Kickstart (/filename) z serwera określonego przez next-server:
+![kick](./screenshots/kickstart-boot.png)
+
+Korzystamy z pobrania pliku z GitHub'a za pomocą `HTTPS`:
+![inst_ks](./screenshots/inst_ks.png)
+
+
+
+
