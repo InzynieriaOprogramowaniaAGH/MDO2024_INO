@@ -1,0 +1,57 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'JR412219', url: 'https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('ITE/GCL4/JR412219/Workspace/Lab3/TDWA'){
+                sh 'ls'
+                sh 'docker build -t tdwabuild -f TDWAbuild.Dockerfile .'
+                }
+               
+            }
+        }
+        stage('Test') {
+            steps {
+                 dir('ITE/GCL4/JR412219/Workspace/Lab3/TDWA'){
+                 sh 'docker build -t tdwatest -f TDWAtest.Dockerfile .'
+                 }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                 dir('ITE/GCL4/JR412219/Workspace/Lab3/TDWA'){
+                 sh 'docker build -t tdwadeploy -f TDWAdeploy.Dockerfile . && docker run -rm -p 3000:3000 tdwadeploy'
+                 }
+            }
+        }
+        stage('Conection Test') {
+            steps {
+                script {
+                def responseCode = sh(script: 'curl -s -o /dev/null -w "%{http_code}" http://localhost:3000', returnStatus: true)
+                if (responseCode == 200) {
+                echo 'Usluga dostepna.'
+                 } 
+                else {
+                error 'ERROR Usluga niedostepna.'
+                }
+                }
+            }
+        }
+        stage('Publish') {
+            steps {
+            sh'''
+            npm install -g verdaccio
+            verdaccio
+            npm config set registry http://localhost:4873/
+            npm publish --registry http://localhost:4873/
+            '''
+            }
+        }
+    }
+}
