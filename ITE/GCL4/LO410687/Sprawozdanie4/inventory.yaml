@@ -1,0 +1,13 @@
+all:
+  children:
+    Orchestrators:
+      hosts:
+        fedora:
+          ansible_host: fedora
+          ansible_user: loprych
+
+    Endpoints:
+      hosts:
+        ansible-target:
+          ansible_host: ansible-target
+          ansible_user: ansible
