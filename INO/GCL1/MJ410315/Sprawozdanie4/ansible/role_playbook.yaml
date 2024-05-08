@@ -1,0 +1,4 @@
+- name: Run redis
+  hosts: Endpoints
+  roles:
+  - redis_container
