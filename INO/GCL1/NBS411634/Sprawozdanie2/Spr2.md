@@ -393,7 +393,11 @@ Odczytuje IP, jest to: *10.0.2.15*
 
 ![](./ss_lab4/lab4_31.png)
 
+<<<<<<< HEAD
 Modyfikuje ustawienia w maszynie wirtualnej zgodnie z poniższym zrzutem ekranu:
+=======
+Modyfikuje ustawienia w maszynie wirtualnej zgodnie z poniższym zrzutem ekranu
+>>>>>>> refs/remotes/origin/NBS411634
 
 ![](./ss_lab4/lab4_32.png)
 
