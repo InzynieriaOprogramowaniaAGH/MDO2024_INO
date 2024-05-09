@@ -1,0 +1,4 @@
+- name: Playbook with Deployment Role
+  hosts: Endpoints
+  roles:
+    - deployment_role
