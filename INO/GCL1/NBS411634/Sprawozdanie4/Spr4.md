@@ -16,11 +16,9 @@ Tworzę maszynę wirtualną o tym samym systemie operacyjnym co maszyna "główn
 
 ![](./ss_lab8/lab8_2.png)
 
-Ansible wymaga instalacji 
-
 Ansible jest napisany w języku Python, więc na hoście musi być zainstalowany interpreter Pythona.
 
-W tym celu:
+W tym celu na nowej maszynie wirtuanej:
 
 ```sudo apt update``` aktualizuje repozytoria pakietów
 
