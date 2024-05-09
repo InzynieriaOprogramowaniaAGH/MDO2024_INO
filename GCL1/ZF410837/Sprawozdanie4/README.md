@@ -109,7 +109,7 @@ dest: ~/inventory.ini
 > Zaktualizuj pakiety w systemie
 
 
-Dyrektywa `become: yes` powinna powodować, że Ansible będzie wykonywać to zadanie z uprawnieniami sudo, jednakże musiałam dodatkowo podać hasło, w innym wypadku nie działało sudo. Czytałam, że można to zrobić poprzez klucze ssh z odpowiednimi uprawnieniami, ale  nie miałam czasu żeby to zrobić. 
+Dyrektywa `become: yes` powinna powodować, że Ansible będzie wykonywać to zadanie z uprawnieniami sudo, trzeba tez dodatkowo podać hasło, w innym wypadku nie działa. Czytałam, że można to zrobić poprzez klucze ssh z odpowiednimi uprawnieniami, ale nie miałam czasu żeby to robić. 
 
 ```yaml
 - name: Update packages
@@ -160,8 +160,8 @@ Zatrzymuje serwer ssh na hoscie `ansible-target`:
 
 ![](ss/15.png)
 
+Ale nadal da się połączyć przez ssh.socket. Nie udało mi się tego pozbyć, dlatego po pingowaniu nadal dało się połączyć.
 
-Wynik działania:
 
 
 >  - z odpiętą kartą sieciową
