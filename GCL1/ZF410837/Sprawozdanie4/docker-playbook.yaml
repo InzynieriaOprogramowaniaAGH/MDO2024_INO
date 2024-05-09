@@ -1,0 +1,43 @@
+- name: Installation 
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: ansible
+  tasks:
+  - name: install docker
+    become: yes
+    apt:
+      name: docker.io
+      state: latest
+  
+  - name: starting docker
+    become: yes
+    command: systemctl enable --now docker
+
+- name: Deploy pet-clinic
+  hosts: Endpoints
+  vars:
+    ansible_sudo_pass: ansible
+  tasks:
+    - name: Pull image from DockerHub
+      become: yes
+      docker_image:
+        name: zuza2828/app-deploy:1.0.0
+        source: pull
+    
+    - name: Run container
+      become: yes
+      docker_container:
+        name: app-deploy
+        image: zuza2828/app-deploy:1.0.0
+        state: started
+
+- name: Stop and remove container
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: ansible
+  tasks:
+  - name: stop and remove container
+    become: yes
+    community.docker.docker_container:
+      name: app-deploy
+      state: absent
