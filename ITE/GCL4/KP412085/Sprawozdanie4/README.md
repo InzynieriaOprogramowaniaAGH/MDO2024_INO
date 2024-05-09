@@ -425,9 +425,86 @@ Zgodnie z tym tworzymy sekcję `%post` z dwoma dodatkowymi parametrami:
 - `--log=`
 > Logs the script’s output into the specified log file
 
-W sekcji post zgodnie z poprzednim sposobem pobierania aplikacji z DockerHub, musimy najpierw zapewnić środowisko `Dockera`, który pozwoli nam na szybkie wdrożenie aplikcaji. Gdybym korzystał z paczki `.src.rpm` budowanej i zapisywanej jako artefatk w Jenkinsie, musiałbym w tej sekcji zdefiniować kilkanaście depencecji budujących paczkę, runtimowych oraz programu do budowania (rpm-dev-tools), a następnie zbudować, zainstalować i uruchomić aplikację. `Docker` umożliwia konteneryzację całego procesu, poprzez stworzenie gotowego programu z zależnościami i zbudowaną aplikacją, nakładając niewielki narzut na wirtualizację systemową, co jezt znacznie lepszym rozwiązaniem (oprócz tego, że sama aplikacja nie jest "stworzona" do działania w kontenerze, jest interaktywnym komunikatorem).
+W sekcji post zgodnie z poprzednim sposobem pobierania aplikacji z DockerHub, musimy najpierw zapewnić środowisko `Dockera`, który pozwoli nam na szybkie wdrożenie aplikcaji. Gdybym korzystał z paczki `.src.rpm` budowanej i zapisywanej jako artefatk w Jenkinsie, musiałbym w tej sekcji zdefiniować kilkanaście depencecji budujących paczkę, runtimowych oraz programu do budowania (rpm-dev-tools), a następnie zbudować, zainstalować i uruchomić aplikację. `Docker` umożliwia konteneryzację całego procesu, poprzez stworzenie gotowego programu z zależnościami i zbudowaną aplikacją, nakładając niewielki narzut na wirtualizację systemową, co jest znacznie lepszym rozwiązaniem (oprócz tego, że sama aplikacja nie jest "stworzona" do działania w kontenerze, jest interaktywnym komunikatorem).
+
+
+W celu zapewnienia wszystkich zależności potrzebnych do uruchomienia aplikacji z obrazu z `DockerHub'a`, dodajemy zależności w sekcji `%packages`:
+```bash
+%packages
+@^server-product-environment
+moby-engine
+
+%end
+```
+
+Kolejnym etapem jest konfiguracja skrytpów post-instalacyjnych aby pobrać i uruchomić obraz. Należy przy tym pamiętać że:
+> Docker zadziała dopiero na uruchomionym systemie! - nie da się wdać z interakcji z Dockerem z poziomu instalatora systemu: polecenia docker run nie powiodą się na tym etapie
+
+Aby uruchomić pewne działania dockera dopiero na uruchomionym systemie po instalacji tworzymy jednostkę `systemd` w skrypcie `%post`. 
+
+```
+%post --erroronfail --log=/root/ks-post.log
+
+cat << 'EOF' > /etc/systemd/system/irssi-docker.service
+
+usermod -aG docker root
+systemctl enable docker
+
+[Unit]
+Description=Download docker and run
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/docker pull kacperpap/irssi-deploy:1.0-1
+ExecStart=/usr/bin/docker run -t --name irssi -e TERM=xterm kacperpap/irssi-deploy:1.0-1
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable irssi-docker.service
+systemctl start irssi-docker.service
+
+%end
+```
+
+Wytłumaczenie powyższych kroków można znaleźć w dokumentacji [https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files](https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files)
+
+>Units are the objects that systemd knows how to manage. These are basically a standardized representation of system resources that can be managed by the suite of daemons and manipulated by the provided utilities. Units can be said to be similar to services or jobs in other init systems. However, a unit has a much broader definition, as these can be used to abstract services, network resources, devices, filesystem mounts, and isolated resource pools.
 
 
 
 
+Zgodnie z dokumentacją tworzymy serwis `irssi-docker.service`, który jest jednostką zarządzaną poprzez `systemd`, który jest najpopularniejszym menedżerem systemów linuxowych. Definiujemy ten serwis poprzez trzy sekcje. Pierwsz z nich: `[Unit]` określa metadane serwisu. Korzystamy przy tym z dyrektyw takich jak:
+- `Requires=`: This directive lists any units upon which this unit essentially depends. If the current unit is activated, the units listed here must successfully activate as well, else this unit will fail. These units are started in parallel with the current unit by default.
 
+- `After=`: The units listed in this directive will be started before starting the current unit. This does not imply a dependency relationship and one must be established through the above directives if this is required.
+
+Kolejny etap to definicja samego serwisu w sekcji `[Service]`. Korzystamy przy tym z dyrektyw:
+- `Type=oneshot`: This type indicates that the process will be short-lived and that systemd should wait for the process to exit before continuing on with other units. It is used for one-off tasks.
+- `RemainAfterExit=`: This directive is commonly used with the oneshot type. It indicates that the service should be considered active even after the process exits.
+- `ExecStart=`: This specifies the full path and the arguments of the command to be executed to start the process.
+
+Ostatnia sekcja `[Install]` definiuje sposób zachowania jednostki `systemd` oraz to czy jest domyślnie `enabled` czy nie. Dyrektywa z któej korzystamy to:
+- `WantedBy=`: directive is the most common way to specify how a unit should be enabled.
+
+Jednostkę zdefiniowaną w taki sposób umieszczamy w odpowidnim miejscu w systemie, zgodnie z dokumentacją:
+
+> If you wish to modify the way that a unit functions, the best location to do so is within the /etc/systemd/system directory. Unit files found in this directory location take precedence over any of the other locations on the filesystem. If you need to modify the system’s copy of a unit file, putting a replacement in this directory is the safest and most flexible way to do this.
+
+
+Ostatnim krokiem jest przeładowanie nowych zmian demona menedżera systemu oraz uruchomienie naszej aplikacji w kontenerze (wraz z ustawieniem domyślnego uruchamiania po każdym restarcie maszyny). 
+
+Wynikiem powyższych kroków jest instalacja po której zakończeniu uruchamiamy maszynę, i wybieramy zainstalowany system poprzez wybór w programie rozruchowym `troubleshooting` oraz `first drive`:
+![ss](./screenshots/systemd.png) 
+
+Po uruchomieniu systemu i wpisaniu hasła sprawdzamy poprawność uruchomionej aplikacji:
+
+![succes-irssi.service](./screenshots/irssi-docker-service-success.png)
+
+***Uwaga: Konieczne było dodanie zmiennej TERM (-t -e TERM=xterm) do poprawnego uruchomienia aplikacji interaktywnej w kontenerze jako serwis, bo w przeciwnym wypadku dostajemy błąd:***
+![fail](./screenshots/fail-docker-run.png)
