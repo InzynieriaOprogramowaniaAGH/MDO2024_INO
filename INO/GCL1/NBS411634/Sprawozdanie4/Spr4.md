@@ -32,7 +32,7 @@ Ansible wymaga również *tar* oraz *sshd*
 
 Komendą ```sudo systemctl status ssh``` sprawdzam czy na mojej maszynie jest zainstalowany serwer ssh oraz czy działa on poprawnie.
 
-![](./ss_lab8/lab8_4.png)
+![](./ss_lab8/lab8_4.1.png)
 
 Pozostała jeszcze instalacja *tar'a*.
 
