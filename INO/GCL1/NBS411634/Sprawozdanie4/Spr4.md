@@ -26,7 +26,7 @@ W tym celu na nowej maszynie wirtuanej:
 
 ```python3 --version``` sprawdzam czy Python 3 został poprawnie zainstalowany
 
-  ![](./ss_lab8/lab8_3.png)
+![](./ss_lab8/lab8_3.png)
 
 Ansible wymaga również *tar* oraz *sshd*
 
