@@ -42,7 +42,7 @@ A następnie upewniam się czy wszystko przebiegło pomyślnie wykorzystując ``
 
 ![](./ss_lab8/lab8_5.png)
 
-Ustawiam nowy *hostname* maszyny:
+Ustawiam nowy *hostname* maszyny
 
 Ustawiam hostname za pomocą polecenia
 
@@ -66,7 +66,7 @@ Aktualizuje hostname
 
 ```sudo hostnamectl set-hostname ansible-target```
 
-Sprawdzam czy hostname został ustawiony poprawnie
+Sprawdzam czy hostname został ustawiony poprawnie poleceniem
 
 ```hostname```
 
@@ -80,13 +80,76 @@ Podczas wykonywania tego polecenia konieczne będzie wprowadzenie hasła dla now
 
 ![](./ss_lab8/lab8_9.png)
 
+Nadaje nowe użytkownikowi uprawnienia administratora
+
+``` sudo usermod -aG sudo ansible```
+
+A następnie upewniam się czy uprawnienia zostały poprawnie nadane
+
+```groups ansible```
+
+![](./ss_lab8/lab8_15.png)
+
 Zapisuje stan maszyny i wykonuje migawkę
 
 ![](./ss_lab8/lab8_10.png)
 
 Na głównej maszynie wirtualnej instaluje [oprogramowanie Ansible](https://docs.ansible.com/ansible/latest/installation_guide/index.html) korzystając z repozytorium dystrybucji.
 
-* Wymień klucze SSH między użytkownikiem w głównej maszynie wirtualnej, a użytkownikiem `ansible` z nowej tak, by logowanie `ssh ansible@ansible-target` nie wymagało podania hasła
+W tym celu upewniam się, że lista pakietów jest aktualna
+
+```sudo apt install```
+
+Natsępnie instaluje oprogramowanie Ansible z repozytorium dystrybucji
+
+```sudo apt install ansible```
+
+![](./ss_lab8/lab8_11.png)
+
+Po zakońćzeniu instalcji sprawdzam wersję zainstalowanego oprogramowanie
+
+```ansible --version```
+
+![](./ss_lab8/lab8_12.png)
+
+Aby wymienić klucze SSH między użytkownikiem na głównej maszynie wirtualnej a użytkownikiem `ansible` na nowej maszynie tak, aby logowanie SSH jako `ansible` na `ansible-target` nie wymagało podawania hasła, wykonałam następujące kroki:
+
+NA GŁÓWNEJ MASZYNIE WIRTUALNEJ
+
+1. Generuje parę kluczy SSH dla użytkownika, którym chcę się zalogować na nową maszynę wirtualną
+
+```ssh-keygen -t rsa -f ~/.ssh/key_to_ansible```
+
+gdzie: 
+
+*-t* oznacza typ klucza, w tym przypadku jest to koucz RSA
+
+*-f* określa nazwę pliku klucza, jako *key_to_ansible*
+
+![](./ss_lab8/lab8_13.png)
+
+NA NOWEJ MASZYNIE WIRTUALNEJ
+
+Po wcześniejszym ywkonaniu migawki uruchamiam nową maszynę. Loguję się na wcześniej nowoutworzonego użytkownika
+
+```su - ansible```
+
+![](./ss_lab8/lab8_14.png)
+
+Następnie odczytuje ip maszyny wirtualnej (będzie mi to potrzebne do wykonania kolejnego kroku)
+
+```ifconfig```
+
+U mnie jest to: 127.0.0.1
+
+![](./ss_lab8/lab8_16.png)
+
+NA GŁÓWNEJ MASZYNIE WIRTUALNEJ
+
+Kopiuje klucz publiczny na nową maszynę wirtualną do katalogu *.ssh* użytkownika *ansible*
+
+```ssh-copy-id ansible@adres_IP_nowej_maszy```
+
 ### Inwentaryzacja
 * Dokonaj inwentaryzacji systemów
   * Ustal przewidywalne nazwy komputerów stosując `hostnamectl`
