@@ -59,13 +59,9 @@ Końcówka wypisu z konsoli potwierdzająca porpawne wykonanie zadania:
 
 ### 3. Część główna - Pipeline
 
-#### Diagramy UML, opisujące proces CI.
+#### Diagram czynności.
 
-Poproszono nas o wykonanie diagramów UML. Pierwszym z nich jest diagram czynności, który pokazuje przebieg działania naszego pipeline'u i co powinno zajść na każdym etapie jego wykonywania. Drugim jest diagram wdrożenia przedstawiający strukturę oraz relacje pomiędzy poszczególnymi elementami.
-
-Diagram czynności:
-
-Diagram wdrożenia:
+![](./screeny/aktywnosc.png)
 
 #### Pipeline
 
@@ -233,4 +229,7 @@ Wchodząc teraz na mój profil na DockerHub'ie można zauważyć wykonany przeze
 
 ### 4. "Definition of Done"
 
-Na koniec zostały nam zadane dwa pytania dotyczące stworoznego przez nas obrazu.
+Utworzony przeze mnie obraz mogę teraz pobrać i bez problemu uruchomić. 
+
+![](./screeny/docker-pull.png)
+![](./screeny/docker-run.png)
