@@ -1,0 +1,88 @@
+  pipeline {
+      agent any
+      
+      
+      environment {     
+        DOCKERHUB_CREDENTIALS= credentials('dankoo4')     
+      } 
+
+      stages {
+          stage('Preparation') {
+              steps {
+                sh "rm -rf MDO2024_INO"
+                sh "docker system prune --all --force"
+
+
+                  }
+             }
+             
+          stage('Clone') {
+              steps {
+                sh "git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO"
+
+                dir('MDO2024_INO'){
+                    sh "git checkout AD411130"
+                }
+                  }
+             }
+             
+          stage('Logs') {
+              steps {
+                  
+                sh 'touch Build_logs_File.log'
+                sh 'touch Test_logs_File.log'
+                
+                  }
+             }
+             
+          stage('Build') {
+              steps {
+                dir('MDO2024_INO'){
+                    sh 'docker build -t node-build2:latest -f ./INO/GCL1/AD411130/Sprawozdanie3/build.Dockerfile . 2>&1 | tee Build_logs_File.log'
+                    }
+                }
+            }
+
+          stage('Test') {
+              steps {
+                dir('MDO2024_INO'){
+                    sh 'docker build -t node_test_esm:latest --no-cache -f ./INO/GCL1/AD411130/Sprawozdanie3/test.Dockerfile . 2>&1 | tee Test_logs_File.log'
+                }
+              }
+          }
+          stage('Deploy') {
+              steps {
+                dir('MDO2024_INO'){
+                    
+                    archiveArtifacts artifacts: "Build_logs_File.log"
+                    archiveArtifacts artifacts: "Test_logs_File.log"
+                    
+                }
+                sh 'docker run --name albert_eventsourcemock node_test_esm:latest'
+                    
+
+              }
+          }
+
+        stage('Publish') {
+            steps {
+                script {
+                    // Logowanie do DockerHuba
+                	sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'                		
+         
+
+                    // Tagowanie obrazu
+                    sh 'docker tag node_test_esm:latest dankoo4/albert_image'
+
+                    // Publikacja obrazu do DockerHuba
+                    sh 'docker push dankoo4/albert_image'
+                    
+                    sh "rm ./albert_image.tar.gz"
+                    sh "tar -czvf albert_image.tar.gz ./"
+                    
+                    archiveArtifacts artifacts: "./albert_image.tar.gz"       
+                }
+            }
+        }
+    }
+}
