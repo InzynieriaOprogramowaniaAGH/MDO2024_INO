@@ -259,6 +259,7 @@ Opublikowany obraz na Dockerhub:
 
 
 
+Moje osiągnięte wyniki w pełni zgadzają się schematem z tym co zawarłem w diagramie aktywności
 
 
 
