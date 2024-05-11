@@ -1,0 +1,48 @@
+- name: Ping all machines
+  hosts: all
+  tasks:
+  - name: ping my hosts
+    ansible.builtin.ping:
+
+- name: Copy inventory
+  hosts: Endpoints
+  tasks:
+  - name: Copy
+    copy:
+      src: ~/MDO2024_INO//GCL1/ZF410837/Sprawozdanie4/inventory.ini
+      dest: ~/inventory.ini
+
+- name: Ping all machines again
+  hosts: all
+  tasks:
+  - name: ping my hosts
+    ansible.builtin.ping:
+
+- name: Update packages
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: ansible
+  become: yes
+  tasks:
+
+    - name: Update packages
+      apt:
+        update_cache: yes
+        upgrade: dist
+
+- name: Restart sshd and rngd
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: ansible
+  tasks:
+  - name: Restart sshd
+    become: yes
+    service:
+      name: ssh
+      state: restarted
+      
+  - name: Restart rngd
+    become: yes
+    service:
+      name: rng-tools
+      state: restarted

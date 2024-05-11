@@ -1,0 +1,73 @@
+pipeline {
+    agent any
+    
+    environment {
+        appVersion = '1.0.0'
+    }
+
+    stages {
+        stage('Prepare and clone') {
+            steps {
+                sh "rm -rf MDO2024_INO/"
+                sh "git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git"
+                dir ("MDO2024_INO") {
+                    sh "git checkout ZF410837"
+                }
+            }
+        }
+        stage('Build'){
+            steps {
+                dir("MDO2024_INO/GCL1/ZF410837/Sprawozdanie2/pet_app_dockerfiles") {
+                    sh "docker build -t app-bld -f pet_app_bld.Dockerfile ."
+                }
+            }
+        }
+        
+        stage('Test'){
+            steps {
+                dir("MDO2024_INO/GCL1/ZF410837/Sprawozdanie2/pet_app_dockerfiles") {
+                    sh "docker build -t app-tst -f pet_app_tst.Dockerfile ."
+                }
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                sh 'docker network create my_network || true'
+                
+                 dir("MDO2024_INO/GCL1/ZF410837/Sprawozdanie2/pet_app_dockerfiles") {
+                    sh "docker build -t app-deploy -f pet_app_deploy.Dockerfile ."
+                }
+                
+                sh 'docker rm -f petclinic || true'
+                
+                //deploy
+                sh 'docker run -d -p 8081:8080 --name petclinic --network my_network app-deploy'
+                
+                sleep 10
+                //smoke test
+                script {
+                    retry(8) {
+                        sh 'docker run --rm --network my_network appropriate/curl -sSf http://petclinic:8080/actuator/health'
+                    }
+                }
+            }
+        }
+        
+        stage('Publish'){
+            steps{
+                sh 'docker cp petclinic:/app/app.jar .'
+                archiveArtifacts artifacts: '*.jar', fingerprint: true
+                
+
+                sh "docker tag app-deploy app-deploy:${appVersion}"
+                
+                script{
+                   docker.withRegistry("", "docker-credentials1") {
+                    sh "sudo docker push zuza2828/app-deploy:${appVersion}"
+                    }  
+                }
+            }  
+        }
+    }
+}

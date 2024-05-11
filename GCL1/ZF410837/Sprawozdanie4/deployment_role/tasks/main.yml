@@ -1,0 +1,32 @@
+- name: Install docker
+  become: yes
+  vars:
+    ansible_become_pass: ansible
+  apt:
+    name: docker.io
+    state: latest
+
+- name: start on boot
+  become: yes
+  vars:
+    ansible_become_pass: ansible
+  command: systemctl enable --now docker
+
+- name: Pull image from DockerHub
+  docker_image:
+    name: zuza2828/app-deploy:1.0.0
+    source: pull
+  become: true
+
+- name: Run container
+  docker_container:
+    name: app-deploy
+    image: zuza2828/app-deploy:1.0.0
+    state: started
+  become: true
+
+- name: Stop and remove container
+  community.docker.docker_container:
+    name: app-deploy
+    state: absent
+  become: true
