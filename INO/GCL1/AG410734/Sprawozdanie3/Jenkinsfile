@@ -1,0 +1,82 @@
+pipeline {
+    agent any
+    
+    environment {
+        VERSION = '1.0'
+        RELEASE = '1'
+    }
+    
+    stages {
+        stage('Prepare') {
+            steps {
+                sh 'docker stop $(docker ps -q) || true'
+                sh 'docker rm -f $(docker ps -a -q) || true'
+                sh 'docker rmi -f $(docker images -q) || true'
+                sh 'rm -rf MDO2024_INO'
+                sh 'git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+                dir("MDO2024_INO") {
+                    sh 'git checkout AG410734'
+                }
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                dir("MDO2024_INO/INO/GCL1/AG410734/Sprawozdanie3/irssi-pipeline") {
+                    sh 'docker build -t bldr -f BLDR.Dockerfile .'
+                }
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                dir("MDO2024_INO/INO/GCL1/AG410734/Sprawozdanie3/irssi-pipeline") {
+                    sh 'docker build -t tstr -f TSTR.Dockerfile .'
+                }
+            }
+        }
+        
+        stage('Publish') {
+            steps {
+                dir("MDO2024_INO/INO/GCL1/AG410734/Sprawozdanie3/irssi-pipeline") {
+                    sh "docker build -t publish -f PB.Dockerfile --build-arg VERSION=${VERSION} --build-arg RELEASE=${RELEASE} ."
+                    sh "mkdir -p artifacts-${VERSION}-${RELEASE}"
+                    sh "mv README.md artifacts-${VERSION}-${RELEASE}/"
+                    sh 'docker create --name publish_temp publish'
+                    sh "docker cp publish_temp:/artifacts-${VERSION}-${RELEASE}/irssi artifacts-${VERSION}-${RELEASE}"
+                    sh 'docker rm -f publish_temp'
+                }
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                dir("MDO2024_INO/INO/GCL1/AG410734/Sprawozdanie3/irssi-pipeline") {
+                    sh "docker build -t deploy -f DEPLOY.Dockerfile --build-arg VERSION=${VERSION} --build-arg RELEASE=${RELEASE} ."
+                    sh "docker run -it -d --name irssi-${VERSION}-${RELEASE} deploy"
+                    sh "docker exec irssi-${VERSION}-${RELEASE} sh -c 'irssi --version && irssi --help'"
+                    sh "docker logs irssi-${VERSION}-${RELEASE}"
+                }
+            }
+        }
+    }
+    
+    post {
+        success {
+            dir("MDO2024_INO/INO/GCL1/AG410734/Sprawozdanie3/irssi-pipeline") {
+            script {
+                
+                archiveArtifacts artifacts: "artifacts-${VERSION}-${RELEASE}/irssi, artifacts-${VERSION}-${RELEASE}/README.md", fingerprint: true, onlyIfSuccessful: true
+                }
+            }
+            script {
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+
+                    sh 'docker tag deploy $DOCKER_USERNAME/deploy:${VERSION}-${RELEASE}'
+                    sh 'docker push $DOCKER_USERNAME/deploy:${VERSION}-${RELEASE}'
+                }
+            }
+        }
+    }
+}

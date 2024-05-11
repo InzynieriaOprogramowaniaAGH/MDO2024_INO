@@ -5,11 +5,13 @@ services:
     build:
       context: .
       dockerfile: BLDR.Dockerfile
+    image: bldr
 
   tester:
     build:
       context: .
       dockerfile: TSTR.Dockerfile
+    image: tstr
     depends_on:
       - builder
 
