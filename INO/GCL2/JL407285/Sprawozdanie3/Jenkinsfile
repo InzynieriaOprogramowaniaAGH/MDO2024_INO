@@ -1,0 +1,102 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Prepare'){
+            steps {
+                sh "rm -rf MDO2024_INO/"
+                sh 'git clone -b JL407285 https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building ...'
+                dir('MDO2024_INO/INO/GCL2/JL407285/Sprawozdanie2') {
+                    // Budujemy obraz z opcją --no-cache
+                    script {
+                    docker.build('builder', '-f easy-bldr.Dockerfile --no-cache .')
+                    }
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Running Tests...'
+                dir('MDO2024_INO/INO/GCL2/JL407285/Sprawozdanie2') {
+                    script {
+                        docker.build('tester', '-f easy-tstr.Dockerfile .')
+                    }
+                }
+            }
+        }
+        
+       stage('Deploy') {
+            steps {
+                echo 'Deploying...'
+                script {
+                    // Sprawdzamy, czy sieć już istnieje
+                    def networkExists = sh(script: 'docker network ls --filter name=mynetwork -q', returnStdout: true).trim()
+                    
+                    // Tworzymy sieć tylko wtedy, gdy nie istnieje
+                    if (!networkExists) {
+                        sh 'docker network create mynetwork'
+                    }
+                    
+                    sh 'docker network ls'
+                    sh 'docker network inspect mynetwork'
+                    
+                    // Usuwamy kontener o tej samej nazwie, jeśli istnieje
+                    sh 'docker rm -f app_container || true'
+                    sh 'docker rm -f curl_container || true'
+                   
+                    // Uruchamiamy kontener z aplikacją Node.js w sieci
+                    sh 'docker run -d --name app_container --network mynetwork builder npm start'                    
+                    // Uruchamiamy kontener z curl w tej samej sieci
+                    sh 'docker run --name curl_container -d --network mynetwork curlimages/curl sleep infinity'
+                    
+                    
+                }
+            }
+        }
+
+        
+        stage('Verify') {
+            steps {
+                echo 'Verifying application...'
+                script {
+                    // Testujemy dostępność aplikacji za pomocą curl
+                    def responseCode = sh(script: "docker exec curl_container curl -s -o /dev/null -w '%{http_code}' http://app_container:3000", returnStatus: true)
+                    // Sprawdzamy odpowiedź
+                    if (responseCode == 0) {
+                        echo "Aplikacja została poprawnie uruchomiona i jest dostępna."
+                    } else {
+                        error "Wystąpił problem podczas uruchamiania aplikacji. Status odpowiedzi HTTP: ${responseCode}"
+                    }
+                }
+            }
+        }
+
+
+
+        stage('Publish') {
+            steps {
+                echo 'Publishing image to DockerHub'
+                sh 'docker stop app_container || true'
+                sh 'docker rm app_container || true'
+                
+                sh 'docker stop curl_container || true'
+                sh 'docker rm curl_container || true'
+                
+                withCredentials([string(credentialsId: 'docker-hub-access-token', variable: 'DOCKER_HUB_ACCESS_TOKEN')]) {
+                // Log in to Docker Hub using the access token
+                sh "docker login -u grubcio0 -p ${DOCKER_HUB_ACCESS_TOKEN}"
+                }
+                
+                sh 'docker tag builder grubcio0/pipeline-repo:builder'
+                sh 'docker push grubcio0/pipeline-repo:builder'
+
+            }
+        }
+    }
+}
