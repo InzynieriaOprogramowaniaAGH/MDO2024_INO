@@ -1,0 +1,56 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Prepare') {
+            steps {
+                sh "rm -rf *"
+                sh "git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO"
+               
+                sh 'docker system prune -af'
+               
+                
+                dir ('MDO2024_INO'){
+                    sh "git checkout KCH411627"
+                }
+                
+            }
+        }
+        stage('Build') {
+            steps {
+                dir ('MDO2024_INO/INO/GCL1/KCH411627/Sprawozdanie2'){
+                    sh "docker build -f BLDR.Dockerfile -t bldr . 2>&1 | tee build_log${BUILD_NUMBER}.txt"
+                    
+                    archiveArtifacts artifacts: 'build_log*.txt'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                dir ('MDO2024_INO/INO/GCL1/KCH411627/Sprawozdanie2'){
+                    sh "docker build -f TSTR.Dockerfile -t tstr . 2>&1 | tee test_log${BUILD_NUMBER}.txt"
+                    
+                    archiveArtifacts artifacts: 'test_log*.txt'
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                    sh 'docker run -d -t -i --name deploy_container bldr'
+                    
+                    sh 'docker exec deploy_container mvn dependency:get -Dartifact=demo:maven-demo:0.1-SNAPSHOT 2>&1 | tee deploy_log${BUILD_NUMBER}.txt'
+                    
+                    sh 'docker stop deploy_container'
+                    
+                    archiveArtifacts artifacts: 'deploy_log*.txt'
+            }
+        }
+        stage('Publish') {
+            steps {
+                    sh 'docker cp deploy_container:/maven-demo/target .'
+                    
+                    archiveArtifacts artifacts: 'target/*.jar'
+            }
+        }
+    }
+}
