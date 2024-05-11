@@ -1,0 +1,14 @@
+services:
+  irssi-builder:
+    build:
+      context: .
+      dockerfile: irssi-builder.Dockerfile
+    container_name: irssi-builder
+
+  irssi-tester:
+    build:
+      context: .
+      dockerfile: irssi-tester.Dockerfile
+    container_name: irssi-tester
+    depends_on:
+      - irssi-builder

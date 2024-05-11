@@ -1,0 +1,54 @@
+    pipeline {
+        agent any
+        stages {
+            stage('Clone') {
+                steps {
+                    git branch: 'AP412695', url: 'https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'    
+                }
+            }
+            stage('Build') {
+                steps {
+                    dir('AP412695/Sprawozdanie3') {
+                        sh 'docker build -t irssi-build -f ./irssi-builder.Dockerfile .'
+                    }
+                }
+            }
+            stage('Test'){
+                steps{
+                    dir('AP412695/Sprawozdanie3'){
+                        sh 'docker build -t irssi-test -f irssi-tester.Dockerfile .'
+                    }
+                }
+            }
+            stage('Build Package'){
+                steps{
+                    dir('AP412695/Sprawozdanie3'){
+                        sh 'docker build -f irssi-package-builder.Dockerfile -t irssi-package .'
+                    }
+                }
+            }
+            stage('Deploy'){
+                steps{
+                    dir('AP412695/Sprawozdanie3'){
+                        sh 'docker build -f irssi-deployer.Dockerfile -t irssi-deploy .'
+                    }
+                }
+            }
+            stage('Publish'){
+                steps{
+                    dir('AP412695/Sprawozdanie3'){
+                        sh 'docker build -f irssi-publisher.Dockerfile -t irssi-publish .'
+                    }
+                }
+            }
+            stage('Save'){
+                steps{
+                sh 'docker run -d --name irssi-artifact irssi-publish'
+                sh 'docker cp irssi-artifact:/rpm/irssi-Test-1.fc40.x86_64.rpm .'
+                sh 'docker stop irssi-artifact'
+                archiveArtifacts artifacts: 'irssi-Test-1.fc40.x86_64.rpm', fingerprint: true
+                sh 'docker rmi -f $(docker images -q)'
+                }
+            }
+        }
+    }
