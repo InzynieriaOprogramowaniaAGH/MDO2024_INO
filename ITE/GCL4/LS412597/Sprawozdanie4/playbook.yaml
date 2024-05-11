@@ -1,0 +1,21 @@
+- name: My playbook
+  hosts: Endpoints
+  become: yes
+  become_user: root
+
+  tasks:
+    - name: Ping my hosts
+      ansible.builtin.ping:
+
+    - name: Copy file with owner and permissions
+      ansible.builtin.copy:
+        src: ./inventory.ini
+        dest: /home/ansible/inventory.ini
+        owner: ansible
+        group: ansible
+        mode: u=rw,g=r,o=r
+
+    - name: Upgrade all packages
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
