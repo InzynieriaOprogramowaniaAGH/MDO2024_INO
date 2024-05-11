@@ -1,0 +1,53 @@
+- name: Install docker
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: ansible
+  tasks:
+  - name: Install / ensure installation
+    become: yes
+    apt:
+      name: docker.io
+      state: latest
+  
+  - name: start on boot
+    become: yes
+    command: systemctl enable --now docker
+  
+- name: Download Redis Image
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: ansible
+  tasks:
+  - name: check if volume exists
+    become: yes
+    command: docker volume inspect vol
+    register: vol_exists_result
+    failed_when: false
+    
+  - name: create vol
+    when: vol_exists_result is failed
+    command: docker volume create vol
+  
+  - name: download and run
+    become: yes
+    community.docker.docker_container:
+      name: ansible_redis
+      image: michaljurzak/redis_build:v1.0
+      command: ./src/redis-server
+      state: started
+      recreate: true
+      volumes:
+      - vol:/redis
+      exposed_ports:
+      - 6379
+  
+- name: Stop and remove container
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: ansible
+  tasks:
+  - name: stop and remove container
+    become: yes
+    community.docker.docker_container:
+      name: ansible_redis
+      state: absent
