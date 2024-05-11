@@ -1,15 +1,14 @@
-- name: My first play
+- name: Inwentaryzacja
   hosts: Endpoints
   tasks:
    - name: Ping my hosts
      ansible.builtin.ping:
-
    - name: Print message
      ansible.builtin.debug:
       msg: Hello world
    - name: Copy inventory file
      copy:
-       src: /home/john/ansible-inv/inventory.ini
+       src: ./inventory.ini
        dest: /home/ansible/
    - name: Update packages
      become: true
