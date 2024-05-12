@@ -107,6 +107,7 @@ W tym celu tworzymy plik `playbook.yml`
 - name: My playbook
   hosts: Endpoints
   remote_user: ansible
+  become: yes
 
   tasks:
     - name: Ping my hosts
@@ -124,22 +125,20 @@ W tym celu tworzymy plik `playbook.yml`
       ansible.builtin.dnf:
         name: "*"
         state: latest
-      become: yes
 
     - name: Zrestartuj usługę SSH
       ansible.builtin.service:
         name: sshd
         state: restarted
-      become: yes
 ```
 
-Jak widać na początku podajemy nazwę naszego playbooku, hosty na których ma sie wszystko wykonać (są to hosty określone w inventory) oraz użytkownika na którym ma się to wykonać.
+Jak widać na początku podajemy nazwę naszego playbooku, hosty na których ma sie wszystko wykonać (są to hosty określone w inventory) oraz użytkownika na którym ma się to wykonać. Dodatkowo określamy, aby wszystko było wykonywane z poziomu sudo, przy pomocy `become: yes`.
 
 Następnie mamy określone taski, ansible udostępnia moduły, które pomogą nam wykonać wszystkie te czynności, przykładowo do wysłania żądania PING wykorzystujemy `ansible.builtin.ping`, do skopiowania pliku: `ansible.builtin.copy` itd.
 
 Przy kopiowaniu pliku musimy określić źródło, miejsce docelowe, właściciela pliku, grupę do której ma należeć oraz uprawnienia.
 
-Do aktualizacji pakietów systemu wykorzystujemy `ansible.builtin.dnf`, który pobierze nam latest paczki, dodatkowo musimy określić, aby wykonało się to z poziomu sudo przy pomocy `become: yes`.
+Do aktualizacji pakietów systemu wykorzystujemy `ansible.builtin.dnf`, który pobierze nam latest paczki.
 
 Do zrestartowania usługi SSHD wykorzystujemy `ansible.builtin.service` na którym podajemy nazwę usługi, czynność jaką ma wykonać (state) oraz ponownie ma to zrobić z poziomu sudo.
 
