@@ -9,12 +9,13 @@
   tasks:
     - name: Copy
       copy:
-        src: ~/repo/MDO2024_INO/ITE/GCL4/LO410687/Sprawozdanie4/inventory.ini
+        src: ~/MDO2024_INO/ITE/GCL4/LO410687/Sprawozdanie4/inventory.ini
         dest: ~/copied_inventory/inventory.ini
+        remote_src: yes
 
     - name: Copy (again)
       copy:
-        src: ~/repo/MDO2024_INO/ITE/GCL4/LO410687/Sprawozdanie4/inventory.ini
+        src: ~/MDO2024_INO/ITE/GCL4/LO410687/Sprawozdanie4/inventory.ini
         dest: ~/copied_inventory/inventory.ini
 
 - name: Update package
