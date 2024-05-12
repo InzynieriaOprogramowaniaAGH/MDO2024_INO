@@ -1,7 +1,6 @@
 - name: My playbook
   hosts: Endpoints
-  become: yes
-  become_user: root
+  remote_user: ansible
 
   tasks:
     - name: Ping my hosts
@@ -19,3 +18,10 @@
       ansible.builtin.dnf:
         name: "*"
         state: latest
+      become: yes
+
+    - name: Zrestartuj usługę SSH
+      ansible.builtin.service:
+        name: sshd
+        state: restarted
+      become: yes
