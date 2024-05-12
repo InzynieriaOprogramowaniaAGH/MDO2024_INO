@@ -61,7 +61,7 @@ Dla obydwu, dodając w krokach budowania uruchomienie powłoki z odpowiednim kod
 ![alt text](hours_time.png)
 
 ## "Prawdziwy" Projekt
-Kolejnym krokiem było utworzenie projektu klonującego gałąź repozytorium i budującej obraz z pomocą pliku dockerfile. Niestety w trakcie pracy napotkałem problem z server bisheaving i pomimo długich starań nie udało mi się go naprawić, wymusiły to na mnie próbę reinstalacji systemu i ponownego wykonania całości labolatoriów.
+Kolejnym krokiem było utworzenie projektu klonującego gałąź repozytorium i budującej obraz z pomocą pliku dockerfile. Niestety w trakcie pracy napotkałem problem z server bisheaving i pomimo długich starań nie udało mi się go naprawić, wymusiły to na mnie próbę reinstalacji systemu i ponownego wykonania całości labolatoriów. TEST2
 
 ## Irssi
 
