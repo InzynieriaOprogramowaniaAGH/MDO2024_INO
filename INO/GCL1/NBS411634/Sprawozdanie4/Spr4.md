@@ -116,7 +116,7 @@ Aby wymienić klucze SSH między użytkownikiem na głównej maszynie wirtualnej
 
 NA GŁÓWNEJ MASZYNIE WIRTUALNEJ
 
-1. Generuje parę kluczy SSH dla użytkownika, którym chcę się zalogować na nową maszynę wirtualną
+Generuje parę kluczy SSH dla użytkownika, którym chcę się zalogować na nową maszynę wirtualną
 
 ```ssh-keygen -t rsa -f ~/.ssh/key_to_ansible```
 
@@ -130,17 +130,21 @@ gdzie:
 
 NA NOWEJ MASZYNIE WIRTUALNEJ
 
-Po wcześniejszym ywkonaniu migawki uruchamiam nową maszynę. Loguję się na wcześniej nowoutworzonego użytkownika
+W ustawieniach nowej maszyny wirtualnej zmieniam połączenie sieciowe NAT na mostkowaną kartę sieciową (bridged). Pozwoli to maszynie na bezpośredni dostęp do sieci lokalnej, a zatem maszyna wirtualna będzie miała własny adres IP w sieci lokalnej.
+
+![](./ss_lab8/lab8_19.png)
+
+Po wcześniejszym wykonaniu migawki uruchamiam nową maszynę. Loguję się na wcześniej nowoutworzonego użytkownika
 
 ```su - ansible```
 
 ![](./ss_lab8/lab8_14.png)
 
-Następnie odczytuje ip maszyny wirtualnej (będzie mi to potrzebne do wykonania kolejnego kroku)
+Następnie odczytuje IP maszyny wirtualnej (będzie mi to potrzebne do wykonania kolejnego kroku)
 
 ```ifconfig```
 
-U mnie jest to: 127.0.0.1
+U mnie jest to: 192.168.0.49
 
 ![](./ss_lab8/lab8_16.png)
 
@@ -148,12 +152,31 @@ NA GŁÓWNEJ MASZYNIE WIRTUALNEJ
 
 Kopiuje klucz publiczny na nową maszynę wirtualną do katalogu *.ssh* użytkownika *ansible*
 
-```ssh-copy-id ansible@adres_IP_nowej_maszy```
+```ssh-copy-id ansible@adres_IP_nowej_maszyny```
+
+![](./ss_lab8/lab8_17.png)
+
+Następnie loguje się na nową maszynę wirtualną bez podawania hasła komendą
+
+```ssh ansible@adres_IP_nowej_maszyny```
+
+![](./ss_lab8/lab8_18.png)
 
 ### Inwentaryzacja
 * Dokonaj inwentaryzacji systemów
   * Ustal przewidywalne nazwy komputerów stosując `hostnamectl`
+
+  Na każdej z maszyn używam polecenia ```hostnemctl``` w celu ustalenia bieżącej nazwy hosta
+
+  ![](./ss_lab8/lab8_20.png)
+
+  ![](./ss_lab8/lab8_21.png)
+
+  Każda z maszyn ma swoją unikalną nazwę, umożliwia to identyfikację i zarządzanie maszynami.
+
   * Wprowadź nazwy DNS dla maszyn wirtualnych, stosując `systemd-resolved` lub `resolv.conf` i `/etc/hosts` - tak, aby możliwe było wywoływanie komputerów za pomocą nazw, a nie tylko adresów IP
+
+  
   * Zweryfikuj łączność
   * Stwórz [plik inwentaryzacji](https://docs.ansible.com/ansible/latest/getting_started/get_started_inventory.html)
   * Umieść w nim sekcje `Orchestrators` oraz `Endpoints`. Umieść nazwy maszyn wirtualnych w odpowiednich sekcjach
