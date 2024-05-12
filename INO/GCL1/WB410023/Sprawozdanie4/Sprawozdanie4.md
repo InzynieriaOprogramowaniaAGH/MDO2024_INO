@@ -154,8 +154,6 @@ exit
 
 ![2](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie4/images/2.png)
 
-![3](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie4/images/3.png)
-
 - zapewniłam obecność serwera OpenSSH (sshd)
 ```bash
 sudo ls
@@ -323,7 +321,7 @@ Maszyna wirtualna bez **Ansible**:
 
 Wygenerowałam nowy klucz **RSA** do uwierzytelniania **SSH**:
 ```bash
-ssh-keygen -t rsa -b 4096
+ssh-keygen
 ```
 i wyświetliłam istniejące klucze:
 ```bash
@@ -354,10 +352,6 @@ nano ~/.ssh/authorized_keys
 Maszyna wirtualna zawierająca **Ansible**:
 
 ![39](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie4/images/39.png)
-
-Maszyna wirtualna bez **Ansible**:
-
-![40](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie4/images/40.png)
 
 Stworzyłam plik inwentaryzacji, korzystając z dostępnej dokumnetacji: https://docs.ansible.com/ansible/latest/getting_started/get_started_inventory.html
 
@@ -497,7 +491,7 @@ ansible-playbook -i inventory.ini playbook2.yaml
 ```
 ![57](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie4/images/56.png)
 
-Niestety po wielokrotnych próbach przeinstalowywania Dockera na drugiej maszynie wirtualnej i edycji pliku **playbook2.yam**, nie udało mi się zidentyfikować problemu i go naprawić tak aby playbook uruchamiał się prawidłowo :((
+Niestety po wielokrotnych próbach przeinstalowywania Dockera na drugiej maszynie wirtualnej i edycji pliku **playbook2.yaml**, nie udało mi się zidentyfikować problemu i go naprawić tak aby playbook uruchamiał się prawidłowo :((
 
 ## Laboratorium 9 - Pliki odpowiedzi dla wdrożeń nienadzorowanych
 ### Opis celu i streszczenie projektu:
