@@ -52,8 +52,8 @@ Po wejściu w przeglądarke (z poza maszyny) na stronę `IP_maszyny:8080`, pojaw
 Następnie przeszedłem do testowania poprawności działania Jenkinsa, w tym celu stworzyłem dwa proste pipeline'y - jeden wyświetlający uname, drugi zwracający błąd gdy godzina jest nieparzysta. 
 
 W tym celu tworzymy dwa nowe projekty
-![alt text](<Zrzut ekranu 2024-05-07 105524.png>)
-Dla obydwu, dodając w krokach budowania uruchomienie powłoki z odpowiednim kodem, a następnie uruchamiany projekty z poziomu Jenkinsa. Po sprwadzeniu logów konsoli możemy stwierdzić, że Jenkins jest w stanie komunikować się z Dockerem DIND i pomyślnie wykonywać zadanie mu polecenia. W przypadku błędu ze skryptem godzinowym, był on spowodowany tym, że traktował on godzinę 9 jako tekst 09, zatem nie mógł wykonać arytmetyki, jednak sam fakt pojawienia się takich log'ów pokazuje, że doszło do komunikacji na linii jenkins-docker.
+![alt text](uname_start.png)
+Dla obydwu, dodając w krokach budowania uruchomienie powłoki z odpowiednim kodem, a następnie uruchamiany projekty z poziomu Jenkinsa. Po sprwadzeniu logów konsoli możemy stwierdzić, że Jenkins jest w stanie komunikować się z Dockerem DIND i pomyślnie wykonywać zadanie mu polecenia. W przypadku błędu ze skryptem godzinowym, był on spowodowany tym, że traktował on godzinę 9 jako tekst 09, zatem nie mógł wykonać operacji, jednak sam fakt pojawienia się takich log'ów pokazuje, że doszło do komunikacji na linii jenkins-docker.
 ![alt text](powloka_uname.png)
 ![alt text](log_uname.png)
 ![alt text](powloka_hour.png)
