@@ -103,7 +103,7 @@ Do wykonania większej ilosci zadań możemy wykorzystać playbooki, w których 
 
 W tym celu tworzymy plik `playbook.yml`
 
-```yml
+```yaml
 - name: My playbook
   hosts: Endpoints
   remote_user: ansible
@@ -161,3 +161,116 @@ Teraz sprawdzmy co się stanie, gdy na docelowej maszynie wyłączymy SSH (odł�
 ![playbook](Images/10.png)
 
 Jak widać otrzymaliśmy błąd w którym mamy powiedziane, że pojawił się problem przy połączeniu przez SSH, połączenie z hostem ansible-target na porcie 22 nie zostało wykonane. Można się było domyślić takiego obrotu spraw, ponieważ ansible wykorzystuje ssh do łączenia się z maszynami.
+
+Następne co chcemy osiągnąć, to aby nasz playbook był w stanie uruchomić kontener docker z aplikacją z poprzedniego sprawozdania, w tym celu playbook musi zapewnić, aby Docker był zainstalowany oraz pobrał i uruchomił obraz z aplikacją. W tym celu dodajemy następujące linijki do playbooka:
+
+```yaml
+ - name: Pobierz Docker
+      ansible.builtin.dnf:
+        name: docker
+        state: latest
+
+    - name: Aktywuj docker
+      ansible.builtin.service:
+        name: docker
+        state: started
+
+    - name: Pull obrazu take_note_pipeline
+      command: docker pull lukaszsawina/take_note_pipeline
+
+    - name: Run obrazu take_note_pipeline
+      command: docker run -d -p 5000:5000 --name=app lukaszsawina/take_note_pipeline
+```
+
+Teraz po wykonaniu naszego playbooka nasza aplikacja będzie działała w tle na drugiej maszynie:
+
+![playbook](Images/11.png)
+
+Sprawdźmy teraz czy nasza aplikacja działa, na przeglądarce spróbujemy się połączyć z nią podająć adres IP maszyny oraz odpowiedni port.
+
+![playbook](Images/12.png)
+
+### Role
+
+Teraz jak mamy działający playbook możemy go ubrać w rolę, w tym celu musimy utworzyć rolę, w tym celu wykorzystujemy polecenie:
+
+```bash
+ansible-galaxy init my_role
+```
+
+![role](Images/13.png)
+
+W wyniku w katalogu została utworzona struktura katalogów my_role, która wygląda następująco:
+
+![playbook](Images/14.png)
+
+Teraz w katalogu tasks w pliku main.yml umieszczamy wszystkie nasze taski, które wcześniej posiadaliśmy w playbooku, a w playbooku zamiast tasków określamy rolę:
+
+playbook.yml
+
+```yaml
+- name: My playbook
+  hosts: Endpoints
+  remote_user: ansible
+  become: yes
+  roles:
+    - my_role
+```
+
+main.yml
+
+```yml
+---
+- name: Ping my hosts
+  ansible.builtin.ping:
+
+- name: Copy file with owner and permissions
+  ansible.builtin.copy:
+    src: ./inventory.ini
+    dest: /home/ansible/inventory.ini
+    owner: ansible
+    group: ansible
+    mode: u=rw,g=r,o=r
+
+- name: Upgrade all packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+
+- name: Zrestartuj usługę SSH
+  ansible.builtin.service:
+    name: sshd
+    state: restarted
+
+- name: Pobierz Docker
+  ansible.builtin.dnf:
+    name: docker
+    state: latest
+
+- name: Aktywuj docker
+  ansible.builtin.service:
+    name: docker
+    state: started
+
+- name: Pull obrazu take_note_pipeline
+  command: docker pull lukaszsawina/take_note_pipeline
+
+- name: Run obrazu take_note_pipeline
+  command: docker run -d -p 5000:5000 --name=app lukaszsawina/take_note_pipeline
+```
+
+![playbook](Images/15.png)
+
+Teraz, gdy uruchomimy nasz playbook wynik zostanie taki sam, jednak nasze taski mamy zapisane w innej lokalizacji. Dodatkowo możemy zauważyć inne katalogi odpowiedzialne za inne rzeczy w playbooku, co pozwala bardziej rozbudować nasz playbook w przyszłości.
+
+Dodatkowo, w naszym playbooku, jak już wiemy, że aplikacja działa prawidłowo dodamy fragment, który będzie zatrzymywał oraz usuwał nasz kontener z aplikacją. W tym celu trzeba dodać następująće linijki:
+
+```yml
+- name: Stop kontener z take_note_pipeline
+  command: docker stop app
+
+- name: Del kontner z take_note_pipeline
+  command: docker rm app
+```
+
+![playbook](Images/16.png)
