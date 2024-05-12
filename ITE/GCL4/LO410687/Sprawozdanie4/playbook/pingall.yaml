@@ -5,7 +5,7 @@
   tasks:
     - name: Copy inventory.yaml to ansible-target
       copy:
-        src: /home/ansible/MDO2024_INO/ITE/GCL4/LO410687/Sprawozdanie4/inventory.ini
+        src: /home/loprych/MDO2024_INO/ITE/GCL4/LO410687/Sprawozdanie4/inventory.yaml
         dest: /home/ansible/
 
     - name: Ping all hosts using the copied inventory file

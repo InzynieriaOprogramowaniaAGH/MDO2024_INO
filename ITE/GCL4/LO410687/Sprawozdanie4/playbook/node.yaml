@@ -1,0 +1,15 @@
+- name: Deploy node
+  hosts: Endpoints
+  tasks:
+    - name: Pull node-js-tests-sample image from DockerHub
+      docker_image:
+        name: lukoprych/node-js-tests-sample:1.0.12
+        source: pull
+    
+    - name: Run node container
+      docker_container:
+        name: node
+        image: lukoprych/node-js-tests-sample:1.0.12
+        state: started
+        interactive: yes
+        tty: yes

@@ -1,0 +1,6 @@
+- name: Deploy node using node-deploy role
+  hosts: Endpoints
+  roles:
+    - role: node-deploy
+      vars:
+        VERSION: "1.0.12"
