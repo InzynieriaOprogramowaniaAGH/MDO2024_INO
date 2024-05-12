@@ -156,7 +156,7 @@ Kopiuje klucz publiczny na nową maszynę wirtualną do katalogu *.ssh* użytkow
 
 ![](./ss_lab8/lab8_17.png)
 
-Następnie loguje się na nową maszynę wirtualną bez podawania hasła komendą
+Następnie loguje się na nową maszynę wirtualną bez podawania hasła
 
 ```ssh ansible@adres_IP_nowej_maszyny```
 
@@ -176,8 +176,38 @@ Następnie loguje się na nową maszynę wirtualną bez podawania hasła komend�
 
   * Wprowadź nazwy DNS dla maszyn wirtualnych, stosując `systemd-resolved` lub `resolv.conf` i `/etc/hosts` - tak, aby możliwe było wywoływanie komputerów za pomocą nazw, a nie tylko adresów IP
 
-  
+  Otwieram plik konfiguracyjny *system-resolved.conf*
+
+  ```sudo nano /etc/systemd/resolved.conf```
+
+  ![](./ss_lab8/lab8_22.png)
+
+  W sekcji *[Resolve]* usuwam komenatrze przy *DNS* oraz *FallbackDNS* i ustalam serwery DNS
+
+  ![](./ss_lab8/lab8_23.png)
+
+  Zapisuje zmiany, zamykam edytor, a następnie restartuje *systemd-resolved*
+
+  ```sudo systemctl restart systemd-resolved```
+
+  Te same kroki wykonuje na maszynie *ansible-target*
+
+  Następnie na głównej maszynie wirtualnej przechodzę do edycji pliku */etc/hosts*
+
+  ```sudo nano /etc/hosts```
+
+  W nowej linii dodaje adres IP maszyny *ansible-target* oraz nazwę hosta 
+
+  ![](./ss_lab8/lab8_26.png)
+
   * Zweryfikuj łączność
+
+  Weryfikuje łączność poleceniem ```ping``` z nazwą hosta, aby sprawdzić, czy moja maszyna może komunikować się z innymi hostami w sieci
+
+  ![](./ss_lab8/lab8_25.png)
+
+  Otrzymuje odpowiedzi na ping od *ansible-target* także połączenie zostało wykonane prawidłowo
+
   * Stwórz [plik inwentaryzacji](https://docs.ansible.com/ansible/latest/getting_started/get_started_inventory.html)
   * Umieść w nim sekcje `Orchestrators` oraz `Endpoints`. Umieść nazwy maszyn wirtualnych w odpowiednich sekcjach
   * Wyślij żądanie `ping` do wszystkich maszyn
