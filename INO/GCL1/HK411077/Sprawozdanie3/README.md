@@ -71,8 +71,17 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    echo 'Budowanie obrazu Docker'
+                    echo 'Budowanie obrazu builda'
                     sh 'docker build -f ./INO/GCL1/HK411077/Sprawozdanie2/build.Dockerfile -t node-app-build .'
+                }
+            }
+        }
+        
+        stage('Test Docker Image') {
+            steps {
+                script {
+                    echo 'Budowanie obrazu testu'
+                    sh 'docker build -f ./INO/GCL1/HK411077/Sprawozdanie2/test.Dockerfile -t node-app-test .'
                 }
             }
         }
@@ -84,6 +93,27 @@ Wynik uruchomienia tego projektu:
 
 ![first pipeline](images/first_pipeline.png)
 
-Przykładowe logi (z klonowania repozytorium):
+Przykładowe logi (z klonowania repozytorium i budowania obrazów):
 
-![przykładowe logi](images/example_log.png)
+![klonowanie](images/example_log.png)
+
+![build](images/build.png)
+
+![test](images/test.png)
+
+### Diagramy UML
+
+#### Wymagania wstępne środowiska:
+- Sprzętowe:
+  - Środowisko wirtualne z dostępem do internetu
+  - Pamięć ram i przestrzeni dyskowej umożliwająca obsługę kontenerów DIND i Jenkins
+- Oprogramowanie:
+  - System operacyjny Ubuntu Server
+  - Kontener Jenkins z zainstalowanym pluginem Blue Ocean i DIND skonfigurowany według instrukcji dostawcy oprogramowania
+  - Node.js i npm do zarządzania zależnościami projektu
+- Siecowie:
+  - Dostęp do repozytorium kodu na GitHub'ie
+
+#### Diagram aktywności
+
+![diagram aktywności](images/diagram_aktywnosci.png)
