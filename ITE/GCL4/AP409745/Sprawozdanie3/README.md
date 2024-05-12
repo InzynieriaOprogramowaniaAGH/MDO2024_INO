@@ -44,7 +44,7 @@ docker run \
   myjenkins-blueocean:2.440.3-1
 ```
 
-Po wejściu w przeglądarke (z poza maszyny) na stronę `IP_maszyny:8080`, pojawiła się interfejs Jenkins'a. Jako że korzystałem z obrazu przygotowanego nieco wcześniej, to miałem już utworzone konto `admin`, na które się zalogowałem. W przypadku gdybym zaczynał bez konta, musiałbym wydobyć hasło do niego z pliku komendą `docker exec [nazwa_obrazu_jenkinsa] [ścieżka_woluminu_jenkinsa]/secrets/initialAdminPassword`
+Po wejściu w przeglądarke (z poza maszyny) na stronę `IP_maszyny:8080`, pojawiła się interfejs Jenkins'a. Jako że korzystałem z obrazu przygotowanego nieco wcześniej, to miałem już utworzone konto `admin`, na które się zalogowałem. W przypadku gdybym zaczynał bez konta, musiałbym wydobyć hasło do niego z pliku komendą `docker exec [nazwa_obrazu_jenkinsa] cat /var/jenkins_home/secrets/initialAdminPassword`
 ![alt text](jenkins_login.png)
 
 ## Testowanie Jenkinsa
@@ -53,7 +53,7 @@ Następnie przeszedłem do testowania poprawności działania Jenkinsa, w tym ce
 
 W tym celu tworzymy dwa nowe projekty
 ![alt text](uname_start.png)
-Dla obydwu, dodając w krokach budowania uruchomienie powłoki z odpowiednim kodem, a następnie uruchamiany projekty z poziomu Jenkinsa. Po sprwadzeniu logów konsoli możemy stwierdzić, że Jenkins jest w stanie komunikować się z Dockerem DIND i pomyślnie wykonywać zadanie mu polecenia. W przypadku błędu ze skryptem godzinowym, był on spowodowany tym, że traktował on godzinę 9 jako tekst 09, zatem nie mógł wykonać operacji, jednak sam fakt pojawienia się takich log'ów pokazuje, że doszło do komunikacji na linii jenkins-docker.
+Dla obydwu, dodając w krokach budowania uruchomienie powłoki z odpowiednim kodem, a następnie uruchamiany projekty z poziomu Jenkinsa. Po sprwadzeniu logów konsoli możemy stwierdzić, że Jenkins jest w stanie komunikować się z Dockerem DIND i pomyślnie wykonywać zadanie mu polecenia - pracowaliśmy na systemie z rodziny Linux, a godzina 2 jest parzysta.
 ![alt text](powloka_uname.png)
 ![alt text](log_uname.png)
 ![alt text](powloka_hour.png)
@@ -61,15 +61,16 @@ Dla obydwu, dodając w krokach budowania uruchomienie powłoki z odpowiednim kod
 ![alt text](hours_time.png)
 
 ## "Prawdziwy" Projekt
-Kolejnym krokiem było utworzenie projektu klonującego gałąź repozytorium i budującej obraz z pomocą pliku dockerfile. Niestety w trakcie pracy napotkałem problem z server bisheaving i pomimo długich starań nie udało mi się go naprawić, wymusiły to na mnie próbę reinstalacji systemu i ponownego wykonania całości labolatoriów. TEST3
+Kolejnym krokiem było utworzenie projektu klonującego gałąź repozytorium i budującej obraz z pomocą pliku dockerfile. Niestety w trakcie pracy napotkałem problem z server bisheaving i pomimo długich starań nie udało mi się go naprawić, wymusiły to na mnie próbę reinstalacji systemu, konfiguracji i ponownego wykonania całości labolatoriów do tego momentu.
+
+Ze względów na brak pewności, czy po reinstalacji systemu, wszystko się poprawnie wkonuje dla pewności spróbowałem zbudować obraz przy użyciu stworzonych plików Dockerfile (node-builder oraz node-tester), z wyeksponowanym portem 3000. Na szczęście wszystko działało poprawnie, więc mogłem ich użyć do utworzenia projektu klonującego repozytorium, i utworzenia obrazu budującego i testującego.
+
+![alt text](image-1.png)
+![alt text](image-3.png)
+![alt text](image-2.png)
+![alt text](image-4.png)
 
 ## Irssi
-
-![test kod](./images/test_func.png)
-
-![test_done](./images/npm_test.png)
-
-## Aplikacja Node'owa
 
 ## Irssi - automatyzacja przy pomocy Dockerfile
 
