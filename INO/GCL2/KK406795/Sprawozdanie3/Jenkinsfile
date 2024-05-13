@@ -1,33 +1,76 @@
 pipeline {
-    agent any
+ agent any
 
-    stages {
-        stage('Prepare') {
-            steps {
-                sh 'rm -rf MDO2024_INO'
-                sh 'git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
-                dir("MDO2024_INO"){
-                    sh 'git checkout KK406795'
-                }
-            }
-        }
-        stage('Build') {
-            steps {
-                echo 'Building'
-                dir('MDO2024_INO/INO/GCL2/KK406795/Sprawozdanie2'){
-                    sh 'docker build -t irssi-builder -f irssi.builder.Dockerfile .'
-                }
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing'
-                dir('MDO2024_INO/INO/GCL2/KK406795/Sprawozdanie2'){
-                    sh 'docker build -t irssi-tester -f ./irssi.test.Dockerfile .'
-                }
-            }
-        }
-        
+ stages {
+     stage('Prepare') {
+         steps {
+             
+                 sh '''
+                 rm -rf MDO2024_INO
+                 git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+                 cd MDO2024_INO
+                 git checkout KK406795
+                 '''
+         
+         }
+     }
+     stage('Create logs') {
+         steps {
+             dir('MDO2024_INO/INO/GCL2/KK406795/Sprawozdanie3/Build'){
+                 sh 'touch b.log'
+             }
+             dir('MDO2024_INO/INO/GCL2/KK406795/Sprawozdanie3/Test'){
+                 sh 'touch t.log'
+             }
+         }
+         
+     }
+     stage('Build '){
+         steps{
+             dir('MDO2024_INO/INO/GCL2/KK406795/Sprawozdanie3/Build'){
+                 sh 'docker build -t build_container -f irssi_builder.Dockerfile . | tee b.log'
+                 archiveArtifacts artifacts: "b.log"
+
+             }
+         }
+     }
+     stage('Tests'){
+         steps{
+             dir('MDO2024_INO/INO/GCL2/KK406795/Sprawozdanie3/Test'){
+                 sh 'docker build -t test_container -f irssi_test.Dockerfile . | tee t.log'
+                 archiveArtifacts artifacts: "t.log"
+             }
+             
+         }
+     }
+     
+     
+      stage('Deploy'){
+ steps{
+     dir('MDO2024_INO/INO/GCL2/KK406795/Sprawozdanie3/Deploy') {
+         sh 'docker build -t deploy . -f deploy.Dockerfile'
+         
+         sh 'docker run -t -d -e TERM=xterm --name ddeploy -v output:/output build_container'
+         sh 'docker run -t -d -e TERM=xterm --name ccopy -v output:/output deploy'
+         
+         sh 'docker cp ddeploy:./irssi/Build/src/fe-text/irssi ./irssi_deployed'
+         sh 'docker cp ./irssi_deployed ccopy:/output'
+         
+         sh 'tar -cvf artifacts/art.tar ./irssi_deployed ../artifacts/README.md'
+     
+         sh 'docker stop ddeploy'
+         sh 'docker stop ccopy' 
+     }    
     }
-    
-}
+  }
+     
+     stage('Publish'){
+     steps{
+         dir('MDO2024_INO/INO/GCL2/KK406795/Sprawozdanie3/Deploy'){
+         archiveArtifacts artifacts: "artifacts/art.tar"
+         sh 'docker system prune --all --volumes --force'
+             }    
+         }
+     }
+ }
+  }
