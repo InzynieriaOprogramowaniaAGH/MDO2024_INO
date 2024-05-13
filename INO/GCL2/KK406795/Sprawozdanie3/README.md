@@ -11,24 +11,31 @@ Proces instalacji Jenkinsa przebiegał zgodnie z zamieszczoną na stronie instru
 W tym celu kliknęłam w nowy projekt na stronie Jenkins. W konfiguracji wybrałam opcję **kroki budowania**, oraz wybrałam uruchom powłokę. Wpisałam komendę **whoami** oraz **uname -a**, aby wypisać wyżej wymienione informację.
 Po wykonanniu otrzymałam następujące logi:
 
-///![](./screeny/spr3scr1.png)
+
+
+![screen1](../Sprawozdanie2/screenshots/spr3scr1.png)
 
   * Utworzyłam projek, który zwraca błąd, gdy godzina jest nieparzysta:
 W krokach budowania powłokę uzupełniłam kodem:
 
-///scr2
+![screen2](../Sprawozdanie2/screenshots/spr3scr2.png)
 
 Po uruchomieniu otrzymałam logi konsoli:
 
-///scr3
+![screen3](../Sprawozdanie2/screenshots/spr3scr3.png)
 
 * Sugerując się wskazówkami podanymi na labolatorium, nie tworzyłam kolejnego projektu tylko odrazu zaczełam od pierwszego pipelinu, który:
   * sklonował nasze repozytorium,
   * przeszedł na moją osobistą gałąź,
   * zbudował obrazy z dockerfiles.
+ ![screen1](../Sprawozdanie2/screenshots/spr3scr4.png)
 Po wykonaniu otrzymałam następujące logi:
 
-///scr5, scr5a
+![screen1](../Sprawozdanie2/screenshots/spr3scr5.png)
+
+![screen1](../Sprawozdanie2/screenshots/spr3scr5a.png)
+
+
 
 ### Wstęp
 Na wstępie chciałam zaznaczyć, że byłam zmuszona przenieść się na inne urzadzęnie, gdyż stan pamięci i procesora poprzedniego komputera ZNACZNIE wydłużał pracę.
@@ -54,19 +61,19 @@ Jest to otwarte oprogramowanie, które korzysta z licencji GNU General Public Li
 ### Pipeline
 Pierwszy krok, który nazwałam "Prepare" ma na celu przygotowanie środowiska pracy do dalszych działań, w skład czego wchodzą następujące kroki, usunięcie starego katalogu, clone repozytorium przedmiotu i checkout na moja gałąź.
 
-///scr6
+![screen1](../Sprawozdanie2/screenshots/spr3scr6.png)
 
 Wykonało się poprawnie:
 
-///scr7
+![screen1](../Sprawozdanie2/screenshots/spr3scr7.png)
 
 Następnie postanowiłam utworzyć pliki, w których przechowywane będą logi z etapów build i test.
 
-///scr8
+![screen1](../Sprawozdanie2/screenshots/spr3scr8.png)
 
 Uruchomiłam:
 
-///scr9
+![screen1](../Sprawozdanie2/screenshots/spr3scr9.png)
 
 
 
