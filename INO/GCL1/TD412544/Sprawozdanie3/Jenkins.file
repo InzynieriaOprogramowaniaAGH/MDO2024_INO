@@ -1,0 +1,71 @@
+pipeline {
+    agent any
+    
+    environment {
+        VERSION = '1.0.0'
+    }
+
+    stages {
+        stage('Preparation') {
+            steps {
+                echo 'Preparation'
+                sh 'docker rmi irssi-dependencies irssi-builder irssi-test irssi-deploy || true'
+                
+                sh 'rm irssi* || true'
+                
+                sh 'rm -rf MDO2024_INO'
+                sh 'mkdir MDO2024_INO'
+                
+                sh 'rm -rf LOGS'
+                sh 'mkdir LOGS'
+                
+                dir('./MDO2024_INO'){
+                    git branch: 'TD412544', url: 'https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+                }
+                sh 'docker build -f ./MDO2024_INO/INO/GCL1/TD412544/Sprawozdanie3/IRSSI_DOCKERFILES/dependencies.Dockerfile -t irssi-dependencies .'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Build'
+                sh 'docker build -f ./MDO2024_INO/INO/GCL1/TD412544/Sprawozdanie3/IRSSI_DOCKERFILES/build.Dockerfile -t irssi-builder . 2>&1 | tee ./LOGS/build_${BUILD_NUMBER}.txt'
+                archiveArtifacts artifacts: "LOGS/build_${BUILD_NUMBER}.txt", onlyIfSuccessful: false
+                
+                sh 'docker run --rm -t -d --name irssi-builder irssi-builder'
+                sh 'docker cp irssi-builder:/usr/local/bin/irssi ./irssi-${VERSION}_${BUILD_NUMBER}' // get binary file
+                sh 'docker stop irssi-builder'
+                sh 'cp irssi-${VERSION}_${BUILD_NUMBER} irssi'
+                
+                archiveArtifacts artifacts: "irssi-${VERSION}_${BUILD_NUMBER}", onlyIfSuccessful: false
+                
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Test'
+                sh 'docker build -f ./MDO2024_INO/INO/GCL1/TD412544/Sprawozdanie3/IRSSI_DOCKERFILES/test.Dockerfile -t irssi-test --no-cache . 2>&1 | tee ./LOGS/test_${BUILD_NUMBER}.txt'
+                archiveArtifacts artifacts: "LOGS/test_${BUILD_NUMBER}.txt", onlyIfSuccessful: false
+            }
+        }
+        stage('Deploy'){
+            steps{
+                echo 'Deploy'
+                sh 'docker build -f ./MDO2024_INO/INO/GCL1/TD412544/Sprawozdanie3/IRSSI_DOCKERFILES/deploy.Dockerfile -t irssi-deploy .'
+                sh 'docker run --rm --name irssi-deploy -t -d -e TERM=xterm irssi-deploy'
+                sh 'docker ps > LOGS/deploy_docker_ps_${BUILD_NUMBER}.txt'
+                sh 'docker stop irssi-deploy'
+                archiveArtifacts artifacts: "LOGS/deploy_docker_ps_${BUILD_NUMBER}.txt", onlyIfSuccessful: false
+            }
+        }
+        stage('Publish'){
+            steps{
+                echo 'Publish'
+                withCredentials([usernamePassword(credentialsId: '4ddabc3f-9261-4b8d-bf5c-72eb0f0a42bb', usernameVariable: 'USERNAME', passwordVariable: 'EL_PASSWORD')]){
+                    sh 'docker login -u $USERNAME -p $EL_PASSWORD'
+                    sh 'docker tag irssi-deploy $USERNAME/irssi:${VERSION}'
+                    sh 'docker push $USERNAME/irssi:${VERSION}'
+                }
+            }
+        }
+    }
+}
