@@ -1,4 +1,4 @@
-# Zajęcia 05
+# Sprawozdanie 3
 ---
 ## Pipeline, Jenkins, izolacja etapów
 
@@ -147,14 +147,20 @@ pipeline {
 
 ```
 
+Postanowiłem nie forkować repozytorium z aplikacją, dlatego że nie planuje dokonywać w aplikacji żadnych zmian i nie czuję specjalnej potrzeby dodawania kolejnego repozytorium do swojego githuba.
 
-### Sprawozdanie (wstęp)
-* Opracuj dokument z diagramami UML, opisującymi proces CI. Opisz:
-  * Wymagania wstępne środowiska
-  * Diagram aktywności, pokazujący kolejne etapy (collect, build, test, report)
-  * Diagram wdrożeniowy, opisujący relacje między składnikami, zasobami i artefaktami
-* Diagram będzie naszym wzrocem do porównania w przyszłości
-  
+
+### Diagramy
+
+Diagram aktywności:
+
+![diag](ss/0_1_diag.png)
+
+Diagram wdrożeniowy:
+
+![diag](ss/0_2_diag.png)
+
+Diagramy pomogły przemyśleć projekt na samym początku - doprowadziło to do wczesnych zmian w implementacji kroków pileline'u.
 
 ## Omówienie kroków pipelineu
 ### Preparation
@@ -194,17 +200,26 @@ RUN dnf -y install git gcc meson ninja* glib2-devel utf8proc-devel ncurses* perl
 Zdecydowałem się na wersję fedora:40, dlatego że jest to nowa wersja fedory, a aplikacja zarówno się na niej buduje jak i uruchamia.
 
 ### Build
-Ten krok polega na uruchomieniu buildera za pomocą DIND i zarchiwizowaniu logów z procesu budowania.
+Ten krok polega na uruchomieniu buildera za pomocą DIND i zarchiwizowaniu logów z procesu budowania. Następnie kopiowany jest zbudowany plik binarny na zewnątrz kontenera celem archiwizacji i deploymentu.
 ```
 stage('Build') {
   steps {
     echo 'Build'
     sh 'docker build -f ./MDO2024_INO/INO/GCL1/TD412544/Sprawozdanie3/IRSSI_DOCKERFILES/build.Dockerfile -t irssi-builder . 2>&1 | tee ./LOGS/build_${BUILD_NUMBER}.txt'
     archiveArtifacts artifacts: "LOGS/build_${BUILD_NUMBER}.txt", onlyIfSuccessful: false
+    
+    sh 'docker run --rm -t -d --name irssi-builder irssi-builder'
+    sh 'docker cp irssi-builder:/usr/local/bin/irssi ./irssi-${VERSION}_${BUILD_NUMBER}' // get binary file
+    sh 'docker stop irssi-builder'
+    sh 'cp irssi-${VERSION}_${BUILD_NUMBER} irssi'
+    
+    archiveArtifacts artifacts: "irssi-${VERSION}_${BUILD_NUMBER}", onlyIfSuccessful: false
   }
 }
 ```
 Przekierowuje stderr na stdout za pomocą `2>&1`, a następnie przepycham output do wersjonowanego pliku. Zmienna środowiskowa Jenkinsa `BUILD_NUMBER` oznacza który raz w tym pipelinie jest przeprowadzany build. Następnie zlecam archiwizację powstałych logów w postaci artefaktów z doprecyzowaniem, że chcę zapisac również w przypadku wystąpienia błędów.
+
+Uruchamiam kontener w trybie `detached`, żeby uruchomił się "w tle", a następnie kopiuje zbudowany plik binarny poza kontener i zamykam kontener (flaga `--rm` usuwa kontener po zamknięciu).
 
 ### Test
 Testowanie odbywa się w kontenerze bazującym na obrazie zbudowanym przez builder. Kontener ten wywyłuje polecenie `ninja test` w katalogu ze zbudowana aplikacją.
@@ -227,14 +242,18 @@ Wynik testów odczytany z artefaktu:
 
 ![tests](ss/1_7_tests.png)
 ### Deploy
-Deployment rozumiem jako uruchomienie aplikacji w kontenerze, co zamierzam zrealizować dzięki nowemu obrazowi.
+Deployment rozumiem jako uruchomienie aplikacji w kontenerze, co zamierzam zrealizować poprzez zbudowanie nowego kontenera z zainstalowanymi dependencjami i przekopiowanie na niego pliku binarnego. Mógłbym skorzystać z gotowego obrazu builder, ale skutkowałoby to wdrażaniem niepotrzebnych plików (t.j. kod źródłowy, biblioteki i aplikacje konieczne tylko do zbudowania pliku binarnego). Nie ma też powodów dołączania do releasa logów z kompilacji czy testów, bo użytkownikom końcowym nie są do niczego potrzebne.
 ```
-FROM irssi-builder
-WORKDIR /irssi
-RUN ninja -C Build install
+FROM fedora:40
+
+RUN dnf -y update
+RUN dnf -y install utf8proc
+RUN dnf clean all
+
+COPY irssi /usr/local/bin/irssi
 ENTRYPOINT [ "irssi" ]
 ```
-Powyższy dockerfile instaluje irssi zgodnie z zaleceniami z githuba. Jego entrypoint jest ustawiony na samą aplikację co znaczy, że uruchomienie kontenera "na sucho" będzie skutkowało w przejściu do irssi.
+Powyższy dockerfile instaluje irssi, a jego entrypoint jest ustawiony na samą aplikację co znaczy, że uruchomienie kontenera "na sucho" będzie skutkowało w przejściu do irssi.
 
 Krok ten zrealizowałem w pipelinie w ten sposób:
 ```
@@ -260,4 +279,81 @@ Zawartość logu (listing `docker ps`):
 ![deploy log](ss/1_9_deploy_log.png)
 
 ### Publish
-Jako
+Biorąc pod uwagę, że sam plik wykonalny irssi może wymaga określonych depenencji, zdecydowałem się krok publish zrealizować poprzez opublikowanie obrazu fedory z zainstalowanym irssi i jego dependencjami. Alternatywą byłby pakiet instalacyjny RPM, który doinstalowałby dependencje, ale postanowiłem sprawdzić jak wygląda praca z DockerHubem.
+
+W tym celu dodałem w Jenkinsie do zakładki credentials dane logowania do mojego konta w DockerHubie - logowanie będzie konieczne do opublikowania obrazu.
+
+![creds](ss/1_10_credentials.png)
+
+Pozostałe kroki opisuje w Jenkinsfile krok publish:
+```
+stage('Publish'){
+    steps{
+      echo 'Publish'
+      withCredentials([usernamePassword(credentialsId: '4ddabc3f-9261-4b8d-bf5c-72eb0f0a42bb', usernameVariable: 'USERNAME', passwordVariable: 'EL_PASSWORD')]){
+        sh 'docker login -u $USERNAME -p $EL_PASSWORD'
+        sh 'docker tag irssi-deploy $USERNAME/irssi:${VERSION}'
+        sh 'docker push $USERNAME/irssi:${VERSION}'
+      }
+    }
+}
+```
+`WithCredentials` deklaruje stosowanie zapisanych w Jenkisie danych, następnie doprecyzowane są kolejno:
+  * typ credentiali
+  * ich id
+  * nazwa zmiennej której będę używał w miejscu nazwy użytkownika
+  * nazwa zmiennej której będę używaj w miejscu hasła
+
+Polecenie `docker tag` oczekuje przekazania nazwy obrazu, który chcę upublicznić, oraz repozytorium wraz z tagiem, które pozwolą pobrać dokładnie tę wersję z DockerHuba.
+
+![dockerhub repo](ss/1_11_docker_hub.png)
+
+Podana wersja (tag) zczytywana jest ze zmiennej środowiskowej ustalonej w Jenkinsfilu pipeline'a. Obrałem schemat Semantic Versioning, który jest popularnym systemem wersjonowania, i nadałem numer wersji `1.0.0`, która najprawdopodobniej będzie jego ostateczną formą.
+
+Sam plik binarny można również pobrać osobno jako wynik pracy pipeline'u - jest zapisywany jako artefakt wraz z logami.
+
+### Test działania opublikowanego obrazu
+Zaciągam i uruchamiam obraz poleceniem:
+```
+docker run --rm -it ullei/irssi:1.0.0
+```
+Drobna uwaga: tag `1.0.0` jest tutaj konieczny, dlatego że domyślnie docker pobiera wersję o tagu `latest` - biorąc pod uwagę, że w moim przypadku tak otagowana wersja nie istnieje, docker niemógłby odnaleźć obrazu.
+
+Uruchomiony kontener:
+
+![irssi in container](ss/1_12_irssi.png)
+
+Bezpośrednio uruchomiło się irssi, dlatego że jest entrypointem obrazu.
+
+## "Definition of done"
+### Czy opublikowany obraz może być pobrany z Rejestru i uruchomiony w Dockerze bez modyfikacji (acz potencjalnie z szeregiem wymaganych parametrów, jak obraz DIND)?
+Obraz można pobrać i uruchomić z DockerHuba bez konieczności modyfikacji
+### Czy dołączony do jenkinsowego przejścia artefakt, gdy pobrany, ma szansę zadziałać od razu na maszynie o oczekiwanej konfiguracji docelowej?
+Ma szansę, ale maszyna musi być odpowiednio przygotowana - dependencies.
+
+- [x] Aplikacja została wybrana
+- [x] Licencja potwierdza możliwość swobodnego obrotu kodem na potrzeby zadania
+- [x] Wybrany program buduje się
+- [x] Przechodzą dołączone do niego testy
+- [x] Zdecydowano, czy jest potrzebny fork własnej kopii repozytorium
+- [x] Stworzono diagram UML zawierający planowany pomysł na proces CI/CD
+- [x] Wybrano kontener bazowy lub stworzono odpowiedni kontener wstepny (runtime dependencies)
+- [x] Build został wykonany wewnątrz kontenera
+- [x] Testy zostały wykonane wewnątrz kontenera
+- [x] Kontener testowy jest oparty o kontener build
+- [x] Logi z procesu są odkładane jako numerowany artefakt
+- [x] Zdefiniowano kontener 'deploy' służący zbudowanej aplikacji do pracy
+- [x] Uzasadniono czy kontener buildowy nadaje się do tej roli/opisano proces stworzenia nowego
+- [x] Wersjonowany kontener 'deploy' ze zbudowaną aplikacją jest wdrażany na instancję Dockera
+- [x] Następuje weryfikacja, że aplikacja pracuje poprawnie (*smoke test*)
+- [x] Zdefiniowano, jaki element ma być publikowany jako artefakt
+- [x] Uzasadniono wybór: kontener z programem, plik binarny, flatpak, archiwum tar.gz, pakiet RPM/DEB
+- [x] Opisano proces wersjonowania artefaktu (można użyć *semantic versioning*)
+- [x] Dostępność artefaktu: publikacja do Rejestru online, artefakt załączony jako rezultat builda w Jenkinsie
+- [x] Przedstawiono sposób na zidentyfikowanie pochodzenia artefaktu
+  * W przypadku logów i pliku binarnego - źródło można określić na podstawie nazwy pliku (numer wersji i builda)
+  * W przypadku obrazu docelowego z DockerHuba, można określić autora i numer wersji (tag) po danych obrazu.
+- [x] Pliki Dockerfile i Jenkinsfile dostępne w sprawozdaniu w kopiowalnej postaci oraz obok sprawozdania, jako osobne pliki
+- [ ] Zweryfikowano potencjalną rozbieżność między zaplanowanym UML a otrzymanym efektem
+- [ ] Sprawozdanie pozwala zidentyfikować cel podjętych kroków
+- [ ] Forma sprawozdania umożliwia wykonanie opisanych kroków w jednoznaczny sposób
