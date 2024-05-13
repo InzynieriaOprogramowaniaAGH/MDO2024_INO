@@ -28,9 +28,21 @@ Natalia Borysowska-Ślęczka, IO
 
   * Utwórz projekt, który wyświetla uname
 
-  ![](./ss_lab5/lab5_2.png)
+    Dodaje nowy projekt. Następnie wybieram typ projektu - *Projket Ogólny*.
 
-  * Utwórz projekt, który zwraca błąd, gdy... godzina jest nieparzysta
+    ![](./ss_lab5/lab5_17.png)
+
+    W sekcji *Kroki Budowania* wybieram - *Uruchom powłokę*, gdzie wprowadzam swój skrypt.
+
+    ![](./ss_lab5/lab5_18.png)
+
+    Skrypt działa poprawnie.
+
+    ![](./ss_lab5/lab5_2.png)
+
+  * Utwórz projekt, który zwraca błąd, gdy godzina jest nieparzysta
+
+    Ponownie tworzę nowy projekt. Wybieram *Projekt Ogólny*. W sekcji *Kroki Budowania* tworzę skrypt, który będzie zwracał błąd w przypadku godziny nieparzystej.
 
     ![](./ss_lab5/lab5_3.png)
 
@@ -38,23 +50,23 @@ Natalia Borysowska-Ślęczka, IO
 
   * klonuje nasze repozytorium
 
-  Repozytorium jest publiczne, zatem w sekcji *Credentials* zostawiamy opcję *none*
+    Analogicznie jak wyżej tworzę nowy projekt. Wybieram *Projekt Ogólny*. Klonowane repozytorium jest publiczne, zatem w sekcji *Credentials* zostawiamy opcję *none*
 
     ![](./ss_lab5/lab5_6.png)
 
   * przechodzi na osobistą gałąź
 
-    W sekcji *Branches to build* wpisujemy nazwę swojej gałęzi, na którą chcemy przejść
+    W sekcji *Branches to build* wpisujemy nazwę swojej gałęzi, na którą chcemy przejść.
 
     ![](./ss_lab5/lab5_6.png)
 
-    Skrypt poprawnie pobiera repozytorium oraz przełącza się na moją gałąź
+    Skrypt poprawnie pobiera repozytorium oraz przełącza się na moją gałąź.
 
     ![](./ss_lab5/lab5_5.png)
     
   * buduje obrazy z dockerfiles i/lub komponuje via docker-compose
 
-    Zeedytowałam projekt. W sekcji *kroki budowania*
+    Zeedytowałam projekt. W sekcji *Kroki Budowania*.
 
     ![](./ss_lab5/lab5_10.png)    
 
@@ -64,7 +76,7 @@ Natalia Borysowska-Ślęczka, IO
 
     Konieczne było rozszerzenie miejsca.
 
-    Użyłam kolejno komend
+    Użyłam poniższych poleceń do rozszerzania partycji oraz do dostosowywania rozmiaru systemu plików do nowego rozmiaru partycji:
 
     ```df -h```
 
@@ -96,6 +108,9 @@ Natalia Borysowska-Ślęczka, IO
 
     ![](./ss_lab5/lab5_15.png) 
 
+    Rozwiązanie problemów z pamięcią pomogło. Skrypt prawidłowo pobiera repozytorium oraz przełącza się na moją gałąź, a następnie buduje obraz z Dockerfilea, który wcześniej znajdował się w moim repozytorium.
+
+    ![](./ss_lab5/lab5_16.png) 
 
 ### Sprawozdanie (wstęp)
 * Opracuj dokument z diagramami UML, opisującymi proces CI. Opisz:
@@ -105,38 +120,12 @@ Natalia Borysowska-Ślęczka, IO
 * Diagram będzie naszym wzrocem do porównania w przyszłości
   
 ### Pipeline
+
+Przed wykonaniem Pipeline'u tworzę *fork* wybranego repozytorium (czyli kopię tego repozytorium na moim koncie GitHub)
+
+![](./ss_lab5/lab5_19.png)
+
 * Definiuj pipeline korzystający z kontenerów celem realizacji kroków `build -> test`
-
-
 * Może, ale nie musi, budować się na dedykowanym DIND, ale może się to dziać od razu na kontenerze CI. Należy udokumentować funkcjonalną różnicę między niniejszymi podejściami
 * Docelowo, `Jenkinsfile` definiujący *pipeline* powinien być umieszczony w repozytorium. Optymalnie: w *sforkowanym* repozytorium wybranego oprogramowania
-
-### Szczegóły
-Ciąg dalszy sprawozdania
-#### Wymagane składniki
-*  Kontener Jenkins i DIND skonfigurowany według instrukcji dostawcy oprogramowania
-*  Pliki `Dockerfile` wdrażające instancję Jenkinsa załączone w repozytorium przedmiotowym pod ścieżką i na gałęzi według opisu z poleceń README
-*  Zdefiniowany wewnątrz Jenkinsa obiekt projektowy „pipeline”, realizujący następujące kroki:
-  * Kontener `Builder`, który powinien bazować na obrazie zawierającym dependencje (`Dependencies`), o ile stworzenie takiego kontenera miało uzasadnienie. Obrazem tym może być np. baza pobrana z Docker Hub (jak obraz node lub 
-dotnet) lub obraz stworzony samodzielnie i zarejestrowany/widoczny w DIND (jak np. obraz oparty o Fedorę, doinstalowujący niezbędne zależności, nazwany Dependencies). Jeżeli, jak często w przypadku Node, nie ma różnicy między runtimowym obrazem a obrazem z dependencjami, proszę budować się w oparciu nie o latest, ale o **świadomie wybrany tag z konkretną wersją**
-  * Obraz testujący, w ramach kontenera `Tester`
-    * budowany przy użyciu ww. kontenera kod, wykorzystujący w tym celu testy obecne w repozytorium programu
-    * Zadbaj o dostępność logów i możliwość wnioskowania jakie testy nie przechodzą
-  * `Deploy`
-    *  Krok uruchamiający aplikację na kontenerze docelowym
-    *  Jeżeli kontener buildowy i docelowy **wydają się być te same** - być może warto zacząć od kroku `Publish` poniżej
-    *  Jeżeli to kontener buildowy ma być wdrażany - czy na pewno nie trzeba go przypadkiem posprzątać?
-      *  Przeprowadź dyskusję dotyczącą tego, jak powinno wyglądać wdrożenie docelowe wybranej aplikacji. Odpowiedz (z uzasadnieniem i dowodem) na następujące kwestie:
-        * czy program powinien zostać *„zapakowany”* do jakiegoś przenośnego pliku-formatu (DEB/RPM/TAR/JAR/ZIP/NUPKG)
-        * czy program powinien być dystrybuowany jako obraz Docker? Jeżeli tak – czy powinien zawierać zawartość sklonowanego repozytorium, logi i artefakty z *builda*?
-    *  Proszę opisać szczegółowo proces który zostanie opisany jako `Deploy`, ze względu na mnogość podejść
-  * `Publish`
-    * Przygotowanie wersjonowanego artefaktu, na przykład:
-      * Instalator
-      * NuGet/Maven/NPM/JAR
-      * ZIP ze zbudowanym runtimem
-    * Opracuj odpowiednią postać redystrybucyjną swojego artefaktu i/lub obrazu (przygotuj instalator i/lub pakiet, ewentualnie odpowiednio uporządkowany obraz kontenera Docker)
-      * Musi powstać co najmniej jeden z tych elementów
-      * Jeżeli ma powstać artefakt, dodaj go jako pobieralny obiekt do rezultatów „przejścia” *pipeline’u* Jenkins.
-    * Opcjonalnie, krok `Publish` (w przypadku podania parametru) może dokonywać promocji artefaktu na zewnętrzne *registry*
 
