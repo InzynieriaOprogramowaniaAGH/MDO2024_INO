@@ -8,4 +8,7 @@ RUN apt-get update && \
 RUN git clone https://github.com/sanity/LastCalc.git
 
 WORKDIR \LastCalc
-RUN mvn appengine:devserver
+
+COPY . /LastCalc
+
+RUN mvn appengine:devserver -e -X
