@@ -1,7 +1,4 @@
-FROM fedora:latest
-
-RUN dnf -y update
-RUN dnf -y install git gcc meson ninja* glib2-devel utf8proc-devel ncurses* perl-Ext*
+FROM irssi-dependencies
 
 RUN git clone https://github.com/irssi/irssi
 WORKDIR /irssi

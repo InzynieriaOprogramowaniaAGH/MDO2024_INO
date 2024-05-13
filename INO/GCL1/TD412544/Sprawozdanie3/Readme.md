@@ -85,11 +85,63 @@ Utworzyłem nowy freestyle project, w którym dodałem build step uruchamiający
 
 ![uname run](ss/1_2_uname.png)
 
-* Utwórz "prawdziwy" projekt, który:
-  * klonuje nasze repozytorium
-  * przechodzi na osobistą gałąź
-  * buduje obrazy z dockerfiles i/lub komponuje via docker-compose
-  
+**projekt, który zwraca błąd, gdy... godzina jest nieparzysta:**
+
+Utowrzyłem kolejny projekt - tym razem w build stepie wykonałem sekwencję poleceń, która sprawdzała czy godzina jest parzysta (`exit 1` oznacza build jako failure).
+
+![hour shell](ss/1_3_hour_script.png)
+
+![hour good](ss/1_4_hour_print.png)
+
+![hour fail](ss/1_5_hour_err.png)
+
+
+### Prawdziwy projekt:
+Utworzyłem nowy projekt z szablonu pipeline, a pipeline podzieliłem na 3 kroki:
+```
+Preparation - zaciągnięcie danych z mojej gałęzi repozytorium
+Build - zbudowaniu aplikacji za pomocą dockerfile
+Test - przetestowanie aplikacji za pomocą dockerfile
+```
+
+Plugin gita w jenkinsie pozwala na wygodne pobranie repozytorium poleceniem:
+```
+git branch: 'TD412544', url: 'https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+```
+
+Sugerując się pipeline scriptem Hello World napisałem własny, który realizował wymienione trzy kroki:
+```
+pipeline {
+    agent any
+
+    stages {
+        stage('Preparation') {
+            steps {
+                echo 'Preparation'
+                sh 'rm -rf MDO2024_INO'
+                git branch: 'TD412544', url: 'https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Build'
+                dir ('./INO/GCL1/TD412544/Sprawozdanie3/IRSSI_DOCKERFILES') {
+                    sh 'docker build -f ./build.Dockerfile -t irssi-builder .'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Test'
+                sh 'docker build -f ./INO/GCL1/TD412544/Sprawozdanie3/IRSSI_DOCKERFILES/test.Dockerfile -t irssi-test --progress=plain --no-cache .'
+            }
+        }
+    }
+}
+
+```
+
+
 ### Sprawozdanie (wstęp)
 * Opracuj dokument z diagramami UML, opisującymi proces CI. Opisz:
   * Wymagania wstępne środowiska
