@@ -260,4 +260,4 @@ Zawartość logu (listing `docker ps`):
 ![deploy log](ss/1_9_deploy_log.png)
 
 ### Publish
-
+Jako
