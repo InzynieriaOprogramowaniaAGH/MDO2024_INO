@@ -31,3 +31,11 @@ Powłoka została uzupełniona o poniższy kod.
 Po zapisaniu projektu i uruchomieniu otrzymano poniższe logi.
 ![](../Screeny/3.1.2.12.png)
 ## 3. Indywidualny projekt
+Projekt został oparty na repozytorium, którego używone bylo na poprzednich laboratoriach. Zgodnie z zawartą w repozytorium informacją licencja pozwalała na korzystanie z tego repo. Na samym początku zostały utworzony plan przeprowadzanych kroków oraz diagram wdrożenia. Prezentują się one następująco:
+![](../Screeny/3.1.3.1.png)
+![](../Screeny/3.1.3.2.png)
+Następnie przystąpiono do pracy. Utworzony został pipline. ``Nowy projekt -> Pipline`` nazwa została ustawiona na "Indywidualny_projekt". Pierwszym krokiem było utworzenie ``stage ('Start')`` który usuwa niepotrzebne elementy, czyli na przykład wcześniej skopiowane repozytorium czy też kontenery oraz tworzy plik z logami, który będzie wykorzystywany póżniej. 
+![](../Screeny/3.1.3.3.png)
+Kolejny stage ma za zadanie pobranie repozytorium oraz przejście na odpowiedni branch. Zostaje to wykonane przy pomocy poniższego kodu.
+![](../Screeny/3.1.3.4.png)
+
