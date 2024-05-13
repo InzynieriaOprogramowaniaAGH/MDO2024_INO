@@ -8,18 +8,24 @@ Natalia Borysowska-Ślęczka, IO
 ## Wykonane kroki - laboratorium nr 5
 
 ### Przygotowanie
-* Upewnij się, że na pewno działają kontenery budujące i testujące, stworzone na poprzednich zajęciach
-* Zapoznaj się z instrukcją instalacji Jenkinsa: https://www.jenkins.io/doc/book/installing/docker/
-  * Uruchom obraz Dockera który eksponuje środowisko zagnieżdżone
-  * Przygotuj obraz blueocean na podstawie obrazu Jenkinsa (czym się różnią?)
-  * Uruchom Blueocean
-  * Zaloguj się i skonfiguruj Jenkins
-  * Zadbaj o archiwizację i zabezpieczenie logów
+  * Obraz blueocean oraz obraz Jenkinsa (czym się różnią?)
+
+    Jenkins Blue Ocean to nowsza wersja interfejsu użytkownika Jenkinsa, która została wprowadzona, aby poprawić i ułatwić doświadczenie użytkownika w pracy z Jenkinsem. Jenkins Blue Ocean oferuje bardziej intuicyjny interfejs graficzny, który ułatwia wizualizację i analizę procesów ciągłej integracji i dostarczania (CI/CD). Dodatkowo, Jenkins Blue Ocean zawiera zestaw preinstalowanych wtyczek, które są zoptymalizowane do pracy z tym interfejsem.
+
+    Instalacji Jenkinsa dokonałam w Sprawozdaniu numer 2, dlatego jedynie upewniam się że wcześniej utworzone kontenry DinD oraz Blueocean działają poprawnie  
+
+    ![](./ss_lab5/lab5_1.png)
   
-![](./ss_lab5/lab5_1.png)
+  * Zaloguj się i skonfiguruj Jenkins
+
+    Loguje się do Jenkinsa i konfiguruje archiwizację oraz zabezpieczenie logów
+
+    ![](./ss_lab5/lab5_9.png)
+
 
 ### Uruchomienie 
 * Konfiguracja wstępna i pierwsze uruchomienie
+
   * Utwórz projekt, który wyświetla uname
 
   ![](./ss_lab5/lab5_2.png)
@@ -29,6 +35,7 @@ Natalia Borysowska-Ślęczka, IO
     ![](./ss_lab5/lab5_3.png)
 
 * Utwórz "prawdziwy" projekt, który:
+
   * klonuje nasze repozytorium
 
   Repozytorium jest publiczne, zatem w sekcji *Credentials* zostawiamy opcję *none*
@@ -37,15 +44,59 @@ Natalia Borysowska-Ślęczka, IO
 
   * przechodzi na osobistą gałąź
 
-  W sekcji *Branches to build* wpisujemy nazwę swojej gałęzi, na którą chcemy przejść
+    W sekcji *Branches to build* wpisujemy nazwę swojej gałęzi, na którą chcemy przejść
 
     ![](./ss_lab5/lab5_6.png)
+
+    Skrypt poprawnie pobiera repozytorium oraz przełącza się na moją gałąź
+
+    ![](./ss_lab5/lab5_5.png)
     
   * buduje obrazy z dockerfiles i/lub komponuje via docker-compose
 
-  ![](./ss_lab5/lab5_5.png)
+    Zeedytowałam projekt. W sekcji *kroki budowania*
 
-  
+    ![](./ss_lab5/lab5_10.png)    
+
+    Podczas próby budowania obrazu z dockerfile napotkałam problem - zbyt mała ilość miejsca na dysku.
+
+    ![](./ss_lab5/lab5_11.png)   
+
+    Konieczne było rozszerzenie miejsca.
+
+    Użyłam kolejno komend
+
+    ```df -h```
+
+    ```sudo vgdisplay```
+
+    ```sudo lvdisplay```
+
+    ```sudo lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv```
+
+    ```sudo lvdisplay```
+
+    ```sudo resize2fs /dev/mapper/ubuntu--vg-ubuntu--lv```
+
+    ```df -h```
+
+    Przed:
+    
+    ![](./ss_lab5/lab5_12.png)   
+
+    Po:
+
+    ![](./ss_lab5/lab5_13.png)   
+
+    Okazało się to jednak nie wystarczające, gdyż otrzymałam kolejny błąd - dalej problem z pamięcią
+
+    ![](./ss_lab5/lab5_14.png)   
+
+    Konieczna była zmiana wartości progów w ustawieniach Jenkinsa (zmieniłam progi na małe wartości, u mnie przykładowo 100MB)
+
+    ![](./ss_lab5/lab5_15.png) 
+
+
 ### Sprawozdanie (wstęp)
 * Opracuj dokument z diagramami UML, opisującymi proces CI. Opisz:
   * Wymagania wstępne środowiska
@@ -55,6 +106,8 @@ Natalia Borysowska-Ślęczka, IO
   
 ### Pipeline
 * Definiuj pipeline korzystający z kontenerów celem realizacji kroków `build -> test`
+
+
 * Może, ale nie musi, budować się na dedykowanym DIND, ale może się to dziać od razu na kontenerze CI. Należy udokumentować funkcjonalną różnicę między niniejszymi podejściami
 * Docelowo, `Jenkinsfile` definiujący *pipeline* powinien być umieszczony w repozytorium. Optymalnie: w *sforkowanym* repozytorium wybranego oprogramowania
 
