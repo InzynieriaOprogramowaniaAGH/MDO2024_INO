@@ -227,3 +227,37 @@ Wynik testów odczytany z artefaktu:
 
 ![tests](ss/1_7_tests.png)
 ### Deploy
+Deployment rozumiem jako uruchomienie aplikacji w kontenerze, co zamierzam zrealizować dzięki nowemu obrazowi.
+```
+FROM irssi-builder
+WORKDIR /irssi
+RUN ninja -C Build install
+ENTRYPOINT [ "irssi" ]
+```
+Powyższy dockerfile instaluje irssi zgodnie z zaleceniami z githuba. Jego entrypoint jest ustawiony na samą aplikację co znaczy, że uruchomienie kontenera "na sucho" będzie skutkowało w przejściu do irssi.
+
+Krok ten zrealizowałem w pipelinie w ten sposób:
+```
+stage('Deploy'){
+  steps{
+    echo 'Deploy'
+    sh 'docker build -f ./MDO2024_INO/INO/GCL1/TD412544/Sprawozdanie3/IRSSI_DOCKERFILES/deploy.Dockerfile -t irssi-deploy .'
+    sh 'docker run --rm --name irssi-deploy -t -d -e TERM=xterm irssi-deploy'
+    sh 'docker ps > LOGS/deploy_docker_ps_${BUILD_NUMBER}.txt'
+    sh 'docker stop irssi-deploy'
+    archiveArtifacts artifacts: "LOGS/deploy_docker_ps_${BUILD_NUMBER}.txt", onlyIfSuccessful: false
+  }
+}
+```
+Jako sposób weryfikacji działania obrałem sprawdzenie, czy po uruchomieniu kontenera pozostaje on uruchomiony (aplikacji irssi utrzymuje go przy życiu (i czy istnieje - flaga `--rm`)). Próbowałem zapisać interfejs aplikacji jako log (`docker logs irssi-deploy > log.txt`), ale wewnątrz Jenkinsa otrzymywałem plik o rozmarze 0B - poza Jenkinsem działało normalnie.
+
+Zapisuje output `docker ps` w postaci logu z deploymentu jako artefakt.
+
+![deploy](ss/1_8_deploy.png)
+
+Zawartość logu (listing `docker ps`):
+
+![deploy log](ss/1_9_deploy_log.png)
+
+### Publish
+
