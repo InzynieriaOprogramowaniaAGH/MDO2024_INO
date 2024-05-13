@@ -2,6 +2,10 @@
 ---
 ## Pipeline, Jenkins, izolacja etapów
 
+Celem projektu jest zapoznanie się z automatyzacją procesów budowania i wdrażania aplikacji za pomocą Jenkinsa. Wykorzystane zostaną kontenery oraz Docker in Docker. Będzie należało rozwiązać problem archiwizacji kolejnych wersji/instancji zbudowanej aplikacji.
+
+Pipeline'y mają na celu usprawnienie życia osobom zajmującym się utrzymywaniem aplikacji, gdzie nierzadko pojawiają się setki commitów dziennie, a nigdy nie wiadomo kiedy pojawi się niepozorny konflikt, który wyłączy aplikację ze sprawnego działania.
+
 ## Przygotowanie
 ### Instancja Jenkins
 
@@ -331,6 +335,91 @@ Obraz można pobrać i uruchomić z DockerHuba bez konieczności modyfikacji
 ### Czy dołączony do jenkinsowego przejścia artefakt, gdy pobrany, ma szansę zadziałać od razu na maszynie o oczekiwanej konfiguracji docelowej?
 Ma szansę, ale maszyna musi być odpowiednio przygotowana - dependencies.
 
+### Jenkinsfile
+Ostatecznie Jenkinsfile prezentuje się tak:
+```
+pipeline {
+    agent any
+    
+    environment {
+        VERSION = '1.0.0'
+    }
+
+    stages {
+        stage('Preparation') {
+            steps {
+                echo 'Preparation'
+                sh 'docker rmi irssi-dependencies irssi-builder irssi-test irssi-deploy || true'
+                
+                sh 'rm irssi* || true'
+                
+                sh 'rm -rf MDO2024_INO'
+                sh 'mkdir MDO2024_INO'
+                
+                sh 'rm -rf LOGS'
+                sh 'mkdir LOGS'
+                
+                dir('./MDO2024_INO'){
+                    git branch: 'TD412544', url: 'https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+                }
+                sh 'docker build -f ./MDO2024_INO/INO/GCL1/TD412544/Sprawozdanie3/IRSSI_DOCKERFILES/dependencies.Dockerfile -t irssi-dependencies .'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Build'
+                sh 'docker build -f ./MDO2024_INO/INO/GCL1/TD412544/Sprawozdanie3/IRSSI_DOCKERFILES/build.Dockerfile -t irssi-builder . 2>&1 | tee ./LOGS/build_${BUILD_NUMBER}.txt'
+                archiveArtifacts artifacts: "LOGS/build_${BUILD_NUMBER}.txt", onlyIfSuccessful: false
+                
+                sh 'docker run --rm -t -d --name irssi-builder irssi-builder'
+                sh 'docker cp irssi-builder:/usr/local/bin/irssi ./irssi-${VERSION}_${BUILD_NUMBER}' // get binary file
+                sh 'docker stop irssi-builder'
+                sh 'cp irssi-${VERSION}_${BUILD_NUMBER} irssi'
+                
+                archiveArtifacts artifacts: "irssi-${VERSION}_${BUILD_NUMBER}", onlyIfSuccessful: false
+                
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Test'
+                sh 'docker build -f ./MDO2024_INO/INO/GCL1/TD412544/Sprawozdanie3/IRSSI_DOCKERFILES/test.Dockerfile -t irssi-test --no-cache . 2>&1 | tee ./LOGS/test_${BUILD_NUMBER}.txt'
+                archiveArtifacts artifacts: "LOGS/test_${BUILD_NUMBER}.txt", onlyIfSuccessful: false
+            }
+        }
+        stage('Deploy'){
+            steps{
+                echo 'Deploy'
+                sh 'docker build -f ./MDO2024_INO/INO/GCL1/TD412544/Sprawozdanie3/IRSSI_DOCKERFILES/deploy.Dockerfile -t irssi-deploy .'
+                sh 'docker run --rm --name irssi-deploy -t -d -e TERM=xterm irssi-deploy'
+                sh 'docker ps > LOGS/deploy_docker_ps_${BUILD_NUMBER}.txt'
+                sh 'docker stop irssi-deploy'
+                archiveArtifacts artifacts: "LOGS/deploy_docker_ps_${BUILD_NUMBER}.txt", onlyIfSuccessful: false
+            }
+        }
+        stage('Publish'){
+            steps{
+                echo 'Publish'
+                withCredentials([usernamePassword(credentialsId: '4ddabc3f-9261-4b8d-bf5c-72eb0f0a42bb', usernameVariable: 'USERNAME', passwordVariable: 'EL_PASSWORD')]){
+                    sh 'docker login -u $USERNAME -p $EL_PASSWORD'
+                    sh 'docker tag irssi-deploy $USERNAME/irssi:${VERSION}'
+                    sh 'docker push $USERNAME/irssi:${VERSION}'
+                }
+            }
+        }
+    }
+}
+```
+
+### Source Control Management Jenkinsfile
+Pobranie Jenkinsfile z gita można zrealizować zanzaczając w ustawieniach pipeline'u `Pipeline script from SCM` i podaniu dokładnej ścieżki do pliku - Repozytorium, Gałąź, Ścieżka.
+
+![scm 1](ss/1_14_1_scm.png)
+![scm 1](ss/1_14_2_scm.png)
+![scm 1](ss/1_14_3_scm.png)
+
+### Lista kontrolna
+
 - [x] Aplikacja została wybrana
 - [x] Licencja potwierdza możliwość swobodnego obrotu kodem na potrzeby zadania
 - [x] Wybrany program buduje się
@@ -354,6 +443,7 @@ Ma szansę, ale maszyna musi być odpowiednio przygotowana - dependencies.
   * W przypadku logów i pliku binarnego - źródło można określić na podstawie nazwy pliku (numer wersji i builda)
   * W przypadku obrazu docelowego z DockerHuba, można określić autora i numer wersji (tag) po danych obrazu.
 - [x] Pliki Dockerfile i Jenkinsfile dostępne w sprawozdaniu w kopiowalnej postaci oraz obok sprawozdania, jako osobne pliki
-- [ ] Zweryfikowano potencjalną rozbieżność między zaplanowanym UML a otrzymanym efektem
-- [ ] Sprawozdanie pozwala zidentyfikować cel podjętych kroków
-- [ ] Forma sprawozdania umożliwia wykonanie opisanych kroków w jednoznaczny sposób
+- [x] Zweryfikowano potencjalną rozbieżność między zaplanowanym UML a otrzymanym efektem
+  * Diagramy nie do końca uwzględniają przeniesienie zbudowanego pliku wykonywalnego z buildera do deployera czy archiwum Jenkinsa. Podobnie nie spodziewałem się że uwzględnie pobieranie jenkinsfile'a z githuba.
+- [x] Sprawozdanie pozwala zidentyfikować cel podjętych kroków
+- [x] Forma sprawozdania umożliwia wykonanie opisanych kroków w jednoznaczny sposób
