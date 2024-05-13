@@ -1,0 +1,22 @@
+---
+# tasks file for container_handling
+
+- name: Budowanie obrazu.
+  become: true
+  community.docker.docker_image:
+    name: deploy
+    build:
+      path: /home/ansible/node_app/
+    source: build
+
+- name: Run container - and application in this
+  become: true
+  community.docker.docker_container:
+    name: node_app
+    image: deploy
+
+- name: Remove container
+  become: true
+  community.docker.docker_container:
+    name: node_app
+    state: absent

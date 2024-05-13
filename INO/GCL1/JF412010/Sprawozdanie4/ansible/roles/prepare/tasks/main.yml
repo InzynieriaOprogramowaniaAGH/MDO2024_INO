@@ -1,0 +1,17 @@
+---
+# tasks file for prepare
+
+- name: Pobieranie dockera
+  become: true
+  ansible.builtin.apt:
+    name: docker.io
+    state: latest
+  
+- name: Umożliewienie jego dzialania bez reboota
+  become: true
+  command: systemctl enable --now docker
+
+- name: Pobieranie obrazu do zbudowania/do deployu programu
+  copy:
+    src: ~/zajecia/MDO2024_INO/INO/GCL1/JF412010/Sprawozdanie4/DEPLOY.Dockerfile
+    dest: ~/node_app/Dockerfile
