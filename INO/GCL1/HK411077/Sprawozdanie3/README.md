@@ -117,3 +117,11 @@ Przykładowe logi (z klonowania repozytorium i budowania obrazów):
 #### Diagram aktywności
 
 ![diagram aktywności](images/diagram_aktywnosci.png)
+
+#### Diagram wdrożeniowy
+
+![diagram wdrożeniowy](images/diagram_wdrozeniowy.png)
+
+### Pipeline
+
+W ramach pipeline będę korzystać z kontenerów Docker do izolacji poszczególnych etapów: budowania, testowania, wdrażania i publikowania. Pierwszy etap nie korzysta z konteru Docker, bezpośrednio klonowane jest w nim repozytorium przedmiotowe z GitHub. Pierwsze 2 etay zostały już przeze mnie opisane wcześniej w sprawozdaniu. Trzeci 
