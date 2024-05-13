@@ -1,16 +1,6 @@
 # Zajęcia 10
 
 # Wdrażanie na zarządzalne kontenery: Kubernetes (1)
-## Format sprawozdania
-- Wykonaj opisane niżej kroki i dokumentuj ich wykonanie
-- Na dokumentację składają się następujące elementy:
-  - plik tekstowy ze sprawozdaniem, zawierający opisy z każdego z punktów zadania
-  - zrzuty ekranu przedstawiające wykonane kroki (oddzielny zrzut ekranu dla każdego kroku)
-  - listing historii poleceń (cmd/bash/PowerShell)
-- Sprawozdanie z zadania powinno umożliwiać **odtworzenie wykonanych kroków** z wykorzystaniem opisu, poleceń i zrzutów. Oznacza to, że sprawozdanie powinno zawierać opis czynności w odpowiedzi na (także zawarte) kroki z zadania. Przeczytanie dokumentu powinno umożliwiać zapoznanie się z procesem i jego celem bez konieczności otwierania treści zadania.
-- Omawiane polecenia dostępne jako clear text w treści, stosowane pliki wejściowe dołączone do sprawozdania jako oddzielne
-- Sprawozdanie proszę umieścić w następującej ścieżce: ```<kierunek>/<grupa>/<inicjały><numerIndeksu>/k8s/Sprawozdanie.md```, w formacie Markdown
-- To zadanie będzie kontynuowane drugą częścią, proszę nie nadpisywać zrzutów ekranu
 
 ## Zadania do wykonania
 ### Instalacja klastra Kubernetes
