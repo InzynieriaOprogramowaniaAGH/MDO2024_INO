@@ -42,7 +42,7 @@ Po wykonaniu otrzymałam następujące logi:
 
 ### Wstęp
 Na wstępie chciałam zaznaczyć, że byłam zmuszona przenieść się na inne urzadzęnie, gdyż stan pamięci i procesora poprzedniego komputera ZNACZNIE wydłużał pracę.
-Na nowym urządzeniu postanowiłam przenieść się na Fedore, kierując się zapewnieniami, że pracuje się na niej lepiej, niż na Ubuntu. Po ponownym zainstalowaniu Jenkinsa, wybrałam repozytorium do dalczej pracy.
+Na nowym urządzeniu postanowiłam przenieść się na Fedore, kierując się zapewnieniami, że pracuje się na niej lepiej, niż na Ubuntu. Po ponownym zainstalowaniu Jenkinsa, wybrałam repozytorium do dalszej pracy.
 Oto link do repozytorium:
 
 ```
@@ -59,7 +59,8 @@ Jest to otwarte oprogramowanie, które korzysta z licencji GNU General Public Li
 
   * Następnie utworzyłam diagram wdrożeniowy:
     
-///SCR_diagram_wdr
+![screen1](../Sprawozdanie2/screenshots/spr3diagram_wdr.png)
+
 
 ### Pipeline
 Pierwszy krok, który nazwałam "Prepare" ma na celu przygotowanie środowiska pracy do dalszych działań, w skład czego wchodzą następujące kroki: usunięcie starego katalogu, clone repozytorium przedmiotu i checkout na moją gałąź.
@@ -154,6 +155,89 @@ Aby udostępnić ostateczny artefakt, dołączyłam program jako końcowy produk
 Wszytskie etapy przebiegły poprawnie:
 
 ![screen1](../Sprawozdanie2/screenshots/spr3scr19.png)
+
+Utworzony Jenkinsfile wygląda nastepująco:
+```
+pipeline {
+ agent any
+
+ stages {
+     stage('Prepare') {
+         steps {
+             
+                 sh '''
+                 rm -rf MDO2024_INO
+                 git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+                 cd MDO2024_INO
+                 git checkout KK406795
+                 '''
+         
+         }
+     }
+     stage('Create logs') {
+         steps {
+             dir('MDO2024_INO/INO/GCL2/KK406795/Sprawozdanie3/Build'){
+                 sh 'touch b.log'
+             }
+             dir('MDO2024_INO/INO/GCL2/KK406795/Sprawozdanie3/Test'){
+                 sh 'touch t.log'
+             }
+         }
+         
+     }
+     stage('Build '){
+         steps{
+             dir('MDO2024_INO/INO/GCL2/KK406795/Sprawozdanie3/Build'){
+                 sh 'docker build -t build_container -f irssi_builder.Dockerfile . | tee b.log'
+                 archiveArtifacts artifacts: "b.log"
+
+             }
+         }
+     }
+     stage('Tests'){
+         steps{
+             dir('MDO2024_INO/INO/GCL2/KK406795/Sprawozdanie3/Test'){
+                 sh 'docker build -t test_container -f irssi_test.Dockerfile . | tee t.log'
+                 archiveArtifacts artifacts: "t.log"
+             }
+             
+         }
+     }
+     
+     
+      stage('Deploy'){
+ steps{
+     dir('MDO2024_INO/INO/GCL2/KK406795/Sprawozdanie3/Deploy') {
+         sh 'docker build -t deploy . -f deploy.Dockerfile'
+         
+         sh 'docker run -t -d -e TERM=xterm --name ddeploy -v output:/output build_container'
+         sh 'docker run -t -d -e TERM=xterm --name ccopy -v output:/output deploy'
+         
+         sh 'docker cp ddeploy:./irssi/Build/src/fe-text/irssi ./irssi_deployed'
+         sh 'docker cp ./irssi_deployed ccopy:/output'
+         
+         sh 'tar -cvf artifacts/art.tar ./irssi_deployed ../artifacts/README.md'
+     
+         sh 'docker stop ddeploy'
+         sh 'docker stop ccopy' 
+     }    
+    }
+  }
+     
+     stage('Publish'){
+     steps{
+         dir('MDO2024_INO/INO/GCL2/KK406795/Sprawozdanie3/Deploy'){
+         archiveArtifacts artifacts: "artifacts/art.tar"
+         sh 'docker system prune --all --volumes --force'
+             }    
+         }
+     }
+ }
+}
+```
+Tak wygląda konfiguracja mojego pliku na moim koncie Jenkins przez Pipeline script from SCM.
+
+![screen1](../Sprawozdanie2/screenshots/spr3scr20.png)
 
 
 
