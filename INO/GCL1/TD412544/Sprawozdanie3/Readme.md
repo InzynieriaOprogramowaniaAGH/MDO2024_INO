@@ -218,3 +218,12 @@ stage('Test') {
 }
 ```
 Logi przeprowadzanej operacji, podobnie jak w przypadku builda, zapisywane są w pliku tekstowym i archiwizowane w postaci artefkatów.
+
+Wynik builda:
+
+![build](ss/1_6_build.png)
+
+Wynik testów odczytany z artefaktu:
+
+![tests](ss/1_7_tests.png)
+### Deploy
