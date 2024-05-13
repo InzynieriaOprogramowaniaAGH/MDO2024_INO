@@ -1,6 +1,6 @@
 FROM build-app
 
-WORKDIR /express/tmp/foo
+WORKDIR /express
 
 RUN npm install
 
