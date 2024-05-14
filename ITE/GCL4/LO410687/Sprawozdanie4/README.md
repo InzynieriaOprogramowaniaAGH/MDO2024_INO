@@ -463,7 +463,6 @@ moby-engine
 ```
 Następnie uzupełniamy sekcję [%post](https://docs.fedoraproject.org/en-US/fedora/f36/install-guide/appendixes/Kickstart_Syntax_Reference/#sect-kickstart-postinstall), która w pliku konfiguracyjnym Kickstart pozwala na wykonywanie poleceń po zakończeniu instalacji systemu. Jest to miejsce, w którym można wprowadzić niestandardowe konfiguracje, instalować dodatkowe oprogramowanie, kopiować pliki konfiguracyjne czy wykonywać skrypty konfiguracyjne.
 ```
-# Execute post installation commands (throw error on fail and save logs)
 
 %post --erroronfail --log=/root/ks-post.log
 
