@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:jammy
 
 #pobranie wszystkich wstepnych zaleznonsci
 RUN apt-get update && apt-get upgrade -y && apt-get install -y wget gnupg git ninja-build cmake libc++-dev libc++abi-dev mesa-common-dev libglu1-mesa-dev freeglut3-dev libopenal1 libopenal-dev clang
