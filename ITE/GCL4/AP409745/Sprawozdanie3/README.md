@@ -10,8 +10,12 @@ Laboratoria koncentrowały się na stworzeniu pipeline'u przy użyciu oprogramow
 Labolatoria były prowadzone na maszynie wirutalnej typu Oracle VM Virtual Box, na systemie Ubuntu 22.
 Aplikacjami wybranymi od realizacji labolatoriów, były wykorzystane już w ramach poprzednich zajęć Irssi oraz Node JS Dummy Test. Są to programy o otwartych licnecjach, zapewniające swobodę w ich używaniu i wykorzystywaniu.
 
-Wstępny projekt pipeline'u wyglądał następująca:
+Wstępny zamysł pipeline'u wygląda następująco:
+- Całośc procesu będzie przeprowadzona w ramach DIND sterowanego przez Jenkinsa
+- Ciąg etapów BUILD, TEST, DEPLOY, PUBLISH będzie tworzyć ciąg czterech, zależnych od siebie kontenerów, z których ostatni (DEPLOY) zostaje umieszczony jako kontener na DockerHub'ie.
+
 ![alt text](<Diagram bez tytułu.drawio.png>)
+
 Labolatoria zaczęto od przygotowania Jenkinsa. Najpier pobrano obraz Docker Inside Docker (DinD) komendą `docker image pull docker:dind` i go uruchomiono z wyekspozycjonowanym portem 2376, by Jenkins mógł się z nim porozumieć. Instalacja DIND jest krytyczna, by móc za pomocą Jenkinsa wykonywać operacje w ramach dockera.
 ```
 docker run \
@@ -132,7 +136,7 @@ Trzeci krok to krok tworzący kontener testujący, by sprawdzić czy poprzednie 
 ## Deploy i Publish
 Jako, że program pomyślnie się budował i testował, kolejnym krokiem było utworzenie dwóch ostatnich kroków - Deploy oraz Publish. 
 
-Krok Deploy jest odpowiedzialny za próbę wdrożenia programu na danym systemie, a krok Publish za jego udostępnienie dalej. Ze względu na użycie systemu Fedora, za sposób rozprowadzania wybrałem pakiet w ramach RPM Packet Manager.
+Krok Deploy jest odpowiedzialny za próbę wdrożenia programu na danym systemie, a krok Publish za jego udostępnienie dalej. Ze względu na użycie systemu Fedora, (a także brak sukcesów z próbami automatyzacji zamieszczania kontenerów w ramach DockerHub'a) za sposób rozprowadzania wybrałem pakiet w ramach RPM Packet Manager.
 
 Jako, że w takim typie dystrybucji mamy do czynienia z instalacją poprzez pakiet tworzony w kroku Publish, wymaga to wykonania go wcześniej od kroku Deploy. Obraz deployera tworzymy w oparciu o obraz wykorzystany w kroku Build.
 
@@ -216,5 +220,5 @@ Tak stworzony pipeline przechodzi przez wszystkie etapy pomyślnie, tworząc art
 # Wnioski i uwagi
 - Jenkins w połączeniu z Docker in Docker (DIND) stanowi efektywne narzędzie do budowania łańcuchów akcji, obejmujących proces budowania, testowania oraz publikowania/deployowania oprogramowania.
 - Wdrażanie metodologii DevOps, której częścią jest automatyzacja procesów CI/CD za pomocą Pipeline'ów, może przyczynić się do zwiększenia efektywności, jakości oraz przewidywalności dostarczania oprogramowania.
-- Pierwotny model Pipeline'ów, inspirowany UML'em, uległ zmianie w praktyce. Przykładowo, procesy Deploy i Publish mają odwróconą kolejność. Zmiana ta wynika z innego podejścia do 
+- Pierwotny model Pipeline'ów, inspirowany UML'em, uległ zmianie w praktyce. Przykładowo, procesy Deploy i Publish mają odwróconą kolejność. Zmiana ta wynika z innego podejścia niż założonego na początku (pakiet RPM zamiast publikacji kontenera na DockerHub'ie)
 - Pliki Jenkinsfile są przydatne, ponieważ uUmożliwiają definiowanie i zarządzanie procesem CI/CD jako zautomatyzowanym kodem, co zapewnia jednolitość i powtarzalność w procesie budowania, testowania i wdrażania aplikacji, a także umożliwiają łatwe udostępnianie i ponowne wykorzystanie konfiguracji między projektami.
