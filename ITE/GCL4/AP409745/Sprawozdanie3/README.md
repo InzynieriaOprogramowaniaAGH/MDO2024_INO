@@ -27,7 +27,7 @@ docker run \
   --storage-driver overlay2
 ```
 Następnie należało utworzyć obraz Jenkinsa, w tym celu stworzyłem odpowiedni Dockerfile.
-![jenkins_dockerfile](jenkins_dockerfile.png)
+![jenkins_dockerfile](/images/jenkins_dockerfile.png)
 A następnie zbudowałem obraz `docker build -t myjenkins-blueocean:2.440.3-1 .` i uruchomiłem, eksponując port 8080, by móc przy pomocy przeglądarki mieć dostęp do interfejsu graficznego Jenkinsa oraz port 50000 by agent TCP mógł się łączyć z dockerem.
 ```
 docker run \
@@ -46,19 +46,19 @@ docker run \
 ```
 
 Po wejściu w przeglądarke (z poza maszyny wirutalnej) na stronę `IP_maszyny:8080`, pojawiła się interfejs Jenkins'a. Przeszedłem instlaację z rekomendowanymi wtyczkami i utworzyłem konto `admin`. Jako, że Jenkins generuje przypadkowe hasło dla swojego pierwszego administratora, musiałem je wydobyć z kontenera Jenkinsa. W tym celu na terminalu systemu (maszyny wirutalnej) użyłem komendy `docker exec [nazwa_konteneru_jenkinsa] cat /var/jenkins_home/secrets/initialAdminPassword` by na kontenerze jenkinsa wykonać operację `cat` w celu odczytu hasła.
-![alt text](jenkins_login.png)
+![alt text](images/jenkins_login.png)
 
 ## Testowanie Jenkinsa
 
 Następnie przeszedłem do testowania poprawności działania Jenkinsa, w tym celu stworzyłem dwa proste projekty - jeden wyświetlający uname, drugi zwracający błąd gdy godzina jest nieparzysta. 
 
 W tym celu tworzymy dwa nowe projekty
-![alt text](uname_start.png)
+![alt text](images/uname_start.png)
 Dla obydwu, dodając w krokach budowania uruchomienie powłoki z odpowiednim kodem, a następnie uruchomiłem projekty z poziomu Jenkinsa. Po sprwadzeniu logów konsoli możemy stwierdzić, że Jenkins działa poprawnie i pomyślnie wykonywać zadanie mu polecenia - pracowaliśmy na systemie z rodziny Linux, a godzina 5 jest nieparzysta.
-![alt text](powloka_uname.png)
-![alt text](log_uname.png)
-![alt text](powloka_hour.png)
-![alt text](err_code.png)
+![alt text](images/powloka_uname.png)
+![alt text](images/log_uname.png)
+![alt text](images/powloka_hour.png)
+![alt text](images/err_code.png)
 
 # Pipeline'y
 
@@ -67,26 +67,29 @@ Kolejnym krokiem było utworzenie projektu klonującego gałąź repozytorium i 
 
 Ze względów na brak pewności, czy po reinstalacji systemu, wszystko się poprawnie wkonuje dla pewności spróbowałem zbudować obraz przy użyciu stworzonych plików Dockerfile (node-builder oraz node-tester), z wyeksponowanym portem 3000. Na szczęście wszystko działało poprawnie, więc mogłem ich użyć do utworzenia projektu klonującego repozytorium, i utworzenia obrazu budującego i testującego.
 
-![alt text](image-1.png)
-![alt text](image-3.png)
+![alt text](images/image-1.png)
+![alt text](images/image-3.png)
 
 W tym celu stowrzyłem nowy projekt. Ustawiłem kopiowane repozytorium na własny branch repozytorium przedmiotowego, gdzie wcześniej umieściłem odpowiednie pliki dockerfile dla aplikacji, a także dodałem do projektu 2 kroki: uruchomienie powłoki i wywołanie komend budujących obrazy - najpierw budujący, potem testowy.
-![alt text](image-2.png)
-![alt text](image-4.png)
+![alt text](images/image-2.png)
+![alt text](images/image-4.png)
 
 W trakcie wykonywania się programu, śledziłem logi z poziomu Jenkins'a. Doszło do pomyślnego zaciągnięcia repozytorium oraz budowy.
-![alt text](image-5.png)
-![alt text](image-6.png)
-![alt text](image-7.png)
-![alt text](image-9.png)
+![alt text](images/image-5.png)
+![alt text](images/image-6.png)
+![alt text](images/image-7.png)
+![alt text](images/image-9.png)
 
 Dla jeszcze większej pewności, wykonałem jeszcze komendę `docker exec [Nazwa kontenera DIND] docker images` w celu sprawdzenia, czy aby napewno wszystkie obrazy się zbudowały i zostały zapisane. Jak najbardziej obrazy znajdowały się w kontenerze, a nawet możliwe było ich poprawne uruchomienie.
-![alt text](image-8.png)
+![alt text](images/image-8.png)
 
 ## Pipeline Irssi
 
-W dalszej części laboloatoriów należało stworzyć pipeline dla wybrane jdla siebie aplikacji. W moim przypadku było to Irssi - tekstowy klient czatu, na otwartej licencji GNU General Public License, z którym to już pracowałem wcześniej. W celu uproszczenia sobie pracy, wykonałem fork repozytorium [Irssi](https://github.com/Grallistrix/irssi)
-, w którym zamieściłem pliki Dockerfile oraz skrypt czyszczący obrazy i kontenery. 
+W dalszej części laboloatoriów należało stworzyć pipeline dla wybrane jdla siebie aplikacji. W moim przypadku było to Irssi - tekstowy klient czatu, na otwartej licencji GNU General Public License, z którym to już pracowałem wcześniej. W celu uproszczenia sobie pracy, wykonałem fork repozytorium [Irssi](https://github.com/Grallistrix/irssi), w którym zamieściłem pliki Dockerfile.
 
-![alt text](image-10.png)
+![alt text](images/image-10.png)
+
+Skrypt Jenkinsfile także zostaje umieszczony w zforkowanym repozytorium, i to z niego go zaciągamy.
+
+![alt text](image.png)
 
