@@ -15,5 +15,8 @@ RUN  git submodule update --init --recursive
 #generowanie plikow ninja
 RUN cmake -Bbuild/linux -H. -G Ninja
 
-#przejscie do katalogu builda i zbudowanie programu
-RUN cd build/linux && ninja
+#przejscie do katalogu builda
+WORKDIR build/linux
+
+#zbudowanie programu
+RUN ninja
