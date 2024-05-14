@@ -5,10 +5,8 @@ pipeline {
         stage('Prepare') {
             steps {
                 sh 'rm -rf MDO2024_INO'
-                sh 'git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
-                dir("MDO2024_INO"){
-                    sh 'git checkout AP409745'
-                }
+                sh 'git clone https://github.com/Grallistrix/irssi'
+
             }
         }
         stage('Build') {
@@ -17,7 +15,7 @@ pipeline {
                 sh 'docker images'
                 sh 'docker rmi -f irssi-builder'
                 sh 'docker images'
-                dir('MDO2024_INO/ITE/GCL4/AP409745/Sprawozdanie3'){
+                dir('irssi/Dockerfiles'){
                     sh 'docker build -t irssi-builder -f irssi-builder.Dockerfile .'
                 }
             }
@@ -25,15 +23,15 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing'
-                dir('MDO2024_INO/ITE/GCL4/AP409745/Sprawozdanie3'){
-                    sh 'docker build -f irssi-tstr.Dockerfile .'
+                dir('irssi/Dockerfiles'){
+                    sh 'docker build -f irssi-test.Dockerfile .'
                 }
             }
         }
         stage('Publish') {
             steps {
                 echo 'Publishing'
-                dir('MDO2024_INO/ITE/GCL4/AP409745/Sprawozdanie3'){
+                dir('irssi/Dockerfiles'){
                     echo 'RPM'
                     sh 'docker build -t irssi-publisher -f irssi-publish.Dockerfile .'
                 }
@@ -42,7 +40,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying'
-                dir('MDO2024_INO/ITE/GCL4/AP409745/Sprawozdanie3'){
+                dir('irssi/Dockerfiles'){
                     sh "docker stop irssi-deployed"
                     sh "docker rm -f irssi-deployed"
                     sh 'docker build -t irssi-deployer -f irssi-deploy.Dockerfile .'

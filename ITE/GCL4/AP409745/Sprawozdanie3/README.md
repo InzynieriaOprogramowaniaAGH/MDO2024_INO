@@ -65,7 +65,7 @@ Dla obydwu, dodając w krokach budowania uruchomienie powłoki z odpowiednim kod
 # Pipeline'y
 
 ## Projekt kopiowania repozytorium i budowania obrazów
-Kolejnym krokiem było utworzenie projektu klonującego gałąź repozytorium i budującej obraz z pomocą pliku dockerfile. Niestety w trakcie pracy napotkałem problem z server bisheaving i pomimo długich starań nie udało mi się go naprawić, wymusiły to na mnie próbę reinstalacji systemu, konfiguracji i ponownego wykonania całości labolatoriów do tego momentu.
+Kolejnym krokiem było utworzenie projektu klonującego gałąź repozytorium i budującej obraz z pomocą pliku dockerfile. Niestety w trakcie pracy napotkałem problem z server misbehaving i pomimo długich starań nie udało mi się go naprawić, wymusiły to na mnie próbę reinstalacji systemu, konfiguracji i ponownego wykonania całości labolatoriów do tego momentu, tym razem w oparciu jendak o system Fedora 39.
 
 Ze względów na brak pewności, czy po reinstalacji systemu, wszystko się poprawnie wkonuje dla pewności spróbowałem zbudować obraz przy użyciu stworzonych plików Dockerfile (node-builder oraz node-tester), z wyeksponowanym portem 3000. Na szczęście wszystko działało poprawnie, więc mogłem ich użyć do utworzenia projektu klonującego repozytorium, i utworzenia obrazu budującego i testującego.
 
@@ -95,9 +95,9 @@ Skrypt Jenkinsfile także zostaje umieszczony w zforkowanym repozytorium, i to z
 
 ![alt text](images/SCM.png)
 
-Pierwszą próbą było zbudowanie trzech pierwszych etapów: etapu przygotowującego (Prepare - pobranie repozytorium), budującego obraz (Build) oraz testującego (Test).
+Pierwszą próbą było zbudowanie trzech pierwszych etapów: etapu przygotowującego (Prepare), budującego (Build) oraz testującego (Test). Za podstawę do etapów Build oraz Test posłużyły mi Dockerfile z poprzednich zajęć.
 
-Pierwszym krokierm był stage Prepare, który usuwał pozostałości poprzedniego repozytorium przed pobraniem następnego. 
+Pierwszym krokiem był stage Prepare, który usuwał pozostałości poprzedniego repozytorium przed pobraniem njego najnowszej wersji.
 ```
         stage('Prepare') {
             steps {
@@ -118,9 +118,32 @@ Drugim krokiem był etap "Build" polegający na usunięciu poprzedniego obrazu b
             }
         }
 ```
+Trzeci krok to krok tworzący kontener testujący, by sprawdzić czy poprzednie kroki wykonały się prawidłowo.
+```
+        stage('Test') {
+            steps {
+                echo 'Testing'
+                dir('irssi/Dockerfiles'){
+                    sh 'docker build -f irssi-test.Dockerfile .'
+                }
+            }
+        }
+```
 ![alt text](image.png)
+
+## Deploy i Publish
+Jako, że program pomyślnie się budował i testował, kolejnym krokiem było utworzenie dwóch ostatnich kroków - Deploy oraz Publish. 
+
+Krok Deploy jest odpowiedzialny za próbę wdrożenia programu na danym systemie, a krok Publish za jego udostępnienie dalej. Ze względu na użycie systemu Fedora, za sposób rozprowadzania wybrałem pakiet w ramach RPM Packet Manager.
+
+Jako, że 
 
 ![alt text](<Zrzut ekranu 2024-05-14 112408.png>)
 
 
+# Wnioski i uwagi
+- Jenkins w połączeniu z Docker in Docker (DIND) stanowi efektywne narzędzie do budowania łańcuchów akcji, obejmujących proces budowania, testowania oraz publikowania/deployowania oprogramowania.
+- Wdrażanie metodologii DevOps, której częścią jest automatyzacja procesów CI/CD za pomocą Pipeline'ów, może przyczynić się do zwiększenia efektywności, jakości oraz przewidywalności dostarczania oprogramowania.
+- Pierwotny model Pipeline'ów, inspirowany UML'em, uległ zmianie w praktyce. Przykładowo, procesy Deploy i Publish mają odwróconą kolejność. Zmiana ta wynika z innego podejścia do 
+- Pliki Jenkinsfile są przydatne, ponieważ uUmożliwiają definiowanie i zarządzanie procesem CI/CD jako zautomatyzowanym kodem, co zapewnia jednolitość i powtarzalność w procesie budowania, testowania i wdrażania aplikacji, a także umożliwiają łatwe udostępnianie i ponowne wykorzystanie konfiguracji między projektami.
 
