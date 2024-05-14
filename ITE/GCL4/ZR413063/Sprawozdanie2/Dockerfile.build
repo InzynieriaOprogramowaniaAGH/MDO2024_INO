@@ -13,7 +13,7 @@ Workdir /pomdog
 RUN  git submodule update --init --recursive
 
 #generowanie plikow ninja
-RUN cmake -Bbuild/linux -H. -G Ninja
+RUN CXXFLAGS="-Wno-error -Wno-switch-default" cmake -Bbuild/linux -H. -G Ninja
 
 #przejscie do katalogu builda
 WORKDIR build/linux
