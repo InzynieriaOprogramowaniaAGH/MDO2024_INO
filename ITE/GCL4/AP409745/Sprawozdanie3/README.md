@@ -91,5 +91,9 @@ W dalszej części laboloatoriów należało stworzyć pipeline dla wybrane jdla
 
 Skrypt Jenkinsfile także zostaje umieszczony w zforkowanym repozytorium, i to z niego go zaciągamy.
 
+![alt text](images/SCM.png)
+
+Pierwszą próbą było zbudowanie trzech pierwszych etapów: etapu przygotowującego (Prepare - pobranie repozytorium), budującego obraz (Build) oraz testującego (Test) w oparciu o użyte we wcześniejszych labolatoriach Dockerfile do tego 
+
 ![alt text](image.png)
 
