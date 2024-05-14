@@ -64,7 +64,7 @@ Dla obydwu, dodając w krokach budowania uruchomienie powłoki z odpowiednim kod
 
 # Pipeline'y
 
-## Projekt kopiowania repozytorium i budowania obrazów
+## Mini-pipeline: projekt kopiowania repozytorium i budowania obrazów
 Kolejnym krokiem było utworzenie projektu klonującego gałąź repozytorium i budującej obraz z pomocą pliku dockerfile. Niestety w trakcie pracy napotkałem problem z server misbehaving i pomimo długich starań nie udało mi się go naprawić, wymusiły to na mnie próbę reinstalacji systemu, konfiguracji i ponownego wykonania całości labolatoriów do tego momentu, tym razem w oparciu jendak o system Fedora 39.
 
 Ze względów na brak pewności, czy po reinstalacji systemu, wszystko się poprawnie wkonuje dla pewności spróbowałem zbudować obraz przy użyciu stworzonych plików Dockerfile (node-builder oraz node-tester), z wyeksponowanym portem 3000. Na szczęście wszystko działało poprawnie, więc mogłem ich użyć do utworzenia projektu klonującego repozytorium, i utworzenia obrazu budującego i testującego.
@@ -110,7 +110,6 @@ Drugim krokiem był etap "Build" polegający na usunięciu poprzedniego obrazu b
 ```
         stage('Build') {
             steps {
-                echo 'Building'
                 sh 'docker rmi -f irssi-builder'
                 dir('irssi/Dockerfiles'){
                     sh 'docker build -t irssi-builder -f irssi-builder.Dockerfile .'
@@ -122,7 +121,6 @@ Trzeci krok to krok tworzący kontener testujący, by sprawdzić czy poprzednie 
 ```
         stage('Test') {
             steps {
-                echo 'Testing'
                 dir('irssi/Dockerfiles'){
                     sh 'docker build -f irssi-test.Dockerfile .'
                 }
@@ -136,14 +134,87 @@ Jako, że program pomyślnie się budował i testował, kolejnym krokiem było u
 
 Krok Deploy jest odpowiedzialny za próbę wdrożenia programu na danym systemie, a krok Publish za jego udostępnienie dalej. Ze względu na użycie systemu Fedora, za sposób rozprowadzania wybrałem pakiet w ramach RPM Packet Manager.
 
-Jako, że 
+Jako, że w takim typie dystrybucji mamy do czynienia z instalacją poprzez pakiet tworzony w kroku Publish, wymaga to wykonania go wcześniej od kroku Deploy. Obraz deployera tworzymy w oparciu o obraz wykorzystany w kroku Build.
+
+```
+#Bazujemy na builderze
+FROM irssi-builder
+#instalujemy depenencies RPMu
+RUN  dnf install -y gcc rpm-build rpm-devel rpmlint make python bash coreutils diffutils patch rpmdevtools
+
+#Pakujemy nasz build do archiwum .tar
+WORKDIR /
+RUN rpmdev-setuptree
+RUN tar -cvzf irssi.tar.gz irssi
+RUN cp irssi.tar.gz /root/rpmbuild/SOURCES/
+
+WORKDIR /root/rpmbuild/SPECS
+
+#Kopiujemy plik specyfikacji i w oparciu o niego budujemy paczkę RPM
+COPY ./irssi.spec .
+RUN rpmbuild -bs irssi.spec
+RUN rpmlint irssi.spec
+RUN rpmlint ../SRPMS/irssi-fc39.src.rpm
+RUN mkdir -p /source_rpm
+RUN mv /root/rpmbuild/SRPMS/irssi-fc39.src.rpm /source_rpm
+```
+```
+        stage('Publish') {
+            steps {
+                dir('irssi/Dockerfiles'){
+                    sh 'docker build -t irssi-publish -f irssi-publish.Dockerfile .'
+                }
+            }
+        }
+```
+
+Kiedy już mamy gotową paczkę, możemy przejść do kroku Deploy, żeby sprawdzić jak zachowuje się po instalacji.
+```
+FROM irssi-publish
+#Instalujemy zaleznosci
+RUN dnf -y install cmake openssl-devel
+
+WORKDIR /source_rpm
+#Przebudowujemy pakiet i instalujemy go
+RUN rpmbuild --rebuild --nodebuginfo irssi-1-1.src.rpm 
+RUN dnf -y install /root/rpmbuild/RPMS/x86_64/irssi-1-1.x86_64.rpm
+
+FROM fedora:39 AS deploy 
+
+#Kopiujemy zpakowane Irssi z obrazu publishowego, do aktualnego
+RUN mkdir -p /rpm
+RUN mkdir -p /source_rpm
+COPY --from=irssi-publish /source_rpm /source_rpm
+COPY --from=irssi-publish /root/rpmbuild/RPMS/x86_64/irssi-1-1.x86_64.rpm /rpm/
+
+#Instalujemy zależności, czyścimy cache i instalujemy nasze RPMowe Irssi
+RUN dnf -y install glib2-devel perl ncurses-libs utf8proc openssl-devel
+RUN dnf clean all
+RUN dnf -y install /rpm/irssi-1-1.x86_64.rpm
+
+#Ustawiamy Entrypoint kontenera i wysyłamy komendę sprawdzenia wersji
+ENTRYPOINT irssi
+CMD ["--version"]
+```
+```
+        stage('Deploy') {
+            steps {
+                dir('irssi/Dockerfiles'){
+                    sh 'docker build -t irssi-deployer -f irssi-deploy.Dockerfile .'
+                    sh "docker run -it -d --name irssi-deployed irssi-deployer"
+                    sh "docker exec irssi-deployed irssi --version"
+                    sh "docker logs irssi-deployed"
+                }
+            }
+        }
+```
 
 ![alt text](<Zrzut ekranu 2024-05-14 112408.png>)
 
+Tak stworzony pipeline przechodzi przez wszystkie etapy pomyślnie, tworząc artefakt w postaci pakietu RPM, który następnie możemy udostępniać na zewnątrz.
 
 # Wnioski i uwagi
 - Jenkins w połączeniu z Docker in Docker (DIND) stanowi efektywne narzędzie do budowania łańcuchów akcji, obejmujących proces budowania, testowania oraz publikowania/deployowania oprogramowania.
 - Wdrażanie metodologii DevOps, której częścią jest automatyzacja procesów CI/CD za pomocą Pipeline'ów, może przyczynić się do zwiększenia efektywności, jakości oraz przewidywalności dostarczania oprogramowania.
 - Pierwotny model Pipeline'ów, inspirowany UML'em, uległ zmianie w praktyce. Przykładowo, procesy Deploy i Publish mają odwróconą kolejność. Zmiana ta wynika z innego podejścia do 
 - Pliki Jenkinsfile są przydatne, ponieważ uUmożliwiają definiowanie i zarządzanie procesem CI/CD jako zautomatyzowanym kodem, co zapewnia jednolitość i powtarzalność w procesie budowania, testowania i wdrażania aplikacji, a także umożliwiają łatwe udostępnianie i ponowne wykorzystanie konfiguracji między projektami.
-
