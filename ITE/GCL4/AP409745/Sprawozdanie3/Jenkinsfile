@@ -1,0 +1,57 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Prepare') {
+            steps {
+                sh 'rm -rf MDO2024_INO'
+                sh 'git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+                dir("MDO2024_INO"){
+                    sh 'git checkout AP409745'
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building'
+                sh 'docker images'
+                sh 'docker rmi -f irssi-builder'
+                sh 'docker images'
+                dir('MDO2024_INO/ITE/GCL4/AP409745/Sprawozdanie3'){
+                    sh 'docker build -t irssi-builder -f irssi-builder.Dockerfile .'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing'
+                dir('MDO2024_INO/ITE/GCL4/AP409745/Sprawozdanie3'){
+                    sh 'docker build -f irssi-tstr.Dockerfile .'
+                }
+            }
+        }
+        stage('Publish') {
+            steps {
+                echo 'Publishing'
+                dir('MDO2024_INO/ITE/GCL4/AP409745/Sprawozdanie3'){
+                    echo 'RPM'
+                    sh 'docker build -t irssi-publisher -f irssi-publish.Dockerfile .'
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying'
+                dir('MDO2024_INO/ITE/GCL4/AP409745/Sprawozdanie3'){
+                    sh "docker stop irssi-deployed"
+                    sh "docker rm -f irssi-deployed"
+                    sh 'docker build -t irssi-deployer -f irssi-deploy.Dockerfile .'
+                    sh "docker run -it -d --name irssi-deployed irssi-deployer"
+                    sh "docker exec irssi-deployed irssi --version"
+                    sh "docker logs irssi-deployed"
+                }
+            }
+        }
+        
+    }
+}
