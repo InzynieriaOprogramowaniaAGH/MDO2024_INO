@@ -93,7 +93,32 @@ Skrypt Jenkinsfile także zostaje umieszczony w zforkowanym repozytorium, i to z
 
 ![alt text](images/SCM.png)
 
-Pierwszą próbą było zbudowanie trzech pierwszych etapów: etapu przygotowującego (Prepare - pobranie repozytorium), budującego obraz (Build) oraz testującego (Test) w oparciu o użyte we wcześniejszych labolatoriach Dockerfile do tego 
+Pierwszą próbą było zbudowanie trzech pierwszych etapów: etapu przygotowującego (Prepare - pobranie repozytorium), budującego obraz (Build) oraz testującego (Test).
 
+Pierwszym krokierm był stage Prepare, który usuwał pozostałości poprzedniego repozytorium przed pobraniem następnego. 
+```
+        stage('Prepare') {
+            steps {
+                sh 'rm -rf irssi'
+                sh 'git clone https://github.com/Grallistrix/irssi.git'
+            }
+        }
+```
+Drugim krokiem był etap "Build" polegający na usunięciu poprzedniego obrazu budującego i zbudowaniu w oparciu o zamieszczony Dockerfile kolejny.
+```
+        stage('Build') {
+            steps {
+                echo 'Building'
+                sh 'docker rmi -f irssi-builder'
+                dir('irssi/Dockerfiles'){
+                    sh 'docker build -t irssi-builder -f irssi-builder.Dockerfile .'
+                }
+            }
+        }
+```
 ![alt text](image.png)
+
+![alt text](<Zrzut ekranu 2024-05-14 112408.png>)
+
+
 
