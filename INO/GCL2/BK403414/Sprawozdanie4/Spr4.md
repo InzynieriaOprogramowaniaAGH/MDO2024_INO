@@ -54,7 +54,7 @@ pip install ansible
 
 instalacja powiodła się pomyślnie
 
-![](./screeny/lab8+9/pipInstallAn.png)
+![](./screeny/lab8+9/pipInstallAnsible.png)
 
 * Wymieniłam klucze SSH pomiędzy użytkownikami głównej maszyny a użytkownikiem ansible tak aby zalogowanie się na nową maszynę nie wymagało hasła
 
@@ -108,15 +108,15 @@ Aby zwiększyć wygodę pracy i usunąć konieczność pamiętania adresów IP m
 ![](./screeny/lab8+9/ansible-target.png)
 
 
-![](./screeny/lab8+9/ubunt-main.png)
+![](./screeny/lab8+9/ubuntu-main.png)
 
 
 Sprawdziłam czy logowanie poprzez protokół ssh poprzez wprowadzenie podanej nazwy działa poprawnie. Połączenie udało się
 
 
-![](./screeny/lab8+9/hostsZadzialalo.png)
+![](./screeny/lab8+9/hostsZadzialal.png)
 
-![](./screeny/lab8+9/hostsZadzialalo2.png)
+![](./screeny/lab8+9/hostsZadzialal2.png)
 
 
 Następnie stworzyłam plik inwentaryzacji zgodnie z podaną w instrukcji dokumentacją
@@ -141,7 +141,7 @@ Wysłałam żądanie ping do wszystkich maszyn:
 
 
 * Zapewniłam łączność między maszynami
-*
+
 W poprzednim podpunkcie wykonałam wszystkie czynności z tego podpunktu. Użyłam wcześniej zrobionych dwóch maszyn, wykonałam wymianę kluczy między "maszyną-dyrygentem" czyli orchestrators a maszyną endpoints, poprzez użycie polecenia ```ssh-copy-id ``` co zapewniło łączność między nimi. Na załączonych wcześniej screenach pokazałam że łączność SSH pomiędzy maszynami była możliwa i nie wymagała podania hasła finalnie dzięki użyciu polecenia ```ssh-agent```  
 
 
@@ -191,7 +191,7 @@ Ostatnim zadaniem z etapu zdalnego wywoływania procedur było przeprowadzenie t
 
 wyłączyłam ssh i interface sieciowy
 
-![](./screeny/lab8+9/ifconfig.png)
+![](./screeny/lab8+9/ifconfigDown.png)
 
 
 Sprawdziłam scenariusz próby skonfigurowania maszyny, która ma włączoną kartę sieciową i ssh na maszynie ansible-target kartę sieciową i ssh następnie próbowałam użyć playbooka. Połączenie oczywiście nie zadziałało ponieważ maszyna nie była dostępna w sieci.
@@ -300,7 +300,7 @@ Cel tych zajęć to nauczenie się przeprowadzania automatycznej instalacji syst
 Zadaniem jest automatyczna instalacja systemu Fedora przy użyciu pliku odpowiedzi, który należy rozszerzyć o specyficzne ustawienia, takie jak formatowanie dysku oraz URL i repo które umożliwią systemowi operacyjnemu Fedora 39 pobieranie odpowiednich plików instalacyjnych i aktualizacji odpowiednich repozytoriów. Plik ten powinien również zawierać konfiguracje repozytoria i instalację niezbędnego oprogramowania, potrzebnego do uruchomienia programu zbudowanego w ramach ostatniego projektu. Instalacja odbywa się w trybie nienadzorowanym. 
 
 
-							 *Plik odpowiedzi*
+	 *Plik odpowiedzi*
 	Plik odpowiedzi to plik tekstowy używany podczas instalacji oprogramowania, który zawiera zestaw instrukcji lub dyrektyw określających parametry instalacji. Może zawierać informacje o lokalizacji repozytoriów, konfiguracji sieci, partycjonowaniu dysku czy wyborze oprogramowania do zainstalowania. Umożliwia automatyzację procesu instalacji i eliminuje konieczność interakcji użytkownika podczas każdej instalacji.
 
 
@@ -314,10 +314,12 @@ Przeprowadziłam instalację systemu Fedora, kolejno:
 	 - maszyna została utworzona prawidłowo
 
  ![](./screeny/lab8+9/fedora39.png)
-	- w instalatorze w wersji graficznej wybrałam minimalną wersję fedory
-	- pobieranie powiodło się
 
-![](./screeny/lab8+9/fedora39uruchomiona.png)
+ - w instalatorze w wersji graficznej wybrałam minimalną wersję fedory
+ - pobieranie powiodło się
+
+
+ ![](./screeny/lab8+9/fedora39uruchomiona.png)
 
 
 Następnie przekopiowałam plik odpowiedzi (anaconda-ks.cfg) z katalogu root do katalogu nad nim, tak aby było możliwe edytowanie go. Dodatkowo nadałam mu uprawnienia komendą: 
@@ -411,17 +413,17 @@ Taki plik, pobrałam i dodałam na mojego githuba (będzie to miejsce do kórego
 Następnym krokiem było utworzenie nowej maszyny w VM na podstawie pliku ```anaconda-ks.cfg``` 
  Po załadowaniu obrazu iso wcisnęłam klawisz ```e``` aby otworzyć tryb GRUB w którym podałam link do pliku. Uruchomiłam instalację klawiszem ```F10``` 
 
-![](./screeny/lab8+9/fanacondaGRUB.png)
+![](./screeny/lab8+9/anacondaGRUB.png)
 
 Po poprawnej instalacji, aby uruchomić system wchodzimy w opcje ```Troubleshooting -> Boot first drive``` 
 
-![](./screeny/lab8+9/fanacondaGrub2.png)
+![](./screeny/lab8+9/anacondaGrub2.png)
 
 
 Po uruchomieniu systemu loguję sie i sprawdzam czy plik ```pcalc``` został prawidłowo umieszczony
 
 
-![](./screeny/lab8+9/fanacondaGrub3.png)
+![](./screeny/lab8+9/anacondaGrub3.png)
 
 ## Podsumowanie
 
