@@ -1,0 +1,13 @@
+---
+- name: install docker
+  vars:
+    container_count: 4
+    default_container_name: docker
+    default_container_image: ubuntu
+    default_container_command: sleep 1
+  include_tasks: playbookDocker.yaml
+
+- name: run container
+  include_tasks: playbookContainer.yaml
+
+    
