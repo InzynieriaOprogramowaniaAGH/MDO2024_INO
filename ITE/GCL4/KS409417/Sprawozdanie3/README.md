@@ -82,3 +82,11 @@ Teraz, naszym zadaniem było stworzyć "prawdziwy projekt", który:
 
 ![Real_project_logs](images/real_project_logs.png)
 
+## Diagram
+
+Przedstawiam diagram opisujący wymagania wstępne środowiska i wdrożenie:
+
+![env_diagram](images/environment_diagram.png)
+
+Na PC odpalony jest virtualbox z Linuxem (w moim przypadku jest to Ubuntu). Następnie potrzeba nam skonteneryzowanej instacji Jenkinsa, odpalonej poprzez kontener Dockerowy.
+
