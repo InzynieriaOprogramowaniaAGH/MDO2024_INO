@@ -71,7 +71,88 @@ curl http://localhost:5000/api/convert-fahrenheit-to-celsius?fahrenheit=100
 
 Aplikację możemy uruchomić na stosie k8s co umożliwi nam zarządzanie nią w dalszej częci podczas wdrażania w łatwieszy sposób. W tym celu musimy stowrzyć `poda`, czyli najmniejszą jednątkę pracy kubernetesa, uruchamiającą kontener z aplikacją oraz stworzyć seriws udostępniający niezmienne api dla uruchomionych podów (w póżniejszej części liczba uruchamianych podów w deploymencie będzie większa, a każdy z nich będzie posiadał inny adres IP, któy może zmieniać się wraz z manipulacjami podami - ich niszczeniem lub tworzeniem, przez co potrzebujemy dodatkowe stabilnego interfejsu udostępniającego nasze usługi)
 
-minikube kubectl run -- <nazwa-wdrożenia> --image=<obraz-docker> --port=<wyprowadzany port> --labels app=<nazwa-wdrożenia>
+
+W tym celu najpierw tworzymy poda uruchamiającego naszą aplikację:
+```bash
+kubectl run temperature-converter --image=kacperpap/temperature_converter:0.1.0 --port=5000 --labels=app=temperature-converter
+```
+
+Następnie tworzymy serwis:
+```bash
+kubectl expose pod temperature-converter --port=5000 --target-port=5000 --name=temperature-converter-service
+```
+
+Po czym przekierowujemy porty. 
+***UWAGA! Przekierowanie portów należy zrobić zarówno na maszynie wirtualnej, co gwarantuje nam dostęp do poda poprzez serwis udostępniający API aplikacji z poda, oraz należy przekierować porty w VSCodoe, tak aby zapytanie na localhost i port serwisu na naszym hoście, zostało przekierowane do VM***
+
+Wynik takiego działania jest następujący:
+![port-f](./screenshots/forwarding-k8s.png)
+
+![local](./screenshots/local-api.png)
+
+# Tworzenie wdrożenia automatycznego
+
+Powyższe kroki można wykonać za pomocą definicji plików yaml. Pozwala to na automatyzację w przypadku bardziej rozbudowanych wdrożeń. Ponadto z całości definicji wdrożenia w k8s można za pomocą `Helm` utworzyć `helm chart` umożliwiający instalowanie całości wdrożenia za pomocą pojedynczej komendy. 
+
+Aby wykonać wdrożenie okreslonej liczby replik aplikacji (z dodatkowymi możliwościami definicji wdrożenia) tworzymy plik [temperature-converter.deployment.yaml](./temperature-converter.deployment.yaml), który definiuje dokładnie to samo co poprzednie bezpośrednie uruchomienie poda poprzez kube-API, ale zawiera to w formie wdrożenia, i definiuje powstanie docelowo 2 replik:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temperature-converter
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: temperature-converter
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: temperature-converter
+        tier: backend
+    spec:
+      containers:
+      - name: temperature-converter
+        image: kacperpap/temperature_converter:0.1.0
+        ports:
+        - containerPort: 5000
+```
+
+Analogicznie tworzymy plik [temperature-converter.service.yaml](./temperature-converter.service.yaml):
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: temperature-converter-service
+spec:
+  selector:
+    app: temperature-converter
+    tier: backend
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+```
+
+
+Uruchomienie tych jednostek pracy k8s wykonujemy za pomocą polecenia:
+```bash
+kubectl apply -f <path_to_yaml>
+```
+
+Po dodtkowym uruchomieniu przekierowania portów jak poprzednio, możemy komunikować się z aplikacją z lokalnego hosta, a wynik wdrożenia wygląda następująco:
+
+![yaml-deploy](./screenshots/yaml-deploy.png)
+
+Powyższe dane przedstawione w `minikube dashboard`:
+![workload](./screenshots/workload.png)
+
+![deploy](./screenshots/pods-replicas.png)
+
+![services](./screenshots/services.png)
+
 
 
 
