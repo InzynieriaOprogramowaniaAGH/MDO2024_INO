@@ -168,7 +168,7 @@ Po wywołaniu `ansible ping` pojawił się błąd połaczenia z orchestratorem, 
 
 ![](screeny/18.png)
 
-### Zdalne wywyoływanie procedur 
+### Zdalne wywoływanie procedur 
 
 Na podstawie podanej dokumnetacji https://docs.ansible.com/ansible/latest/getting_started/get_started_playbook.html tworzę playbooka Ansible.
 
@@ -251,3 +251,51 @@ Wynik wykonania playbooka:
 ![](screeny/19.png)
 
 ![](screeny/20.png)
+
+Wyniki wskazują, że wszystkie zadania na obu hostach zostały wykonane pomyślnie, przy czym na hoście 01 wprowadzono sześć zmian w systemie, podczas gdy na hoście orchestrator nie było żadnych zmian. Można zauważyć, że w sumie w raporcie końcowym po wykonaniu playbooka dostępnych jest 7 stanów:
+- `ok` - liczba zadań, które zostały pomyślnie wykonane bez wprowadzania żadnych zmian.
+
+- `changed` - liczba zadań, które wprowadziły zmiany w systemie.
+
+- `unreachable` - liczba hostów, z którymi Ansible nie był w stanie się połączyć.
+
+- `failed` - liczba zadań, które zakończyły się niepowodzeniem.
+
+- `skipped` - liczba zadań, które zostały pominięte (np. z powodu niespełnienia określonych warunków).
+
+- `rescued` - liczba zadań, które zostały "uratowane" przez bloki rescue po wystąpieniu błędu.
+
+- `ignored` - liczba zadań, które zakończyły się błędem, ale błąd został zignorowany (np. dzięki ignore_errors).
+
+!!!!!!!!!!!
+
+### Zarządzanie kontenerem
+
+W tym podpunkcie będę realizowała wdrożenie mojego kontenera z `irssi` na maszynie `ansible-target`.
+W pierwszej kolejności na podstawie dokumentacji https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html tworzę szkielet roli poleceniem:
+
+```
+ansible-galaxy init irssi_deploy
+```
+
+Struktura utworzonego katalogu:
+
+```
+irssi_deploy/
+├── README.md
+├── defaults
+│   └── main.yml
+├── files
+├── handlers
+│   └── main.yml
+├── meta
+│   └── main.yml
+├── tasks
+│   └── main.yml
+├── templates
+├── tests
+│   ├── inventory
+│   └── test.yml
+└── vars
+    └── main.yml
+```
