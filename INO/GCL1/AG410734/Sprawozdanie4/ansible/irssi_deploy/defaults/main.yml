@@ -1,0 +1,9 @@
+---
+# defaults file for irssi_deploy
+docker_image: "agnieszka123/deploy:1.0-1"
+container_name: "irssi_container"
+host_port: 6667
+container_port: 6667
+volume_source: "/home/agnieszka/repo/MDO2024_INO/INO/GCL1/AG410734/Sprawozdanie3/irssi-pipeline/README.md"
+volume_target: "/usr/README.md"
+

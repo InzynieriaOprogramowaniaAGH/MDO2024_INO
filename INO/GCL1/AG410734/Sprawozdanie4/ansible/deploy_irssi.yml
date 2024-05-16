@@ -1,0 +1,4 @@
+---
+- hosts: Endpoints
+  roles:
+    - irssi_deploy

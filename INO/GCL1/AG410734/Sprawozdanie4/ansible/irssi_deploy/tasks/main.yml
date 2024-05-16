@@ -1,0 +1,30 @@
+---
+# tasks file for irssi_deploy
+
+- name: Check if Docker is installed
+  command: docker --version
+  register: docker_version
+  failed_when: docker_version.rc != 0
+  changed_when: false
+
+- name: Pull Docker image
+  docker_image:
+    name: "{{ docker_image }}"
+    source: pull
+
+- name: Run the Irssi container and start Irssi
+  docker_container:
+    name: "{{ container_name }}"
+    image: "{{ docker_image }}"
+    state: started
+    ports:
+      - "{{ host_port }}:{{ container_port }}"
+    volumes:
+      - "{{ volume_source }}:{{ volume_target }}"
+    command: "irssi"
+    restart_policy: always
+
+- name: Stop and remove the container
+  docker_container:
+    name: "{{ container_name }}"
+    state: absent

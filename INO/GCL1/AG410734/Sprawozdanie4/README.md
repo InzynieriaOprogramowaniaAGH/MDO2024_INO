@@ -392,3 +392,6 @@ Wynik działania:
 
 ![](screeny/23.png)
 
+5 zadań zakończyło się sukcesem, w tym 2 spowodowały zmiany w systemie. W pierwszym przypadku kontener został uruchomiony i aplikacja `Irssi` została uruchomiona wewnątrz niego. W drugim przypadku kontener został zatrzymany i usunięty.
+
+Pliki z części sprawozdania **zdalane wywoływania procedur** i **zarządzanie kontenerem**, zostały umieszczone w repozytorium w folderze `Sprawozdanie4/ansible`.
