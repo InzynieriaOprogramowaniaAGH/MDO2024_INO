@@ -73,8 +73,8 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
 
-                    sh 'docker tag deploy $DOCKER_USERNAME/deploy:${VERSION}-${RELEASE}'
-                    sh 'docker push $DOCKER_USERNAME/deploy:${VERSION}-${RELEASE}'
+                    sh 'docker tag deploy $DOCKER_USERNAME/irssi-deploy:${VERSION}-${RELEASE}'
+                    sh 'docker push $DOCKER_USERNAME/irssi-deploy:${VERSION}-${RELEASE}'
                 }
             }
         }
