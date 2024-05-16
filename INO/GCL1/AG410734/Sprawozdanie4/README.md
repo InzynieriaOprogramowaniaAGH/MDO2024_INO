@@ -272,11 +272,34 @@ Wyniki wskazują, że wszystkie zadania na obu hostach zostały wykonane pomyśl
 ### Zarządzanie kontenerem
 
 W tym podpunkcie będę realizowała wdrożenie mojego kontenera z `irssi` na maszynie `ansible-target`.
-W pierwszej kolejności na podstawie dokumentacji https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html tworzę szkielet roli poleceniem:
+
+Na początek przechodzę do maszyny `ansible-target` i instaluję niezbędne biblioteki, aby moduł Ansible używany w playbooku do zarządzania kontenerami Docker'a działał poprawnie. Instaluję menedżer pakietów Pythona `pip` dla Pythona 3 i pakiet `docker`. 
+
+```
+sudo apt install python3-pip
+pip3 install docker
+```
+Sprawdzam czy instalacja się powiodła poleceniem:
+
+```
+pip3 show docker
+```
+![](screeny/22.png)
+
+Należy także pamiętać o dodaniu uzytkownika do grupy Docker poleceniem:
+
+```
+sudo usermod -aG docker nazwa_użytkownika
+```
+
+Wracam do hosta i w pierwszej kolejności na podstawie dokumentacji https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html tworzę szkielet roli poleceniem:
 
 ```
 ansible-galaxy init irssi_deploy
 ```
+Zdjęcie terminala po wykonaniu polecenia:
+
+![](screeny/21.png)
 
 Struktura utworzonego katalogu:
 
@@ -299,3 +322,73 @@ irssi_deploy/
 └── vars
     └── main.yml
 ```
+W pliku `defaults/main.yml` umieszczam domyślne wartości zmiennych używanych w roli.
+
+```
+---
+# defaults file for irssi_deploy
+docker_image: "agnieszka123/deploy:1.0-1"
+container_name: "irssi_container"
+host_port: 6667
+container_port: 6667
+volume_source: "/home/agnieszka/repo/MDO2024_INO/INO/GCL1/AG410734/Sprawozdanie3/irssi-pipeline/README.md"
+volume_target: "/usr/README.md"
+
+```
+W pliku `tasks/main.yml` definuję zadanie do wykonania przez Ansible'a.
+Pierwsze zadanie sprawdza, czy Docker jest zainstalowany na maszynie docelowej, wykonując polecenie `docker --version`. Wynik jest rejestrowany w zmiennej `docker_version`. Jeśli polecenie nie zwróci statusu wyjścia równego 0 (czyli nie powiedzie się), zadanie zostanie oznaczone jako niepowodzenie.
+
+```
+- name: Check if Docker is installed
+  command: docker --version
+  register: docker_version
+  failed_when: docker_version.rc != 0
+  changed_when: false
+```
+Następnie definuję zadanie pobierające obraz wdrażający `irssi` z DockerHub:
+
+```
+- name: Pull Docker image
+  docker_image:
+    name: "{{ docker_image }}"
+    source: pull
+```
+Kolejne zadanie wykorzystuje moduł `docker_container`, aby utworzyć i uruchomić kontener na podstawie wcześniej pobranego obrazu. Określa także porty, na których ma być nasłuchiwane `irssi` oraz wolumeny, które mają być podłączone do kontenera, tak aby była wykonana instrukcja  *"podłącz storage oraz wyprowadź port"*. W moim przypadku volumen źródłowy udostępnia plik README.md, który jest artefaktem z poprzednich zajęć i określa niezbędne zależności w kontenerze z plikiem wykonywalnym `irssi`. W konfiguracji tego zadania określono, że kontener powinien zostać uruchomiony z opcją restartowania polityki "always". Oznacza to, że kontener zostanie automatycznie uruchomiony ponownie w razie awarii lub zatrzymania. Uruchamiam `Irssi` wewnątrz kontenera.
+
+```
+- name: Run the Irssi container
+  docker_container:
+    name: "{{ container_name }}"
+    image: "{{ docker_image }}"
+    state: started
+    ports:
+      - "{{ host_port }}:{{ container_port }}"
+    volumes:
+      - "{{ volume_source }}:{{ volume_target }}"
+    restart_policy: always
+```
+W ostatnim zadaniu zatrzymuję i usuwam kontener, który został wcześniej utworzony. W tym celu używam również modułu `docker_container`.
+
+```
+- name: Stop and remove the container
+  docker_container:
+    name: "{{ container_name }}"
+    state: absent
+```
+Gdy skonfiguruję szkielet roli, definiuję palybooka `deploy-irssi.yml`, który będzie wywoływał tę rolę. Zadania zdefiniowane w roli będą wykonywane przez maszyny docelowe `Endpoints`:
+
+```
+---
+- hosts: Endpoints
+  roles:
+    - irssi_deploy
+```
+Zdefiniowanego playbooka `deploy-irssi.yml` uruchamiam poleceniem:
+
+```
+ansible-playbook -i inventory.ini deploy_irssi.yml
+```
+Wynik działania:
+
+![](screeny/23.png)
+
