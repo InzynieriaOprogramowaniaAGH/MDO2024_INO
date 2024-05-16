@@ -132,15 +132,129 @@ Za zadanie mieliśmy również przeprowadzić operacje względem maszyn z wyłą
 
 #### Zarządzanie kontenerem
 
+Sekcja Deploy z poprzednich zajęć uruchamiała budowanie obrazu deploy służącego do rozpakowania zbudowanej aplikacji a następnie uruchomienia jest w celu sprawdzenia czy oprogramowanie jest gotowe do działania.
 
+Elementy nowego playbooka:
+- Pierwszym wymaganym krokiem w tej sekcji sprawozdania było uruchomienie kontenera z obrazem Deploy.
+- Zamiast pobierać obraz z DockerHub pobrany zostanie artefakt z Jenkinsa ze zbudowaną aplikacją. Następnie zostanie on przekopiowany do docelowych maszyn.
+- Doinstalowane zostaną potrzebne zależności aby uruchomić Ghidrę (OpenJDK w wersji przynajmniej 17).
+- Na docelowych maszynach uruchomiony zostanie kontener jedynie z OpenJDK i zbudowanym kodem Ghidry.
+- Na końcu usunie się uruchomiony wcześniej kontener.
+
+Powyższe elementy można podzielić na dwie fazy: przygotowanie środowiska (zainstalowanie dockera, pobranie repozytorium z kodem itp.) a następnie uruchomienia aplikacji.
+
+W celu pobrania artefaktu z jenkinsa został stworzony playbook ansible, wykorzystujący Jenkinsowe API. Potrzebne jest hasło oraz login aby móc pobrać artefakt.
+
+Playbook kopiujący artefakt z Jenkinsa:
+
+```yaml
+- name: Copy file from jenkins
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Retrieve latest build from jenkins
+      command: wget -r -np -l 1 -A zip --auth-no-challenge --http-user=<redacted> --http-password=<redacted>  http://127.0.0.1:8080/job/ghidra-main-pip/lastSuccessfulBuild/artifact/*zip*/ghidra.zip -O ghidra.zip
+```
+
+Ansible musi wykonać tą operację lokalnie ponieważ nie może zalogować się do maszyny po ssh. W tym celu przy hostach należy podać adres `localhost` oraz ustawić połączenie na `local`.
+
+Poniżej znajduje się wynik polecenia `ansible-playbook ./ghidra-package.yaml`.
+
+![alt text](image-10.png)
+
+Gdy wylistujemy pliki w obecnym katalogu powinniśmy zobaczyć plik ghidra.zip.
+
+![alt text](image-11.png)
+
+Poniżej znajduje się listing playbooka instalującego dockera i uruchamiający nowy obraz w kontenerze. Aby ansible poprawnie skopiowało plik z ghidrą należy go umieścić w ~/. Po kolei:
+- odświeżenie repozytoriów
+- instalacja dockera
+- uruchomienie usługi dockera
+- skopiowanie plików do docelowych maszyn
+- zbudowanie obrazu dla ghidry
+- uruchomienie kontenera z nowo stworzonym obrazem zawierającym skopiowany artefakt
+
+```yaml
+- name: Install and start docker
+  hosts: Endpoints
+  become: yes
+  tasks:
+    - name: Refresh all repositories
+      command: zypper refresh
+    - name: Install Docker
+      zypper:
+        name: docker
+        state: present
+    - name: Start and enable Docker service
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+- name: Copy files
+  hosts: Endpoints
+  tasks:
+    - name: Copy files 2
+      copy:
+        src: "~/{{ item }}"
+        dest: ~/
+      with_items:
+        - ghidra.zip
+        - devops/MDO2024_INO/INO/GCL2/JK412625/Sprawozdanie4/Dockerfile
+
+- name: Create image with JDK and copied artifact
+  hosts: Endpoints
+  become: true
+  tasks:
+    - name: Build Docker image
+      docker_image:
+        name: deploy
+        build:
+          path: /home/ansible
+        source: build
+
+- name: Run ghidra
+  hosts: Endpoints
+  become: true
+  tasks:
+    - name: Run Docker container
+      docker_container:
+        name: ghidra_run
+        image: deploy
+```
+
+Wyniki po uruchomieniu playbooka.
+
+![alt text](image-12.png)
+
+Ostatnim wymaganym elementem było wyczyszczenie zbudowanych obrazów i uruchomionych kontenerów. W tym celu również użyjemy dockerowego pluginu w ansible. Jako target ustawiamy maszyny podane w sekcji Endpoints.
+
+```yaml
+- name: Remove docker images and container
+  hosts: Endpoints
+  become: true
+  tasks:
+    - name: Run Docker container
+      docker_container:
+        name: ghidra_run
+        state: absent
+    - name: Run Docker container
+      docker_image:
+        name: deploy
+        state: absent
+```
+
+Playbook uruchamiamy poleceniem: `ansible-playbook ./clean-docker.yaml -i ./inventory.ini -u ansible --ask-become-pass`.
 
 ### Pliki odpowiedzi dla wdrożeń nienadzorowanych
 
 Pierwszym etapem laboratorium było wygenerowanie pliku odpowiedzi. Aby to zrobić, należało utworzyć nową maszynę wirtualną, wspierającą kickstart, na przykład Fedorę. Po przejściu przez proces instalacji i zainstalowaniu systemu, konieczne było skopiowanie pliku znajdującego się pod ścieżką /root/anaconda-ks.cfg do systemu bazowego.
 
-Plik ten będzie później używany do automatycznej instalacji systemu. Jest to pójście o krok dalej jeżeli chodzi o automatyzację bla bla bla.
+Plik ten będzie później używany do automatycznej instalacji systemu. 
 
 
+
+<!-- TO BE DELETED -->
 Wykonanie playbooka po raz pierwszy
 
 ![alt text](image-1.png)
