@@ -246,19 +246,105 @@ Ostatnim wymaganym elementem było wyczyszczenie zbudowanych obrazów i uruchomi
 
 Playbook uruchamiamy poleceniem: `ansible-playbook ./clean-docker.yaml -i ./inventory.ini -u ansible --ask-become-pass`.
 
+##### Ansible galaxy
+
+Powyższe playbooki można ubrać w role używając ansible galaxy.
+
+
 ### Pliki odpowiedzi dla wdrożeń nienadzorowanych
 
 Pierwszym etapem laboratorium było wygenerowanie pliku odpowiedzi. Aby to zrobić, należało utworzyć nową maszynę wirtualną, wspierającą kickstart, na przykład Fedorę. Po przejściu przez proces instalacji i zainstalowaniu systemu, konieczne było skopiowanie pliku znajdującego się pod ścieżką /root/anaconda-ks.cfg do systemu bazowego.
 
-Plik ten będzie później używany do automatycznej instalacji systemu. 
+Plik ten będzie później używany do automatycznej instalacji systemu. Zawiera on szereg instrukcji opisujących kolejne kroki instalowania nowego systemu. Jest to np. wybór języka, stworzenie nowego użytkownika czy zainstalowanie sprecyzowanych pakietów.
 
+Po stworzeniu i uruchomieniu maszyny z docelowym instalatorem iso w GRUB'ie należy wejść w tryb edycji komend, które zostaną uruchomione przez GRUB. Należy wcisnąć `e`. Żeby wykorzystać nasz plik uruchamiający należy dodać zmienną `inst.ks=<ścieżka do pliku anaconda-ks.cfg>`. Można podać ścieżkę sieciową (np. adres webservera, który hostuje nasz plik). W tym celu wykorzystane zostały Github Gist, które pozwalają na dodawanie snippetów kodu tak samo jak pastebin. Po edycji komendy powinny wyglądać tak jak poniżej. Nową instrukcję dodajemy przed `initrdefi`, które rozpoczyna instalację.
 
+![alt text](image-13.png)
 
-<!-- TO BE DELETED -->
-Wykonanie playbooka po raz pierwszy
+Tryb instalacji został ustawiony na tekstowy poprzez polecenie text, co oznacza, że instalacja będzie przeprowadzona bez użycia interfejsu graficznego. Układ klawiatury skonfigurowano na polski (keyboard --vckeymap=pl --xlayouts='pl'), a język systemu na polski z kodowaniem UTF-8 (lang pl_PL.UTF-8).
 
-![alt text](image-1.png)
+Źródła instalacji zostały określone poprzez użycie list: główna lista dla Fedora 39 (url --mirrorlist="http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-39&arch=x86_64") oraz lista dla aktualizacji (repo --name=update --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f39&arch=x86_64).
 
-Wynik po uruchomieniu drugi raz tego samego polecenia i playbooka
+Konfiguracja dysku zakłada ignorowanie wszystkich dysków poza sda (ignoredisk --only-use=sda), automatyczne partycjonowanie (autopart) oraz usunięcie wszystkich istniejących partycji i utworzenie nowej etykiety dysku (clearpart --all --initlabel). Strefa czasowa została ustawiona na Europe/Warsaw z użyciem czasu UTC (timezone Europe/Warsaw --utc).
 
-![alt text](image.png)
+Konto administratora (root) zostało zablokowane (rootpw --lock), co oznacza, że nie będzie można się na nie bezpośrednio zalogować. Zostało utworzone konto użytkownika john, który należy do grupy wheel (grupa administracyjna), z zaszyfrowanym hasłem (user --groups=wheel --name=john --password=$y$j9T$y0nYbyK8bG4D7d36UMN9pa6G$0uQDFS8/6NgXTErzM1Rqc57QVfKsnpjhfH7zLcl9k22 --iscrypted --gecos="john doe").
+
+Lista pakietów do instalacji obejmuje:
+
+```
+@^server-product-environment
+java-17-openjdk
+java-17-openjdk-devel
+python3
+python3-pip
+unzip
+wget
+```
+
+Po instalacji wykonywane są dodatkowe działania:
+
+```
+wget http://172.31.100.202:8000/ghidra.zip -P /tmp
+unzip /tmp/ghidra.zip -d /usr/bin/local/
+mv /usr/bin/local/ghidra_* /usr/bin/local/ghidra_exec/
+rm -rf /usr/bin/local/ghidra
+echo "export PATH=$PATH:/usr/bin/local/ghidra_exec" >> /etc/profile
+echo "/usr/local/bin/ghidra_exec/ghidraRun" >> /home/john/.bashrc
+```
+
+Polecenia te pobierają plik ghidra.zip z określonego adresu URL, rozpakowują go do katalogu /usr/bin/local/, przenoszą zawartość do katalogu /usr/bin/local/ghidra_exec/, usuwają pierwotny katalog ghidra oraz dodają ścieżkę do zmiennej środowiskowej PATH w pliku /etc/profile. Na końcu za każdym razem gdy użytkownik zaloguje się do systemu i uruchomi basha to Ghidra uruchomi się w tle.
+
+Po zakończeniu instalacji system zostaje automatycznie uruchomiony ponownie (reboot).
+
+Plik z pełną konfiguracją znajduje się poniżej. 
+
+```cfg
+text
+
+keyboard --vckeymap=pl --xlayouts='pl'
+lang pl_PL.UTF-8
+
+url --mirrorlist="http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-39&arch=x86_64"
+repo --name=update --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f39&arch=x86_64
+
+firstboot --enable
+
+ignoredisk --only-use=sda
+autopart
+# Partition clearing information
+clearpart --all --initlabel
+
+timezone Europe/Warsaw --utc
+
+rootpw --lock
+user --groups=wheel --name=john --password=$y$j9T$y0nYbyK8bG4D7d36UMN9pa6G$0uQDFS8/6NgXTErzM1Rqc57QVfKsnpjhfH7zLcl9k22 --iscrypted --gecos="john doe"
+
+%packages
+@^server-product-environment
+java-17-openjdk
+java-17-openjdk-devel
+python3
+python3-pip
+unzip
+wget
+%end
+
+%post
+wget http://172.31.100.202:8000/ghidra.zip -P /tmp
+unzip /tmp/ghidra.zip -d /usr/bin/local/
+mv /usr/bin/local/ghidra_* /usr/bin/local/ghidra_exec/
+rm -rf /usr/bin/local/ghidra
+echo "export PATH=$PATH:/usr/bin/local/ghidra_exec" >> /etc/profile
+echo "/usr/local/bin/ghidra_exec/ghidraRun" >> /home/john/.bashrc
+%end
+
+reboot
+```
+
+Poniżej widać załadowanie wstępnych ustawień (język, czas itp.) podczas instalacji
+
+![alt text](image-14.png)
+
+Po zainstalowaniu systemu i automatycznym jego zrestartowaniu można się zalogować na stworzone wcześniej konto. Gdy wylistujemy procesy zobaczymy tam uruchomiony proces Ghidry. Docelowo tą aplikację powinno się uruchamiać w środowisku graficznym. 
+
+![alt text](image-15.png)
