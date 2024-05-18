@@ -347,8 +347,6 @@ Zawartość tego pliku musimy sobie zapisać, tak abyśmy mogli ją edytować a 
 
 #### Zmiany w pliku anaconda-ks.cfg
 
-Oczywiście nasz plik nie musi mieć takiej nazwy, w moim przypadku nazwałem go `fedorka.cfg`
-
 Pierwsze co musimy zmienić to podanie lokalizacji serwerów lustrzanych repozytorium fedory oraz aktualizacji.
 
 ```
@@ -409,4 +407,4 @@ Teraz przetestujmy nasz plik.
 
 ### Instalacja z pliku kickstart
 
-W tym celu tworzymy nową maszynę identycznie jak poprzednio
+W tym celu tworzymy nową maszynę identycznie jak poprzednio.
