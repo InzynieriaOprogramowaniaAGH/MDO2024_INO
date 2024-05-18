@@ -410,3 +410,105 @@ Teraz przetestujmy nasz plik.
 ### Instalacja z pliku kickstart
 
 W tym celu tworzymy nową maszynę identycznie jak poprzednio.
+
+![fedorka.cfg](Images/31.png)
+
+Podczas pierwszego okna przy instalacji nie wybieramy opcji Install jednka wchodzimy do opcji edycji wciskając `e`.
+
+![fedorka.cfg](Images/32.png)
+
+Dostaniemy taki widok, w nim możemy zauważyć, że mamy podane źródło instalacji czyli plik .iso, teraz chcemy dodać do tego nasz plik anaconda-ks.cfg jako źródło konfiguracji do instalacji, w tym celu wykorzystujemy url do naszego pliku na repozytorium.
+
+![fedorka.cfg](Images/33.png)
+
+Następnie akceptujemy wszystko przy pomocy `ctrl + x` i czekamy na przebieg instalacji.
+
+![fedorka.cfg](Images/34.png)
+
+W oknie wyboru konfiguracji nie musimy niczego ustawiać, wszystkie opcje zostały pobrane z pliku konfiguracji.
+
+Po wszystkim nasz system jest gotowy i zainstalowany, bez żadnej ingerencji i skonfigurowany.
+
+Dodatkowo w pliku .cfg dodajemy dwie linie, które pozwolą nam zmienić nazwę hosta:
+
+```
+network  --bootproto=dhcp --device=eth0 --ipv6=auto --activate
+network  --hostname=lukasz.sawina
+```
+
+Teraz zamiast localhost będziemy mieli nazwę sieci lukasz.sawina.
+
+### Uruchomienie Docker Container z pliku kickstart
+
+Kolejnym co chcemy osiągnąć to podczas instalacji pobrać obraz z dockerhub aplikacji z poprzedniego sprawozdanie i uruchomić go w kontenerze. W tym celu musimy dodać kilka zmian w pliku .cfg
+
+Pierwsze co musimy zmienić to packages, do uruchomienia dockera potrzebować będziemy dwóch paczek
+`@^server-product-environment`
+`moby-engine`
+
+```
+%packages
+@^minimal-environment
+@container-management
+@^server-product-environment
+moby-engine
+
+%end
+```
+
+Dodatkowo musimy dodać sekcje post, która będzie odpowiadała za utworzenie daemona, który pobierze nasz obraz i uruchomi go w kontenerze:
+
+```
+%post --erroronfail --log=/root/ks-post.log
+
+# Add root to docker group and enable docker service
+usermod -aG docker root
+systemctl enable docker
+
+# Create systemd service for docker container
+cat << 'EOF' > /etc/systemd/system/takenote-docker.service
+[Unit]
+Description=docker download and run
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+
+ExecStart=/usr/bin/docker pull lukaszsawina/take_note_pipeline:latest
+ExecStart=/usr/bin/docker run -t -d --name takenote -p 5000:5000 lukaszsawina/take_note_pipeline:latest
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Reload systemd and enable the new service
+systemctl daemon-reload
+systemctl enable takenote-docker.service
+systemctl start takenote-docker.service
+
+%end
+```
+
+Fragment ten tworzy nam daemona o nazwie takenote-docker.service, który w trakcie instalacji zostanie skonfigurowany docker, pobierze nam obraz oraz uruchomi kontener.
+
+Teraz ponownie jak wcześniej, przetestujmy naszą instalację systemu ze skonfigurowanym dockerem.
+
+![fedorka.cfg](Images/35.png)
+
+Po zainstalowaniu systemu sprawdzamy nasz daemon przy pomocy polecenia:
+
+```bash
+systemctl status takenote-docker.service
+```
+
+Jak widzimy nasz daemon jest aktywny, w takim razie sprwadzimy czy kontener z naszą aplikacja został utworzony.
+
+![fedorka.cfg](Images/36.png)
+
+Jak widać kontener pracuje, dodatkowo w .cfg przy uruchomieniu kontenera określiłem jaki port ma zostać ukazany, więc możemy sprawdzić czy aplikacja na pewno działa, w tym celu musimy poznać adres IP maszyny i w przeglądarce połączyć się z nim z portem 5000.
+
+![fedorka.cfg](Images/37.png)
+
+Nasz kontener z aplikacją działa. Teraz możemy wykorzystać nasz plik anaconda-ks.cfg gdybyśmy chcieli ponownie zainstalować nowy system z od razu dockerem i uruchomioną aplikacją.
