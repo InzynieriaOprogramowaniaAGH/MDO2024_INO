@@ -133,12 +133,11 @@ Kolejno skopiowałam plik inwentaryzacji na maszynę endpoints.
 ![](./screeny/4cp.png)
 Za pierwszym razem zwrócony został status CHANGED. Oznaczało to, że wprowadzone zostały zmiany - kopiowanie pliku.
 
-Ponów operację, porównaj różnice w wyjściu. 
-Za drugim razem zwrócony został status OK, ponieważ plik był juz skopiowany. Nie została wyświetlona informacja o zmianach, więc plik z przekopiowaną wcześniej zawartością był widziany przez ansible.
+Ponowiłam operację. Za drugim razem zwrócony został status OK, ponieważ plik był juz skopiowany. Nie została wyświetlona informacja o zmianach, więc plik z przekopiowaną wcześniej zawartością był widziany przez ansible.
 
 ![](./screeny/4cp2.png)
 
-Zaktualizuj pakiety w systemie w następujący sposób:
+Zaktualizowałam pakiety w systemie w następujący sposób:
 
 ```
 - name: Packets update
@@ -150,6 +149,54 @@ Zaktualizuj pakiety w systemie w następujący sposób:
 	name: "*"
         state: latest
 ```
+Playbook działał z uprawnieniami administratora, dzięki ustawieniu become: true. Poprzez dodanie flagi --ask-become-pass do komendy uruchamiającej playbook będzie uruchamiana opcja z podaniem hasła.
 
-Zrestartuj usługi sshd i rngd
-Przeprowadź operacje względem maszyny z wyłączonym serwerem SSH, odpiętą kartą sieciową
+Kolejno zrestartowałam usługi sshd i rngd. 
+
+```
+- name: Restart sshd
+  become: true
+  service:
+    name: sshd
+    state: restarted
+```
+To zadanie ma na celu restart usługi sshd, która jest odpowiedzialna za obsługę połączeń SSH na serwerze.
+
+```
+- name: Restart rng
+  become: true
+  ansible.builtin.service:
+    name: rngd
+    state: restarted
+```
+ To zadanie ma na celu restart usługi rngd, która jest odpowiedzialna za dostarczanie losowych danych i zbieranie entropii z różnych źródeł w systemie i dostarczanie jej do jądra systemu operacyjnego.
+
+ ![](./screeny/4res.png)
+
+Przeprowadiłam operacje względem maszyny z wyłączonym serwerem SSH, odpiętą kartą sieciową.
+Na maszynie ansible target wykonałam polecenie:
+```
+sudo systemctl stop ssh
+```
+aby zatrzymać usługę ssh. 
+
+![](./screeny/4stop.png)
+
+Wykonanie playbooka wyświetliło komunikat: "Connection refused", co oznaczało, że nie uzyskano połączenia między obiema maszynami. 
+
+![](./screeny/4stop.png)
+
+Następnie odpięłam kartę sieciową w ustawieniach maszyny ansible-target. Przeszłam do opcji: Sieć, a następnie wybrałam Źródło: rozłączono.
+
+![](./screeny/4odp.png)
+
+Tym razem po wykonaniu playbooka otrzymałam komunikat: "Connectiom timed out". Połączenie również się nie udało. 
+
+
+# Zarządzanie kontenerem:
+
+Na poprzednich zajęciach moja aplikacja została opublikowana jako archiwum tar przy użyciu platformy Jenkins, zamiast jako obraz na DockerHubie. Utworzyłam zatem katalog app i przeniosłam do niego plik Dockerfile_deploy oraz to archiwum tar. 
+W trakcie implementacji mojej aplikacji zauważyłam, że plik Dockerfile używany do wdrażania był pierwotnie skonfigurowany do działania na systemie Ubuntu. Gdy jednak próbowałam uruchomić aplikację na systemie Fedora, napotkałam problemy z niezgodnością nazw pakietów. Aby rozwiązać ten problem, musiałam dokonać odpowiednich zmian w pliku Dockerfile, aby uwzględnić różnice w nazwach pakietów między systemami Ubuntu a Fedora.
+Utworzyłam playbook o nazwie playbook2.yaml, w którym wykonałam poniższe kroki:
+
+
