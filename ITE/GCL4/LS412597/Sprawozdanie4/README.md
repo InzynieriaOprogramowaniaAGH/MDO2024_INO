@@ -283,31 +283,31 @@ Systemem na którym będziemy wykonywać automaty zację jest Fedora v40. Naszym
 
 #### Tworzenie wirtualnej maszyny
 
-![playbook](Images/17.png)
+![fedorka](Images/17.png)
 
 > Podajemy nazwę naszej maszyny.
 
-![playbook](Images/18.png)
+![fedorka](Images/18.png)
 
 > Wybieramy 2 generację.
 
-![playbook](Images/19.png)
+![fedorka](Images/19.png)
 
 > Określamy wielkość pamięci RAM, w tym przypadku hojnie 2GB.
 
-![playbook](Images/20.png)
+![fedorka](Images/20.png)
 
 > Podpinamy go do default switch
 
-![playbook](Images/21.png)
+![fedorka](Images/21.png)
 
 > Określamy wielkośc dysku
 
-![playbook](Images/22.png)
+![fedorka](Images/22.png)
 
 > Możemy od razu podać plik ISO z jakiego ma nam uruchomić instalację
 
-![playbook](Images/23.png)
+![fedorka](Images/23.png)
 
 > Dodatkowo musimy wyłączyć w ustawieniach "Włącz bezpieczny rozruch" ponieważ instalacja może się nawet nie odpalić.
 
@@ -315,23 +315,23 @@ Systemem na którym będziemy wykonywać automaty zację jest Fedora v40. Naszym
 
 Po utworzeniu naszej maszyny uruchamiamy ją
 
-![playbook](Images/24.png)
+![fedorka](Images/24.png)
 
 > Wybieramy opcję install
 
-![playbook](Images/25.png)
+![fedorka](Images/25.png)
 
 > Określamy język
 
-![playbook](Images/26.png)
+![fedorka](Images/26.png)
 
 > Uzupełniamy informacje o instalacji, w tym przypadku wybieramy dysk na którym ma zostać zainstalowany system, włączamy użytkownika root oraz tworzymy dodatkowego użytkownika, po czym rozpoczynamy instalację
 
-![playbook](Images/27.png)
+![fedorka](Images/27.png)
 
 > Idziemy zrobić kawusię i czekamy aż system się zainstaluje
 
-![playbook](Images/28.png)
+![fedorka](Images/28.png)
 
 > Instalacja się zakończyła i uruchamiamy ponownie maszynę.
 
@@ -341,7 +341,7 @@ Teraz po uruchomieniu systemu i zalogowania się na użytkownika odczytujemy zaw
 /root/anaconda-ks.cfg
 ```
 
-![playbook](Images/29.png)
+![fedorka](Images/29.png)
 
 Zawartość tego pliku musimy sobie zapisać, tak abyśmy mogli ją edytować a następnie mieć do niej dostęp, w tym celu zapisujemy ją na naszych lokalnych repozytoriach.
 
@@ -400,3 +400,13 @@ user --groups=wheel --name=user --password=$y$j9T$sJ9fLzkS18PBT2u5ywdHzf9O$UZ0Dt
 ```
 
 Nowy plik zamieszczamy w repozytorium i sprawdzamy jak sprawić aby mieć do niego dostęp z zewnątrz.
+
+![fedorka.cfg](Images/30.png)
+
+Jak widać pod odpowiednim adresem z prefixem `raw` mamy dostęp do naszego pliku konfiguracji.
+
+Teraz przetestujmy nasz plik.
+
+### Instalacja z pliku kickstart
+
+W tym celu tworzymy nową maszynę identycznie jak poprzednio
