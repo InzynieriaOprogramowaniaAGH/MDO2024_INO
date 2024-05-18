@@ -3,7 +3,7 @@ Dagmara Pasek
 411875
 
 ### Cel ćwiczenia:
-Celem tego ćwiczenia było 
+Celem tych zajęć było zapoznanie się i praktyczne wykorzystanie narzędzia Ansible do automatyzacji zarządzania infrastrukturą oraz zdobycie umiejętności w zakresie tworzenia playbooków, zarządzania inwentaryzacją, wymiany kluczy SSH, a także zarządzania kontenerami Docker. 
 
 ### Przebieg ćwiczenia 008:
 # Instalacja zarządcy Ansible:
