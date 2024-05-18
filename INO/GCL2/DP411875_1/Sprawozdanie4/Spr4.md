@@ -309,3 +309,31 @@ W folderze wyżej utworzyłam osobny playbook o nazwie "playbook_roles", który 
 ```
 Wykonanie playbooka było takie samo, jak w krokach powyżej.
 ![](./screeny/4o.png)
+
+### Przebieg ćwiczenia 009:
+Zainstalowałam system Fedora, stosując instalator sieciowy netinst. Po poprawnej instalacji powinniśmy otrzymać plik anaconda-ks.cfg. Skopiowałam go stosując polecenie:
+```
+sudo cp /root/anaconda-ks.cfg ~/anaconda-ks.cfg
+```
+Musiałam dodać wzmianki na temat potrzebnych repozytoriów:
+```
+url --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-39&arch=aarch64
+repo --name=update --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f38&arch=aarch64
+```
+Zapewniłam, że zawsze plik będzie formatować całość, stosując polecenie:
+``
+clearpart --all
+```
+Dodałam jeszcze polecenie
+```
+reboot
+```
+aby system od razu uruchomił się ponownie.
+![](./screeny/42ss.png)
+Pobrałam plik na Github i utworzyłam nową maszynę na podstawie tego pliku. Wybrałam opcję -e aby otworzyć tryb GRUB, w którym mogłam podać link do pliku.
+
+![](./screeny/42ss2.png)
+
+Instalacja przebiegła pomyślnie. Pojawiło się okno instalacji.
+
+![](./screeny/42ok.png)
