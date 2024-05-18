@@ -1,0 +1,14 @@
+orchestrators:
+  hosts:
+    main_host:
+      ansible_host: daga-fedora
+endpoints:
+    hosts:
+        target_host:
+            ansible_host: ansible-target
+            ansible_user: ansible
+
+network:
+  children:
+    orchestrators:
+    endpoints:

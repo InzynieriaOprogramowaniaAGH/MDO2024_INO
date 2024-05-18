@@ -1,0 +1,47 @@
+- name: Install and enable Docker
+  hosts: endpoints
+  become: true
+  tasks:
+    - name: Install Docker
+      dnf:
+        name: docker
+        state: present
+      become: true
+
+    - name: Ensure Docker service is enabled
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
+      become: true
+
+- name: Download image for building/deploying the program
+  hosts: endpoints
+  tasks:
+    - name: Copy Dockerfile for deployment
+      copy:
+        src: /home/parallels/ssh/MDO2024_INO/INO/GCL2/DP411875_1/Sprawozdanie4/app
+        dest: /home/ansible/ansible_1/
+
+- name: Build
+  hosts: endpoints
+  become: true
+  tasks:
+    - name: Build Docker image
+      docker_image:
+        name: deploy
+        build:
+          path: /home/ansible/ansible_1/app
+          dockerfile: Dockerfile_deploy
+        source: build
+    - name: Run build
+      docker_container:
+        name: my_container   
+        image: deploy
+        auto_remove: yes
+        detach: yes
+    - name: Delete container
+      docker_container:
+        name: my_container
+        image: deploy
+        state: absent

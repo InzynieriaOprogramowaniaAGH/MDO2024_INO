@@ -1,0 +1,5 @@
+FROM fedora:latest
+RUN dnf -y update && \
+    dnf -y install libglib2.0-0 libutf8proc-devel libcrypt
+
+

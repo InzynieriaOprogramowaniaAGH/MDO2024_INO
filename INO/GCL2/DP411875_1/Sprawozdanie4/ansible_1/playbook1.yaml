@@ -1,0 +1,28 @@
+- name: Copy
+  hosts: endpoints
+  tasks:
+    - name: Copy inventory file
+      copy:
+        src: /home/parallels/ansible_1/inventory.yaml
+        dest: /home/ansible/ansible_1/inventory.yaml
+
+- name: Packets update
+  hosts: endpoints
+  become: true
+  tasks:
+    - name: Update all packages to the latest version
+      package:
+        name: "*"
+        state: latest
+
+    - name: Restart sshd
+      become: true
+      service:
+        name: sshd
+        state: restarted
+
+    - name: Restart rng      
+      become: true
+      ansible.builtin.service:
+        name: rngd
+        state: restarted
