@@ -160,6 +160,68 @@ Utwórz "prawdziwy" projekt, który:
 
  - diagram aktywności
 
-
+![ ](./SS/24.png)
 
  - diagram wdrożeń
+
+![ ](./SS/25.png)
+
+**4. Pipeline**
+
+- Użyte pliki dockerfile:
+
+Do zbudowania naszego projektu użyjemy BLDR.Dockerfile z node w wersji 18, który od razu instaluje GitHuba i klonujue nasze repozytorium.Aby było prościej budowanie przeprowadzamy w kontenerze CI, bo nie potrzebujemy zbytnio zabezpieczać naszego projektu oraz ta opcja jest wydajniejsza.
+
+![ ](./SS/26.png)
+
+Następnie w oparciu o powyższy obraz TSTR.Dockerfile przeprowada testy
+
+![ ](./SS/27.png)
+
+ - Zgoda na publikację
+
+Użytkownik jest proszony o potwierdzenie chęci upublicznienia projektu, wybranie wersji aplikacji oraz podanie hasła potrzebnego do publikacji na DockerHunb'ie.
+
+![ ](./SS/34.png)
+
+ - Etap klonowania:
+
+Robimy miejsce na nasze repozytorium poprzez usunięcie poprzedniego oraz obrazów kontenerów. Po sklonowaniu przenosimy się na naszą docelową gałąź gdzie tworzymy pliki na logi z następnych etapów.
+
+![ ](./SS/28.png)
+
+ - Etap budowanie:
+
+W tym etapie poprostu budujemy nasz obar z BLDR.Dockerfile oraz zapisujemy nasze logi to wczesniej utworzonego pliku.
+
+![ ](./SS/29.png)
+
+ - Etap testowania:
+
+Postępujemy tak jak w etapie budowania, ale z wykozystaniem obrazu testującego z TSTR.Dockerfile
+
+![ ](./SS/30.png)
+
+ - Etap wdrażania:
+
+Podczas wdrażania archiwizujemy nasze logi oraz pozbywamy się utworzonych wcześniej obrazów kontenerów. Tworzymy folder gdzie wersjonizujemy nasz projekt oraz uruchamiamy kontener. W razie niepowodzenia zostanie zwrócona informacja o błędzie.
+
+![ ](./SS/31.png)
+
+ - Etap publikowania:
+
+Jeśli wszystkie poprzednie etapy przebiegły pomyslnie tworzymy nasz oczekiwany artefakt w postaci paczki tar.gz, a obraz wysyłamy do Dockerhub'a. 
+
+![ ](./SS/32.png)
+
+ - Wylogowanie
+
+ Na końcu następuje wylogowanie z DockerHub'a
+
+ ![ ](./SS/33.png)
+
+ - Uruchomienie Pipeline'u
+
+ Jeśli całość Pipeline'u wykonała się bezbłędnie powinniśmy otrzymać taki wynik potwierdzający przejście Pipeline'u oraz stworzenie trzech artefaktów w postaci spakowanej aplikacji i logów:
+
+ ![ ](./SS/35.png)
