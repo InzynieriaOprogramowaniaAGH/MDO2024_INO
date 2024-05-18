@@ -1,4 +1,4 @@
-# Sprawozdanie 3
+# Sprawozdanie 4
 Dagmara Pasek
 411875
 
@@ -191,12 +191,99 @@ Następnie odpięłam kartę sieciową w ustawieniach maszyny ansible-target. Pr
 ![](./screeny/4odp.png)
 
 Tym razem po wykonaniu playbooka otrzymałam komunikat: "Connectiom timed out". Połączenie również się nie udało. 
-
+![](./screeny/4stop2.png)
 
 # Zarządzanie kontenerem:
 
 Na poprzednich zajęciach moja aplikacja została opublikowana jako archiwum tar przy użyciu platformy Jenkins, zamiast jako obraz na DockerHubie. Utworzyłam zatem katalog app i przeniosłam do niego plik Dockerfile_deploy oraz to archiwum tar. 
 W trakcie implementacji mojej aplikacji zauważyłam, że plik Dockerfile używany do wdrażania był pierwotnie skonfigurowany do działania na systemie Ubuntu. Gdy jednak próbowałam uruchomić aplikację na systemie Fedora, napotkałam problemy z niezgodnością nazw pakietów. Aby rozwiązać ten problem, musiałam dokonać odpowiednich zmian w pliku Dockerfile, aby uwzględnić różnice w nazwach pakietów między systemami Ubuntu a Fedora.
+
+Zmieniony Dockerfile wyglądał następująco:
+```
+FROM fedora:latest
+RUN dnf -y update && \
+    dnf -y install glib2 utf8proc-devel libxcrypt
+
+```
 Utworzyłam playbook o nazwie playbook2.yaml, w którym wykonałam poniższe kroki:
 
+Zainstalowałam i aktywowałam usługę Docker na hoście endpoints. Pierwsze zadanie instaluje pakiet Docker za pomocą modułu dnf, a drugie zapewnia, że usługa Docker będzie aktywowana i uruchomiona przy użyciu modułu systemd.
 
+```
+ - name: Install and enable Docker
+  hosts: endpoints
+  become: true
+  tasks:
+    - name: Install Docker
+      dnf:
+	name: docker
+        state: present
+      become: true
+
+    - name: Ensure Docker service is enabled
+      systemd:
+	name: docker
+        enabled: yes
+        state: started
+      become: true
+```
+
+![](./screeny/4doc.png)
+
+Następnie plik Dockerfile jest kopiowany z lokalnej ścieżki /home/parallels/ssh/MDO2024_INO/INO/GCL2/DP411875_1/Sprawozdanie4/app na serwer docelowy do lokalizacji /home/ansible/ansible_1/. Ten proces zapewnia dostępność pliku Dockerfile na serwerze, co jest niezbędne do budowy obrazu Dockera.
+Kolejne kroki w playbooku Ansible realizują proces budowy i uruchomienia kontenera na podstawie wcześniej skopiowanego pliku Dockerfile. W pierwszym zadaniu budowany jest obraz Docker o nazwie "deploy", korzystając z pliku Dockerfile znajdującego się w ścieżce /home/ansible/ansible_1/app o nazwie Dockerfile_deploy. Następnie, w drugim zadaniu, uruchamiany jest kontener Dockerowy o nazwie "my_container" z wykorzystaniem zbudowanego obrazu "deploy", gdzie parametry auto_remove: yes i detach: yes oznaczają, że kontener zostanie automatycznie usunięty po zakończeniu działania, a proces zostanie odłączony. 
+
+```
+- name: Download image for building/deploying the program
+  hosts: endpoints
+  tasks:
+    - name: Copy Dockerfile for deployment
+      copy:
+	src: /home/parallels/ssh/MDO2024_INO/INO/GCL2/DP411875_1/Sprawozdanie4/app
+        dest: /home/ansible/ansible_1/
+
+- name: Build
+  hosts: endpoints
+  become: true
+  tasks:
+    - name: Build Docker image
+      docker_image:
+        name: deploy
+        build:
+          path: /home/ansible/ansible_1/app
+          dockerfile: Dockerfile_deploy
+        source: build
+    - name: Run build
+      docker_container:
+        name: my_container   
+        image: deploy
+        auto_remove: yes
+        detach: yes
+```
+
+![](./screeny/4cpd.png)
+
+Na maszynie ansible-target wykonałam polecenie:
+```
+sudo docker images
+```
+aby sprawdzić, czy utworzył się obraz o nazwie deploy.
+
+![](./screeny/4obraz.png)
+
+Finalnie playbook usuwa kontener Dockerowy o nazwie "my_container", który był oparty na obrazie "deploy". Parametr state: absent wskazuje, że kontener zostanie usunięty, jeśli istnieje. 
+
+```
+- name: Delete container
+      docker_container:
+        name: my_container
+        image: deploy
+        state: absent
+```
+
+Sprawdziłam, czy nastąpiło usunięcie.
+
+![](./screeny/4del.png)
+
+
+![](./screeny/4del2.png)
