@@ -3,6 +3,7 @@
 
 **CEL PROJEKTU**
 
+Przy użyciu Jenkins'a automatyzujemy budowanie -> testowanie -> wdrażanie aplikacji z wybranego repozytorium na Dockerze.
 
 **WYKONANE KROKI**
 **ZAJĘCIA 5-7**
@@ -57,7 +58,7 @@ Powinniśmy otrzymać ```10.0.2.15```. Teraz w ustawienaich zaawansowanych dla s
 
 Można teraz pokazać ekran logowania wpisując w przeglądarce:
 
-```host:8080```
+```localhost:8080```
 
 ![ ](./SS/9.png)
 
@@ -119,13 +120,46 @@ Jeśli otrzymamy 0 wszystko wykonało się prawidłowo:
 Konfiguracja wstępna i pierwsze uruchomienie:
  - Utwórz projekt, który wyświetla uname
 
+Tworzymy prosty projekt i używamy prostej komendy ```uname -a``` na powłoce:
+
+![ ](./SS/16.png)
+
+Powinniśmy otrzymać taki wypis w konsoli:
+
+![ ](./SS/17.png)
 
  - Utwórz projekt, który zwraca błąd, gdy... godzina jest nieparzysta
 
+Tworzymy go tak samo jak poprzedni:
 
-**3. Upewnij się, że na pewno działają kontenery budujące i testujące, stworzone na poprzednich zajęciach**
-  * Uruchom obraz Dockera który eksponuje środowisko zagnieżdżone
-  * Przygotuj obraz blueocean na podstawie obrazu Jenkinsa (czym się różnią?)
-  * Uruchom Blueocean
-  * Zaloguj się i skonfiguruj Jenkins
-  * Zadbaj o archiwizację i zabezpieczenie logów
+![ ](./SS/18.png)
+
+Powinniśmy otrzymać taki wypis w konsoli dla godziny parzystej:
+
+![ ](./SS/19.png)
+
+Powinniśmy otrzymać taki wypis w konsoli dla godziny nieparzystj:
+
+![ ](./SS/20.png)
+
+Utwórz "prawdziwy" projekt, który:
+ - klonuje nasze repozytorium
+ - klonuje nasze repozytorium
+ - buduje obrazy z dockerfiles i/lub komponuje via docker-compose
+
+ Tym razem utworzyłem pipeline o nastepującej treści:
+
+![ ](./SS/21.png)
+
+ Po uruchomieniu otrzymujemy:
+
+![ ](./SS/22.png)
+![ ](./SS/23.png)
+
+**3. Opracuj dokument z diagramami UML aktywności i wdrożeń**
+
+ - diagram aktywności
+
+
+
+ - diagram wdrożeń
