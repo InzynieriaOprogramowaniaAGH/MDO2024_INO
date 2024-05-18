@@ -321,7 +321,7 @@ url --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-39&arch
 repo --name=update --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f38&arch=aarch64
 ```
 Zapewniłam, że zawsze plik będzie formatować całość, stosując polecenie:
-``
+```
 clearpart --all
 ```
 Dodałam jeszcze polecenie
