@@ -287,3 +287,25 @@ Sprawdziłam, czy nastąpiło usunięcie.
 
 
 ![](./screeny/4del2.png)
+
+Ubrałam powyższe kroki w rolę, za pomocą szkieletowania ansible-galaxy. Na głównej maszynie wykonałam polecenie:
+```
+ansible-galaxy init irssi_roles
+```
+dzięki któremu utworzyłam role. Weszłam do katalogu tasks i edytowałam plik main.yml. Wkleiłam do niego treść wcześniej utworzonego playbooka.
+
+Fragment tego pliku wygląda następująco:
+
+![](./screeny/4frag.png)
+
+W folderze wyżej utworzyłam osobny playbook o nazwie "playbook_roles", który uwzględniał rolę "irssi_roles". Jego treść:
+
+```
+- name: Deploy Docker container
+  hosts: endpoints
+  become: true
+  roles:
+    - irssi_roles
+```
+Wykonanie playbooka było takie samo, jak w krokach powyżej.
+![](./screeny/4o.png)
