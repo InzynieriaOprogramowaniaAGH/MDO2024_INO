@@ -1,5 +1,7 @@
 ## Sprawozdanie 4
 
+> Informacja: Do wykonania zadań (tworzenia wirtualnych maszyn itp. ) wykorzystano zarówno VirtualBoxa i Hyper-v. Pierwsza część sprawozdania (do ansible-galaxy) została wykonana na VirtualBoxie a reszta przy użyciu Hyper-V.
+
 ### Automatyzacja i zdalne wykonywanie poleceń za pomocą Ansible
 
 Ansible to potężne narzędzie do automatyzacji, które umożliwia zarządzanie konfiguracją i wdrażanie aplikacji na wielu serwerach jednocześnie. Jest to popularne rozwiązanie wśród administratorów systemów i inżynierów DevOps ze względu na swoją prostotę użycia i skalowalność. Dzięki modelowi działania opartemu na infrastrukturze kodu oraz wykorzystaniu języka YAML do definiowania zadań, Ansible pozwala na szybkie i skuteczne zarządzanie infrastrukturą IT.
@@ -10,9 +12,9 @@ Jako system maszyny ansible-target, na której wykonywane będą polecenia zleco
 
 Na tym systemie należało uruchomić usługę sshd oraz upewnić się, że znajduje się tam narzędzie tar.  
 
-![alt text](image-2.png)
+![alt text](img/image-2.png)
 
-![alt text](image-3.png)
+![alt text](img/image-3.png)
 
 Kolejnym krokiem było zainstalowanie [oprogramowania Ansible](https://docs.ansible.com/) w systemie bazowym.
 
@@ -26,7 +28,7 @@ Ostatnim elementem ułatwiającym komunikację ansible z nowo stworzoną maszyn�
 
 Weryfikacja, że z maszyną `ansible-target` da się połączyć bez używania hasła
 
-![alt text](image-4.png)
+![alt text](img/image-4.png)
 
 #### Inwentaryzacja
 
@@ -44,7 +46,7 @@ sudo hostnamectl set-hostname ansible-target-<1 lub 2>
 
 Dodatkowo zedytowano (jak wcześniej wspomniano) plik `/etc/hosts` na głownej maszynie.
 
-![alt text](image-5.png)
+![alt text](img/image-5.png)
 
 Plik inwentaryzacji jest swojego rodzaju plikiem konfiguracyjnym zawierającym informacje o hostach, w których wykonywane będą określone polecenia. Dzięki niemu, ansible może zarządzać dużą liczbą hostów za pomocą pojedynczej komendy. Ma on rozszerzenie `ini`. Pliki w tym formacie są używane do przechowywania ustawień czy kluczy w hierarchicznej strukturze sekcji i parametrów. 
 
@@ -63,7 +65,7 @@ localhost
 
 Aby zweryfikować poprawność przygotowanego pliku, należało wysłać żądanie `ping` do wszystkich maszyn z sekcji `Endpoints`.
 
-![alt text](image-6.png)
+![alt text](img/image-6.png)
 
 Maszyny 'odbijają piłeczkę' i zwracają `pong`. Dodatkowo widać, że ansible połączył się po protokole ssh i sprawdził, że na systemach dostępny jest Python w wersji 3.11.
 
@@ -118,17 +120,17 @@ ansible-playbook ./playbook1.yaml -i inventory.ini -u ansible --ask-become-pass
 
 Pierwsze uruchomienie
 
-![alt text](image-7.png)
+![alt text](img/image-7.png)
 
 Drugie uruchomienie
 
-![alt text](image-8.png)
+![alt text](img/image-8.png)
 
 Jak widać za drugim razem przy kopiowaniu plików dostajemy status OK oznaczający, że ansible zastało stan, który odpowiada temu co sprecyzowaliśmy w playbooku. Można zauważyć, że podczas restartowania usługi [`rngd`](https://manpages.opensuse.org/Tumbleweed/rng-tools/rngd.8.en.html) otrzymujemy błąd. Z tego co wynika z dokumentacji systemu openSUSE, rngd to narzędzie, które nie jest włączone jako usługa, którą można zrestartować, dlatego otrzymujemy błąd. Usługa sshd, za każdym razem się restartuje i zwraca status changed co jest przewidywanym wynikiem.
 
 Za zadanie mieliśmy również przeprowadzić operacje względem maszyn z wyłączonym serwerem ssh. Gdy wyłączymy serwer ssh ansible nie będzie mogło połączyć się z docelową maszyną a tym samym wykonać operacji, które sprecyzowaliśmy w playbooku.
 
-![alt text](image-9.png)
+![alt text](img/image-9.png)
 
 #### Zarządzanie kontenerem
 
@@ -160,11 +162,11 @@ Ansible musi wykonać tą operację lokalnie ponieważ nie może zalogować się
 
 Poniżej znajduje się wynik polecenia `ansible-playbook ./ghidra-package.yaml`.
 
-![alt text](image-10.png)
+![alt text](img/image-10.png)
 
 Gdy wylistujemy pliki w obecnym katalogu powinniśmy zobaczyć plik ghidra.zip.
 
-![alt text](image-11.png)
+![alt text](img/image-11.png)
 
 Poniżej znajduje się listing playbooka instalującego dockera i uruchamiający nowy obraz w kontenerze. Aby ansible poprawnie skopiowało plik z ghidrą należy go umieścić w ~/. Po kolei:
 - odświeżenie repozytoriów
@@ -225,7 +227,7 @@ Poniżej znajduje się listing playbooka instalującego dockera i uruchamiający
 
 Wyniki po uruchomieniu playbooka.
 
-![alt text](image-12.png)
+![alt text](img/image-12.png)
 
 Ostatnim wymaganym elementem było wyczyszczenie zbudowanych obrazów i uruchomionych kontenerów. W tym celu również użyjemy dockerowego pluginu w ansible. Jako target ustawiamy maszyny podane w sekcji Endpoints.
 
@@ -248,8 +250,38 @@ Playbook uruchamiamy poleceniem: `ansible-playbook ./clean-docker.yaml -i ./inve
 
 ##### Ansible galaxy
 
-Powyższe playbooki można ubrać w role używając ansible galaxy.
+Powyższe playbooki można ubrać w role używając ansible galaxy. Pozwala to na udostępnienie i ponowne wykorzystanie kolekcji. W prosty sposób można zainstalować czyjąś kolekcję np. `ansible-galaxy collection install <col_name>`.
 
+Aby stworzyć nową rolę należy wykonać komendę `ansible-galaxy init <nazwa_roli>`. Ansible wygeneruje template z różnymi plikami i katalogami.
+
+![alt text](img/image-16.png)
+
+Omówienie poszczególnych katalogów:
+- defaults/ -> zawiera domyślne zmienne dla danej roli. Zmienne te mają niski priorytet i mogą zostać nadpisane przez każdą inną zmienną.
+- handlers/ -> reużywalne obsługi żądań
+- meta/ -> metadane roli (autor, licencja czy zależności potrzebne do wykonania danej roli)
+- tasks/ -> zawiera główne zadania, które zostaną wykonane przez rolę, tutaj umieszczony został wydzielony kod z wcześniejszych playbooków.
+- tests/ -> testy dla danej roli
+- vars/ -> zmienne ustawiane przez rolę, mają wyższy priorytet niż te w defaults/
+
+Można zauważyć, że każdy z katalogów posiada plik main.yml, który będzie domyślnie załączony do roli przez ansible podczas egzekucji kodu. Można tworzyć pliki o dowolnych nazwach z rozszerzeniem `.yml` i używać ich w plikach main poprzez użycie `import` lub `include`. Jeżeli chcemy podzielić się daną rolą z resztą świata warto wypełnić plik `README.md`, w którym zazwyczaj znajduje się dokumentacja opisująca do dana rola robi i np. jak ją skonfigurować.
+
+Dla zilustrowania wdrażania kontenera z Ghidrą przygotowano 3 role:
+- clean_docker -> wyczyszczenie zbudowanych obrazów i kontenera z Ghidrą
+- copy_artifacts -> skopiowanie artefaktu z Jenkinsa
+- install_and_run_docker -> na początku instalowany jest docker, następnie kopiuje się Dockerfile z instrukcją budowy obrazu pod Ghidrę a na końcu uruchamiany jest kontener z Ghidrą.
+
+Aby skorzystać z roli można stworzyć nowy playbook i umieścić w nim nazwy ról, które chcemy wykonać.
+
+```yaml
+- hosts: Endpoints
+  roles:
+    - role: install_and_run_docker
+    - role: copy_artifacts
+    - role: clean_docker
+```
+
+Ansible galaxy uruchamiamy poleceniem `ansible-galaxy -i inventory.ini -f playbook3.yaml -u ansible --ask-become-pass`.
 
 ### Pliki odpowiedzi dla wdrożeń nienadzorowanych
 
@@ -259,7 +291,7 @@ Plik ten będzie później używany do automatycznej instalacji systemu. Zawiera
 
 Po stworzeniu i uruchomieniu maszyny z docelowym instalatorem iso w GRUB'ie należy wejść w tryb edycji komend, które zostaną uruchomione przez GRUB. Należy wcisnąć `e`. Żeby wykorzystać nasz plik uruchamiający należy dodać zmienną `inst.ks=<ścieżka do pliku anaconda-ks.cfg>`. Można podać ścieżkę sieciową (np. adres webservera, który hostuje nasz plik). W tym celu wykorzystane zostały Github Gist, które pozwalają na dodawanie snippetów kodu tak samo jak pastebin. Po edycji komendy powinny wyglądać tak jak poniżej. Nową instrukcję dodajemy przed `initrdefi`, które rozpoczyna instalację.
 
-![alt text](image-13.png)
+![alt text](img/image-13.png)
 
 Tryb instalacji został ustawiony na tekstowy poprzez polecenie text, co oznacza, że instalacja będzie przeprowadzona bez użycia interfejsu graficznego. Układ klawiatury skonfigurowano na polski (keyboard --vckeymap=pl --xlayouts='pl'), a język systemu na polski z kodowaniem UTF-8 (lang pl_PL.UTF-8).
 
@@ -343,8 +375,8 @@ reboot
 
 Poniżej widać załadowanie wstępnych ustawień (język, czas itp.) podczas instalacji
 
-![alt text](image-14.png)
+![alt text](img/image-14.png)
 
-Po zainstalowaniu systemu i automatycznym jego zrestartowaniu można się zalogować na stworzone wcześniej konto. Gdy wylistujemy procesy zobaczymy tam uruchomiony proces Ghidry. Docelowo tą aplikację powinno się uruchamiać w środowisku graficznym. 
+Po zainstalowaniu systemu i automatycznym jego zrestartowaniu można się zalogować na stworzone wcześniej konto. Gdy wylistujemy procesy zobaczymy tam uruchomiony proces Ghidry. Docelowo tą aplikację powinno się uruchamiać w środowisku graficznym.
 
-![alt text](image-15.png)
+![alt text](img/img.jpg)

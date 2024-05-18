@@ -1,13 +1,4 @@
 ---
 # tasks file for copy_artifacts
-- name: Copy file from jenkins
-  block:
-    - name: Copy artifacts
-      copy:
-        src: ghidra.zip
-        dest: ~/
-  hosts: localhost
-  connection: local
-  tasks:
-    - name: Retrieve latest build from jenkins
-      command: wget -r -np -l 1 -A zip --auth-no-challenge --http-user=<redacted> --http-password=<redacted>  http://127.0.0.1:8080/job/ghidra-main-pip/lastSuccessfulBuild/artifact/*zip*/ghidra.zip -O ghidra.zip
+- name: Retrieve latest build from jenkins
+  command: wget -r -np -l 1 -A zip --auth-no-challenge --http-user=<redacted> --http-password=<redacted>  http://127.0.0.1:8080/job/ghidra-main-pip/lastSuccessfulBuild/artifact/*zip*/ghidra.zip -O ghidra.zip

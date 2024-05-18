@@ -24,3 +24,7 @@
     build:
       path: /home/ansible
     source: build
+- name: Run Docker container
+  docker_container:
+    name: ghidra_run
+    image: deploy

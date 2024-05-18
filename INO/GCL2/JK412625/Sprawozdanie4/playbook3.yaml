@@ -1,0 +1,6 @@
+- hosts: Endpoints
+  roles:
+    - role: install_docker
+      docker_version: latest
+    - role: copy_files
+    - role: install_and_run_docker
