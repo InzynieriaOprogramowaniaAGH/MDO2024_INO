@@ -118,48 +118,23 @@ Logi konsoli wyglądały następująco:
 
 ### Wstęp:
 #### Wymagania wstępne środowiska:
-1. Repozytorium kodu źródłowego: Repozytorium to będzie źródłem kodu, który będzie budowany, testowany i publikowany. Korzystałam z poniższego repozytorium:
+Repozytorium kodu źródłowego: Repozytorium to będzie źródłem kodu, który będzie budowany, testowany i publikowany. Korzystałam z poniższego repozytorium:
 ```
 https://github.com/irssi/irssi.git
 ```
-2. Serwer Jenkins: Jenkins będzie używany do automatyzacji procesu CI. Musimy mieć zainstalowany i skonfigurowany serwer Jenkinsa.
-3. Kontener Docker: Będę używać kontenera Docker do izolacji i zarządzania procesami budowania i publikowania naszych paczek NPM.
+Serwer Jenkins: Jenkins będzie używany do automatyzacji procesu CI. Musimy mieć zainstalowany i skonfigurowany serwer Jenkinsa.
+Kontener Docker również jest niezbędny.
 
 
-#### Opis diagramu aktywności:
-1. Pobranie kodu źródłowego z repozytorium git.
-2. Budowanie aplikacji za pomocą narzędzia npm.
-3. Wykonywanie testów za pomocą polecenia ``` npm test ```.
-4. Postawienie Local NPM Registry - Verdaccio.
-5. Publikowanie paczek do lokalnego rejestru NPM Verdaccio za pomocą polecenia ``` npm publish --registry verdaccio ```.
-6. Pobranie paczek z lokalnego rejestru NPM do kolejnego kontenera.
-7. Publikacja paczek do prawdziwego rejestru NPM za pomocą polecenia ``` npm publish```.
+#### Diagram aktywności:
+
+![](./screeny/3akt.png)
 
 
+#### Diagram wdrożeniowy:
 
-SCREEEN
+![](./screeny/3wdr.png)
 
-
-
-
-
-#### Opis diagramu wdrożeniowego:
-1. Repozytorium git, z którego pobieramy kod źródłowy.
-2. Serwer Jenkinsa, który zarządza procesem CI.
-3. Kontenery Docker, w których są wykonywane procesy budowania, testowania i publikowania paczek NPM.
-4. Verdaccio - Lokalny rejestr NPM, na który publikowany jest pakiet przed ich finalną publikacją.
-5. Prawdziwy rejestr NPM, gdzie ostatecznie publikowany jest pakiet.
-
-
-
-
-
-SCREEEN
-
-
-
-
-   
 
 ### Pipeline:
 1. Początkowo w etapie "Prepare" wykonałam kilka kroków przygotowawczych. Usunęłam stary katalog projektu, który został po poprzednim wykonaniu, sklonowałam repozytorium przedmiotowe oraz przełączyłam się na odpowiednią gałąź, aby mieć najnowszą wersję kodu przed przystąpieniem do budowy aplikacji.
@@ -197,6 +172,7 @@ stage('Create logs') {
 ```
 
 Zdefiniowałam pipeline korzystający z kontenerów celem realizacji kroków build -> test. 
+
 3. Dockerfile , z którego korzystałam wyglądał następująco:
 
 ```
@@ -373,8 +349,8 @@ Wszystkie etapy pomyślnie przeszły build.
             sh 'docker stop depl_1'
             sh 'docker stop copy_1' 
         }    
-    }
- }
+       }
+     }
         
         stage('Publish'){
         steps{
@@ -385,7 +361,7 @@ Wszystkie etapy pomyślnie przeszły build.
             }
         }
     }
- }
+     }
 ```
 
 
