@@ -35,7 +35,7 @@ pipeline {
             steps {
                 echo 'Building...'
                 dir('MDO2024_INO'){
-                    sh 'docker build -t notes-app-build:latest -f ./ITE/GCL4/LO410687/Sprawozdanie5/node/node-build.Dockerfile . | tee build_logs.log'
+                    sh 'docker build -t notes-app:latest -f ./ITE/GCL4/LO410687/Sprawozdanie5/node/node-build.Dockerfile . | tee build_logs.log'
                 }
             }
         }
