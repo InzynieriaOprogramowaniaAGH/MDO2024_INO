@@ -1,0 +1,17 @@
+- name: Pull Docker image and run container
+  hosts: Endpoints
+  become: yes
+  tasks:
+    - name: Pull the image
+      community.docker.docker_image:
+        name: phisiic/utt-deployer
+        tag: "1.93"
+        source: pull
+
+    - name: Run the container 
+      community.docker.docker_container:
+        name: utt-deployer
+        image: phisiic/utt-deployer:1.93
+        state: started
+        interactive: yes
+        tty: yes

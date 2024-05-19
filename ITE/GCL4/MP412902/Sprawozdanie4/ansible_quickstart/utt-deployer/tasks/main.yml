@@ -1,0 +1,16 @@
+---
+
+- name: Pull the image
+  become: yes
+  community.docker.docker_image:
+    name: "phisiic/utt-deployer:{{ VERSION }}"
+    source: pull
+
+- name: Run node container
+  become: yes
+  community.docker.docker_container:
+    name: utt
+    image: "phisiic/utt-deployer:{{ VERSION }}"
+    state: started
+    tty: yes
+    interactive: yes

@@ -1,0 +1,5 @@
+- name: Deploy utt using role
+  hosts: Endpoints
+  roles:
+    - role: utt-deployer
+  become: yes
