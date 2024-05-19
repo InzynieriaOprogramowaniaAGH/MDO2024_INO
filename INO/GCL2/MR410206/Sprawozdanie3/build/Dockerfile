@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM pierwszy
 
 RUN apt-get update && \
     apt-get install -y git && \
