@@ -121,7 +121,7 @@ pipeline {
             steps {
                 script {
                     echo 'Budowanie obrazu'
-                    sh 'docker build -f ./INO/GCL1/KG411149/Sprawozdanie2/Dockerfile_node_build -t node-app-build .'
+                    sh 'docker build -f ./INO/GCL1/KG411149/Sprawozdanie2/Dockerfile_node_build -t node-build .'
                 }
             }
         }
@@ -132,4 +132,18 @@ pipeline {
 
 
 
-#### Konfiguracja wstępna i pierwsze uruchomienie
+### Wstęp - opracowanie dokumentu z diagramami UML, opisującymi proces CI.
+
+#### Wymagania wstępne środowiska
+
+- uruchomiony obraz DIND,
+- uruchomiony obraz blueocean na podstawie obrazu Jenkinsa.
+
+Diagram aktywności, pokazujący kolejne etapy (collect, build, test, report)
+!["diagram aktywnosci"](./zrzuty_ekranu/9.jpg)
+
+
+
+Diagram wdrożeniowy opisujący relacje między składnikami, zasobami i artefaktami: 
+!["diagram wdrozeniowy"](./zrzuty_ekranu/8.jpg)
+
