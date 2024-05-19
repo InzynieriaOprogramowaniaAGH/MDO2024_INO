@@ -155,4 +155,14 @@ Początkowo należało zainstalować nowy obraz maszyny wirtualnej o systemie op
 
 e w GRUB i dodanie linku do wstawionego na GitHubie pliku
 
-![alt text](image-33.png)
+![alt text](image-34.png)
+
+
+Odpalenie zainstalowanej maszyny oraz zalogowanie się do użytkownika z pliku anaconda-ks.cfg
+
+![alt text](image-35.png)
+
+Maszyna jest zainstalowana poprawnie z pliku konfiguracyjnego, więc można wykonać dalszą część laboratorium - dodanie czynności po instalacyjnych (post)
+
+
+
