@@ -1,0 +1,6 @@
+- name: Copy file from jenkins
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Retrieve latest build from jenkins
+      command: wget -r -np -l 1 -A zip --auth-no-challenge --http-user=<redacted> --http-password=<redacted>  http://127.0.0.1:8080/job/ghidra-main-pip/lastSuccessfulBuild/artifact/*zip*/ghidra.zip -O ghidra.zip

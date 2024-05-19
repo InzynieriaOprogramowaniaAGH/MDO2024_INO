@@ -1,0 +1,9 @@
+---
+- name: Run Docker container
+  docker_container:
+    name: ghidra_run
+    state: absent
+- name: Run Docker container
+  docker_image:
+    name: deploy
+    state: absent

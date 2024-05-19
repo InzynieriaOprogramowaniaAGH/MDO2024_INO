@@ -1,0 +1,46 @@
+- name: Install and start docker
+  hosts: Endpoints
+  become: yes
+  tasks:
+    - name: Refresh all repositories
+      command: zypper refresh
+    - name: Install Docker
+      zypper:
+        name: docker
+        state: present
+    - name: Start and enable Docker service
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+- name: Copy files
+  hosts: Endpoints
+  tasks:
+    - name: Copy files 2
+      copy:
+        src: "~/{{ item }}"
+        dest: ~/
+      with_items:
+        - ghidra.zip
+        - devops/MDO2024_INO/INO/GCL2/JK412625/Sprawozdanie4/Dockerfile
+
+- name: Create image with JDK and copied artifact
+  hosts: Endpoints
+  become: true
+  tasks:
+    - name: Build Docker image
+      docker_image:
+        name: deploy
+        build:
+          path: /home/ansible
+        source: build
+
+- name: Run ghidra
+  hosts: Endpoints
+  become: true
+  tasks:
+    - name: Run Docker container
+      docker_container:
+        name: ghidra_run
+        image: deploy
