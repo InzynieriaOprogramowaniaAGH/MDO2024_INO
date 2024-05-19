@@ -54,7 +54,7 @@ Dzięku temu maszyny wymieniły się kluczami i w tym momencie nie wymagane jest
 
 Należy pamiętać, aby dodać też klucz publiczny maszyny, na której zainstalowany jest *ansible*, tak aby mogła łączyć się poprzez ssh sama ze sobą bez konieczności podawania hasła.
 
-![ ](./ss/połaczenie_ssh.png)
+![ ](./ss/polaczenie_ssh.png)
 
 ### Inwentaryzacja
 
