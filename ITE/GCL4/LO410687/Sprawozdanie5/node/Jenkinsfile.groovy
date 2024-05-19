@@ -62,9 +62,12 @@ pipeline {
                 script {
                     if(params.PROMOTE) {
                         sh "echo '${params.Password}' | docker login -u lukoprych --password-stdin"
-                        sh "docker tag node-test:latest lukoprych/notes-app:${params.VERSION}"
+                        sh "docker tag notes-app-deploy:latest lukoprych/notes-app:${params.VERSION}"
                         sh "docker push lukoprych/notes-app:${params.VERSION}"
                         sh 'docker rm notes-app-deploy' 
+                        sh "tar -czvf notes-app-${params.VERSION}.tar.gz ${params.VERSION}/"
+                        echo 'Creating artifact...'
+                        archiveArtifacts artifacts: "notes-app-${params.VERSION}.tar.gz"
                     } else {
                         echo 'Promote parameter is false. Skipping publishing...'
                     }
