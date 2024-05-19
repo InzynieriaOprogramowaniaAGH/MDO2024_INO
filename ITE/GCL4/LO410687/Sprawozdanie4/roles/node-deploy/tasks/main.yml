@@ -1,0 +1,13 @@
+---
+- name: Deploy node container
+  docker_image:
+    name: "lukoprych/node-js-tests-sample:{{ VERSION }}"
+    source: pull
+
+- name: Run node container
+  docker_container:
+    name: node
+    image: "lukoprych/node-js-tests-sample:{{ VERSION }}"
+    state: started
+    tty: yes
+    interactive: yes
