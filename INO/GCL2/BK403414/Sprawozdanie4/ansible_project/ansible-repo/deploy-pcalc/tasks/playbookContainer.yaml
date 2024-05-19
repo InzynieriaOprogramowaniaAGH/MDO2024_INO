@@ -1,0 +1,31 @@
+    - name: copy files
+      copy:
+        src: ~/ansible_project/ansible-repo/deploy-pcalc/files/application
+        dest: /home/ansible/
+
+    - name: build deploy container
+      docker_image:
+        name: pcalc_image:latest
+        build:
+          path: /home/ansible/application
+          dockerfile: deploy.Dockerfile
+        source: build
+        state: present
+
+    - name: run deploy container
+      docker_container:
+        name: pcalc
+        image: pcalc_image
+        state: started
+        detach: yes
+        auto_remove: yes
+        pull: no
+        entrypoint: sh
+        command: pcalc
+
+    - name: stop container
+      docker_container:
+        name: pcalc
+        image: pcalc_image
+        pull: no
+        state: stopped 
