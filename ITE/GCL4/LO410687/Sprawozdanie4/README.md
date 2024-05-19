@@ -304,7 +304,7 @@ Następnie powyższe kroki ubrano w rolę przy użyciu szkieletowania `ansible-g
 W tym celu generujemy odpowiednią strukturę katalogową poleceniem
 
 ```bash
-ansible-galaxy init deploy-irssi
+ansible-galaxy init node-deploy
 ```
 Widoczna struktura katalogowa:
 

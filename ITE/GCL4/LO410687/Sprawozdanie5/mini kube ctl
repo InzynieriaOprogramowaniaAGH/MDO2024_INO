@@ -1,0 +1,1 @@
+minikube kubectl run --myserver --image=nginx --port=80 --labels
