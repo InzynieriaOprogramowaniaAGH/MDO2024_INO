@@ -1,3 +1,3 @@
-FROM bld
+FROM builder:latest
 
-CMD ["npm","start"]
+CMD ["npm", "start"]
