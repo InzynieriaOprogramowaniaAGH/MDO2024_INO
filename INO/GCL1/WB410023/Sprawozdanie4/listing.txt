@@ -1,0 +1,112 @@
+  495  sudo apt install pipx
+  496  sudo pipx ensurepath
+  497  sudo apt install ansible
+  498  ansible --version
+  499  sudo hostnamectl set-hostname weronikaabednarz
+  500  hostname
+  501  sudo nano /etc/systemd/resolved.conf
+  502  sudo systemctl restart systemd-resolved
+  503  hostname -l
+  504  hostname -I
+  505  sudo nano /etc/hosts
+  506  ping ansible-target
+  507  sudo systemctl status ssh
+  508  sudo apt install openssh-server
+  509  sudo systemctl status ssh
+  510  ls ~/.ssh
+  511  ssh-keygen -t rsa -b 4096
+  512  ls ~/.ssh
+  513  cat ~/.ssh/id_rsa.pub
+  514  nano ~/.ssh/authorized_keys 
+  515  nano inventory.ini
+  516  ansible all -i inventory.ini -m ping
+  517  ssh-copy-id -i ~/.ssh/id_rsa.pub weronikaabednarz@ansible-target
+  518  ssh-copy-id -i ~/.ssh/id_rsa.pub ansible@ubuntu2
+  519  ssh-copy-id -i ~/.ssh/id_rsa.pub ansible@ansible-target
+  520  ansible all -i inventory.ini -m ping
+  521  ssh ansible@ansible-target
+  522  docker login
+  523  docker start
+  524  docker ps
+  525  ansible all -i inventory.ini -m ping
+  526  nano inventory.ini
+  527  hostname
+  528  nano inventory.ini
+  529  ansible all -i inventory.ini -m ping
+  530  ssh-copy-id -i ~/.ssh/id_rsa.pub ansible@ansible-target
+  531  nano inventory.ini
+  532  nano inv.yaml
+  533  hostname
+  534  ansible all -i inv.yaml -m ping
+  535  nano inv.yaml
+  536  ansible all -i inv.yaml -m ping
+  537  hostname
+  538  hostname -I
+  539  sudo nano /etc/hosts
+  540  ping ansible-target
+  541  sudo apt install openssh-server
+  542  ssh keygen
+  543  ssh-keygen
+  544  systemctl start sshd
+  545  systemctl status ssh
+  546  nano ~/.ssh/authorized_keys 
+  547  ls ~/.ssh
+  548  cat ~/.ssh/id_rsa.pub
+  549  cat ~/.ssh/id_rsa
+  550  cat ~/.ssh/id_rsa.pub
+  551  nano ~/.ssh/authorized_keys 
+  552  sudo apt install software-properties-common -y
+  553  sudo apt install ansible -y
+  554  ansible --version
+  555  nano inventory.ini
+  556  ansible -i inventory.ini all -m ping
+  557  sudo nano /etc/hosts
+  558  nano authorized_keys
+  559  nano ~/.ssh/authorized_keys 
+  560  nano inventory.ini
+  561  nano playbook.yaml
+  562  ansible -i inventory.ini playbook.yaml
+  563  nano playbook.yaml
+  564  ansible -i inventory.ini playbook.yaml
+  565  nano playbook.yaml
+  566  ansible -i inventory.ini playbook.yaml
+  567  ansible-playbook -i inventory.ini playbook.yaml
+  568  - name: Copy inventory file
+  569  sudo service ssh restart
+  570  sudo service rng-tools restart
+  571  systemctl stop ssh
+  572  systemctl status ssh
+  573  systemctl start ssh
+  574  systemctl start sshd
+  575  systemctl status sshd
+  576  systemctl status ssh
+  577  ansible-playbook -i inventory.ini playbook.yaml
+  578  nano playbook2.yaml
+  579  ansible-playbook -i inventory.ini playbook2.yaml
+  580  nano playbook2.yaml
+  581  sudo ansible-playbook -i inventory.ini playbook2.yaml
+  582  ansible-playbook -i inventory.ini playbook2.yaml
+  583  nano playbook2.yaml
+  584  ansible-playbook -i inventory.ini playbook2.yaml
+  585  nano playbook2.yaml
+  586  ansible-playbook -i inventory.ini playbook2.yaml
+  587  nano playbook2.yaml
+  588  ansible-playbook -i inventory.ini playbook2.yaml
+  589  docker login
+  590  ansible-playbook -i inventory.ini playbook2.yaml
+  591  sudo systemctl status docker
+  592  ansible-playbook -i inventory.ini playbook2.yaml
+  593  sudo ansible-playbook -i inventory.ini playbook2.yaml
+  594  nano ~/.ssh/authorized_keys 
+  595  cat ~/.ssh/authorized_keys
+  596  sudo ansible-playbook -i inventory.ini playbook2.yaml
+  597  nano playbook2.yaml
+  598  sudo ansible-playbook -i inventory.ini playbook2.yaml
+  599  ansible-playbook -i inventory.ini playbook2.yaml
+  600  nano inventory.ini
+  601  nano playbook2.yaml
+  602  nano playbook.yaml
+  603  nano playbook2.yaml
+  604  ansible-playbook -i inventory.ini playbook2.yaml
+  605  history
+

@@ -1,0 +1,14 @@
+   55  ls
+   56  cd Desktop
+   57  ls
+   58  nano create-VM.sh
+   59  ./create-VM.sh
+   60  nano create-VM.sh
+   61  cd Desktop
+   62  ./create-VM.sh
+   63  ./create-VM.sh
+   64  ./create-VM.sh
+   65  ./create-VM.sh
+   66  cd Desktop
+   67  ./create-VM.sh
+   68  history

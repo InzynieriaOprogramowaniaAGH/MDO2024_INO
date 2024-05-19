@@ -1,0 +1,14 @@
+- name: Pobierz i uruchom obraz Docker
+  hosts: Endpoints
+  become: no
+  tasks:
+    - name: Pobierz obraz z DockerHub
+      docker_image:
+        name: weronikaabednarz/spring-deploy
+        source: pull
+
+    - name: Uruchom kontener
+      docker_container:
+        name: spring-deploy
+        image: weronikaabednarz/spring-deploy
+        state: started
