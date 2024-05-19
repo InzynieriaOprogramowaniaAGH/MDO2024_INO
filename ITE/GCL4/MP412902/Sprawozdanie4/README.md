@@ -152,3 +152,7 @@ Oznacza, że obraz nie został znowu pobrany, tylko skorzystał z gotowego (wcze
 ## Instalacje nienadzorowane
 
 Początkowo należało zainstalować nowy obraz maszyny wirtualnej o systemie operacyjnym Fedora 39. Wybrano tę wersję Fedory, ponieważ jest stabilniejsza i wersja 40 jest świeża, co oznacza, że może występować wiele błędów. 
+
+e w GRUB i dodanie linku do wstawionego na GitHubie pliku
+
+![alt text](image-33.png)
