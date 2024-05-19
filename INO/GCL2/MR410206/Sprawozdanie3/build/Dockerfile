@@ -1,4 +1,4 @@
-FROM pierwszy
+FROM ubuntu
 
 RUN apt-get update && \
     apt-get install -y git && \
@@ -11,4 +11,4 @@ WORKDIR /LastCalc
 
 COPY . /LastCalc
 
-RUN mvn appengine:devserver -e -X
+RUN mvn package
