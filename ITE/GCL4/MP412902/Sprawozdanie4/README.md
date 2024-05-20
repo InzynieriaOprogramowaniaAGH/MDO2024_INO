@@ -38,23 +38,61 @@ Możemy teraz się łączyć do maszyny poprzez `ssh <user>@<hostname>` zamiast 
 
 ### Inwentaryzacja
 
+Ansible Inventory, czyli inwentarz, jest listą hostów, na których Ansible ma wykonywać zadania. Określamy adresy hostów poprzez adresy IP lub ich nazwę DNS. Plik ten może być formatu `.ini` lub `.yaml`. Różnica polega na tym, że `.yaml` jest zazwyczaj stosowany do bardziej złożonych infrastruktur, ponieważ jest czytelniejszy. Jednak w scenariuszu korzystamy jedynie z dwóch maszyn, więc dlaczego użyłem `.ini`. 
 
+Plik `inventory.ini` wygląda następująco:
 
-Problem z pingowaniem siebie: nie było klucza w authorized keys. Po jego dodaniu działa
+```
+[Orchestrators]
+fedora ansible_user=marcin
+
+[Endpoints]
+ansible-target ansible_user=ansible
+
+```
+
+Podział jest na `Orchestrators`, czyli maszyna nadzorująca - wysyłająca instrukcje. W tym przypadku jest to hostname mojej głównej maszyny `fedora` oraz użytkownik na niej wpisany `marcin`. 
+
+`Endpoints` to węzły końcowe, nasze docelowe. W tym przypadku jest to `ansible-target` oraz użytkownik `ansible`. 
+
+Po utworzeniu inwentarza, możemy odwoływać się do wymienonych w nim maszyn. Pierwszym zadaniem było pingowanie wszystkich hostów. Możemy wywołać komendę `ansible -i inventory.ini all -m ping`. Jednak napotkałem problem: pingowanie fedory przez siebie: nie było klucza w authorized keys. Z nieznanych mi przyczyn plik `authorized_keys` był katalogiem a nie plikiem.
 
 ![alt text](image-5.png)
 
-Udany ping
+Po zmianie i wklejeniu klucza, udało się wywołać ping.
 
 ![alt text](image-6.png)
 
 ### Playbook Ansible
 
-**ping.yml**
+Playbook w Ansible to plik napisany w formacie `.yaml` lub `.yml`, który definiuje zestaw zadań do wykonania na danych hostach. Playbooki są podstawowym narzędziem do automatyzacji procesów konfiguracyjnych, wdrożeniowych oraz zarządzania infrastrukturą w Ansible. Każdy playbook składa się z jednego lub więcej "plays", a każdy "play" opisuje zestaw zadań (tasks) do wykonania na określonych grupach hostów.
+
+Playbooki wywołujemy komendą `ansible-playbook -i <inventory.ini/yaml> <playbook-name.yaml>`
+
+#### ping.yml
+
+Pierwszym playbookiem do napisania był playbook, który wysyła żądanie `ping` do wszystkich maszyn. Praktycznie to samo co wcześniej, tylko w formie playbooka.
+
+Napisano taki playbook:
+
+```
+- name: Ping all machines
+  hosts: all
+  tasks:
+    - name: Ping all machines
+      ping:
+
+```
+
+Po jego wywołaniu otrzymujemy wynik:
 
 ![alt text](image-7.png)
 
+Ping się udał, dostajemy odpowiedź `ok` dla obu hostów. 
+
 **copy_inventory.yml**
+
+Kolejnym playbookiem był `copy_inventory.yml` 
 
 Pierwsze uruchomienie
 
