@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clock-deployment-rollingupdate
+  labels:
+    app: clock-nginx
+    version: v1.2
+spec:
+  replicas: 3
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 40%
+  selector:
+    matchLabels:
+      app: clock-nginx
+  template:
+    metadata:
+      labels:
+        app: clock-nginx
+    spec:
+      containers:
+      - name: clock-nginx
+        image: jakubficek/clock-nginx:1.2
+        ports:
+        - containerPort: 80
