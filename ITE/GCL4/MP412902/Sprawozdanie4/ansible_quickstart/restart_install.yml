@@ -1,0 +1,24 @@
+---
+- name: Install and restart sshd and rngd services
+  hosts: Endpoints
+  become: yes
+  tasks:
+    - name: Install rng-tools
+      dnf:
+        name: rng-tools
+        state: present
+
+    - name: Install OpenSSH Server
+      dnf:
+        name: openssh-server
+        state: present
+
+    - name: Restart sshd service
+      ansible.builtin.service:
+        name: sshd
+        state: restarted
+
+    - name: Restart rngd service
+      ansible.builtin.service:
+        name: rngd
+        state: restarted

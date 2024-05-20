@@ -1,5 +1,4 @@
 ---
-
 - name: Pull the image
   become: yes
   community.docker.docker_image:
