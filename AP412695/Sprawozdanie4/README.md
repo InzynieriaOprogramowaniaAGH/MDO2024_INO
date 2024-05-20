@@ -8,7 +8,7 @@ Ansible jest zestawem narzędzi na licencji open-source, pozwalającymi na zdaln
 
 Aby wykonać zadanie, utworzyłem nową maszynę wirtualną z systemem Fedora 40 o minimalnych specyfikacjach i utworzyłem użytkownika o nazwie *ansible*. Po uruchomieniu maszyny zaktualizowałem wszystkie pakiety, a następnie upewniłem się, że zainstalowane są programy *tar* oraz serwer **OpenSSH*.
 
-![alt text](image-1.png)
+![alt text](scrnshts/image-1.png)
 
 Na swojej głównej maszynie zainstalowałem Ansible za pomocą komendy:
 
@@ -16,7 +16,7 @@ Na swojej głównej maszynie zainstalowałem Ansible za pomocą komendy:
 sudo dnf install ansible
 ```
 
-![alt text](image-2.png)
+![alt text](scrnshts/image-2.png)
 
 Ostatnim krokiem była wymiana kluczy SSH pomiędzy główną maszyną a ansible-target, żeby móc łączyć się z nią bez podawania hasła. W tym celu utworzyłem nowy klucz RSA, który następnie przekopiowałem do ansible-target przy pomocy komendy:
 
@@ -24,7 +24,7 @@ Ostatnim krokiem była wymiana kluczy SSH pomiędzy główną maszyną a ansible
 ssh-copy-id -i ~/.ssh/id_rsa.pub ansible@192.168.1.58
 ```
 
-![alt text](image-3.png)
+![alt text](scrnshts/image-3.png)
 
 ### Inwentaryzacja
 
@@ -36,7 +36,7 @@ Używając *hostnamectl* można wyciągnąć potencjalne nazwy komputerów. Aby 
 
 Następnie sprawdziłem łączność pomiędzy tymi maszynami używając *ping'a*
 
-![alt text](image-4.png)
+![alt text](scrnshts/image-4.png)
 
 Teraz można zająć się inwentaryzacją. Plik inwentory może mieć dwa rozszerzenia - *.ini* lub *.yml*. Ten drugi pozwala na lepszą skalowalność wraz ze zwiększającą się liczbą węzłów. Jednakże w tym przypadku zarządzamy tylko jedną maszyną, zatem format *.ini* będzie rozsądniejszym wyborem do wykonania tego zadania. Wykorzystując [dokumentację ansible](https://docs.ansible.com/ansible/latest/getting_started/get_started_inventory.html) utworzyłem następujący plik:
 
@@ -54,11 +54,11 @@ i nazwałem go *inventory.ini*. Sprawdziłem jego poprawność wykorzystując ko
 ansible-inventory -i inventory.ini --list
 ```
 
-![alt text](image-5.png)
+![alt text](scrnshts/image-5.png)
 
 Teraz można spingować nasz "Endpoint", a także wszystkie maszyny. Aby wykonać to drugie polecenie należy dodać klucz SSH do "samego siebie", inaczej Ansible zwróci błąd.
 
-![alt text](image-7.png)
+![alt text](scrnshts/image-7.png)
 
 
 ### Zdalne wywoływanie procedur
@@ -77,7 +77,7 @@ ansible-playbook -i inventory.ini playbook_ping.yaml
       ping:
 ```
 
-![alt text](image-6.png)
+![alt text](scrnshts/image-6.png)
 
 Zadanie wykonało się bez jakichkolwiek problemów, zatem można zaimplementować pozostałe podpunkty z tego zadania:
 
@@ -137,13 +137,13 @@ Niektóre z poleceń, chociażby aktualizacja pakietów czy restart usług są d
 ansible-playbook -i inventory.ini playbook_ping.yaml --vault-password-file vault_pass.txt
 ```
 
-![alt text](image-8.png)
+![alt text](scrnshts/image-8.png)
 
 Jak można zauważyć, operacja skopiowania pliku zwraca status "changed", jednakże ponowna próba skopiowania go zwraca "ok", co wskazuje, że plik już istnieje w danym miejscu na maszynie docelowej. Zadania restartujące dane usługi także zwróciły status "changed". Oznacza to, że tylko 3 zmiany zaszły na systemie.
 
 W przypadku wyłączenia serwera SSH na maszynie docelowej, Ansible wyrzuca error i kończy działanie playbook'a
 
-![alt text](image-9.png)
+![alt text](scrnshts/image-9.png)
 
 ### Zarządzanie kontenerem
 
@@ -197,9 +197,9 @@ Utworzyłem kolejny playbook, który zajmie się instalacją Dockera na maszynie
 ```
 
 
-![alt text](image-10.png)
+![alt text](scrnshts/image-10.png)
 
-![alt text](image-11.png)
+![alt text](scrnshts/image-11.png)
 
 Jak można zauważyć, udało się uruchomić testowy kontener za pomocą playbook'a Ansible. Teraz możemy go też wyłączyć i usunąć. Wystarczy dopisać zadanie:
 
@@ -216,9 +216,9 @@ Jak można zauważyć, udało się uruchomić testowy kontener za pomocą playbo
         state: absent
 ```
 
-![alt text](image-12.png)
+![alt text](scrnshts/image-12.png)
 
-![alt text](image-13.png)
+![alt text](scrnshts/image-13.png)
 
 
 ## Pliki odpowiedzi dla wdrożeń nienadzorowanych
@@ -262,16 +262,17 @@ timezone Europe/Warsaw --utc
 
 # Root password
 rootpw --lock 
-user --groups=wheel --name=test --password=examplepassword --plaintext
+user --groups=wheel --name=test --password=examplepassword --plaintext 
 
 reboot
 ```
+***Hasło zostało podane w plain-text w celach testowych. W normalnym przypadku powinno ono być zahashowane.***
 
-![alt text](image-14.png)
+![alt text](scrnshts/image-14.png)
 
-![alt text](image-15.png)
+![alt text](scrnshts/image-15.png)
 
-![alt text](image-16.png)
+![alt text](scrnshts/image-16.png)
 
 Po zakończeniu instalacji po raz kolejny pojawia się ekran instalacyjny. Tym razem jednak należy wejść w zakładkę *Troubleshooting* i wejść w opcję *Boot first drive*.
 
@@ -309,3 +310,12 @@ systemctl enable docker-nginx.service
 systemctl start docker-nginx.service
 %end
 ```
+
+W przypadku błędu, zostanie wyrzucony błąd i zapisany on zostanie w logach. Pierwsza linijka tworzy usługę w systemie.
+- Zakładka [Unit] zawiera opis usługi, a także wymaga Dockera do uruchomienia i dopiero po jego zainstalowaniu zostanie uruchomiona. 
+- [Service] zawiera typ usługi (jednostrzał, wywoła pojedyńcze polecenie), oraz określa jej działanie po wykonaniu polecenia. Jak widać, po uruchomieniu pobierze i uruchomi kontener z nginx. 
+- [Install] określa, że usługa zostanie uruchomiona w trybie wieloużytkownikowym. Zostanie dodany root do grupy *docker*, a następnie uruchomi Dockera i włączy usługę.
+
+![alt text](scrnshts/image-17.png)
+
+Jak można zauważyć, usługa wystartowała poprawnie, a kontener działa w trybie *detached*, aby był on cały czas uruchomiony.
