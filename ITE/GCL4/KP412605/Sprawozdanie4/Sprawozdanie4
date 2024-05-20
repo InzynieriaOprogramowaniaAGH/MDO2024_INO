@@ -1,0 +1,420 @@
+# Sprawozdanie4
+## Karol Przydział 412605
+
+## Laboratoria 8-9
+
+## Automatyzacja i zdalne wykonywanie poleceń za pomocą Ansible
+
+Pierwsze z ćwiczeń opiera się na wykorzystaniu narzędzia Ansible. Jest to otwarte oprogramowanie służące między innymi do automatyzacji, ale także do zarządzania konfiguracją. Pozwala ono również na automatyzację zadań. Ansible stosujemy głównie, aby uprościć proces zarządzania orad dostarczania infrastruktury IT.
+
+Ćwiczenie rozpoczynamy od instalacji zarządcy Ansible.
+
+W tym celu przechodzimy do Hyper-V i tam dodajemy maszynę wirtualną.
+
+![1](1.png)
+
+W moim przypadku maszyna ta nazywa się `UbuntudoAnsible`. Maszyna ta ma minimalny zbiór zainstalowanego oprogramowania oraz ten sam system operacyjny, który występuje na maszynie "głównej".
+
+Po utworzeniu maszyny wirtualnej wraz z dodanym użytkownikiem logujemy się na konto root wykorzystując polecenie:
+
+```
+su root
+```
+Domyślnie hasło ustawione było jako `enter`, jednak skorzystałem z komendy `sudo passwd root` ustawiam hasło dla użytkownika root.
+
+Kolejno dodajemy użytkownika ansible i nadajemy mu uprawnienia takie same, jak w przypadku root'a.
+
+```
+cat /etc/sudoers
+usermod -aG sudo ansible
+exit
+```
+
+Po wykonaniu powyższych czynności musimy sprawdzić, czy nasza maszyna zawiera serwer OpenSSH. Domyślnie nie mamy tego serwera, musimy go więc doinstalować. Korzystamy z komend:
+
+```
+sudo apt install openssh-server
+sudo systemctl start sshd
+sudo systemctl status
+```
+
+Komenda start włącza nam usługę, z kolei komenda status sprawdza aktualny stan usługi.
+
+![3](3.png)
+
+Kolejno doinstalowuję program tar. Korzystam z komend:
+
+```
+sudo apt update
+sudo apt install tar
+tar --version
+```
+
+![4](4.png)
+
+Wykorzystując komendę:
+```
+sudo hostnamectl set-hostname ansible-target
+```
+Nadaję maszynie wirtualnej podany hostname. Następnie sprawdzam czy został on dodany wykorzystując komendę:
+```
+hostname
+```
+![5](5.png)
+
+W tym momencie zapisuję skonfigurowany stan maszyny wykorzystując punkt kontrolny.
+
+![6](6.png)
+
+
+#### Przechodzimy do "głównej" maszyny wirtualnej. 
+
+Korzystając z dokumentacji https://docs.ansible.com/ansible/latest/index.html pobieramy oprogramowanie **Ansible**.
+
+Wykorzystujemy komendy:
+```
+sudo apt update
+sudo apt install pipx
+sudo pipx ensurepath
+sudo apt install ansible
+```
+
+![7](7.png)
+
+Po zainstalowaniu komponentów sprawdzamy wersję Ansible korzystając z polecenia:
+```
+ansible --version
+```
+
+![8](8.png)
+
+#### Dokonujemy inwentaryzacji systemów.
+
+Podobny zabieg co wcześniej wykonuję teraz na maszynie głównej.
+Ustalam więc nazwę hosta na tej maszynie, a następnie ją wyświetam.
+
+```
+sudo hostnamectl set-hostname karolprzydzial
+hostname
+```
+
+Teraz możemy porównywać jak podane operacje kształtują się na obydwu maszynach.
+
+Maszyna zawierająca Ansible wygląda następująco:
+
+![9](9.png)
+
+Maszyna bez zainstalowanego Ansible:
+
+![aha](5.png)
+
+W przypadku obydwu maszyn otwieramy plik resolved.conf, w których odkomentowujemy sekcję DNS i uzupełniamy ją adresem. Pozwoli nam to wykorzystać nazwy, a niekoniecznie adresy IP podczas porozumiewania się między maszynami.
+
+Aby dostać sie do pliku zarówno na jednej jak i drugiej maszynie wpisujemy polecenie:
+
+```
+sudo nano /etc/systemd/resolved.conf
+```
+
+Maszyna z Ansible:
+
+![DNS1](DNSzAnsible.png)
+
+Maszyna bez Ansible:
+
+![DNS2](DNSbezAnsible.png)
+
+Kolejno restartujemy usługę `systemd-resolved`.
+
+Maszyna z Ansible:
+
+![DNS3](DNSrestartZAnsible.png)
+
+Maszyna bez Ansible:
+
+![DNS4](DNSrestartbezAnsible.png)
+
+Wykorzystując komendę:
+```
+hostname -I
+```
+
+Sprawdzamy adresy IP na poszczególnych maszynach.
+
+Następnie po wykonaniu polecenia:
+```
+sudo nano /etc/hosts
+```
+
+Dostajemy się do pliku konfiguracyjnego, w którym dodajemy adresy IP. Robimy to w sposób naprzemienny, oznacza to, że dla maszyny z Ubuntu wpisujemy adres IP oraz nazwę hosta maszyny bez Ubuntu. Natomiast dla maszyny bez Ubuntu wpisujemy adres IP oraz nazwę hosta maszyny z Ubuntu.
+
+Maszyna z Ansible:
+
+![etc1](etchostsZAnsible.png)
+
+Maszyna bez Ansible:
+
+![etc2](etchostsbezAnsible.png)
+
+Sprawdzamy czy maszyny są ze sobą połączone. Pingujemy pierwszą oraz drugą maszynę:
+
+```
+ping <Hostname>
+```
+
+Maszyna z Ansible:
+
+![poetc](POetchostsZAnsible.png)
+
+Maszyna bez Ansible:
+
+![poetc2](POetchostsBezAnsible.png)
+
+Kolejno sprawdzam status ssh, wykorzystując komendę:
+```
+sudo systemctl status ssh
+```
+
+Maszyna wirtualna z Ansible:
+
+![statusssh1](sshstatusZAnsible.png)
+
+Maszyna wirtualna bez Ansible:
+
+![statusssh2](sshstatusbezAnsible.png)
+
+Generuję klucz `RSA`, tak abyśmy mogli wykorzystać je przy uwierzytelnianiu. Robię to na obydwu maszynach.
+
+Korzystam z polecenia:
+```
+ssh-keygen
+```
+
+Maszyna wirtualna z Ansible:
+
+![nowyklucz1](nowykluczZAnsible.png)
+
+Maszyna wirtualna bez Ansible:
+
+![nowyklucz2](nowykluczbezAnsible.png)
+
+
+Na obydwu maszynach wyświetlam nazwy kluczy stosując komendę:
+```
+cat ~/.ssh/id_rsa.pub
+```
+
+Kolejno korzystając z komendy:
+```
+ssh-copy-id -i <lokalizacja_klucza> <nazwa_hosta>
+```
+Kopiuję klucze do sekcji `authorized_keys`.
+
+Klucze dla obydwu maszyn wklejam w tej sekcji zarówno na jednej jak i drugiej maszynie.
+
+Następnie sprawdzam plik authorized_keys i upewniam się, że klucze się tam znajdują.
+```
+nano ~/.ssh/authorized_keys
+```
+
+![klucze](kluczeSSH.png)
+
+Jak widać w plikach znajdują sie obydwa klucze.
+
+Wykorzystując dokumentację https://docs.ansible.com/ansible/latest/getting_started/get_started_inventory.html stworzyłem plik inwentaryzacji.
+
+```
+nano inventory.ini
+```
+
+W podanym pliku zawarłem Orcherators oraz Endpoints.
+
+![inv1](inventory1.png)
+
+Po utworzeniu podanego pliku wysłałem żądanie ping na poszczególne maszyny:
+
+```
+ansible all -i inventory.ini -m ping
+```
+
+![ping](inventoryPing.png)
+
+Kolejno utworzyłem plik `playbook.yml`. Skorzystałem z komendy:
+```
+nano playbook.yml
+```
+
+W podanym playbooku napisałem skrypt:
+
+![skrypt](skrypt.png)
+
+Ponadto, uruchomiłem ten skrypt dwukrotnie:
+
+![ansiblecos](ansibleplaybooktransport.png)
+
+Pierwsza próba uruchomienia określa nam pomyślne przekopiowanie pliku na drugą maszynę o czym świadczy status `changed=1`, natomiast drugie podejście już nic nie zmienia w stosunku do pierwszego (plik przesłał się za pierwszym razem).
+
+Napisałem kolejny skrypt, tym razem do restartu usługi ssh.
+
+![skrypt2](skrypt2.png)
+
+Następnie uruchomiłem go korzystając z:
+```
+ansible-playbook -i inventory.ini --ask-become-pass restart.yml
+```
+
+![restart](drugiPlaybookRestart.png)
+
+Kolejno przeprowadzam operację na maszynie z wyłączonym serwerem SSH oraz odpiętą kartą sieciową. W tym celu najpierw odpinam kartę:
+
+![odpiecie](odpieciekartysieciowej.png)
+
+Następnie wyłączam SSH:
+
+![wylaczenie](wylaczenieSSH.png)
+
+Wynik przedstawia się następująco:
+
+![odloczeniekarty](poOdlaczeniukarty.png)
+
+### Zarządzanie kontenerem.
+
+Ten etap opiera się na uruchomeniu kontenera z sekcji Deploy wykorzystanej przy poprzednim Pipelinie poprzez użycie playbooka.
+
+Obraz wgrany na Docker Hub przy użyciu Pipeline'a.
+
+![dockerhub](dockerhub.png)
+
+Aby wykonać tą część musimy mieć zainstalowanego dockera. Sprawdzam więc wersję dockera na swojej maszynie:
+
+```
+docker --version
+```
+
+Następnie tworzę playbooka o nazwie `DockerPlaybook.yml`. Wykorzystuję komendę:
+```
+nano DockerPlaybook.yml
+```
+
+Modyfikuję powstały plik:
+```
+- name: Pobierz oraz uruchom obraz
+  hosts: Endpoints
+  tasks: 
+    - name: Pobierz obraz
+      docker_image: 
+      name: kacprzyk22/spring-deploy:latest
+      source: pull
+    - name: Uruchom obraz
+      docker_container:
+      name: kacprzyk22/spring-deploy:latest
+      state: started
+```
+
+![skryptdocker](skryptdocker.png)
+
+Początkowo miałem problemy z ponownym połączeniem między maszynami przez co wyskakiwał podobny błąd:
+
+![popo](poOdlaczeniukarty.png)
+
+Sprawdziłem, czy karta jest podpięta oraz czy ssh jest włączone. SSH było aktywne, a karta podłączona. Zacząłem więc szukać błędów, dalej i okazało się za zmieniły się adresy IP hostów na maszynie głównej oraz maszynie do Ansible. Poprawiłem dane adresy i błąd zniknął.
+
+Wynik maszyny po wykonaniu skryptu:
+![problem](problem.png)
+
+Pomimo problemów z połączeniem, które udało się rozwiązać, pojawił się drugi problem, którego nie potrafiłem rozwiązać. Zapoznałem się z podaną w błędzie dokumentacją. Myślałem, że problemem mogą być niedoinstalowane pakiety. W związku z czym doinstalowałem python3-pip:
+
+![blad3](blad3.png)
+
+Dalej donstalowałem dockera z pip3:
+
+![blad1](blad1.png)
+
+a także upewniłem się, że działa on prawidłowo
+
+![blad2](blad2.png)
+
+Zainstalowałem te same zależności na drugiej maszynie wirtualnej. Po zainstalowaniu dockera poprzez pip3
+
+![blad4](blad4.png)
+
+problem zmienił się na inny błąd.
+
+![blad5](blad5.png)
+
+
+
+## Pliki odpowiedzi dla wdrożeń nienadzorowanych.
+
+Kolejne ćwiczenia opierają się na utworzeniu źródła instalacji nienadzorowanej w oparciu o nasz system operacyjny, a także jako kolejny etap instalacja systemu, który będzie hostował nasz program.
+
+Rozpoczynam od zainstalowania systemu `Fedora 38` na maszynie wirtualnej.
+
+Fedorę pobieram z linku: 
+https://download.fedoraproject.org/pub/fedora/linux/releases/38/Server/x86_64/iso/Fedora-Server-netinst-x86_64-38-1.6.iso
+
+Zainstalowane maszyny:
+
+![maszyny](maszyny.png)
+
+Rozpoczęcie instalacji Fedory:
+
+![fedora1](fedora1.png)
+
+Kolejno konfiguruję Fedorę:
+
+![fedora2](fedora2.png)
+
+Włączam konto roota, oraz ustawiam mu hasło:
+
+![fedora3](fedora3.png)
+
+Tworzę nowego użytkownika:
+
+![fedora4](fedora4.png)
+
+Po zainstalowaniu loguje się do Fedory wczesniej stworzonym użytkownikiem:
+
+![fedora5](fedora5.png)
+
+Korzystając z polecenia:
+```
+sudo cp /root/anaconda-ks.cfg .
+ls
+```
+odpowiednio pobieram plik odpowiedzi a następnie sprawdzam katalog, w którym jestem.
+
+![fedora6](fedora6.png)
+
+Wykorzystując polecenie:
+```
+sudo nano anaconda-ks.cfg
+```
+edytuję podany plik.
+
+Do zawartości tego pliku dodaję dwie linie kodu:
+```
+# Repositories
+url --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-38&arch=x86_64
+repo --name=update --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f38&arch=x86_64
+```
+
+![fedora7](fedora7.png)
+
+Dodaję również fragment mówiacy o tym, że nasz plik będzie formatował całość, ze względu na to, że może wystąpić pusty dysk.
+
+![fedora8](fedora8.png)
+
+Dodaję fragment związany z poprzednimi zajęciami z pipeline. Ponadto tworzę oprogramowanie potrzebne do uruchomienia programu.
+
+![fedora9](fedora9.png)
+
+Skrypt ten opiera się na utworzeniu my-docker.service, następnie dodaje on uzytkownika określonego jako root do grupy docker, po czym włącza tą usługę i definiuje ją. Ostatecznie następuje refresh usługi systemd co powoduje, że my-docker.service jest włączony oraz uruchomiony.
+
+Zapoznaję się z dokumentacją dla pliku odpowiedzi:
+```
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/performing_an_advanced_rhel_9_installation/kickstart-commands-and-options-reference_installing-rhel-as-an-experienced-user
+```
+Tworzę nowe repozytorium na GitHub:
+
+![repo](repo.png)
