@@ -225,3 +225,4 @@ Jak można zauważyć, udało się uruchomić testowy kontener za pomocą playbo
 
 W tej części zostanie przygotowane źródło instalacji systemu dla maszyny wirtuaknej lub serwera, które następnie zostanie wykorzystane do automatycznej instalacji środowiska testowego dla programu, który nie jest w stanie pracować w trybie ciągłym w kontenerze. Nie musiałem pobierać Fedory, jako że jest to system na którym pracuję, dlatego też mogę wykorzystać swój własny plik *anaconda-ks.cfg* i zmodyfikować go pod swoje potrzeby.
 
+![alt text](image-14.png)
