@@ -2,6 +2,8 @@
 
 ## Wstęp - Pipeline, Jenkins, izolacja etapów
 
+Celem tego sprawozdania jest przedstawienie procesu budowy, testowania, wdrażania i publikowania oprogramowania przy użyciu narzędzi takich jak Jenkins oraz konteneryzacja.
+
 ### Przygotowanie
 
 Przed rozpoczęciem pracy z Jenkinsem, należało upewnić się, że kontenery używane do budowania i testowania aplikacji, które zostały stworzone w ramach jednych z poprzednich zajęć, są w pełni funkcjonalne. Aby to sprawdzić wykonałem następujące kroki:
