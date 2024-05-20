@@ -1,0 +1,47 @@
+- name: Ping
+  hosts: all
+  tasks:
+    - name: Ping 
+      ping:
+
+- name: Copy inventory
+  hosts: Endpoints
+  tasks:
+    - name: Copy
+      copy:
+        src: ~/MDO2024_INO/AP412695/Sprawozdanie4/inventory.ini
+        dest: ~/inventory.ini
+    - name: Copy (alt)
+      copy:
+        src: ~/MDO2024_INO/AP412695/Sprawozdanie4/inventory.ini
+        dest: ~/inventory.ini
+
+- name: Update system
+  hosts: Endpoints
+  become: yes
+  vars_files:
+    - vault.yml
+  tasks:
+    - name: update
+      dnf:
+        name: "*"
+        state: latest
+
+- name: Restart sshd&rngd
+  hosts: Endpoints
+  become: yes
+  vars_files:
+    - vault.yml
+  tasks:
+  - name: Restart sshd
+    become: yes
+    service:
+      name: sshd
+      state: restarted
+      
+  - name: Restart rngd
+    become: yes
+    service:
+      name: rngd
+      state: restarted
+        
