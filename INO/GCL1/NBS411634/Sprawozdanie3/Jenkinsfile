@@ -1,0 +1,57 @@
+pipeline {
+    agent any
+    
+    environment {     
+        DOCKERHUB_CREDENTIALS = credentials('nbsss')     
+    } 
+    
+    stages {
+        stage('Prepare and clone') {
+            steps {
+                sh "rm -rf MDO2024_INO/"
+                sh "git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git"
+                dir("MDO2024_INO") {
+                    sh "git checkout NBS411634"
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                dir("MDO2024_INO/INO/GCL1/NBS411634/Sprawozdanie2/") {
+                    sh "docker build -t builder -f builder.Dockerfile ."
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                dir("MDO2024_INO/INO/GCL1/NBS411634/Sprawozdanie2/") {
+                    sh "docker build -t tester -f tester.Dockerfile ."
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'docker network create my_network || true'
+                
+                dir("MDO2024_INO/INO/GCL1/NBS411634/Sprawozdanie2") {
+                    sh "docker build -t app-deploy -f deploy.Dockerfile ."
+                }
+                
+                sh 'docker rm -f app || true'
+                sh 'docker run -d -p 8081:8080 --name app --network my_network app-deploy'
+                sleep 10
+            }
+        }
+        stage('Publish') {
+            steps {
+                script {
+                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                    sh 'docker tag app-deploy:latest $DOCKERHUB_CREDENTIALS_USR/tesseractjs:latest'
+                    sh 'docker push $DOCKERHUB_CREDENTIALS_USR/tesseractjs:latest'
+                    sh "docker save $DOCKERHUB_CREDENTIALS_USR/tesseractjs:latest | gzip > tesseractjs_image.tar.gz"
+                    archiveArtifacts artifacts: 'tesseractjs_image.tar.gz'       
+                }            
+            }     
+        }
+    }
+}

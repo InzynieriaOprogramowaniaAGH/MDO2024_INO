@@ -3,9 +3,9 @@ Natalia Borysowska-Ślęczka, IO
 
 ## Streszczenie projektu
 
-...
+W ramach tych laboratoriów skonfigurowano Jenkinsa oraz obrazy Dockera. Stworzono pipeline w Jenkinsie, który automatyzuje procesy budowania, testowania i publikowania aplikacji. Skrypt Jenkinsa został rozbudowany o kroki deploy i publish, aby umożliwić automatyczne uruchamianie aplikacji oraz publikowanie jej na Docker Hubie.
 
-## Wykonane kroki - laboratorium nr 5
+## Wykonane kroki - laboratorium nr 5, 6 oraz 7
 
 ### Przygotowanie
   * Obraz blueocean oraz obraz Jenkinsa (czym się różnią?)
@@ -115,9 +115,20 @@ Natalia Borysowska-Ślęczka, IO
 ### Sprawozdanie (wstęp)
 * Opracuj dokument z diagramami UML, opisującymi proces CI. Opisz:
   * Wymagania wstępne środowiska
+
+    * Node.js:
+
+      Repozytorium tesseract.js-node jest projektem opartym na JavaScript, więc wymagane będzie środowisko uruchomieniowe Node.js.
+
+    * npm (Node Package Manager):
+
+      npm jest menedżerem pakietów dla środowiska Node.js i jest wykorzystywany do zarządzania zależnościami projektu oraz uruchamiania skryptów budowania i testowania.
+
   * Diagram aktywności, pokazujący kolejne etapy (collect, build, test, report)
+
+    ![](./ss_lab5/activity_diagram.png) 
+
   * Diagram wdrożeniowy, opisujący relacje między składnikami, zasobami i artefaktami
-* Diagram będzie naszym wzrocem do porównania w przyszłości
   
 ### Pipeline
 * Definiuj pipeline korzystający z kontenerów celem realizacji kroków `build -> test`
