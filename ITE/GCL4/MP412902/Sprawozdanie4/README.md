@@ -1,12 +1,26 @@
+# Sprawozdanie 4
+## Marcin Pigoń
+## ITE gr. 4
 
-Nadanie hostname 'ansible-target'
+### Cel: Zapoznanie się z zarządcą Ansible oraz instalacją nienadzorowaną
 
+### Lab 8
+
+*Ansible* jest narzędziem open-source, które służy do automatyzacji zarządzania konfiguracją, wdrażania aplikacji oraz orkiestracji zadań. Jest bezagentowy - oznacza to, że maszyny docelowe nie wymagają instalowania dodatkowego oprogramowania. Komunikacja odbywa się poprzez SSH. Ansible jest dosyć prosty w użyciu oraz korzysta z YAML - język, który jest logiczny oraz czytelny dla człowieka.
+
+Pierwszym zadaniem było stworzenie nowej maszyny wirtualnej, która miała jak najmniejszy zbiór oprogramowania. Maszyna działała na najnowszej dystrybucji Fedory - Fedora40. Chcemy wykazać, że jedynie potrzeba SSH oraz tar, żeby na systemie dało się instalować nowe oprogramowanie oraz zarządzać nią. Ansible należało jedynie zainstalować na głównej maszynie (zarządcy). 
+
+Instalacja Ansible odbywa się wskutek komendy `sudo dnf install -y ansible`. W analogiczny sposób pobieramy tar oraz sshd na nowej maszynie (ale sshd jest już domyślnie pobrane w systemie).
+
+Kolejnym krokiem było utworzenie użytkownika 'ansible' oraz nadanie hostname 'ansible-target' dla odbiorcy. Użytkownika możemy dodać przez `sudo useradd ansible` i wykorzystać `sudo passwd ansible` do zmiany hasła. Zmiany nazwy host'a możemy dokonać przez `sudo hostnamectl set-hostname ansible-target`. Hostname służy do identyfikacji maszyny w sieci, żeby nie musieć pamiętać adresów IP, co może być kłopotliwe przy większej infrastrukturze IT. 
+
+Jak już było wspomniane, Ansible działa przez łącza SSH. W tym celu należy wygenerować hasło poleceniem `ssh-keygen`, które domyślnie wygeneruje parę kluczy o typie rsa - jeden prywatny a drugi publiczny. Klucz publiczny należy przesłać do maszyny odbiorczej, w tym celu zastosowano `ssh-copy-id <user>@<ip>`.
 
 Wymiana kluczy ssh, umożliwiająca łączenie się bez podawania hasła
 
 ![alt text](image.png)
 
-Wymiana udana - nie trzeba hasła
+Wymiana udana - klucz został skopiowany do pliku `.ssh/authorized_keys` w maszynie odbiorczej, co pozwala nam na połączenie się bez podawania hasła.
 
 ![alt text](image-1.png)
 
@@ -14,15 +28,17 @@ Upewnienie się, że program tar jest zainstalowany
 
 ![alt text](image-2.png)
 
-Dodanie do `etc/hosts` ansible-target, żeby umożliwić połączenie się za pomocą hostname, zamiast adresu ip.
+Dodanie do `etc/hosts` ansible-target, żeby umożliwić połączenie się za pomocą hostname.
 
 ![alt text](image-3.png)
 
-Połączenie działa 
+Możemy teraz się łączyć do maszyny poprzez `ssh <user>@<hostname>` zamiast ip.
+
+![alt text](image-4.png)
 
 ### Inwentaryzacja
 
-![alt text](image-4.png)
+
 
 Problem z pingowaniem siebie: nie było klucza w authorized keys. Po jego dodaniu działa
 
@@ -164,5 +180,22 @@ Odpalenie zainstalowanej maszyny oraz zalogowanie się do użytkownika z pliku a
 
 Maszyna jest zainstalowana poprawnie z pliku konfiguracyjnego, więc można wykonać dalszą część laboratorium - dodanie czynności po instalacyjnych (post)
 
+Odpalając maszynę możemy sprawdzić czy utt-docker.service jest odpalony:
+
+![alt text](image-36.png)
+
+I widzimy, że obraz istnieje świeżo po instalacji, bez potrzeby manualnego pobrania.  
+
+Kontener również został utworzony i zakończył się prawidłowo.
+
+![alt text](image-37.png)
+
+Po ponownym wystartowaniu kontenera, widzimy, że licznik czasu wynosił 2 minuty - oznacza to, że przy starcie kontener się odpalił w tle, działał i zakończył się po minucie. Ponowne odpalenie tego samego kontenera doliczyło minutę do poprzedniej. Wiem, że service działał w tle, ponieważ mogłem się zalogować do maszyny oraz operować w niej, podczas gdy skrypt utt się wykonywał.
+
+![alt text](image-38.png)
+
+Sprawdzając status utt-docker.service widzimy, że usługa jest **active (exited)**. Wcześniej ten service był w stanie **activating**.
+
+![alt text](image-39.png)
 
 
