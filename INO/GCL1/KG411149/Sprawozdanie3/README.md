@@ -2,7 +2,7 @@
 Krystian Gliwa, IO.
 
 ## Cel projektu
-
+Celem projektu jest zapoznanie się z procesami CI/CD oraz wykorzystaniu narzędzia Jenkins do automatyzacji tego procesu. 
 
 ## Pipeline, Jenkins, izolacja etapów
 
@@ -103,7 +103,7 @@ Kolejnym krokiem było tym razem utworzenie projektu który:
 - przechodzi na osobistą gałąź
 - buduje obrazy z dockerfiles i/lub komponuje via docker-compose
 
-Aby go zrealizować skorzystałem z Jenkins Pipeline który umożliwia definiowanie zestawu kroków do wykonania w sposób skryptowy. Definicje ustawiłem na *Pipeline skript* . Moj pipeline składa się z trzech etapów: klonowanie (zawiera w sobie również zmiane na moją gałąź) i build obrazu:
+Aby go zrealizować skorzystałem z Jenkins Pipeline który umożliwia definiowanie zestawu kroków do wykonania w sposób skryptowy. Definicje ustawiłem na *Pipeline skript* . Moj pipeline składa się z trzech etapów: klonowanie (zawiera w sobie również zmiane na moją gałąź) i build obrazu(**sh "..."** przed poleceniami jest używana w Pipelinie do wykonania poleceń powłoki(shell)):
 ```
 pipeline {
     agent any
@@ -139,11 +139,181 @@ pipeline {
 - uruchomiony obraz DIND,
 - uruchomiony obraz blueocean na podstawie obrazu Jenkinsa.
 
-Diagram aktywności, pokazujący kolejne etapy (collect, build, test, report)
+Diagram aktywności, pokazujący kolejne etapy (prepare-clone, build, test, deploy i publish)
 !["diagram aktywnosci"](./zrzuty_ekranu/9.jpg)
 
 
 
 Diagram wdrożeniowy opisujący relacje między składnikami, zasobami i artefaktami: 
 !["diagram wdrozeniowy"](./zrzuty_ekranu/8.jpg)
+
+### Pipeline 
+
+Mój pipeline składa się z pięciu etapów(stages) - clone, build, test, deploy i publish i służy do automatyzacji procesu CI/CD. Dyrektywa **agent any** wskazuje, że pipeline może być wykonywany na jakimkolwiek wolnym agencie, który jest skonfigurowany w systemie Jenkins.
+
+#### Clone 
+Pierwszy z etapów wyświetla informacje za co jest odpowiedzialny, a następnie usuwa repozytorium MDO2024_INO jeśli takowe juz jest pobrane poleceniem: 
+```
+sh "rm -rf MDO2024_INO || true"
+```
+Następnie pobiera repozytorium z gałęzią **KG411149** poleceniem: 
+```
+git branch: 'KG411149', url: 'https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+```
+
+#### Build
+Ten stage buduje obraz budujący o nazwie **node-build** korzystając z pliku **build.Dockerfile** poleceniem: 
+```
+sh "docker build -f ./INO/GCL1/KG411149/Sprawozdanie2/build.Dockerfile -t node-build ."
+```
+Plik build.Dockerfile znajduje się w wyżej wymienionej ścieżce w tym repozytorium a jego zawartość jest następująca: 
+```
+FROM node:14
+
+RUN git clone https://github.com/devenes/node-js-dummy-test.git
+
+WORKDIR /node-js-dummy-test
+
+RUN npm install
+```
+Opisany on został juz w wcześniejszym sprawozdaniu, zmieniona została tylko wersja z latest na 14.
+
+#### Test 
+Ten stage opiera się na wykonaniu testów przypisanych do aplikacji. Też tworzony jest obraz Dockerowy - node-test lecz tym razem na podstawie pliku **test.Dockerfile**. Oto jego zawartość: 
+```
+FROM node-build
+
+WORKDIR /node-js-dummy-test
+
+RUN npm test
+```
+
+#### Deploy
+W tym etapie najpierw, jeśli istnieje zatrzymywany i usuwany jest kontener aplikacji o nazwie first-app-con, aby zapewnić czyste środowisko dla nowej wersji aplikacji. Następnie tworzona jest sieć Dockerowa o nazwie moja_siec, jeśli jeszcze nie istnieje, co umożliwia kontenerom wewnątrz niej komunikację między sobą. Potem w scieżce INO/GCL1/KG411149/Sprawozdanie2 tworzony jest obraz na podstawie pliku deploy.Dockerfile: 
+```
+FROM node-build
+
+WORKDIR /node-js-dummy-test
+
+CMD ["npm", "start"]
+```
+Po zbudowaniu obrazu, ewentualny istniejący kontener o nazwie first-app zostaje usunięty, aby uniknąć konfliktów z nowym kontenerem. Następnie nowy kontener aplikacji jest uruchamiany na podstawie wcześniej zbudowanego obrazu, poleceniem: 
+```
+sh 'docker run -d -p 3000:3000 --name first-app-con --network moja_siec krystian3243/first-app'
+
+```
+ Ten kontener jest nazwany first-app_con, mapuje port 3000 na zewnątrz i wewnątrz kontenera, oraz jest podłączony do wcześniej utworzonej sieci moja_siec.
+
+ #### Publish
+ Ostatnim etapem w moim pipelinie jest Publish który ma na celu opublikowanie zbudowanego obrazu kontenera Docker na zewnętrznym rejestrze Docker Hub.
+ Najpierw używam polecenia: 
+ ```
+withCredentials([usernamePassword(credentialsId: 'moje_ID', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {...}
+ ```
+Służy ono do uwierzytelnienia się w zewnętrznym systemie (Docker Hub) za pomocą przechowywanych w Jenkins nazwy użytkownika i hasła. Aby z tego skorzystać wcześniej musiałem dodać "Credential" w "Zarządzanie Jenkinsem"->"Credentials":
+
+ !["dodawanie credentiala"](./zrzuty_ekranu/10.jpg)
+
+ Następnie nastąpiło zalogowanie się do Docker hub poleceniem: 
+ ```
+ sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
+ ``` 
+ Po czym za pomocą polecenia: 
+ ```
+ sh 'docker push krystian3243/first-app'
+ ```
+ wysyłany jest zbudowany obraz kontener na Docker Hub. **krystian3243/first-app** jest nazwą i tagiem obrazu. Dzięki temu krokowi obraz jest udostępniany na Docker Hub.
+
+ 
+Cały pipeline prezentuje się następująco: 
+```
+pipeline {
+    agent any
+    
+    stages {
+        
+        stage('Clone') {
+            steps {
+                echo "Klonowanie"
+                sh "rm -rf MDO2024_INO || true"
+                git branch: 'KG411149', url: 'https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo "Budowanie obrazu budującego"
+                sh "docker build -f ./INO/GCL1/KG411149/Sprawozdanie2/build.Dockerfile -t node-build ."
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                echo 'Budowanie obrazu testujacego'
+                sh "docker build -f ./INO/GCL1/KG411149/Sprawozdanie2/test.Dockerfile -t node-test ."
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                sh 'docker stop first-app-con || true'
+                sh 'docker rm first-app-con || true'
+                sh 'docker network create moja_siec || true'
+                echo 'Budowanie obrazu i uruchamianie aplikacji'
+                dir('INO/GCL1/KG411149/Sprawozdanie2') {
+                    sh 'docker build -f deploy.Dockerfile -t krystian3243/first-app .'  // Zaktualizowany tag
+                    sh 'docker rm -f first-app || true'
+                    sh 'docker run -d -p 3000:3000 --name first-app-con --network moja_siec krystian3243/first-app'
+                }
+            }
+        }
+        
+        stage('Publish') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'moje_ID', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    script {
+                        sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
+                        sh 'docker push krystian3243/first-app'
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+Po uruchomieniu projektu otrzymałem następujący "Stage Viev": 
+
+ !["Stage View"](./zrzuty_ekranu/11.jpg)
+ 
+ Co świadczy że wszytko pipeline przeprowadzono pomyślnie. 
+
+ Końcowe logi:
+
+ ![pipeline - sukces"](./zrzuty_ekranu/12.jpg)
+
+ Utworzony obraz na Docker Hub:
+
+ ![pipeline - sukces"](./zrzuty_ekranu/13.jpg)
+
+
+### Definition of done
+
+Utworzony obraz jest teraz ogólnie dostępny więc moge go pobrać i uruchomić aby sprawdzić czy wszystko napewno działa dobrze: 
+
+![pobieranie obrazu"](./zrzuty_ekranu/14.jpg)
+
+![uruchamianie"](./zrzuty_ekranu/15.jpg)
+
+![pracujace kontenery"](./zrzuty_ekranu/16.jpg)
+
+A następnie sprawdzam działanie w przeglądarce wpisując: 
+```
+http://localhost:3000
+```
+![pracujace kontenery"](./zrzuty_ekranu/17.jpg)
+
+
+
+Wszytko działa poprawnie.
 
