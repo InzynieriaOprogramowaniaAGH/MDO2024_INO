@@ -12,4 +12,4 @@ WORKDIR /tesseract.js-node
 RUN npm install
 
 # Wskazanie pliku startowego Twojej aplikacji
-CMD ["node", "package.js"]
+CMD ["node", "index.js"]
