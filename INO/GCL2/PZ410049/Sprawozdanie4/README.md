@@ -143,7 +143,7 @@ Następnie przetestowałem czy playbook wykona się na maszynie, na której odpi
 
 W tym przypadku błąd podczas włączania playbook'a wygląda w ten sposób: 
 
-[network-card-playbook](./screenshots/18.png)
+![network-card-playbook](./screenshots/18.png)
 
 Oczywiście w tym przypadku rownież nie udało się nawiązać połaczenia, lecz tym razem połączenie nie mogło zastać nawiązane w określonym czasie (Connection timed out), a nie jak w poprzeednim scenariuszu, w którym maszyna docelowa odrzucała połaczenia (Connection refused).
 
@@ -152,41 +152,41 @@ Oczywiście w tym przypadku rownież nie udało się nawiązać połaczenia, lec
 W tej częsci wykonam wdrożenie mojej aplikacji z kontenera na maszynie ansible-target poprzez napisanie odpowiedniego playbook'a. 
 W moim playbook'u na samym wstępie umieścić sekcję odpowiedzialną za zainstalowanie i uruchomienie dockera na docelowej maszynie. 
 
-[install docker](./screenshots/19.png)
+![install docker](./screenshots/19.png)
 
 Następnie zdefiniowałem zadanie, które pobiera obraz Docker z Docker Hub. Jest to ten sam obraz co na poprzednich zajęciach został tam umieszony podczas pipeline'a. Używam tu modułu 'community.docker.docker_image', który jest używany do zarządzania obrazami Docker za pomocą Ansible. Kolejnym zadaniem jest uruchomienie kontenera z pobranego obrazu. Modul Ansible, który jest używany do zarządzania kontenerami to moduł 'docker_container'. W tej częsci definiuje nazwę kontenera, nazwę obrazu z którego ma powstać ten kontener, stan kontenera - w tym przypadku 'started' co oznacza, że kontener ma być uruchomiony, detach - ustawiam na 'yes', gdyż chcę aby kontener działał w tle, a na koniec określam mapowanie portów. 
 
-[pull docker image](./screenshots/20.png)
+![pull docker image](./screenshots/20.png)
 
 Po uruchomieniu tego playbook'a na maszynie ansible-target został zaciągniety obraz:
 
-[pull docker image](./screenshots/21.png)
+![pull docker image](./screenshots/21.png)
 
 Następnie został uruchomiony kontener z aplikacją: 
 
-[docker ps](./screenshots/22.png)
+![docker ps](./screenshots/22.png)
 
 Logi widoczne po uruchomieniu kontenera: 
 
-[docker logs](./screenshots/23.png)
+![docker logs](./screenshots/23.png)
 
 W celu upewnienia się, ze aplikacja działa poprawnie użyłem polecenia 'curl':
 
-[curl](./screenshots/24.png)
+![curl](./screenshots/24.png)
 
 Jak widać aplikacja zostala wdrożona poprawnie. 
 
 Aplikacja działa w trybie 'detach', więc następnym krokiem było zatrzymanie kontenera z aplikacją i jego usunięcie. W tej części playbook'a używam modułu 'docker_container' i stanu 'absent':
 
-[docker rm](./screenshots/25.png)
+![docker rm](./screenshots/25.png)
 
 Tak wygląda cały playbook:
 
-[second playbook](./screenshots/26.png)
+![second playbook](./screenshots/26.png)
 
 Efekt uruchomienia playbook'a:
 
-[second playbook result](./screenshots/27.png)
+![second playbook result](./screenshots/27.png)
 
 Ostatnim krokiem z tego laboratorium było ubranie playbook'a w role za pomocą narzędzia 'ansible-galaxy'. Służy ono do tworzenia, udostępniania i zarządzania rolami Ansible. Role w Ansible to modularne, wielokrotnego użytku jednostki kodu automatyzacji, które można udostępniać i ponownie wykorzystywać w różnych projektach Ansible.
 
@@ -197,20 +197,20 @@ w katalogu z playbookiem stworzyłem nowy katalog o nazwie 'roles', a w nim stwo
 W ten sposób stwrozyłem w katalogu 'roles' trzy role: 'install_docker', 'deploy' oraz 'remove_container'. 
 Struktura katalogów wyświetlona za pomocą polecenia 'tree': 
 
-[tree](./screenshots/28.png)
+![tree](./screenshots/28.png)
 
 W pliku 'main.yml' w katalogu 'tasks' w strukturze roli definiuje zadania do wykonania przez daną role. 
 Przykładowo dla roli 'install_docker' plik 'main.yml' wygląda w ten sposób:
 
-[main.yml](./screenshots/29.png)
+![main.yml](./screenshots/29.png)
 
 Po zdefiniowaniu każdej z ról, tworzę nowego playbook'a, który będzie z nich korzystał: 
 
-[role playbook](./screenshots/30.png)
+![role playbook](./screenshots/30.png)
 
 Uruchamiam nowo stworzonego playbook'a i jak widać wszystko działa poprawnie i jest realizowane jak poprzednio:
 
-[role playbook](./screenshots/31.png)
+![role playbook](./screenshots/31.png)
 
 # Zajęcia 09
 
@@ -240,11 +240,11 @@ Następnie zmodyfikowałem plik 'anaconda-ks.cfg', gdyż nie zawiera potrzebnych
 
       inst.ks=https://raw.githubusercontent.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/PZ410049/INO/GCL2/PZ410049/Sprawozdanie4/anaconda-ks.cfg
 
-[fedora](./screenshots/32.png)
+![fedora](./screenshots/32.png)
 
 System automatycznie ustawił odpowiednie parametry, pobrał zależności oraz pakiety i sam się zrestartował oraz uruchomił: 
 
-[fedora-start](./screenshots/33.png)
+![fedora-start](./screenshots/33.png)
 
 ## rozszerzenie pliku odpowiedzi o repozytoria i oprogramowanie potrzebne do uruchomienia programu, zbudowanego w ramach projektu
 
@@ -255,7 +255,7 @@ W celu zrealizowania tego zadania w pliku 'anaconda-ks.cfg' dodałem sekcję '%p
 
 * moby-engine: Instaluje Moby Engine, który jest używany do uruchamiania i zarządzania kontenerami Docker.
 
-[packages](./screenshots/34.png)
+![packages](./screenshots/34.png)
 
 Kolejnym krokiem było stworzenie sekcji '%post', w której zdefiniowałem kroki, które mają zostać wykonane po zakończeniu podstawowej instalacji systemu. Te kroki są wykonywane w już zainstalowanym systemie, gdyż należy pamiętac, że '**Docker zadziała dopiero na uruchomionym systemie**'.
 
@@ -272,12 +272,12 @@ Za pomocą 'systemctl enable docker-java-deploy.service' włączam usługę 'doc
 
 Tak wygląda sekcja '%post': 
 
-[post](./screenshots/36.png)
+![post](./screenshots/36.png)
 
 Pod koniec sprawdzam poprawność pliku kickstart poprzez uruchomienie systemu z tego pliku i zweryfikowaniu czy aplikacja została poprawnie wdrożona: 
 
-[werfyfikacja](./screenshots/35.png)
+![werfyfikacja](./screenshots/35.png)
 
 Jak widać obraz został zaciągniety, kontener został uruchamiony z odpowiednim przekierowaniem portów. Dodatkowo sprawdziłem logi kontenera i łacznośc z aplikacją poprzez polecenie 'curl':
 
-[werfyfikacjav2](./screenshots/37.png)
+![werfyfikacjav2](./screenshots/37.png)
