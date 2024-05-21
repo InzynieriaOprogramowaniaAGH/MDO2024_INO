@@ -1,0 +1,56 @@
+- name: Ping to all machines
+  hosts: all
+  tasks:
+    - name: Send ping to all machines
+      ping:
+
+- name: Copy inventory file to Endpoints
+  hosts: Endpoints
+  tasks:
+    - name: Copy inventory file
+      copy:
+        src: ~/devops/MDO2024_INO/ITE/GCL4/MR412777/Sprawozdanie4/inventory.yml
+        dest: /home/ansible/inventory.yml
+        force: yes
+      become: yes
+
+- name: Update system packages
+  hosts: all
+  tasks:
+    - name: Update all packages to the latest version
+      apt:
+        update_cache: yes
+        upgrade: dist
+      become: yes
+
+- name: Restart services
+  hosts: all
+  tasks:
+    - name: Restart sshd service
+      service:
+        name: sshd
+        state: restarted
+      become: yes
+
+    - name: Restart rngd service
+      service:
+        name: rngd
+        state: restarted
+      become: yes
+
+- name: Handle host with SSH issues
+  hosts: all
+  tasks:
+    - name: Check SSH connection
+      shell: |
+        if nc -zw1 localhost 22; then
+          echo "SSH is up"
+        else
+          echo "SSH is down"
+        fi
+      register: ssh_status
+      ignore_errors: yes
+
+    - name: Display SSH status
+      debug:
+        msg: "{{ inventory_hostname }}: {{ ssh_status.stdout }}"
