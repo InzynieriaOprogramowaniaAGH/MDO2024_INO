@@ -287,17 +287,95 @@ Na podstawie powyższego listingu widać w jaki sposób tworzone i usuwane były
 
 **5. Rolling back do starszej wersji**
 
-Zgodnie z dokumentacją, każda zmiana sekcji `templates` w pliku yaml powoduje zapisanie do historii rollbacku nowej rewizji. Jest to mechanizm umożliwiający cofanie nowych wdrożeń, w przypadku pojawienia się jakiś błędów. Historia nowych wdrożeń jest definiowana w pliku yaml deploymentu za pomocą parametru `.spec.revisionHistoryLimit` domyslnie ustawionego na 2 (zapis 2 ostatnich zmian we wdrożeniach).
+Zgodnie z dokumentacją, każda zmiana sekcji `templates` w pliku yaml powoduje zapisanie do historii rollbacku nowej rewizji. Jest to mechanizm umożliwiający cofanie nowych wdrożeń, w przypadku pojawienia się jakiś błędów. Historia nowych wdrożeń jest definiowana w pliku yaml deploymentu za pomocą parametru `.spec.revisionHistoryLimit` domyslnie ustawionego na 10 (zapis 10 ostatnich zmian we wdrożeniach).
 
 >A Deployment's revision is created when a Deployment's rollout is triggered. This means that the new revision is created if and only if the Deployment's Pod template (.spec.template) is changed, for example if you update the labels or container images of the template. Other updates, such as scaling the Deployment, do not create a Deployment revision, so that you can facilitate simultaneous manual- or auto-scaling. This means that when you roll back to an earlier revision, only the Deployment's Pod template part is rolled back.
 
 Powrót do poprzedniej wersji można wykonać za pomocą polecenia:
 ```bash
-kubectl rollback undo <deployment>
+kubectl rollout undo <deployment>
 ```
 
 Jeśli zdefiniowaliśmy inną liczbę zapisów historii, możemy się do nich odwoływać przekazując dodatkowy parametr do polecenia:
 ```bash
-kubectl rollback undo --to-revision <deployment>
+kubectl rollout undo --to-revision <deployment>
 ```
 ![rollback](./screenshots/undo-rollout.png)
+
+**6. Obraz zwracający kod błędu**
+
+Trzeci utworzony obraz i dodany na DockerHuba zwraca zawsze kod błędu 1. Oznacza to, że podczas wdrożenia pody z takim obrazem nigdy nie wystartują.
+
+W celu przetestowania aktualizujemy obraz we wdrożeniu:
+```bash
+kubectl set image deployment.apps/temperature-converter temperature-converter=kacperpap/temperature_converter:0.3.0
+
+#kubectl set image <deployment> <container_name>=<new_image>
+```
+
+Po wykonaniu tego polecenia monitorując wdrażanie podów widzimy, że wdrożenie nowych podów, kończy się ich 3-krotnym restartem, po czym następuje zwrócny status podów `CrashLoopBackError`, który oznacza, że pod pomimo próby restarów za każdym razem kończył pracę z błędem.
+![crash](./screenshots/error-03.png)
+
+Aby powrócić stan poprzedni korzystamy z polecenia:
+```bash
+kubectl rollout undo deployment.apps/temperature-converter
+```
+
+# Kontrola wdrożenia
+
+W celu kontroli wdrożenia piszemy prosty skrypt, który sprawdza czy żądana liczba replik została utworzona w określonym czasie. W przypadku braku sukcesu, następuje rollback do poprzedniej wersji.
+
+Skrpyt [verify_deployment.sh](./verify_deployment.sh):
+```bash
+#!/bin/bash
+
+DEPLOYMENT_NAME=""
+NAMESPACE="default"
+TIMEOUT=60
+SLEEP_INTERVAL=5
+
+for arg in "$@"
+do
+    eval "$arg"
+done
+
+ELAPSED_TIME=0
+
+if [[ -z "$DEPLOYMENT_NAME" ]]; then
+    echo "DEPLOYMENT_NAME needs to be specified"
+    exit 1
+fi
+
+echo "Starting to monitor deployment '$DEPLOYMENT_NAME' in namespace '$NAMESPACE' for up to $TIMEOUT seconds..."
+
+while [[ $ELAPSED_TIME -lt $TIMEOUT ]]; do 
+    READY_REPLICAS=$(kubectl get deployment $DEPLOYMENT_NAME -n $NAMESPACE -o jsonpath='{.status.updatedReplicas}')
+    DESIRED_REPLICAS=$(kubectl get deployment $DEPLOYMENT_NAME -n $NAMESPACE -o jsonpath='{.spec.replicas}')
+
+    if [[ $READY_REPLICAS -eq $DESIRED_REPLICAS ]]; then
+        echo "Deployment '$DEPLOYMENT_NAME' successfully deployed with all $DESIRED_REPLICAS replicas ready."
+        exit 0
+    fi
+
+    echo "Waiting for deployment, current state: $READY_REPLICAS/$DESIRED_REPLICAS    ($ELAPSED_TIME seconds elapsed)"
+    sleep $SLEEP_INTERVAL
+    ELAPSED_TIME=$((ELAPSED_TIME + SLEEP_INTERVAL))
+
+done 
+
+echo "Timeout of $TIMEOUT seconds reached. Deployment '$DEPLOYMENT_NAME' did not complete successfully. Rolling back to previous version"
+kubectl rollout undo deployment $DEPLOYMENT_NAME
+exit 1
+```
+
+Dodajemy uprawnienia dla skryptu:
+```bash
+chmod +x ./verify_deployment.sh
+```
+
+Teraz w momencie wprowadzania zmian we wdrożeniu uruchamiamy skrypt, który w przypadku błędu wdrożenia cofnie je do poprzedniej wersji.
+
+![sk](./screenshots/skrypt.png)
+
+
+# Strategie wdrożenia

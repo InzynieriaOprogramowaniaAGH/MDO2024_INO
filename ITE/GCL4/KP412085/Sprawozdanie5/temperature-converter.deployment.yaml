@@ -19,3 +19,4 @@ spec:
         image: kacperpap/temperature_converter:0.2.0
         ports:
         - containerPort: 5000
+  progressDeadlineSeconds: 60
