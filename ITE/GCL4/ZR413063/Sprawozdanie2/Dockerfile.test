@@ -1,5 +1,5 @@
 #nalezy wpisac nazwe obrazu pierwszego kontenera 
-FROM pomdog_build:latest
+FROM pomdog_build:jammy
 
 #ustawienie katalogu roboczego
 WORKDIR /pomdog/build/linux
