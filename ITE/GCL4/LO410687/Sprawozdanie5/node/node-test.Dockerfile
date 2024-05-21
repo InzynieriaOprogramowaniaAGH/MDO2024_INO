@@ -1,5 +1,5 @@
-FROM web-app
-WORKDIR /fullstack-nextjs-app-template
+FROM notes-app
+WORKDIR /notes-app-cicd
 COPY . . 
 RUN npm install
 
