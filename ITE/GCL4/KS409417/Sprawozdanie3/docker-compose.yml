@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  node_builder:
+    build:
+      context: .
+      dockerfile: ./node_builder.Dockerfile
+    image: node_builder
+
+  node_test:
+    build:
+      context: .
+      dockerfile: ./node_test.Dockerfile
+    image: node_test
+    depends_on:
+      - node_builder
+
+  node_deploy:
+    build:
+      context: .
+      dockerfile: ./node_deploy.Dockerfile
+    image: node_deploy
+    depends_on:
+      - node_builder
