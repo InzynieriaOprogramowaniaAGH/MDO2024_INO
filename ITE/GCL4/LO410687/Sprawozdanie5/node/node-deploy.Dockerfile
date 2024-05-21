@@ -1,11 +1,13 @@
-FROM notes-app
+FROM web-app
 
-WORKDIR /notes-app-cicd
+WORKDIR /fullstack-nextjs-app-template
 
 COPY . .
 
 RUN npm install
 
-CMD ["npm", "start"]
+RUN npm run build
 
 EXPOSE 3000
+
+ENTRYPOINT npm run deploy:prod 

@@ -35,7 +35,7 @@ pipeline {
             steps {
                 echo 'Building...'
                 dir('MDO2024_INO'){
-                    sh 'docker build -t notes-app:latest -f ./ITE/GCL4/LO410687/Sprawozdanie5/node/node-build.Dockerfile . | tee build_logs.log'
+                    sh 'docker build -t web-app:latest -f ./ITE/GCL4/LO410687/Sprawozdanie5/node/node-build.Dockerfile . | tee build_logs.log'
                 }
             }
         }
@@ -43,7 +43,7 @@ pipeline {
             steps {
                 echo 'Testing...'
                 dir('MDO2024_INO'){
-                    sh 'docker build -t notes-app-test:latest -f ./ITE/GCL4/LO410687/Sprawozdanie5/node/node-test.Dockerfile . | tee test_logs.log'
+                    sh 'docker build -t web-app-test:latest -f ./ITE/GCL4/LO410687/Sprawozdanie5/node/node-test.Dockerfile . | tee test_logs.log'
                 }
             }
         }
@@ -51,8 +51,8 @@ pipeline {
             steps {
                 echo 'Deploying...'
                 dir('MDO2024_INO'){
-                    sh 'docker build -t notes-app-deploy:latest -f ./ITE/GCL4/LO410687/Sprawozdanie5/node/node-deploy.Dockerfile .'
-                    sh 'docker run -d -p 3000:3000 --name notes-app-deploy notes-app-deploy:latest'
+                    sh 'docker build -t web-app-deploy:latest -f ./ITE/GCL4/LO410687/Sprawozdanie5/node/node-deploy.Dockerfile .'
+                    sh 'docker run -d -p 3000:3000 --name web-app-deploy web-app-deploy:latest'
                 }
             }
         }
@@ -62,11 +62,11 @@ pipeline {
                 script {
                     if(params.PROMOTE) {
                         sh "echo '${params.Password}' | docker login -u lukoprych --password-stdin"
-                        sh "docker tag notes-app-deploy:latest lukoprych/notes-app:${params.VERSION}"
-                        sh "docker push lukoprych/notes-app:${params.VERSION}"
-                        sh "tar -czvf notes-app-${params.VERSION}.tar.gz ${params.VERSION}/"
+                        sh "docker tag web-app-deploy:latest lukoprych/web-app:${params.VERSION}"
+                        sh "docker push lukoprych/web-app:${params.VERSION}"
+                        sh "tar -czvf web-app-${params.VERSION}.tar.gz ${params.VERSION}/"
                         echo 'Creating artifact...'
-                        archiveArtifacts artifacts: "notes-app-${params.VERSION}.tar.gz"
+                        archiveArtifacts artifacts: "web-app-${params.VERSION}.tar.gz"
                     } else {
                         echo 'Promote parameter is false. Skipping publishing...'
                     }
