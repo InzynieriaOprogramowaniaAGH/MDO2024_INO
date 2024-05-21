@@ -14,6 +14,9 @@ RUN  git submodule update --init --recursive
 
 RUN env
 
+RUN update-alternatives --set c++ /usr/bin/g++
+RUN update-alternatives --set cc /usr/bin/gcc
+
 #generowanie plikow ninja
 RUN cmake -Bbuild/linux -H. -G Ninja
 
