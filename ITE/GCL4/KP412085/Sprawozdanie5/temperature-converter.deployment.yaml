@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: temperature-converter
 spec:
-  replicas: 2
+  replicas: 8
   selector:
     matchLabels:
       app: temperature-converter
@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: temperature-converter
-        image: kacperpap/temperature_converter:0.1.0
+        image: kacperpap/temperature_converter:0.2.0
         ports:
         - containerPort: 5000
