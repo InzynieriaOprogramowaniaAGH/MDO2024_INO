@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  irssi:
+    build:
+      dockerfile: irssi/build.Dockerfile
+      context: .
+  dummy:
+    build:
+      dockerfile: dummy/run.Dockerfile
+      context: .
+    ports:
+      - "80:3000"
