@@ -163,3 +163,19 @@ services:
 - przygotowanie woluminu wejściowego `Vin` i wyjściowego `Vout`
 ![docker-volume-create](img/4/docker-volume-create.png)
 
+### Umieszczenie repozytorium `dummy-js-app` w woluminie wejściowym `Vin`
+![git-clone-into-volume](img/4/git-clone-into-volume.png)
+Aby sklonować repozytorium do woluminu wejściowego, nie instalując gita w docelowym kontenerze i nie tworząc narzędzi tymczasowych, możemy sklonować repozytorium bezpośrednio do woluminu - jedynym wymaganiem jest posiadanie odpowiednich uprawnień w systemie.
+
+### Instalacja zależności i uruchomienie projektu w kontenerze. Skopiowanie zbudowanego projektu do woluminu wyjściowego
+![tmp-fedora-deps](img/4/tmp-fedora-deps.png)
+
+![tmp-fedora-out](img/4/tmp-fedora-out.png)
+
+### Ponowna instalacja z wykorzystaniem kontenera
+![](img/4/cloner-run.png)
+
+### Możliwość wykonania opisanych kroków za pomocą `docker build` i pliku `Dockerfile`
+Cały opisany moża bezproblemowo zautomatyzować z wykorzystaniem obarów docker. Zgodnie z dokumentacją `docker build`, instrukcja `RUN --mount` pozwala na zamontowanie woluminu na czas wykonania pojedynczej warstwy. Typ `bind` jest w tym przypadku szczególnie interesujący, ponieważ pozwala na zamontowanie w budowanym kontenerze plików czy katalogów systemu gospodarza. Nie licząc różnic syntaktycznych, polecenie `RUN --mount=type=bind,source=<host_fs>,target=<container_fs>` montuje obiekty tylko na okres działania warstwy tworzonej przez daną instruckję `RUN`.
+
+## Eksportowanie portu
