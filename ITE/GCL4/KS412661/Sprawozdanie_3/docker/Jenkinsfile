@@ -35,7 +35,7 @@ pipeline {
                 dir('MDO2024_INO'){
                     sh 'ls -a'
                     sh 'docker build -t build:latest -f ./ITE/GCL4/KS412661/Sprawozdanie_3/docker/build.Dockerfile .| tee build_logs.log'
-                    sh 'docker run --name node-build node-build:latest'
+                    sh 'docker run --name build build:latest'
                 }
             }
         }
