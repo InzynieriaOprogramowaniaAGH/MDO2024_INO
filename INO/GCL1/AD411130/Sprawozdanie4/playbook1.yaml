@@ -1,0 +1,41 @@
+- name: Ping to all Endpoints
+  hosts: Endpoints
+  tasks:
+   - name: Ping my hosts
+     ansible.builtin.ping:
+
+
+- name: Copying twice to Endpoints
+  hosts: Endpoints  
+  tasks:
+    - name: Copy yaml
+      copy:
+        src: ~/home/sample_dir/MDO2024_INO/INO/GCL1/AD411130/Sprawozdanie4/inventory.yaml
+        dest: ~/ansible_lab/inventory.yaml
+
+    - name: Repeat copying
+      copy:
+        src: ~/home/sample_dir/MDO2024_INO/INO/GCL1/AD411130/Sprawozdanie4/inventory.yaml
+        dest: ~/ansible_lab/inventory.yaml
+
+
+- name: Copying twice to Endpoints
+  hosts: Endpoints  
+  tasks:
+    - name: Aktualizowanie pakietów
+      become: true
+      ansible.builtin.apt:
+          name: "*"
+          state: latest
+
+    - name: Restart usługi sshd
+      become: true
+      ansible.builtin.service:
+          name: sshd
+          state: restarted
+
+    - name: Restart usługi rng-tools
+      become: true
+      ansible.builtin.service:
+          name: rng-tools
+          state: restarted 

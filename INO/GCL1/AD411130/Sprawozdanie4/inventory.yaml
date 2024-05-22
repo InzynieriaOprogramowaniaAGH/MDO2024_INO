@@ -1,0 +1,13 @@
+all:
+  children:
+    Orchestrators:
+      hosts:
+        ochrestrator:
+          ansible_host: dankoserver
+          ansible_user: danko
+
+    Endpoints:
+      hosts:
+        endpoint:
+          ansible_host: ansible-target
+          ansible_user: ansible

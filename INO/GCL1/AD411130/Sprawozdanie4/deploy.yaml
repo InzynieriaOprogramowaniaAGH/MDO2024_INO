@@ -1,0 +1,16 @@
+- name: Deploy
+  hosts: Endpoints
+  become: yes
+  tasks:
+    - name: DockerHub
+      docker_image:
+        name: dankoo4/albert_image:latest
+        source: pull
+    
+    - name: Container
+      docker_container:
+        name: node
+        image: dankoo4/albert_image:latest
+        state: started
+        interactive: yes
+        tty: yes
