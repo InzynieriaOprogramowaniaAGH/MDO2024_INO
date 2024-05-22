@@ -16,6 +16,11 @@ spec:
     spec:
       containers:
       - name: temperature-converter
-        image: kacperpap/temperature_converter:0.1.0
+        image: kacperpap/temperature_converter:0.2.0
         ports:
         - containerPort: 5000
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1

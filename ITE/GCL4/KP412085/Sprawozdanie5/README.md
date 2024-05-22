@@ -379,3 +379,24 @@ Teraz w momencie wprowadzania zmian we wdrożeniu uruchamiamy skrypt, który w p
 
 
 # Strategie wdrożenia
+
+***Uwaga, dla pierwszych dwóch wdrożeń korzystamy ze wcześniej zdefiniowanego serwisu: [temperature-converter.service.yaml](./temperature-converter.service.yaml), ponieważ zdefiniowane w nim labels są identyczne jak we wdrożeniu co pozwoli na dopasowanie serwisu do tych wdrożeń.***
+
+**1. Recreate deployment**
+
+Strategia ta jest najprostszym typem wdrażania. Polega na zamknięciu wszystkich podów ze starej wersji i dopiero wtedy utworzeniu podów z nowym updatem. Definiujemy ją poprzez dodanie do pliku yaml typu strategi: `.spec.strategy.type==Recreate`.
+
+>This will only guarantee Pod termination previous to creation for upgrades. If you upgrade a Deployment, all Pods of the old revision will be terminated immediately. Successful removal is awaited before any Pod of the new revision is created. If you manually delete a Pod, the lifecycle is controlled by the ReplicaSet and the replacement will be created immediately (even if the old Pod is still in a Terminating state).
+
+
+**2. Rolling Update**
+
+Strategia ta była już wcześniej opisywana. Polega na stopniowym wdrażaniu nowych wersji, tak aby nie został przekroczony parametr `maxUnavailable`, czyli żeby liczba dostępnych podów z obydwu wersji nie spadła poniżej pewnego poziomu, oraz parametr `maxSurge`, definiujący maksymalną nadmiarową liczbę podów. Domyślnie parametry te ustawiane są na 25%. Można również ustawić je jako wartości absolutne a nie procentowe. W naszym przykładzie ustawiamy `maxUnavailable` na 2, co znacza że dla wdrożenia 8 replik, podczas updatu, minimalna liczba wszystkich replik dostępnych, nie będzie mogła być mniejsza od 6. Parametr `maxSurge` ustawiamy na 30%. Zgodnie z dokumentacją wartość absolutna tego parametru, obliczana jest poprzez zaokrąglenie w górę, w związku z czym w naszym przypadku wynosić będzie ceil(2,4) = 3, czyli maksymalna liczba wszystkich replik w danym momencie będzie mogła wynosić 11.
+
+Strategię definiujemy w pliku yaml poprzez ustawienie `.spec.strategy.type==RollingUpdate` oraz parametrów: `.spec.strategy.rollingUpdate.maxUnavailable` i `.spec.strategy.rollingUpdate.maxSurge`.
+
+**3. Canary deplyment**
+
+Canary deployment tworzymy zgodnie z opisem w dokumentacji: [https://kubernetes.io/docs/concepts/workloads/management/#canary-deployments](https://kubernetes.io/docs/concepts/workloads/management/#canary-deployments)
+
+
