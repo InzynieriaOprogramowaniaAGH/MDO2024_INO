@@ -49,3 +49,31 @@ Zadanie wykonywałem o 12, dlatego pozwoliłem sobie zamienić warunki programu,
 ![alt text](image-3.png)
 
 ![alt text](image-4.png)
+
+### "Prawdziwy" projekt
+
+Tym razem tworzymy kolejny projekt, ale jest on bardziej zaawansowany:
+- klonujemy nasze repozytorium
+- przechodzimy na osobistą gałąź
+- budujemy obrazy z Dockerfile 
+
+Na wstępie, przekopiowałem obrazy z poprzedniego sprawozdania do nowego folderu i wystawiłem zmiany do repozytorium.
+
+Utworzyłem Nowy Projekt i dodałem dwie intrukcje: jedną do budowania i drugą do testów. Dodatkowo wskazałem naszę repozytorium:
+
+![alt text](image-5.png)
+
+![alt text](image-6.png)
+
+Po skonfigurowaniu projektu, uruchomiłem go:
+
+![alt text](image-7.png)
+
+![alt text](image-8.png)
+
+
+### Pipeline
+
+Diagram aktywności
+
+![alt text](image-10.png)
