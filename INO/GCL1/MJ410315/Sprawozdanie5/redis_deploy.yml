@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deployment
+  labels:
+    app: kuberedis
+spec:
+  replicas: 5 # 4, 5, 1, 0
+  selector:
+    matchLabels:
+      app: kuberedis
+  template:
+    metadata:
+      labels:
+        app: kuberedis
+    spec:
+      containers:
+      - name: kuberedis
+        image: michaljurzak/redis_build:v1.1 # v1.0, v1.1, error
+        ports:
+        - containerPort: 6379
+        command: ["./src/redis-server"] # kiedy error, nalezy zakomentować
