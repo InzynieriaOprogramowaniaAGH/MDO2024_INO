@@ -1,13 +1,12 @@
 # Sprawozdanie nr 3
 ---
 ## Cel ćwiczenia:
- ## Celem ćwiczenia było 
-
+ ## Celem ćwiczenia było  zapoznanie się z instalacją i konfiguracją Ansible jako narzędzia do automatyzacji zadań administracyjnych oraz zarządzania konfiguracją. Ćwiczenie obejmowało instalację Ansible na maszynie wirtualnej, konfigurację środowiska do bezpiecznego i bezhasłowego połączenia SSH, utworzenie pliku inwentaryzacji oraz napisanie playbooka do zdalnego wykonywania procedur. Dodatkowo, zadanie obejmowało zarządzanie kontenerami za pomocą Dockera oraz automatyzację instalacji systemu Fedora z wykorzystaniem pliku konfiguracyjnego.
 
 
 ---
 
-## Streszczenie laboratorium:
+## Streszczenie laboratorium: Podczas laboratorium zainstalowano i skonfigurowano Ansible na dwóch maszynach wirtualnych, aby umożliwić bezpieczne i bezhasłowe połączenia SSH. Proces ten obejmował instalację niezbędnego oprogramowania, konfigurację hostname oraz wymianę kluczy SSH. Utworzono plik inwentaryzacji definiujący hosty i grupy zarządzane przez Ansible. W kolejnej części laboratorium stworzono playbook Ansible, który automatyzował zadania takie jak wysyłanie pingów, kopiowanie plików, aktualizacja pakietów oraz restartowanie usług. Następnie zainstalowano Dockera na maszynie zarządzanej, aby zarządzać kontenerami z poziomu Ansible. Ostatecznie, wykonano nienadzorowaną instalację systemu Fedora za pomocą pliku, automatyzując proces instalacji i konfiguracji systemu operacyjnego.
 
 
 ###  Laboratorium 
