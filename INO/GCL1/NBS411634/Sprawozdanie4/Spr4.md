@@ -16,6 +16,14 @@ Tworzę maszynę wirtualną o tym samym systemie operacyjnym co maszyna "główn
 
 ![](./ss_lab8/lab8_2.png)
 
+W ustawieniach nowej maszyny wirtualnej zmieniam połączenie sieciowe NAT na mostkowaną kartę sieciową (bridged). Pozwoli to maszynie na bezpośredni dostęp do sieci lokalnej, a zatem maszyna wirtualna będzie miała własny adres IP w sieci lokalnej.
+
+![](./ss_lab8/lab8_19.png)
+
+Taki sam krok wykonuje dla maszyny "głównej"
+
+![](./ss_lab8/lab8_32.png)
+
 Ansible jest napisany w języku Python, więc na hoście musi być zainstalowany interpreter Pythona.
 
 W tym celu na nowej maszynie wirtuanej:
@@ -44,6 +52,16 @@ A następnie upewniam się czy wszystko przebiegło pomyślnie wykorzystując ``
 
 Ustawiam nowy *hostname* maszyny
 
+Do tego będę potrzebować adresów IP obu maszyn, używam do tego polecenia ```hostname -I```
+
+Maszyna "główna":
+
+![](./ss_lab8/lab8_34.png)
+
+Maszyna ansible-target:
+
+![](./ss_lab8/lab8_34.png)
+
 Ustawiam hostname za pomocą polecenia
 
 ```sudo hostname ansible-target```
@@ -58,11 +76,23 @@ Aktualizuje plik */etc/hosts*
 
 ```sudo nano /etc/hosts```
 
-aktualizuje tylko wiersz z nową nazwą hostname'a    *(127.0.1.1 ansible-taget)*
+aktualizuje tylko wiersz z nową nazwą hostname'a    
 
-![](./ss_lab8/lab8_7.png)
+Na maszynie "głównej":
+
+![](./ss_lab8/lab8_38.png)
+
+Na maszynie ansible-target:
+
+![](./ss_lab8/lab8_37.png)
 
 Aktualizuje hostname
+
+Na maszynie głównej:
+
+```sudo hostnamectl set-hostname natalia```
+
+Na maszynie ansible-target:
 
 ```sudo hostnamectl set-hostname ansible-target```
 
@@ -70,9 +100,15 @@ Sprawdzam czy hostname został ustawiony poprawnie poleceniem
 
 ```hostname```
 
+Na maszynie "głównej":
+
+![](./ss_lab8/lab8_39.png)
+
+Na maszynie ansible-target:
+
 ![](./ss_lab8/lab8_8.png)
 
-Następnie tworzę nowego użytkownika (o nazwie ansible) poleceniem:
+Następnie na maszynie ansible-target tworzę nowego użytkownika (o nazwie ansible) poleceniem:
 
 ```sudo adduser ansible```
 
@@ -114,53 +150,41 @@ Po zakońćzeniu instalcji sprawdzam wersję zainstalowanego oprogramowanie
 
 Aby wymienić klucze SSH między użytkownikiem na głównej maszynie wirtualnej a użytkownikiem `ansible` na nowej maszynie tak, aby logowanie SSH jako `ansible` na `ansible-target` nie wymagało podawania hasła, wykonałam następujące kroki:
 
-NA GŁÓWNEJ MASZYNIE WIRTUALNEJ
-
 Generuje parę kluczy SSH dla użytkownika, którym chcę się zalogować na nową maszynę wirtualną
 
-```ssh-keygen -t rsa -f ~/.ssh/key_to_ansible```
+```ssh-keygen```
 
-gdzie: 
+Na maszynie "głównej":
 
-*-t* oznacza typ klucza, w tym przypadku jest to koucz RSA
+![](./ss_lab8/lab8_40.png)
 
-*-f* określa nazwę pliku klucza, jako *key_to_ansible*
+Na maszynie ansible-target:
 
-![](./ss_lab8/lab8_13.png)
+![](./ss_lab8/lab8_41.png)
 
-NA NOWEJ MASZYNIE WIRTUALNEJ
+Kopiuje klucze publiczne między maszynami 
 
-W ustawieniach nowej maszyny wirtualnej zmieniam połączenie sieciowe NAT na mostkowaną kartę sieciową (bridged). Pozwoli to maszynie na bezpośredni dostęp do sieci lokalnej, a zatem maszyna wirtualna będzie miała własny adres IP w sieci lokalnej.
+```ssh-copy-id -i ~/.ssh/id_rsa.pub nazwa_użytkownika@adres_IP_maszyny```
 
-![](./ss_lab8/lab8_19.png)
+U mnie IP "głównej" maszyny to: 192.168.0.131, a mszyny ansible-target to: 192.168.0.49 (można to sprawdzić komendą ```hostname -I``` jak wyżej)
 
-Po wcześniejszym wykonaniu migawki uruchamiam nową maszynę. Loguję się na wcześniej nowoutworzonego użytkownika
+Na "głównej" maszynie:
 
-```su - ansible```
+![](./ss_lab8/lab8_42.png)
 
-![](./ss_lab8/lab8_14.png)
+Na maszynie ansible-target:
 
-Następnie odczytuje IP maszyny wirtualnej (będzie mi to potrzebne do wykonania kolejnego kroku)
+![](./ss_lab8/lab8_43.png)
 
-```ifconfig```
+Dzięki temu, jesteśmy w stanie logować się pomiędzy maszynami, tak by logowanie ssh nie wymagało podawania hasła.
 
-U mnie jest to: 192.168.0.49
+Na maszynie "głównej":
 
-![](./ss_lab8/lab8_16.png)
+![](./ss_lab8/lab8_44.png)
 
-NA GŁÓWNEJ MASZYNIE WIRTUALNEJ
+Na mszynie ansible-target:
 
-Kopiuje klucz publiczny na nową maszynę wirtualną do katalogu *.ssh* użytkownika *ansible*
-
-```ssh-copy-id ansible@adres_IP_nowej_maszyny```
-
-![](./ss_lab8/lab8_17.png)
-
-Następnie loguje się na nową maszynę wirtualną bez podawania hasła
-
-```ssh ansible@adres_IP_nowej_maszyny```
-
-![](./ss_lab8/lab8_18.png)
+![](./ss_lab8/lab8_45.png)
 
 ### Inwentaryzacja
 * Dokonaj inwentaryzacji systemów
@@ -176,13 +200,15 @@ Następnie loguje się na nową maszynę wirtualną bez podawania hasła
 
   * Wprowadź nazwy DNS dla maszyn wirtualnych, stosując `systemd-resolved` lub `resolv.conf` i `/etc/hosts` - tak, aby możliwe było wywoływanie komputerów za pomocą nazw, a nie tylko adresów IP
 
+  Na OBU maszynach!
+  
   Otwieram plik konfiguracyjny *system-resolved.conf*
 
   ```sudo nano /etc/systemd/resolved.conf```
 
   ![](./ss_lab8/lab8_22.png)
 
-  W sekcji *[Resolve]* usuwam komenatrze przy *DNS* oraz *FallbackDNS* i ustalam serwery DNS
+  W sekcji *[Resolve]* usuwam komenatrze przy *DNS* i ustalam serwery DNS
 
   ![](./ss_lab8/lab8_23.png)
 
@@ -190,7 +216,7 @@ Następnie loguje się na nową maszynę wirtualną bez podawania hasła
 
   ```sudo systemctl restart systemd-resolved```
 
-  Te same kroki wykonuje na maszynie *ansible-target*
+  Te same kroki wykonuje na maszynie "głównej" oraz na *ansible-target*
 
   Następnie na głównej maszynie wirtualnej przechodzę do edycji pliku */etc/hosts*
 
@@ -209,8 +235,49 @@ Następnie loguje się na nową maszynę wirtualną bez podawania hasła
   Otrzymuje odpowiedzi na ping od *ansible-target* także połączenie zostało wykonane prawidłowo
 
   * Stwórz [plik inwentaryzacji](https://docs.ansible.com/ansible/latest/getting_started/get_started_inventory.html)
-  * Umieść w nim sekcje `Orchestrators` oraz `Endpoints`. Umieść nazwy maszyn wirtualnych w odpowiednich sekcjach
-  * Wyślij żądanie `ping` do wszystkich maszyn
+
+  Tworzę folder *ansible_quickstart*
+
+  ```mkdir ansible_quickstart```
+
+  Tworzę nowy plik inwentaryzacji *inventory.ini*. Plik inwentaryzacji zawiera informacje o hostach, z którymi Ansible ma się komunikować.
+
+  ![](./ss_lab8/lab8_27.png)
+
+  * W pliku *inventory.ini* tworzę dwie sekcje`Orchestrators` oraz `Endpoints`, umieszczam nazwy maszyn wirtualnych w odpowiednich sekcjach
+
+   ![](./ss_lab8/lab8_28.png)
+
+  Sprawdzam poprawność połączeń i definicji pliku
+
+  ```ansible-inventory -i inventory.ini --list```
+
+  ![](./ss_lab8/lab8_29.png) 
+
+  * Wyślij żądanie `ping` 
+
+  ```ansible Endpoints -m ping -i inventory.ini```
+
+  ![](./ss_lab8/lab8_46.png) 
+
+  Następnie wysyłam żądanie `ping` do wszystkich maszyn
+
+  ```ansible all -m ping -i inventory.ini```
+
+  Otrzymałam błąd - ​​uwierzytelnienie SSH nie powiodło się dla hosta *natalia*. Było to spowodowane problemami z uwierzytelnieniem klucza SSH.
+
+  ![](./ss_lab8/lab8_47.png) 
+  
+  Klucz SSH nie był dodany do agenta SSH. Dodałam klucz maszyny na której pracuje do niej samej. aby rozwiązać problem
+
+  ```ssh-copy-id -i ~/.ssh/id_rsa.pub nati@192.168.0.131```
+
+  ![](./ss_lab8/lab8_49.png)  
+  
+  Tym razem ping zakończył się pomyślnie
+
+  ![](./ss_lab8/lab8_48.png) 
+   
 * Zapewnij łączność między maszynami
   * Użyj co najmniej dwóch maszyn wirtualnych (optymalnie: trzech)
   * Dokonaj wymiany kluczy między maszyną-dyrygentem, a końcówkami (`ssh-copy-id`)
@@ -219,6 +286,10 @@ Następnie loguje się na nową maszynę wirtualną bez podawania hasła
 ### Zdalne wywoływanie procedur
 Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started/get_started_playbook.html) Ansible:
   * Wyślij żądanie `ping` do wszystkich maszyn
+
+  Tworzę plik *.yml* który wysyła żądanie ping do wszystkich maszyn 
+
+
   * Skopiuj plik inwentaryzacji na maszyny/ę `Endpoints`
   * Ponów operację, porównaj różnice w wyjściu
   * Zaktualizuj pakiety w systemie
