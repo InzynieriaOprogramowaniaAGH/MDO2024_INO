@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clinic-app-rolling
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: clinic-app
+      strategy: rolling
+  template:
+    metadata:
+      labels:
+        app: clinic-app
+        strategy: rolling
+    spec:
+      containers:
+      - name: clinic-app
+        image: zuza2828/app-deploy:1.0.0
+        ports:
+        - containerPort: 8080

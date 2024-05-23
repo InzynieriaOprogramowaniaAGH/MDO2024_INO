@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clinic-app-deployment
+  labels:
+    app: clinic-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: clinic-app
+  template:
+    metadata:
+      labels:
+        app: clinic-app
+    spec:
+      containers:
+      - name: clinic-app
+        image: zuza2828/app-deploy:1.0.0
+        ports:
+        - containerPort: 8080
