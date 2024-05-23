@@ -45,6 +45,7 @@ pipeline {
                 dir('MDO2024_INO'){
                     sh 'ls -la'
                     sh 'docker build -t test:latest -f ./ITE/GCL4/KS412661/Sprawozdanie_3/docker/test.Dockerfile . | tee test_logs.log'
+                    sh 'docker run --name test test:latest'
                 }
             }
         }
@@ -53,15 +54,15 @@ pipeline {
                 echo 'Deployment stage'
                 dir('MDO2024_INO'){
                     sh 'ls -la'
-                    sh 'docker rm node-build'
-                    sh 'docker rm node-test'
+                    sh 'docker rm build'
+                    sh 'docker rm test'
                     archiveArtifacts artifacts: "build_logs.log"
                     archiveArtifacts artifacts: "test_logs.log"
                 }
                 script {
                     sh "mkdir ${params.VERSION}"
                     sh "cd ${params.VERSION}"
-                    sh 'docker run --name node-test node-test:latest'
+                    sh 'docker run --name test test:latest'
                 }
             }
         }
@@ -74,11 +75,11 @@ pipeline {
                     
                     sh "echo '${params.PASSWORD}' | docker login -u flafyking --password-stdin"
                     
-                    sh "docker tag node-test:latest flafyking/node-js-dummy-test:${params.VERSION}"
+                    sh "docker tag test:latest flafyking/node-js-dummy-test:${params.VERSION}"
                     
                     sh "docker push flafyking/node-js-dummy-test:${params.VERSION}"
                     
-                    sh 'docker rm node-test'
+                    sh 'docker rm test'
                     
                     sh "tar -czvf node-js-dummy-test-${params.VERSION}.tar.gz ${params.VERSION}/"
                     echo 'Creating artifact...'
