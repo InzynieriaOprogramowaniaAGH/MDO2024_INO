@@ -60,7 +60,7 @@ Maszyna "główna":
 
 Maszyna ansible-target:
 
-![](./ss_lab8/lab8_34.png)
+![](./ss_lab8/lab8_33.png)
 
 Ustawiam hostname za pomocą polecenia
 
@@ -268,7 +268,7 @@ Na mszynie ansible-target:
 
   ![](./ss_lab8/lab8_47.png) 
   
-  Klucz SSH nie był dodany do agenta SSH. Dodałam klucz maszyny na której pracuje do niej samej. aby rozwiązać problem
+  Klucz SSH nie był dodany do agenta SSH. Dodałam klucz maszyny na której pracuje do niej samej
 
   ```ssh-copy-id -i ~/.ssh/id_rsa.pub nati@192.168.0.131```
 
@@ -278,11 +278,6 @@ Na mszynie ansible-target:
 
   ![](./ss_lab8/lab8_48.png) 
    
-* Zapewnij łączność między maszynami
-  * Użyj co najmniej dwóch maszyn wirtualnych (optymalnie: trzech)
-  * Dokonaj wymiany kluczy między maszyną-dyrygentem, a końcówkami (`ssh-copy-id`)
-  * Upewnij się, że łączność SSH między maszynami jest możliwa i nie potrzebuje haseł
-  
 ### Zdalne wywoływanie procedur
 Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started/get_started_playbook.html) Ansible:
   * Wyślij żądanie `ping` do wszystkich maszyn
