@@ -1,0 +1,38 @@
+- name: moj playbook
+  hosts: all
+  tasks:
+    - name: ping hosts
+      ansible.builtin.ping:
+- name: moj playbook
+  hosts: Endpoints
+  tasks:
+  - name: copy inventory.ini
+    ansible.builtin.copy:
+      src: /home/szkrzykwa/MDO2024_INO/INO/GCL2/SK412907/Sprawozdanie4/inventory.ini
+      dest: /home/ansible
+- name: Update package
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: XXX
+  tasks:
+  - name: update packs
+    become: yes
+    ansible.builtin.apt:
+      name: "*"
+      state: latest
+- name: sshd and rngd
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: XXX
+  tasks:
+  - name: Restart sshd
+    become: yes
+    service:
+      name: sshd
+      state: restarted
+  - name: Restart rngd
+    become: yes
+    service:
+      name: rng-tools
+      state: restarted
+      
