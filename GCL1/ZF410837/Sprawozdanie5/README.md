@@ -225,10 +225,11 @@ Możemy monitorować postęp wdrożenia za pomocą `kubectl rollout status`.
 
 Edytujemy plik `spring-petclinic-deployment.yaml` i zmieniamy liczbę replik na 1:
 
-yaml
+```yaml
 
 `spec:
   replicas: 1` 
+  ```
 
 Stosujemy zmiany:
 
@@ -241,10 +242,11 @@ Stosujemy zmiany:
 
 Edytujemy plik `spring-petclinic-deployment.yaml` i zmieniamy liczbę replik na 0:
 
-yaml
+```yaml
 
 `spec:
   replicas: 0` 
+  ```
 
 Stosujemy zmiany:
 
@@ -263,7 +265,7 @@ Wszystkie mają status ``TERMINATING``.
 
 Edytujemy plik `spring-petclinic-deployment.yaml` i zmieniamy obraz na wersję z błędem z ``JEDNA`` replika:
 
-yaml
+```yaml
 
 `spec:
   template:
@@ -271,6 +273,7 @@ yaml
       containers:
       - name: clinic-app
         image: zuza2828/app-deploy:error
+```
 
 Stosujemy zmiany:
 
