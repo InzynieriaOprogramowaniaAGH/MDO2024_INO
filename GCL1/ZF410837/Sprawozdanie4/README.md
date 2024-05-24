@@ -437,3 +437,5 @@ Po uruchomieniu instalatora, wszystko przebiega automatycznie i otrzymujemy uruc
 ![](ss/28.png)
 
 ![](ss/29.png)
+
+![](ss/30.png)
