@@ -432,3 +432,8 @@ docker run -d -p 8080:8080 --name app-deploy zuza2828/app-deploy:1.0.0
 
 Po uruchomieniu instalatora, wszystko przebiega automatycznie i otrzymujemy uruchomiona aplikację.
 
+![](ss/27.png)
+
+![](ss/28.png)
+
+![](ss/29.png)
