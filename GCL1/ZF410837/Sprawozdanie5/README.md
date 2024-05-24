@@ -4,7 +4,7 @@
 
 # Instalacja klastra Kubernetes
 
-> ### Instalacja minkube
+> ### Instalacja minikube
 
 Minikube jest narzędziem do tworzenia lokalnego klastra Kubernetes na pojedynczej maszynie. Nie jest przeznaczone do użytku w środowisku produkcyjnym, ale raczej do celów deweloperskich i testowych.
 
