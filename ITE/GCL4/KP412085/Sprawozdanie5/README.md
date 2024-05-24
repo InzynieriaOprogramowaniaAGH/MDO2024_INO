@@ -380,13 +380,51 @@ Teraz w momencie wprowadzania zmian we wdrożeniu uruchamiamy skrypt, który w p
 
 # Strategie wdrożenia
 
-***Uwaga, dla pierwszych dwóch wdrożeń korzystamy ze wcześniej zdefiniowanego serwisu: [temperature-converter.service.yaml](./temperature-converter.service.yaml), ponieważ zdefiniowane w nim labels są identyczne jak we wdrożeniu co pozwoli na dopasowanie serwisu do tych wdrożeń.***
+***Uwaga, dla wszystkich wdrożeń korzystamy ze wcześniej zdefiniowanego serwisu: [temperature-converter.service.yaml](./temperature-converter.service.yaml), ponieważ zdefiniowane w nim labels są identyczne jak we wdrożeniu co pozwoli na dopasowanie serwisu do tych wdrożeń. Ponadto dla canary deployment, dla którego dodajemy dodatkowe labels w celu rozróżnienia wdrożeń canary od starych, w serwisie pomijamy te labels, ponieważ udostępniamy dalej wszystkie wdrożenia pod jednym serwisem***
 
 **1. Recreate deployment**
 
-Strategia ta jest najprostszym typem wdrażania. Polega na zamknięciu wszystkich podów ze starej wersji i dopiero wtedy utworzeniu podów z nowym updatem. Definiujemy ją poprzez dodanie do pliku yaml typu strategi: `.spec.strategy.type==Recreate`.
+Strategia ta jest najprostszym typem wdrażania. Polega na zamknięciu wszystkich podów ze starej wersji i dopiero wtedy utworzeniu podów z nowym updatem. Definiujemy ją poprzez dodanie do pliku yaml typu strategi: `.spec.strategy.type==Recreate`. 
 
 >This will only guarantee Pod termination previous to creation for upgrades. If you upgrade a Deployment, all Pods of the old revision will be terminated immediately. Successful removal is awaited before any Pod of the new revision is created. If you manually delete a Pod, the lifecycle is controlled by the ReplicaSet and the replacement will be created immediately (even if the old Pod is still in a Terminating state).
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temperature-converter
+spec:
+  replicas: 8
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: temperature-converter
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: temperature-converter
+        tier: backend
+    spec:
+      containers:
+      - name: temperature-converter
+        image: kacperpap/temperature_converter:0.1.0
+        ports:
+        - containerPort: 5000
+```
+
+Poniższy gif ilustruje ten proces w minikube dashboar. Najpierw wdrożenie posiada wersję obrazu `0.1.0`. Po zaktualizowaniu obrazu za pomocą `kubectl set` na wersję `0.2.0` następuje update zgodny z zdefiniowanym typem w pliku yaml, przedstawionym powyżej. Po zakończeniu stanu `terminating` dla starych wersji, tworzone są nowe pody ze statusem `ContainerCreating`, i po utworzeniu przechodzą do stanu `Running`.
+
+![recreate_gif](./screenshots/recreate.gif)
+
+Repliki zarządzające wersjami obrazów:
+![recreate](./screenshots/recreate.png)
+
+Zgodnie z tym co pisałem wcześniej serwis uruchomiony wcześniej rozpoznaje pody o etykietach podanych we wdrożeniu obydwu wersji dlatego poprawnie aktualizuje endpoints, tak aby pody były dostępne wewnątrz klastra po uruchomieniu:
+
+![serv](./screenshots/working_service.png)
+
 
 
 **2. Rolling Update**
@@ -395,8 +433,143 @@ Strategia ta była już wcześniej opisywana. Polega na stopniowym wdrażaniu no
 
 Strategię definiujemy w pliku yaml poprzez ustawienie `.spec.strategy.type==RollingUpdate` oraz parametrów: `.spec.strategy.rollingUpdate.maxUnavailable` i `.spec.strategy.rollingUpdate.maxSurge`.
 
+Plik yaml definiujący tą strategię wygląda następująco [tc.deploy.rollingupdate.yaml](./strategies/tc.deploy.rollingupdate.yaml):
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temperature-converter
+spec:
+  replicas: 8
+  selector:
+    matchLabels:
+      app: temperature-converter
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: temperature-converter
+        tier: backend
+    spec:
+      containers:
+      - name: temperature-converter
+        image: kacperpap/temperature_converter:0.1.0
+        ports:
+        - containerPort: 5000
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 30%
+      maxUnavailable: 2
+```
+
+Działanie wdrożenia w dashboard:
+![rolling_gif](./screenshots/rolling_update.gif)
+
+***Jak widać na powyższym gifie, maksymalna liczba podów utworzonych podczas wdrożenia wynosi 11/8, natomiast minimalna liczba dostępnych przez czas wdrożenia to 6/8***
+
+
 **3. Canary deplyment**
 
-Canary deployment tworzymy zgodnie z opisem w dokumentacji: [https://kubernetes.io/docs/concepts/workloads/management/#canary-deployments](https://kubernetes.io/docs/concepts/workloads/management/#canary-deployments)
+Canary deployment tworzymy zgodnie z opisem w dokumentacji: [https://kubernetes.io/docs/concepts/workloads/management/#canary-deployments](https://kubernetes.io/docs/concepts/workloads/management/#canary-deployments), dokładniejszy opis można znaleźć również tutaj: [https://octopus.com/docs/deployments/patterns/canary-deployments](https://octopus.com/docs/deployments/patterns/canary-deployments)
+
+W tym celu tworzymy osobne dwa pliki wdrożeń, gdzie definiujemy dodatkowy `label`. Etykieta `track` będzie miała dwie wartości określające, której wersji aplikacji dotyczy wdrożenie. Dla aplikacji w wersji `0.1.0`, która jest wersją stabilną używamy etykiety `track=stable`, natomiast dla wesji `0.2.0`: `track=canary`. 
+
+Wdrażanie typu canary polega na stopniowym wdrażaniu nowej wersji aplikacji na małej liczbie instancji (tzw. canary, [see why canary](https://en.wikipedia.org/wiki/Domestic_canary#Miner.27s_canary)), podczas gdy większość ruchu jest obsługiwana przez stabilną wersję. Pozwala to na testowanie nowej wersji w rzeczywistych warunkach bez ryzyka związanego z pełnym wdrożeniem. 
+
+Plik z wdrożeniem testowym: [tc.deploy.canary.canary.yaml](./strategies/tc.deploy.canary.canary.yaml):
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temperature-converter
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: temperature-converter
+      tier: backend
+      track: canary
+  template:
+    metadata:
+      labels:
+        app: temperature-converter
+        tier: backend
+    spec:
+      containers:
+      - name: temperature-converter
+        image: kacperpap/temperature_converter:0.2.0
+        ports:
+        - containerPort: 5000
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+          limits:
+            memory: "256Mi"
+            cpu: "500"
+        livenessProbe:
+          httpGet:
+            path: /api/healthcheck
+            port: 5000
+```
 
 
+Plik z wdrożeniem testowym: [tc.deploy.canary.stable.yaml](./strategies/tc.deploy.canary.stable.yaml):
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temperature-converter
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: temperature-converter
+      tier: backend
+      track: stable
+  template:
+    metadata:
+      labels:
+        app: temperature-converter
+        tier: backend
+    spec:
+      containers:
+      - name: temperature-converter
+        image: kacperpap/temperature_converter:0.1.0
+        ports:
+        - containerPort: 5000
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+          limits:
+            memory: "256Mi"
+            cpu: "500"
+        livenessProbe:
+          httpGet:
+            path: /api/healthcheck
+            port: 5000
+```
+
+
+Jak opisywałem wcześniej, aby wdrożenie canary działało poprawnie, musimy skonfigurować usługę, która będzie rozdzielać ruch między wersje stable i canary. Do tego celu służy [temperature-converter.service.yaml](./temperature-converter.service.yaml):
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: temperature-converter-service
+spec:
+  selector:
+    app: temperature-converter
+    tier: backend
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+```
+
+***Zdefiniowanie 2 labels, pozwala na obsługę obydwu wdrożeń za pomocą jednej usługi, która znajduje wszystkie pasujące pody na podstawie podanych pasujących selektorów***

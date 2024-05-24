@@ -3,11 +3,12 @@ kind: Deployment
 metadata:
   name: temperature-converter
 spec:
-  replicas: 8
+  replicas: 6
   selector:
     matchLabels:
       app: temperature-converter
       tier: backend
+      track: stable
   template:
     metadata:
       labels:
@@ -19,8 +20,14 @@ spec:
         image: kacperpap/temperature_converter:0.1.0
         ports:
         - containerPort: 5000
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 30%
-      maxUnavailable: 2
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+          limits:
+            memory: "256Mi"
+            cpu: "500"
+        livenessProbe:
+          httpGet:
+            path: /api/healthcheck
+            port: 5000
