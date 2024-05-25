@@ -120,3 +120,52 @@ I w tym momencie mogłem wreszcie logować się z głównej maszyny na nową bez
 
 ### Inwentaryzacja
 
+Kolejnym krokiem w ramach tych ćwiczeń laboratoryjnych było dokonanie inwentaryzacji systemów. Należało najpierw ustalić przewidywane nazwy komputerów stosując `hostnamectl` ale one były już przeze mnie ustalone wcześniej. Nazwa głównej maszyny w moim przypadku to *kopczys* natomiast druga maszyna to *ansible-target*. Potwierdziłem to jedynie sprawdzając wynik tego polecenia:
+
+![nazwa głównej maszyny](images/hostnamectl_kopczys.png)
+![nazwa drugiej maszyny](images/hostnamectl_ansible-target.png)
+
+Wprowadzenie nazwy DNS drugiej maszyny w maszynie głównej również zrobiłem już wcześniej, edytujać plik pod ścieżką */etc/hosts* więc zweryfikowałem jedynie łączność poleceniem `ping -c 10 ansible-target`, w którym opcja *-c* oznacza ile pakietów zostanie wysłanych:
+
+![ping ansible-target](images/ping_ansible-target.png)
+
+W drugiej maszynie, musiałem wprowadzić jednak nazwę DNS i zweryfikować łączność. W tym celu doinstalowałem na niej pakiet *nano* do edycji plików i pakiet *iputils-ping* do sprawdzania osiągalności hostów sieciowych. Teraz dzięki pakietowi *nano* mogłem zmodyfikować plik pod ścieżką */etc/hosts* i dodałem w nim linijkę:
+
+```
+10.0.2.4 kopczys
+```
+
+Zweryfikowałem łączność w taki sam sposób jak poprzednio (z tym że nazwą było *kopczys* a nie *ansible-target*) co dało pozytywny rezultat:
+
+![ping kopczys](images/ping_kopczys.png)
+
+Używając dokumentacji *Ansible* należało teraz stworzyć plik inwentaryzacji. W tym celu utworzyłem na głównej maszynie folder *ansible_quickstart* i przeszedłem do niego. Wewnątrz folderu utworzyłem plik *inventory.ini*, z następującą zawartością:
+
+```
+[Orchestrators]
+kopczys ansible_user=kopczys
+
+[Endpoints]
+ansible-target ansible_user=ansible
+```
+
+Znajdując się w folderze z tym plikiem dokonałem weryfikacji inwentarzu poleceniem:
+
+```
+ansible-inventory -i inventory.ini --list
+```
+
+Którego rezultat był taki:
+
+![weryfikacja inwentarzu](images/inventory.png)
+
+Wysłanie żądania `ping` do wszystkich maszyn odbywa się za pomocą polecenia `ansible all -i inventory.ini -m ping`. Gdy spróbowałem po raz pierwszy wysłać ping rezultat był negatywny:
+
+![negatywny rezultat ping](images/ping_negatywny.png)
+
+Okazało się, że klucz z maszyny głownej nie został wymieniony z nią samą. Żeby wyeliminować ten błąd użyłem polecenia `ssh-copy-id kopczys@kopczys`. Po wymianie klucza wysłanie ping'a do wszystkich maszyn poszło już bez żadnych problemów:
+
+![pozytywny rezultat ping](images/ping_pozytywny.png)
+
+### Zdalne wywoływanie procedur
+
