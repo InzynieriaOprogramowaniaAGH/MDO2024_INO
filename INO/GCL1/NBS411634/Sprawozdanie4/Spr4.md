@@ -230,13 +230,23 @@ Dzięki temu, jesteśmy w stanie logować się pomiędzy maszynami, tak by logow
 
   ![](./ss_lab8/lab8_80.png)
 
-  Na mszynie ansible-target:
+  Na maszynie ansible-target:
 
   ![](./ss_lab8/lab8_79.png)
 
-  Otrzymuje odpowiedzi na ping od *ansible-target* oraz od maszyny "głównej",także połączenie zostało wykonane prawidłowo
+  Możliwe jest teraz logowanie się między maszynami za pomocą:
 
-  * Stwórz [plik inwentaryzacji](https://docs.ansible.com/ansible/latest/getting_started/get_started_inventory.html)
+  ```ssh nati@natalia```
+
+  ![](./ss_lab8/lab8_83.png)
+
+  oraz
+
+  ```ssh ansible@ansible-target```
+
+  ![](./ss_lab8/lab8_82.png)
+
+  * Stwórz plik inwentaryzacji
 
   Tworzę folder *ansible_quickstart*
 
@@ -280,18 +290,6 @@ Dzięki temu, jesteśmy w stanie logować się pomiędzy maszynami, tak by logow
 
   ![](./ss_lab8/lab8_48.png) 
    
-  Możliwe jest teraz logowanie się między maszynami za pomocą:
-
-  ```ssh nati@natalia```
-
-  ![](./ss_lab8/lab8_83.png)
-
-  oraz
-
-  ```ssh ansible@ansible-target```
-
-  ![](./ss_lab8/lab8_82.png)
-
 ### Zdalne wywoływanie procedur
 Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started/get_started_playbook.html) Ansible:
   * Wyślij żądanie `ping` do wszystkich maszyn
