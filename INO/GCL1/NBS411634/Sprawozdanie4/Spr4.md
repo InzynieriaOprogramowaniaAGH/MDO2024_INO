@@ -5,7 +5,7 @@ Natalia Borysowska-Ślęczka, IO
 
 ...
 
-## Wykonane kroki - laboratorium nr 
+## Wykonane kroki - laboratorium nr 8
 
 ## Zadania do wykonania
 ### Instalacja zarządcy Ansible
@@ -312,8 +312,8 @@ Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started
 
   ![](./ss_lab8/lab8_58.png) 
 
-  ```systemctl start sshd
-  systemctl status ssh```
+  ```systemctl start sshd```
+  ```systemctl status ssh```
 
   Wynik z wyłączonym serwerem ssh:
 
@@ -326,16 +326,60 @@ Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started
   Timed out.
   
 ### Zarządzanie kontenerem
-Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started/get_started_playbook.html) Ansible:
-* Wykonaj, w zależności od dostępności obrazów:
-  * Uruchom kontener sekcji `Deploy` z poprzednich zajęć
-  * Pobierz z Docker Hub aplikację "opublikowaną" w ramach kroku `Publish`
-  * Opcjonalnie: zaimportuj obrazy `Builder` i `Tester` (z pliku, nie z Docker Hub)
-  * Uruchom aplikację dostarczaną kontenerem Deploy/Publish, podłącz *storage* oraz wyprowadź port
-    * W przypadku aplikacji działającej poza kontenerem:
-      * Wyślij plik aplikacji na zdalną maszynę
-      * Stwórz kontener przeznaczony do uruchomienia aplikacji (zaopatrzony w zależności)
-      * Umieść/udostępnij plik w kontenerze, uruchom w nim aplikację
-  * Zatrzymaj i usuń kontener
-* Ubierz powyższe kroki w [*rolę*](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html), za pomocą szkieletowania `ansible-galaxy`
+
+  Ponownie podłączam kartę sieciową i przechodzę do wykonywania kolejnych kroków
+
+  Instaluje dockera na maszynie ansible-target
+
+  ```sudo snap install docker```
+
+  ![](./ss_lab8/lab8_61.png) 
+
+  Instaluje również pythona
+
+  ```sudo apt update```
+
+  ```sudo apt install python3-pip```
+
+  ```sudo apt install python3```
+
+  ![](./ss_lab8/lab8_63.png) 
+
+  ![](./ss_lab8/lab8_64.png) 
+
+  Na "głownej" maszynie tworzę nowy plik 
+
+  ```nano playbook2.yml```
+  
+  Playbook ma na celu zainstalowanie Dockera oraz SDK Docker dla Pythona, uruchomienie usługi Docker, a następnie zalogowanie się do Docker Hub, pobranie obrazu Tesseract.js (jest to aplikacja opublikowana przeze mnie w ramach poprzednich zajęć) i uruchomienie kontenera. 
+
+  Playbook używa uprawnień superużytkownika *(become: yes)*, aby mieć dostęp do zarządzania pakietami i usługami systemowymi.
+
+  Uruchamiam playbooka poleceniem:
+
+  ```ansible-playbook -i inventory.ini playbook2.yaml ```
+
+  Niestety pojawia się błąd
+
+  ![](./ss_lab8/lab8_67.png) 
+
+  Dodanie do komendy *--ask-become-pass* rozwiązuje problem braku dostępu do hasła. Po wpisaniu komendy:
+
+  ```ansible-playbook -i inventory.ini playbook2.yaml --ask-become-pass```
+
+  w miejscu *BECOME password:* podaję hasło do maszyny ansible-target. 
+
+  ![](./ss_lab8/lab8_68.png) 
+
+  Pojawił się kolejny błąd związany z brakiem dostępu do docker huba, aby go rozwiązać na maszynie ansible-target używam komendy 
+
+  ```sudo docker login```
+
+  ![](./ss_lab8/lab8_65.png) 
+
+  Ponownie uruchamiam playbooka. Tym razem wszystko przebiegło pomyślnie.
+
+  ![](./ss_lab8/lab8_66.png) 
+
+## Wykonane kroki - laboratorium nr 9
   
