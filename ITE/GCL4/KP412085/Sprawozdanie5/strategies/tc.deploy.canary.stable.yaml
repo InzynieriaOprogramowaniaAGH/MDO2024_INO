@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: temperature-converter
+  name: temperature-converter-stable
 spec:
   replicas: 6
   selector:
@@ -14,6 +14,7 @@ spec:
       labels:
         app: temperature-converter
         tier: backend
+        track: stable
     spec:
       containers:
       - name: temperature-converter

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: temperature-converter-canary
+spec:
+  selector:
+    app: temperature-converter
+    tier: backend
+    track: canary
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000

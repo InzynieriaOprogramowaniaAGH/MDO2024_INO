@@ -380,7 +380,7 @@ Teraz w momencie wprowadzania zmian we wdrożeniu uruchamiamy skrypt, który w p
 
 # Strategie wdrożenia
 
-***Uwaga, dla wszystkich wdrożeń korzystamy ze wcześniej zdefiniowanego serwisu: [temperature-converter.service.yaml](./temperature-converter.service.yaml), ponieważ zdefiniowane w nim labels są identyczne jak we wdrożeniu co pozwoli na dopasowanie serwisu do tych wdrożeń. Ponadto dla canary deployment, dla którego dodajemy dodatkowe labels w celu rozróżnienia wdrożeń canary od starych, w serwisie pomijamy te labels, ponieważ udostępniamy dalej wszystkie wdrożenia pod jednym serwisem***
+***Uwaga, dla dwóch pierwszych wdrożeń korzystamy ze wcześniej zdefiniowanego serwisu: [temperature-converter.service.yaml](./temperature-converter.service.yaml), ponieważ zdefiniowane w nim labels są identyczne jak we wdrożeniu co pozwoli na dopasowanie serwisu do tych wdrożeń.***
 
 **1. Recreate deployment**
 
@@ -555,21 +555,71 @@ spec:
 ```
 
 
-Jak opisywałem wcześniej, aby wdrożenie canary działało poprawnie, musimy skonfigurować usługę, która będzie rozdzielać ruch między wersje stable i canary. Do tego celu służy [temperature-converter.service.yaml](./temperature-converter.service.yaml):
+Jak opisywałem wcześniej, aby wdrożenie canary działało poprawnie, musimy skonfigurować usługi, które będzie rozdzielać ruch między wersje stable i canary. Do tego celu służą [./strategies/tc.service.canary.yaml](./strategies/tc.service.canary.yaml):
 
 ```yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: temperature-converter-service
+  name: temperature-converter-canary
 spec:
   selector:
     app: temperature-converter
     tier: backend
+    track: canary
   ports:
     - protocol: TCP
       port: 5000
       targetPort: 5000
 ```
 
-***Zdefiniowanie 2 labels, pozwala na obsługę obydwu wdrożeń za pomocą jednej usługi, która znajduje wszystkie pasujące pody na podstawie podanych pasujących selektorów***
+Oraz dla wersji stabilnej [./strategies/tc.service.stable.yaml](./strategies/tc.service.stable.yaml):
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: temperature-converter-canary
+spec:
+  selector:
+    app: temperature-converter
+    tier: backend
+    track: stable
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+```
+
+Aby zapewnić reguły ruchu i udostępnić serwisy na zewnątrz klastra, potrzebujemy zdefiniować dodatkową usługę. Może być nią np. istio lub ingress. Zgodnie z dokumentacją [https://kubernetes.io/docs/concepts/services-networking/ingress/#load-balancing](https://kubernetes.io/docs/concepts/services-networking/ingress/#load-balancing) :
+
+>Ingress exposes HTTP and HTTPS routes from outside the cluster to services within the cluster. Traffic routing is controlled by rules defined on the Ingress resource. An Ingress may be configured to give Services externally-reachable URLs, load balance traffic, terminate SSL / TLS, and offer name-based virtual hosting. An Ingress controller is responsible for fulfilling the Ingress, usually with a load balancer, though it may also configure your edge router or additional frontends to help handle the traffic. **You must have an Ingress controller to satisfy an Ingress. Only creating an Ingress resource has no effect.**.
+
+Aby poprawnie skonfigurować ingress i umożliwić jego działanie musimy pobrać kontroler ingress, który będzie realizował zdania zdefiniowane dla ingress. Popularnym wyborem jest `ingress-nginx`. Aby go pobrać i skonfigurować postępujemy zgodnie z dokumentacją [https://kubernetes.io/docs/tasks/access-application-cluster/ingress-minikube/](https://kubernetes.io/docs/tasks/access-application-cluster/ingress-minikube/):
+
+**1. Pobieramy add-on ingress**
+
+```bash
+minikube addons enable ingress
+```
+
+Po zakończeniu dodawania ingress sprawdzamy poprawność jego działania za pomocą:
+```bash
+kubectl get pods -n ingress-nginx
+```
+![ingress](./screenshots/ingress-addon.png)
+
+**2. Definiujemy osobne pliki ingress dla każdego serwisu**
+
+Plik ten można zdefiniować jako jedną całość, ale ingress z API w wersji 1 nie umożliwia dodawania adnotacji 
+
+Adnotacje ...
+[https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md)
+
+
+**3. Uruchomienie wszystkich zdefiniowanych usług**
+
+**4. Ustawienie nazwy DNS i wpis do /etc/hosts**
+
+**5. Przekierowanie portów w VB**
+
