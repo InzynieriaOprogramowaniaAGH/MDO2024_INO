@@ -111,7 +111,7 @@ Następnie należy uruchomić kontener i sprawdzić, czy aplikacja działa popra
 
 Wynik działania aplikacji:
 
-![ ](./ssdzialajaca_apka.png)
+![ ](./ss/dzialajaca_apka.png)
 
 Aplikacja spełnia wszystkie wymagania, które umożliwiają wykonanie dalszej instrukcji.
 
