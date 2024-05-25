@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <body style="background-color:MediumSeaGreen;padding:25px;color:#FFFFFF" onload="startTime()">
+        <div style="width: 600px;margin: auto;text-align:center;">
+            <h1>Aplikacja wypisuje date i godzine </h1>
+            <p>Nowa wersja obrazu.</p>
+            <p>Aleksandra Banak </p>
+            <div id="txt" style="font-size:50px;"></div>
+        </div>
+
+        <script>
+            function startTime() {
+                const today = new Date();
+                let h = today.getHours();
+                let m = today.getMinutes();
+                let s = today.getSeconds();
+		let day = today.getDate();
+    		let month = today.getMonth() + 1; 
+    		let year = today.getFullYear();
+                m = checkTime(m);
+                s = checkTime(s);
+		day = checkTime(day);
+		month = checkTime(month);
+                document.getElementById('txt').innerHTML = day + "-" + month + "-" + year + "  " +  h + ":" + m + ":" + s;
+                setTimeout(startTime, 1000);
+            }
+
+            function checkTime(i) {
+                if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+                return i;
+            }
+        </script>
+
+    </body>
+</html>
