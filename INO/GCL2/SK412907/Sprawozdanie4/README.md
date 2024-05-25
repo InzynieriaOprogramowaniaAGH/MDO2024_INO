@@ -160,10 +160,7 @@ Wynik działania:
 
 ![](./screeny/karta-off2.png)
 
-
-### 4. Zarządzanie kontenerem
-
-### 5. Fedora
+### 4. Fedora
 
 Na koniec tej części laboratoriów poruszyliśmy temat wdrożeń nienadzorowanych. Zadanie polegało na zainstalowaniu nowego systemu Fedora, pobraniu z niego pliku konfiguracyjnego, który następnie po edycji był wykorzystany do ponownej instalacji.
 
@@ -201,4 +198,10 @@ oraz zmiana nazwy hosta:
 
     network  --hostname=szkrzykwa
 
-Całość dodałęm do swojego repo na GitHub'ie, z któego następnie będę go z powrotem pobierał do wykonania konfiguracji instalacyjnej. Po wciśnięciu e pojawia się panel GRUB, gdzie wybrałęm opcję Test media & Install Fedora 40 i podaje tam link do pliku z GitHuba. Po instalacji uruchamiamy ponownie system i widzimy efekt końcowy naszego działania.
+Całość dodałęm do swojego repo na GitHub'ie, z któego następnie będę go z powrotem pobierał do wykonania konfiguracji instalacyjnej. Po wciśnięciu e pojawia się panel GRUB, gdzie wybrałęm opcję Test media & Install Fedora 40 i podaje tam link do pliku z GitHuba. 
+
+![](./screeny/grub.png)
+
+Po instalacji uruchamiamy ponownie system i widzimy efekt końcowy naszego działania.
+
+![](./screeny/happyend.png)
