@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clock-deployment-canary
+  labels:
+    app: clock-nginx
+    version: v1.2
+    track: canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: clock-nginx
+      version: v1.2
+      track: canary
+  template:
+    metadata:
+      labels:
+        app: clock-nginx
+        version: v1.2
+        track: canary
+    spec:
+      containers:
+      - name: clock-nginx
+        image: jakubficek/clock-nginx:1.2
+        ports:
+        - containerPort: 80

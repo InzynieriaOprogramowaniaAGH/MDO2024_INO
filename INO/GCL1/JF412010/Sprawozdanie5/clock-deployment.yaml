@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clock-deployment
+  labels:
+    app: clock-nginx
+spec:
+  replicas: 1
+  # strategy: 
+  #   type: Recreate
+  selector:
+    matchLabels:
+      app: clock-nginx
+  template:
+    metadata:
+      labels:
+        app: clock-nginx
+    spec:
+      containers:
+      - name: clock-nginx
+        image: jakubficek/clock-nginx:1.3
+        ports:
+        - containerPort: 80

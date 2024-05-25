@@ -1,0 +1,5 @@
+- name: Run node_app with roles
+  hosts: Endpoints
+  roles:
+  - prepare
+  - container_handling
