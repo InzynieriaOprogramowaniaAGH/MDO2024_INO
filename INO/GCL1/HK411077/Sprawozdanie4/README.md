@@ -169,3 +169,116 @@ Okazało się, że klucz z maszyny głownej nie został wymieniony z nią samą.
 
 ### Zdalne wywoływanie procedur
 
+Teraz należało za pomocą playbooka Ansible w pierwszej kolejności wysłać żądanie `ping` do wszystkich maszyn. W tym celu w folderze *ansible_quickstart* utworzyłem plik *playbook.yaml*, którego zawartość edytowałem do kolejnych wymaganych podpunktów zadania, aczkolwiek do tego zadania jego zawartość wyglądała tak:
+
+```
+- name: Zdalne wywoływanie procedur
+  hosts: all
+  tasks:
+    - name: Wysyłanie żądania ping do wszystkich maszyn
+      ansible.builtin.ping:
+```
+
+Działanie playbook'a zarówno za tym jak i za każdym kolejnym razem sprawdzałem za pomocą polecenia:
+
+```
+ansible-playbook -i inventory.ini playbook.yaml
+```
+
+Rezultat:
+
+![playbook ping do wszystkich maszyn](images/playbook_ping.png)
+
+Kolejnym krokiem było skopiowanie pliku inwentaryzacji na maszynę `Endpoints`. Do mojego playbook'a dodałem kolejną część:
+
+```
+- name: Zdalne wywoływanie procedur w Endpoints
+  hosts: Endpoints
+  tasks:
+    - name: Kopiowanie pliku inwentaryzacji na maszynę Endpoints
+      copy:
+        src: ~/ansible_quickstart/inventory.ini
+        dest: ~/inventory.ini
+```
+
+Po uruchomieniu playbook'a po raz pierwszy widać, że część odpowiadająca za kopiowanie pliku inwentaryzacji na maszynę Endpoints jest podświetlona na żółto. Związane jest to z tym, że operacja ta została wykonana po raz pierwszy i podczas niej zaszły zmiany w plikach na maszynie *ansible-target*:
+
+![pierwsze kopiowanie](images/playbook_kopiowanie.png)
+
+Przy drugim uruchomieniu playbook'a część ta zmieniła swój kolor na zielony, co oznacza że wszystko poszło poprawnie i nie zostały zmodyfikowane żadne pliki:
+
+![drugie kopiowanie](images/playbook_drugie_kopiowanie.png)
+
+Kolejną rzeczą do wykonania za pomocą playbook'a było zaktualizowanie pakietów w systemie. W tym wypadku konieczne było podanie hasła do admina `anisble_become_pass` na maszynie ansible-target i użycia `become=yes`:
+
+```
+- name: Aktualizacja pakietów w systemie
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: 12345
+  tasks:
+    - name: update
+      become: yes
+      apt:
+        name: '*'
+        state: latest
+```
+
+Pakiety systemów udało się zaktualizować:
+
+![aktualizacja pakietów systemowych](images/playbook_aktualizacja.png)
+
+Do wykonania restartu usługi `sshd` i `rngd` dopisałem taki fragment w playbook'u:
+
+```
+- name: Restartowanie sshd i rngd
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: 12345
+  tasks:
+  - name: Restart sshd
+    become: yes
+    service:
+      name: sshd
+      state: restarted
+
+  - name: Restart rngd
+    become: yes
+    service:
+      name: rngd
+      state: restarted
+```
+
+W tym wypadku również konieczne jest użycie hasła admina i zastosowanie `become: yes`. Po uruchomieniu rezultat był taki:
+
+![restartowanie sshd i rngd](images/playbook_restart_failed.png)
+
+Restartowanie usługi `sshd` przebiegło pomyślnie natomiast usługi `rngd` nie udało się zrestartować gdyż nawet nie było jej zainstalowanej na maszynie *ansible-target*. Zalogowałem się więc do niej i doinstalowałem pakiet w którym ta usługa się znajduje. Następnie musiałem go jeszcze uruchomić ale po tym okazało się, że po pobraniu odpowiednich pakietów nie mogłem dalej zrestartować pakietu `rngd` pod taką nazwą ale mogłem zrestartować go pod nazwą `rng-tools`:
+
+![restartowanie sshd i rng-tools](images/playbook_restart_passed.png)
+
+Zmiana stanu przy restartowaniu tych usług oznacza, że poszło to zgodnie z planem.
+
+Ostanim co należało zrobić to przeprowadzić te operacje z wyłączonym serwerem SSH oraz z odpiętą kartą sieciową. SSH na maszynie docelowej czyli na *ansible-target* wyłączyłem za pomocą polecenial:
+
+```
+sudo systemctl stop ssh
+```
+
+Teraz przy próbie wykonania playbook'a na głównej maszynie *kopczys* rezultat był taki:
+
+![wyłączone ssh](images/wylaczone_ssh.png)
+
+Komunikat mówi, że nie udało się połączyć z hostem za pomocą ssh i połączenie zostało odrzucone.
+
+W drugim przypadku w ustawieniach sieci w VirtualBox odznaczyłem opcję *Kabel podłączony* tak jak na zrzucie ekranu:
+
+![kabel odłączony](images/kabel_podlaczony.png)
+
+A po wykonanie playbook'a otrzymałem taki rezultat:
+
+![odpięta karta](images/odpieta_karta.png)
+
+W komunikacie o błędzie tym razem widać, że zamiast odrzucenia połączenia to został przekroczony limit czasu połączenia więc wykonanie playbook'a również zakończyło się niepowodzeniem.
+
+### Zarządzanie kontenerem
