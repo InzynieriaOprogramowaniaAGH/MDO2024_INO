@@ -276,22 +276,22 @@ Dzięki temu, jesteśmy w stanie logować się pomiędzy maszynami, tak by logow
 
   ![](./ss_lab8/lab8_81.png)  
   
-  Tym razem ping zakończył się pomyślnie
+  Tym razem ping zakończył się pomyślnie.
 
   ![](./ss_lab8/lab8_48.png) 
    
-   Możliwe jest teraz logowanie się między maszynami za pomocą:
+  Możliwe jest teraz logowanie się między maszynami za pomocą:
 
-   ```ssh nati@natalia```
+  ```ssh nati@natalia```
 
   ![](./ss_lab8/lab8_83.png)
 
-   oraz
+  oraz
 
-   ```ssh ansible@ansible-target```
+  ```ssh ansible@ansible-target```
 
   ![](./ss_lab8/lab8_82.png)
-    
+
 ### Zdalne wywoływanie procedur
 Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started/get_started_playbook.html) Ansible:
   * Wyślij żądanie `ping` do wszystkich maszyn
