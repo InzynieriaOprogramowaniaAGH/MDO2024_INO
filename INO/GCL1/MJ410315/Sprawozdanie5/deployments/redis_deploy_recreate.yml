@@ -1,0 +1,25 @@
+# redis_deploy_recreate.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deployment #-recreate
+  labels:
+    app: kuberedis
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: kuberedis
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: kuberedis
+    spec:
+      containers:
+      - name: kuberedis
+        image: michaljurzak/redis_build:v1.0
+        ports:
+        - containerPort: 6379
+        command: ["./src/redis-server"]

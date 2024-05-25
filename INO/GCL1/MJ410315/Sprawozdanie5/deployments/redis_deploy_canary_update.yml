@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deployment-canary-update
+  labels:
+    app: kuberedis
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kuberedis
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: kuberedis
+        version: v2
+    spec:
+      containers:
+      - name: kuberedis
+        image: michaljurzak/redis_build:v1.1
+        ports:
+        - containerPort: 6379
+        command: ["./src/redis-server"]

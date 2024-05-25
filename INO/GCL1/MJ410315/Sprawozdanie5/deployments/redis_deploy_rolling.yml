@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deployment #-rolling-update
+  labels:
+    app: kuberedis
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: kuberedis
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 25%
+  template:
+    metadata:
+      labels:
+        app: kuberedis
+    spec:
+      containers:
+      - name: kuberedis
+        image: michaljurzak/redis_build:v1.1
+        ports:
+        - containerPort: 6379
+        command: ["./src/redis-server"]
