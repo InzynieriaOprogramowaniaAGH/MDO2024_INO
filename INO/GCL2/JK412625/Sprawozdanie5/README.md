@@ -137,6 +137,14 @@ Przykładowy wynik dla drugiej komendy.
 
 ![alt text](image-5.png)
 
+Obraz można również dodać do głównego rejestru dockera (DockerHub) wykonująć poniższe komendy:
+
+```bash
+docker login
+docker tag custom-nginx:1.0.0 <username>/custom-nginx:1.0.0
+docker push <username>/custom-nginx:1.0.0
+```
+
 Kolejnym krokiem jest uruchomienie poda. Aby to zrobić można skorzystać z polecenia `minikube kubectl run`. Należy podać nazwę obrazu docker, który ma zostać uruchomiony, wyprowadzone porty (przez, które połączymy się z nginx'em) oraz label, dzięki któremu w prosty sposób będzie można sterować podem. Korzystając z `kubectl get pods` można wypisać działające pody.
 
 ```bash
@@ -145,13 +153,165 @@ minikube kubectl run -- nginx-deployment --image=nginx:latest --port=443 --label
 
 ![alt text](image-6.png)
 
-Widać pojedynczy kontener z działającym nginx'em. Nie jesteśmy jeszcze w stanie połączyć się z kontenerem ponieważ znajdujemy się w innej sieci. W tym celu należy przekierować porty.
+Widać pojedynczy kontener z działającym nginx'em. Nie jesteśmy jeszcze w stanie połączyć się z kontenerem ponieważ znajdujemy się w innej sieci. W tym celu należy przekierować porty. Kubectl umożliwia na przekierowanie portów z wewnątrz klastra do naszej lokalnej sieci. W tym celu należy wykonać polecenie `kubectl port-forward pod/nginx-deployment 8000:443`. Port `443` kontenera będzie dostępny pod portem `8000` w naszej lokalnej sieci.
 
+![alt text](image-7.png)
+
+Można wykonać połączenie do webowego serwera, który wita nas zmodyfikowaną wcześniej stroną powitalną.
+
+![alt text](image-8.png)
 
 #### Dashboard k8s
 
+Kubernetes udostępnia graficzny interfejs w formie aplikacji webowej, dzięki której można zarządzać klastrem. Aby go uruchomić w minikube należy wykonać komendę `minikube dashboard`. Wygląda on jak poniżej. 
+
+![alt text](image-12.png)
+
+Umożliwia on wykonywanie tych samych operacji, które można przeprowadzić za pomocą narzędzia wiersza poleceń kubectl, ale w bardziej interaktywny i dostępny sposób. Dzięki Dashboardowi użytkownicy mogą np. tworzyć i edytować zasoby lub monitorować stan klastra (jest to wygodniejsze niż uruchamianie kolejnych komend w terminalu).
 
 ### Wdrażanie na zarządzalne kontenery (K8s cz. 1)
+
+#### Manifest
+
+Kroki z poprzedniej części (uruchamianie poda, przekierowywanie portów itp.) można ubrać w tzw. wdrożenia (deployment'y) zapisane w formacie yaml. Zawierają one finalny stan aplikacji jaki chcemy otrzymać w klastrze k8s. Można sprecyzować wszystkie parametry związane z wdrożeniem danej aplikacji (przekierowanie portów, ilość podów jakie mają zostać uruchomione, ograniczenia zasobów dla podów takie jak procesor, pamięć itp.).
+
+Plik wdrożenia dla zmodyfikowanego nginx'a
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: custom-nginx:1.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        resources:
+          limits:
+            memory: "512Mi"
+```
+
+Głównymi parametrami pliku wdrożenia są:
+- `.kind` -> rodzaj wdrożenia np. Deployment/StatefulSet/CronJob/ReplicaSet
+- `.spec.replicas` -> ilość replik danego poda
+- `.spec.template.spec.containers` -> sprecyzowanie kontenerów znajdujących się w danym podzie (pod może mieć uruchomione wiele kontenerów)
+    - `.spec.template.spec.containers.image` -> nazwa obrazu, który zostanie uruchomiony
+
+#### Zmiany w deploymencie
+
+Wdrażanie deploymentu zapisanego w formie yaml jest bardzo proste. Wystarczy wykonać komendę `kubectl apply -f <nazwa-pliku-wdrożenia>`.
+
+![alt text](image-9.png)
+
+Wdrożenie zostało uruchomione. Można teraz sprawdzić czy k8s stworzył docelową ilość zreplikowanych podów.
+
+![alt text](image-10.png)
+
+Zamast sprawdzać czy pody zostały uruchomione można sprawdzić stan `rollout'u` czyli tzw. procesu wdrożenia nowej wersji aplikacji ze zdefiniowaną ilością podów. Należy wykonać komendę `kubectl rollout status <resource-type>/<name-of-the-resource>`.
+
+![alt text](image-11.png)
+
+Komenda `kubectl rollout <opcja>` posiada inne ciekawe opcje:
+- history -> można sprawdzić historę wdrożeń
+- status -> status wdrożenia, pokazuje dynamicznie status jeżeli wdrożenie nie jest jeszcze gotowe
+- undo -> przywrócenie poprzedniej wersji deploymentu
+- pause/resume -> wstrzymanie/wznowienie deploymentu
+ 
+Aktualne wdrożenie można modyfikować np. zmieniając parametry w wyżej wspomniany pliku yaml i ponownie uruchamiając polecenie `kubectl apply -f <nazwa-pliku-manifest>`.
+
+![alt text](image-13.png)
+![alt text](image-14.png)
+
+Jak widać liczba podów zwiększyła się do 8. Można również redukować liczbę podów np. do 1 lub 0. Zmniejszenie liczby podów do 0 pozwala na zachowanie konfiguracji deploymentu. Jeżeli pojawi sie potrzeba ponownego uruchomienia podów, wystarczy wykonać jedną komendę (np. `kubectl scale deployment <nazwa-deploymentu> --replicas=<liczba-replik>`).
+
+![alt text](image-15.png)
+
+'Wyzerowanie' deploymentu. Widać, że deployment dalej istnieje w klastrze.
+
+![alt text](image-16.png)
+
+K8s pozwala w prosty sposób podmieniać wersje danej aplikacji. Przykładem może być zmiana wcześniej zmodyfikowanego obrazu nginx'a. Mamy dwie wersje, które różnią się tagiem oraz posiadają inne strony powitalne. Wersja 1.0.0 była wdrażana w poprzednich przykładach. Aby wdrożyć wersję 2.0.0 należy zmodyfikować tag obrazu custom-nginx w pliku yaml (z wdrożeniem).
+
+![alt text](image-17.png)
+
+Jak widać powyżej po wdrożeni nowej wersji obrazu otrzymujemy nową rewizję historii. Gdy sprawdzimy wersję obrazów np. używając dashboarda k8s zobaczymy wersję 2.0.0.
+
+![alt text](image-18.png)
+
+Gdyby nowo wprowadzona wersja np. nie działała lub miała jakieś luki bezpieczeństwa, w prosty sposób można cofnąć się do poprzedniej wersji deploymentu uruchamiając komendę `kubectl rollout undo`. Można sprecyzować którą wersję deploymentu chcemy przywrócić podając flagę `--to-revision=<numer-rewizji>` (domyślnie jest to największy numer).
+
+![alt text](image-19.png)
+
+Pody korzystają z obrazów z wersją 1.0.0
+
+![alt text](image-20.png)
+
+#### Strategie wdrożenia
+
+Oto główne strategie wdrożeń w Kubernetes:
+- RollingUpdate -> w strategii RollingUpdate, pody są aktualizowane stopniowo, co oznacza, że część starych podów jest sukcesywnie zastępowana nowszymi wersjami. W trakcie aktualizacji zawsze pewna liczba podów pozostaje dostępna, co zapewnia ciągłość działania aplikacji. Można precyzyjnie określić, ile podów ma być jednocześnie niedostępnych i ile nowych podów ma być tworzonych podczas wdrażania aktualizacji.
+  - Parametr MaxSurge -> precyzuje ile nowych podów może zostać stworzonych na raz
+  - Parametr MaxUnAvailable -> precyzuje maksymalną ilość niedostępnych podów.
+- Recreate -> w strategii Recreate wszystkie pody są usuwane przed stworzeniem nowych podów z nowszą wersją.
+- CanaryDeployment -> polega na stworzeniu deploymentu z nową wersją oprogramowania i udostępnieniu jej określonej liczbie użytkowników. Z czasem co raz więcej ruchu sieciowego jest przekierowywane do nowej instancji. Dzięki temu nowy deployment stopniowo otrzyma cały ruch sieciowy poprzedniego deploymentu.
+
+**Wdrożenie *RollingUpdate***
+
+Strategie dla deploymentu definiuje się pod parametrem `.spec.strategy` w pliku yaml. Poniżej ustawiono również wyżej wspomniane parametry sterujące sposobem wdrożenia nowych podów i zmieniono liczbę replik na 6.
+
+```yaml
+spec:
+  (...)
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+```
+
+Gdy zmienimy wersję oprogramowania `rollout` powinien zachować się w poniższy sposób.
+
+![alt text](image-21.png)
+
+**Wdrożenie *Recreate***
+
+```yaml
+spec:
+  (...)
+  strategy:
+    type: Recreate
+```
+
+Po uruchomieniu nowego deploymentu za pomocą komendy `kubectl apply`, otrzymujemy poniższy wynik. Jak widać na końcu, nie ma widocznej operacji usuwania starych podów. Na początku wszystkie stare pod'y są usuwane, a następnie wdrażane są nowe.
+
+![alt text](image-22.png)
+
+**Wdrożenie *Canary Deployment***
+
+
+
+> Powyżej wymienione strategie wdrażały wersję 2.0.0 lub 1.0.0 zmodyfikowanego obrazu nginx'a.
+
+#### Serwisy
+
+
+#### Kontrola wdrożenia
+
+
 
 Komendy:
 eval $(minikube -p minikube docker-env)
