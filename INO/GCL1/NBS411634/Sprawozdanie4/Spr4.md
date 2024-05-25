@@ -56,11 +56,11 @@ Do tego będę potrzebować adresów IP obu maszyn, używam do tego polecenia ``
 
 Maszyna "główna":
 
-![](./ss_lab8/lab8_34.png)
+![](./ss_lab8/lab8_70.png)
 
 Maszyna ansible-target:
 
-![](./ss_lab8/lab8_33.png)
+![](./ss_lab8/lab8_69.png)
 
 Ustawiam hostname za pomocą polecenia
 
@@ -80,11 +80,11 @@ aktualizuje tylko wiersz z nową nazwą hostname'a
 
 Na maszynie "głównej":
 
-![](./ss_lab8/lab8_38.png)
+![](./ss_lab8/lab8_71.png)
 
 Na maszynie ansible-target:
 
-![](./ss_lab8/lab8_37.png)
+![](./ss_lab8/lab8_72.png)
 
 Aktualizuje hostname
 
@@ -100,9 +100,17 @@ Sprawdzam czy hostname został ustawiony poprawnie poleceniem
 
 ```hostname```
 
+Następnie na głównej maszynie wirtualnej przechodzę do edycji pliku */etc/hosts*
+
+```sudo nano /etc/hosts```
+
+W nowej linii dodaje adres IP maszyny *ansible-target* oraz nazwę hosta (*ansible-target*). 
+
 Na maszynie "głównej":
 
 ![](./ss_lab8/lab8_39.png)
+
+Analogicznie postępuje w przypadku maszyny ansible-target. Tam w nowej linii dodaje adres IP maszyny "głównej" oraz nazwę hosta (*natalia*).
 
 Na maszynie ansible-target:
 
@@ -166,25 +174,17 @@ Kopiuje klucze publiczne między maszynami
 
 ```ssh-copy-id -i ~/.ssh/id_rsa.pub nazwa_użytkownika@adres_IP_maszyny```
 
-U mnie IP "głównej" maszyny to: 192.168.0.131, a mszyny ansible-target to: 192.168.0.49 (można to sprawdzić komendą ```hostname -I``` jak wyżej)
+U mnie IP "głównej" maszyny to: 192.168.100.75, a mszyny ansible-target to: 192.168.100.74 (można to sprawdzić komendą ```hostname -I``` jak wyżej)
 
 Na "głównej" maszynie:
 
-![](./ss_lab8/lab8_42.png)
+![](./ss_lab8/lab8_73.png)
 
 Na maszynie ansible-target:
 
-![](./ss_lab8/lab8_43.png)
+![](./ss_lab8/lab8_74.png)
 
 Dzięki temu, jesteśmy w stanie logować się pomiędzy maszynami, tak by logowanie ssh nie wymagało podawania hasła.
-
-Na maszynie "głównej":
-
-![](./ss_lab8/lab8_44.png)
-
-Na mszynie ansible-target:
-
-![](./ss_lab8/lab8_45.png)
 
 ### Inwentaryzacja
 * Dokonaj inwentaryzacji systemów
@@ -205,7 +205,7 @@ Na mszynie ansible-target:
   Otwieram plik konfiguracyjny *system-resolved.conf*
 
   ```sudo nano /etc/systemd/resolved.conf```
-
+  
   ![](./ss_lab8/lab8_22.png)
 
   W sekcji *[Resolve]* usuwam komenatrze przy *DNS* i ustalam serwery DNS
@@ -218,21 +218,23 @@ Na mszynie ansible-target:
 
   Te same kroki wykonuje na maszynie "głównej" oraz na *ansible-target*
 
-  Następnie na głównej maszynie wirtualnej przechodzę do edycji pliku */etc/hosts*
+  ![](./ss_lab8/lab8_77.png)
 
-  ```sudo nano /etc/hosts```
-
-  W nowej linii dodaje adres IP maszyny *ansible-target* oraz nazwę hosta 
-
-  ![](./ss_lab8/lab8_26.png)
+  ![](./ss_lab8/lab8_78.png)
 
   * Zweryfikuj łączność
 
   Weryfikuje łączność poleceniem ```ping``` z nazwą hosta, aby sprawdzić, czy moja maszyna może komunikować się z innymi hostami w sieci
 
-  ![](./ss_lab8/lab8_25.png)
+  Na maszynie "głównej":
 
-  Otrzymuje odpowiedzi na ping od *ansible-target* także połączenie zostało wykonane prawidłowo
+  ![](./ss_lab8/lab8_80.png)
+
+  Na mszynie ansible-target:
+
+  ![](./ss_lab8/lab8_79.png)
+
+  Otrzymuje odpowiedzi na ping od *ansible-target* oraz od maszyny "głównej",także połączenie zostało wykonane prawidłowo
 
   * Stwórz [plik inwentaryzacji](https://docs.ansible.com/ansible/latest/getting_started/get_started_inventory.html)
 
@@ -270,9 +272,9 @@ Na mszynie ansible-target:
   
   Klucz SSH nie był dodany do agenta SSH. Dodałam klucz maszyny na której pracuje do niej samej
 
-  ```ssh-copy-id -i ~/.ssh/id_rsa.pub nati@192.168.0.131```
+  ```ssh-copy-id -f -i ~/.ssh/id_rsa.pub nati@192.168.100.75```
 
-  ![](./ss_lab8/lab8_49.png)  
+  ![](./ss_lab8/lab8_81.png)  
   
   Tym razem ping zakończył się pomyślnie
 
