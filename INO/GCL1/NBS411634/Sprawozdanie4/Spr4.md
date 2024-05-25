@@ -284,12 +284,46 @@ Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started
 
   Tworzę plik *.yml* który wysyła żądanie ping do wszystkich maszyn 
 
+  ![](./ss_lab8/lab8_50.png) 
+
+  ![](./ss_lab8/lab8_51.png) 
 
   * Skopiuj plik inwentaryzacji na maszyny/ę `Endpoints`
+
+  ![](./ss_lab8/lab8_53.png) 
+
   * Ponów operację, porównaj różnice w wyjściu
+
+  ![](./ss_lab8/lab8_52.png) 
+
   * Zaktualizuj pakiety w systemie
+
+  ![](./ss_lab8/lab8_54.png) 
+
   * Zrestartuj usługi `sshd` i `rngd`
+  
+  ![](./ss_lab8/lab8_55.png) 
+  
+  ![](./ss_lab8/lab8_56.png) 
+
   * Przeprowadź operacje względem maszyny z wyłączonym serwerem SSH, odpiętą kartą sieciową
+
+  ![](./ss_lab8/lab8_57.png) 
+
+  ![](./ss_lab8/lab8_58.png) 
+
+  ```systemctl start sshd
+  systemctl status ssh```
+
+  Wynik z wyłączonym serwerem ssh:
+
+  ![](./ss_lab8/lab8_59.png) 
+
+  Wynik z odłączoną kartą sieciową:
+
+  ![](./ss_lab8/lab8_60.png) 
+
+  Timed out.
   
 ### Zarządzanie kontenerem
 Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started/get_started_playbook.html) Ansible:
