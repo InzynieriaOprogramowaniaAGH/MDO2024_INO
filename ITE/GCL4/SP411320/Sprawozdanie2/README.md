@@ -158,7 +158,7 @@ services:
 | Czy zbudowany program należałoby dystrybuować jako pakiet, np. JAR, DEB, RPM, EGG? | Tak - znacząco ułatwiło by to jej instalacje. Nie bez powodu jest to niemal jedyny sposób dystrybucji aplikacji desktopowych i mobilnych. Nawet, jeżeli na docelowym systemie będzie się ona uruchamiać w kontenerze, konteneryzator i kod aplikacji zostaną zainstalowane nawet z pojedynczego pakietu jako aplikacja docelowa, a sama knoteneryzacja będzie implementowana *pod maską* | Wykorzystana aplikacja raczej nie, natomiast gdyby implementowała ona logikę na nieco wyższym poziomie abstrakcji, jak np. routing (Nginx) lub usługę bazodanową (MongoDB) - więcej sensu będzie miałaby instalacja w systemie hosta. W przypadku *dummy-js-app* możliwe jest spakowanie w archiwum kodu źródłowego i pliku `package.json` i będzie ono wystarczające |
 | W jaki sposób zapewnić taki format? Dodatkowy krok (trzeci kontener)? Jakiś przykład? | Kontener oparty o system o architekturze tożsamej z systemem docelowym (najprawdopodobniej kilka). W przypadku aplikacji opartej na C docker swietnie nadałby się do masowego tworzenia artefaktów dedykowanych dla różnych systemów operacyjnych bez potrzeby zmiany systemu hosta | Dodająć pakiet pozwalający na *zamrożenie* aplikacji w pliku binarnym lub instalatorze. Mógłby to być również trzeci kontener w zeleżności od potrzeb dodatkowego podziału procesu |
 
-# Dodatkowa terminologia w konteneryzacji, instancja Jenkins
+# Dodatkowa terminologia w konteneryzacji, instalacja Jenkins
 ## Zachowanie stanu
 - przygotowanie woluminu wejściowego `Vin` i wyjściowego `Vout`
 ![docker-volume-create](img/4/docker-volume-create.png)
@@ -195,12 +195,10 @@ Cały opisany moża bezproblemowo zautomatyzować z wykorzystaniem obarów docke
 ![](img/4/docker-iperf3-landlord.png)
 > Wynik: `9.94 Gbps`
 
-### [WIP] Przedstaw przepustowość komunikacji lub problem z jej zmierzeniem (wyciągnij log z kontenera, woluminy mogą pomóc)
-
 ### *Opcjonalnie:* odwołuj się do kontenera serwerowego za pomocą nazw, a nie adresów IP
 Aby wykorzystać rozwiązywanie nazw w sieci docker, wystarczy wykorzystać opcję `--network-alias <alias>` polecenia `docker run` lub uruchomić kontenery z wykorzystaniem `docker-compose`, gdzie rozwiązywane nazwy pochodzą od nazw tworzonych serwisów.
 
-## Instancja Jenkins w systemime Linux z wyorzystaniem kontenera DinD (Docker-in-Docker)
+## Instalacja Jenkins w systemime Linux z wyorzystaniem kontenera DinD (Docker-in-Docker)
 > Wszystkie opisane w tej sekcji kroki pochodzą bezpośrednio z [dokumentacji Jenkins](hhttps://www.jenkins.io/doc/book/installing/docker/#on-macos-and-linux), lub są wariacją opisanych w dokumentacji kroków.
 
 ### Utworzenie sieci mostkowej docker dla Jenkins
@@ -247,11 +245,18 @@ RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
 ![](img/4/docker-run-jnks.png)
 
 ### Uzyskanie dostępu do panelu kontrolnego Jenkins
+- Uruchomione kontenery
+![](img/4/docker-ps-jnks.png)
+
 - Hasło do Jenkinsa możemy uzyskać z logów kontenera `jnks` za pomocą polecenia `docker logs jnks`
 ![](img/4/docker-logs-jnks.png)
 
 - Następnie logujemy się do panelu administracynego
 ![](img/4/jnks-login.png)
 
-- Uruchomione kontenery
-![](img/4/docker-ps-jnks.png)
+- Ponieważ jest to pierwsze uruchomienie Jenkinsa, po zalogowaniu aplikacja pyta o isntalację rozszerzeń. Dla wygody możemy wykorzystać instalacje dodatków *sugergowanych przez społeczność*
+![](img/4/jnks-plugins.png)
+![](img/4/jnks-plugins-install.png)
+
+- Na samym końcu ustawiamy dane dla pierwszego administratora w systemie
+![](img/4/jnks-setup-admin.png)
