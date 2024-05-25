@@ -179,3 +179,79 @@ Aby sklonować repozytorium do woluminu wejściowego, nie instalując gita w doc
 Cały opisany moża bezproblemowo zautomatyzować z wykorzystaniem obarów docker. Zgodnie z dokumentacją `docker build`, instrukcja `RUN --mount` pozwala na zamontowanie woluminu na czas wykonania pojedynczej warstwy. Typ `bind` jest w tym przypadku szczególnie interesujący, ponieważ pozwala na zamontowanie w budowanym kontenerze plików czy katalogów systemu gospodarza. Nie licząc różnic syntaktycznych, polecenie `RUN --mount=type=bind,source=<host_fs>,target=<container_fs>` montuje obiekty tylko na okres działania warstwy tworzonej przez daną instruckję `RUN`.
 
 ## Eksportowanie portu
+### Uruchomienie i przetestowanie szybkości połączenia dwóch kontenerów w domyślnej sieci mostkowej docker
+![](img/4/docker-iperf3.png)
+> Wynik: `27.2 Gbps`
+
+### Ponowne przeprowadzenie testu we własnej sieci `bridge` docker (rozwiązywanie nazw docker)
+![](img/4/docker-iperf3-networth.png)
+> Wynik: `25.9 Gbps`
+
+### Ponowne przeprowadzenie testu sieci z poziomu hosta
+![](img/4/docker-iperf3-host.png)
+> Wynik: `36.2 Gbps`
+
+### Ponowne przeprowadzenie testu sieci z poziomu gospodarza
+![](img/4/docker-iperf3-landlord.png)
+> Wynik: `9.94 Gbps`
+
+### [WIP] Przedstaw przepustowość komunikacji lub problem z jej zmierzeniem (wyciągnij log z kontenera, woluminy mogą pomóc)
+
+### *Opcjonalnie:* odwołuj się do kontenera serwerowego za pomocą nazw, a nie adresów IP
+Aby wykorzystać rozwiązywanie nazw w sieci docker, wystarczy wykorzystać opcję `--network-alias <alias>` polecenia `docker run` lub uruchomić kontenery z wykorzystaniem `docker-compose`, gdzie rozwiązywane nazwy pochodzą od nazw tworzonych serwisów.
+
+## Instancja Jenkins w systemime Linux z wyorzystaniem kontenera DinD (Docker-in-Docker)
+> Wszystkie opisane w tej sekcji kroki pochodzą bezpośrednio z [dokumentacji Jenkins](hhttps://www.jenkins.io/doc/book/installing/docker/#on-macos-and-linux), lub są wariacją opisanych w dokumentacji kroków.
+
+### Utworzenie sieci mostkowej docker dla Jenkins
+![](img/4/docker-create-network-jenkins.png)
+
+### Utworzenie kontenera DinD
+```bash
+docker run \
+  --name jnks-dind \
+  --detach \
+  --privileged \
+  --network jenkins \
+  --network-alias docker \
+  --env DOCKER_TLS_CERTDIR=/certs \
+  --volume jenkins-docker-certs:/certs/client \
+  --volume jenkins-data:/var/jenkins_home \
+  --publish 2376:2376 \
+  docker:dind \
+  --storage-driver overlay2
+```
+
+![](img/4/docker-jenkins-dind-run.png)
+
+### Utworzenie nowego obrazu `jnks.Dockerfile` i uruchomienie kontenera Jenkins
+```docker
+FROM jenkins/jenkins:2.452.1-jdk17
+USER root
+RUN apt-get update && apt-get install -y lsb-release
+RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc \
+  https://download.docker.com/linux/debian/gpg
+RUN echo "deb [arch=$(dpkg --print-architecture) \
+  signed-by=/usr/share/keyrings/docker-archive-keyring.asc] \
+  https://download.docker.com/linux/debian \
+  $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
+RUN apt-get update && apt-get install -y docker-ce-cli
+USER jenkins
+RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
+```
+
+- Zbudowanie obrau `jnks`
+![](img/4/docker-build-jnks.png)
+
+- Uruchomienie kontenera `jnks` z obrazu `jnks`
+![](img/4/docker-run-jnks.png)
+
+### Uzyskanie dostępu do panelu kontrolnego Jenkins
+- Hasło do Jenkinsa możemy uzyskać z logów kontenera `jnks` za pomocą polecenia `docker logs jnks`
+![](img/4/docker-logs-jnks.png)
+
+- Następnie logujemy się do panelu administracynego
+![](img/4/jnks-login.png)
+
+- Uruchomione kontenery
+![](img/4/docker-ps-jnks.png)
