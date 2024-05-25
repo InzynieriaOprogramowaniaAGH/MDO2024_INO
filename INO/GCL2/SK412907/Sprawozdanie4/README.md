@@ -142,3 +142,63 @@ Następnym krokiem było zrestartowanie usług sshd i rngd. Usługę rngd pobra�
 ![](./screeny/restart.png)
 
 Na koniec mieliśmy przeprowadzić powyższe operacje względem maszyny z wyłączonym serwerem SSH i odpiętą kartą sieciową. 
+
+Wyłączenie serwera SSH na maszynie ansible:
+
+![](./screeny/ssh-off.png)
+
+Wynik działania:
+
+![](./screeny/ssh-off2.png)
+
+Odpięcie karty sieciowej:
+
+![](./screeny/karta-off.png)
+
+
+Wynik działania:
+
+![](./screeny/karta-off2.png)
+
+
+### 4. Zarządzanie kontenerem
+
+### 5. Fedora
+
+Na koniec tej części laboratoriów poruszyliśmy temat wdrożeń nienadzorowanych. Zadanie polegało na zainstalowaniu nowego systemu Fedora, pobraniu z niego pliku konfiguracyjnego, który następnie po edycji był wykorzystany do ponownej instalacji.
+
+Na początek zainstalowałem system Fedora stosując instalator sieciowy (Fedora 40). Po przejściu przez wszystkie kroki instalacji i zalogowaniu się na moje konto użytkownika pobrałem plik anaconda-ks.cfg stosując komendę
+
+    sudo cp root/anaconda-ks.cfg .
+
+Skopiowany plik:
+
+![](./screeny/cp.png)
+
+Zawartość pliku pokazana przy pomocy nano:
+
+![](./screeny/anaconda.png)
+
+Plik pojawiał się na koncie użytkownika i teraz mam możliwość aby go pobrać.
+
+Pobieranie wykonałem za pomocą PowerShell'a i otrzymany plik następnie zmodyfikowałem dodając do niego:
+
+![](./screeny/PS.png)
+
+Do pliku dodałem następujące linie kodu:
+
+Wzmianki o potrzebnych repozytoriach:
+
+    url --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-40&arch=x86_64 
+  
+    repo --name=updates-released --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f40&arch=x86_64
+
+Wykonujący restart systemu po ukończniu instalacji:
+
+    reboot
+
+oraz zmiana nazwy hosta:
+
+    network  --hostname=szkrzykwa
+
+Całość dodałęm do swojego repo na GitHub'ie, z któego następnie będę go z powrotem pobierał do wykonania konfiguracji instalacyjnej. Po wciśnięciu e pojawia się panel GRUB, gdzie wybrałęm opcję Test media & Install Fedora 40 i podaje tam link do pliku z GitHuba. Po instalacji uruchamiamy ponownie system i widzimy efekt końcowy naszego działania.
