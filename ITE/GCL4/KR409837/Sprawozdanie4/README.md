@@ -27,7 +27,7 @@ Następnie wykonałem migawkę maszyny:
 </p>
 
 Przed wymianą kluczy pomiędzy urządzeniami wykonałem jeszcze kilka kroków pośrednich:
-> Zmieniłem typ sieci obu urządzeń na mostkowy i zarejestrowałem je w sieci w akademiku:
+- Zmieniłem typ sieci obu urządzeń na mostkowy i zarejestrowałem je w sieci w akademiku:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/5.0.0 zmieniłem typ sieci na mostkowa.png">
 </p>
@@ -38,7 +38,7 @@ Przed wymianą kluczy pomiędzy urządzeniami wykonałem jeszcze kilka kroków p
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/7.1.1 dodałem hosta do sieci akademickiej.png">
 </p>
 
-> Wygenerowałem klucze `ssh` na obu maszynach:
+- Wygenerowałem klucze `ssh` na obu maszynach:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/5.2 Wymień klucze SSH.png">
 </p>
