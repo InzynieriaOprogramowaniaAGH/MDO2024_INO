@@ -1,4 +1,6 @@
-FROM utt-builder
+ARG BUILDER_VERSION
+
+FROM utt-builder:${BUILDER_VERSION}
 
 # Create a directory to store the report
 RUN mkdir -p /var/www/html
