@@ -91,3 +91,8 @@ Następnie skorzystałem z poniższej komendy, aby skopiować klucz publiczny do
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/13. przesłanie do knownhost do ziutka.png">
 </p>
+
+Po licznych bataliach nareszcie udało się, aby łączenie przy pomocy komendy `ssh ansible@ansible-target` nie wymagało podania hasła:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/14. udało się połączyć.png">
+</p>
