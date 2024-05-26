@@ -61,3 +61,15 @@ Przed wymianą kluczy pomiędzy urządzeniami wykonałem jeszcze kilka kroków p
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/7.1 na drugiej maszynie zrobiłem to samo.png">
 </p>
+
+- W folderze `.ssh` utworzyłem plik `config`:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/8. utworzyłem plik config.png">
+</p>
+powyżej utworzony plik od razu po utworzeniu posiadał następującą zawartość:
+```
+Host ansible-target
+    HostName 192.168.65.116
+    User ansible
+    IdentityFile ~/.ssh/ansible1
+```
