@@ -4,7 +4,7 @@
 
 W ramach tych ćwiczeń laboratoryjnych przeprowadzono proces instalacji Ansible na głównej maszynie wirtualnej oraz konfigurację maszyny docelowej. Następnie przeprowadzono kroki związane z wymianą kluczy SSH, tworzeniem pliku inwentaryzacji, weryfikacją łączności między maszynami, oraz uruchomieniem playbooków Ansible do instalacji Dockera, wdrażania kontenerów i zarządzania nimi.
 
-
+Drugie ćwiczenia dotyczyły instalacji i konfiguracji systemu Fedora za pomocą instalatora sieciowego oraz pliku odpowiedzi Anaconda. Udokumentowane zostały działania wykonane w celu automatyzacji instalacji systemu.
 
 ### Instalacja zarządcy Ansible
 
