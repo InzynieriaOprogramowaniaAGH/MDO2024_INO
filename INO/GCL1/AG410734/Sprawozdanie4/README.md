@@ -55,6 +55,7 @@ sudo systemctl status ssh
 sudo systemctl start ssh
 ```
 **Wymiana kluczy ssh**
+
 Aby wygenerować klucz ssh należy użyć polecenia (szczegółowo generowanie klucza opisałam w Sprawozdaniu 1):
 
 ```
@@ -110,7 +111,7 @@ Jednak gdyby tak nie było można to zrobić poleceniem:
 ```
 hostnamectl set-hostname nowa-nazwa-hosta
 ```
-Aby ustawić nazwy DNS dla maszyn wirtualnych, bez konieczności łączenia sie po IP, wchodzę do folderu `/etc/hosts` i ustawiam nazwę maszyny dla danego adresu IP:
+Aby ustawić nazwy DNS dla maszyn wirtualnych, bez konieczności łączenia się po IP, wchodzę do folderu `/etc/hosts` i ustawiam nazwę maszyny dla danego adresu IP:
 
 W agnieszka@agnieszka wpisuję:
 
@@ -179,6 +180,7 @@ Po wywołaniu `ansible ping` pojawił się błąd połaczenia z orchestratorem, 
 Różnica pomiędzy poleceniem `ping` i `ansible ping`:
 
 **Zwykły ping:**
+
 Cel: Sprawdzenie, czy dany host jest osiągalny w sieci.
 
 Jak działa: Wysyła pakiety ICMP Echo Request do docelowego hosta i czeka na ICMP Echo Reply.
@@ -186,6 +188,7 @@ Jak działa: Wysyła pakiety ICMP Echo Request do docelowego hosta i czeka na IC
 Zastosowanie: Diagnostyka sieci, sprawdzanie połączenia sieciowego.
 
 **Ansible ping:**
+
 Cel: Sprawdzenie, czy Ansible może połączyć się z hostem i wykonać polecenia.
 
 Jak działa: Wysyła moduł ping Ansible do zdalnego hosta i czeka na odpowiedź, używając domyślnego transportu (zazwyczaj SSH).
@@ -205,7 +208,7 @@ Na początku wsyłam żądanie `ping` do wszystkich maszyn:
     - name: Ping all hosts
       ping:
 ```
-Następnie kopiuję plik inwentryzacji z maszyny `Orchestratora` na maszynę `Endopoint` pod ścieżkę `/home/ansible/inventory_first.ini`. W kolejnym tasku w celu ponowienia operacji i sprawdzenia różnic w wyjściu, kopiuję plik inwentaryzacji jeszcze raz, nadaję nazwę `inventory_second.ini` i porównuję poleceniem `diff` z pierwszym skopiowanym. Operator || true sprawia, że nawet jeśli diff wykryje różnice i zakończy się błędem (z kodem wyjścia różnym od zera), zadanie nie zostanie oznaczone jako niepowodzenie. Wynik polecenia diff jest rejestrowany w zmiennej diff_output, a następnie wyświetlany.
+Następnie kopiuję plik inwentryzacji z maszyny `Orchestratora` na maszynę `Endopoint` pod ścieżkę `/home/ansible/inventory_first.ini`. W kolejnym tasku w celu ponowienia operacji i sprawdzenia różnic w wyjściu, kopiuję plik inwentaryzacji jeszcze raz, nadaję nazwę `inventory_second.ini` i porównuję poleceniem `diff` z pierwszym skopiowanym. Operator || true sprawia, że nawet jeśli `diff` wykryje różnice i zakończy się błędem (z kodem wyjścia różnym od zera), zadanie nie zostanie oznaczone jako niepowodzenie. Wynik polecenia `diff` jest rejestrowany w zmiennej` diff_output`, a następnie wyświetlany.
 
 ```
 - name: Copy inventory file to endpoints and compare
@@ -293,6 +296,7 @@ Wyniki wskazują, że wszystkie zadania na obu hostach zostały wykonane pomyśl
 - `ignored` - liczba zadań, które zakończyły się błędem, ale błąd został zignorowany (np. dzięki ignore_errors).
 
 **Wyłączenie sshd**
+
 Zgodnie z instrukcją próbuję powtórzyć wywołanie playbooka po wyłączeniu `sshd`:
 
 ![](screeny/20.1.png)
