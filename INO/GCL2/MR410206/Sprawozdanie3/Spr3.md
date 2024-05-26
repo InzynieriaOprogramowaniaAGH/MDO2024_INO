@@ -31,11 +31,59 @@ Powłoka została uzupełniona o poniższy kod.
 Po zapisaniu projektu i uruchomieniu otrzymano poniższe logi.
 ![](../Screeny/3.1.2.12.png)
 ## 3. Indywidualny projekt
-Projekt został oparty na repozytorium, którego używone bylo na poprzednich laboratoriach. Zgodnie z zawartą w repozytorium informacją licencja pozwalała na korzystanie z tego repo. Na samym początku zostały utworzony plan przeprowadzanych kroków oraz diagram wdrożenia. Prezentują się one następująco:
+Początkowy projekt został oparty na repozytorium, którego używone bylo na poprzednich laboratoriach. Jendnak po trzech tygodniach walki i wyrwaniu praktycznie połowy swoich włosów, zostawiłem je w spokoju i zmieniłem na nowe repozytorium. Zgodnie z zawartą w repozytorium informacją licencja pozwalała na korzystanie z tego repo. Na samym początku zostały utworzony plan przeprowadzanych kroków oraz diagram wdrożenia. Prezentują się one następująco:
 ![](../Screeny/3.1.3.1.png)
+Start: Początek procesu pipeline, czyszczenie wcześniejszych artefaktów.
+Clone: Klonowanie repozytorium Git i przejście do odpowiedniego branch.
+Build: Budowanie obrazu Docker z kodem źródłowym.
+Test: Testowanie obrazu Docker.
+Deploy: Wdrażanie obrazu Docker na serwerze i sprawdzanie jego stanu.
+Publish: Publikowanie obrazu Docker do rejestru Docker Hub i archiwizacja artefaktów.
 ![](../Screeny/3.1.3.2.png)
 Następnie przystąpiono do pracy. Utworzony został pipline. ``Nowy projekt -> Pipline`` nazwa została ustawiona na "Indywidualny_projekt". Pierwszym krokiem było utworzenie ``stage ('Start')`` który usuwa niepotrzebne elementy, czyli na przykład wcześniej skopiowane repozytorium czy też kontenery oraz tworzy plik z logami, który będzie wykorzystywany póżniej. 
 ![](../Screeny/3.1.3.3.png)
-Kolejny stage ma za zadanie pobranie repozytorium oraz przejście na odpowiedni branch. Zostaje to wykonane przy pomocy poniższego kodu.
+Kolejny stage był ``stage ('Clone')``. Klonowanie repozytorium to kluczowy krok, pozwalający na pobranie najnowszej wersji kodu źródłowego. Działanie to jest niezbędne do lokalnej pracy nad projektem. Checkout do konkretnego brancha (MR410206) gwarantuje pracę na odpowiedniej wersji projektu, co jest istotne dla zachowania spójności i przejrzystości testów i budowania.
 ![](../Screeny/3.1.3.4.png)
+Następnie wykonano ``stage ('Build')``. Budowanie obrazu Docker w tym kontekście polega na przygotowaniu środowiska aplikacji w izolowanym kontenerze, co jest kluczowe dla zapewnienia jej przenośności i powtarzalności. Wyświetlenie zawartości katalogu oraz wykonanie budowy obrazu to działania pozwalające na weryfikację poprawności struktury plików oraz samą budowę środowiska wykonawczego.
+![](../Screeny/3.1.3.5.png)
+Dockerfile wykorzystany w tym kroku wyglądął następująco:
+![](../Screeny/3.1.3.10.png)
+Kolejny stage był ``stage ('Test')``. Podczas etapu testowania, wylistowano dostępne obrazy Docker oraz zbudowano obraz Docker przeznaczony do testowania.
+![](../Screeny/3.1.3.6.png)
+Dockerfile wykorzystany w tym kroku wyglądął następująco:
+![](../Screeny/3.1.3.11.png)
+W kolejnym kroku w środowisku pracy określono zmienne takie jak repozytorium Docker (DOCKER_REPO), poświadczenia do Dockera (DOCKER_CRE) oraz tag obrazu Docker (imageTag). Tak jak na zdjęciu poniżej.
+![](../Screeny/3.1.3.7.png)
+Następnie wykonano ``stage ('Deploy')``. Wdrożenie aplikacji to złożony etap, w którym używa się kilku komend Docker do zarządzania siecią i kontenerami. Tworzenie dedykowanej sieci dla kontenerów i uruchomienie aplikacji w izolowanym kontenerze Docker gwarantuje kontrolę nad środowiskiem, w którym aplikacja jest uruchamiana. Przetestowanie dostępności aplikacji za pomocą curl jest krytycznym krokiem w celu zapewnienia, że aplikacja działa poprawnie po wdrożeniu.
+![](../Screeny/3.1.3.8.png)
+Dockerfile wykorzystany w tym kroku wyglądął następująco:
+![](../Screeny/3.1.3.12.png)
+Kolejnym i ostatnim stage był ``stage ('Publish')``. Finałowy etap, polegający na publikacji wyników pracy, zabezpiecza artefakty (pliki jar) przez ich archiwizację oraz udostępnia zbudowany obraz Docker w zdalnym repozytorium. Jest to szczególnie ważne dla umożliwienia dostępu do aplikacji przez innych użytkowników oraz dla utrzymania rejestru wersji aplikacji.
+![](../Screeny/3.1.3.9.png)
+`sh "docker tag deploy ${DOCKER_REPO}:${imageTag}"` Komenda ta służy do otagowania lokalnego obrazu Docker, przygotowując go do wypchnięcia do zdalnego repozytorium.
 
+`script`: Blok script wykorzystuje docker.withRegistry, konfigurując sesję Docker do korzystania ze specyficznych poświadczeń i repozytorium.
+
+Natomiast `sh "docker push ${DOCKER_REPO}:${imageTag}"` użyta została w celu wypchnięcia otagowanego obrazu Docker do zdalnego repozytorium na DockerHub. Repozytorium na DockerHub:
+![](../Screeny/3.1.3.14.png)
+Aby prawidłowo wykonać wszytkie wcześniej opisane elementy należało też utworzyć "New Credentials" w Jenkinsie, odpowiednie pola zostały uzupełnione tak jak poniżej.
+![](../Screeny/3.1.3.15.png)
+
+Po uruchomieniu pipline, otrzymaliśmy informacje, że wszystkie etapy przeszły pomyślnie, oczywiście nie od razu. 
+![](../Screeny/3.1.3.13.png)
+
+Archiwizacje pliku JAR można opisać w trzech etapach. Najpierw w `stage ('Build')` aplikacja zostaje skompilowana a pliki JAR znajdują się w katalogi `target`. Następnie w `stage ('Publish')` następuje skopiowanie tego pliku z kontenera z `stage ('Deploy')` do bieżącego katalogu. A później jest on archiwizowany przy pomocy poniższego polecenia 
+``` archiveArtifacts artifacts: '*.jar', fingerprint: true ```
+Dzięki procesowi archiwizacji, plik JAR aplikacji jest dostępny jako pobieralny obiekt w ramach rezultatów przebiegu procesu.
+![](../Screeny/3.1.3.16.png)
+
+Podczas wykonywania zadania napotkałem liczne problemy wynikające albo z mojej nieuwagi bądź głupoty. Rozwiązanie jednogo z nich chciałbym opisać. Problem dotyczył małej ilości miejsca w pamięci masyzny wirtualnej.
+
+![](../Screeny/3.1.4.1.png)
+Zgodnie z odnalezionym poradnikiem, zalecano użycie następujących komend, aby umożliwić wykorzystanie 100% przypisanych zasobów dyskowych dla systemu Ubuntu.
+![](../Screeny/3.1.4.2.png)
+![](../Screeny/3.1.4.3.png)
+![](../Screeny/3.1.4.4.png)
+Oprócz zwiększenia pojemności pamięci, konieczne było również jej przydzielenie do odpowiedniej partycji. Jak widać na załączonym obrazku, proces ten zakończył się powodzeniem, co zaowocowało uzyskaniem dodatkowych GB wolnego miejsca, które wcześniej nie było dostępne do wykorzystania.
+![](../Screeny/3.1.4.5.png)
+![](../Screeny/3.1.4.6.png)
