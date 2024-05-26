@@ -45,3 +45,11 @@ Przed wymianą kluczy pomiędzy urządzeniami wykonałem jeszcze kilka kroków p
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/6. wygenerowałem klucze na nowej maszynie.png">
 </p>
+
+- Pobrałem adresy ip obu maszyn komendą `hostname -I` i wymieniłe klucze ssh pomiędzy maszynami. Klucze mojej głównej maszyny nazywa się `ansible1.pub`, natomiast klucz nowej maszyny to `ansible2.pub`:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/5.3 przesłałem klucz ssh do nowej maszyny .png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/7.2 wysłanie z nowej maszyny do hosta.png">
+</p>
