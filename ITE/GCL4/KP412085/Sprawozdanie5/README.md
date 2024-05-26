@@ -611,15 +611,79 @@ kubectl get pods -n ingress-nginx
 
 **2. Definiujemy osobne pliki ingress dla każdego serwisu**
 
-Plik ten można zdefiniować jako jedną całość, ale ingress z API w wersji 1 nie umożliwia dodawania adnotacji 
+Plik ten można zdefiniować jako jedną całość, ale ingress z API w wersji 1: `networking.k8s.io/v1` nie umożliwia dodawania adnotacji specyficznych dla canary bezpośrednio w sekcji `paths`, którą każdą musimy zdefiniować dla osobnego serwisu.
 
-Adnotacje ...
-[https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md)
+Adnotacje, które można zamieścić w pliku ingress, i które będą obsługiwane przez kontroler `ingress-nginx` są zdefiniowane tutaj: [https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md)
 
+Zgodnie z tym tworzymy dwa pliki ingess:
+
+- [tc.ingress.stable.yaml](./strategies/tc.ingress.stable.yaml):
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: temperature-converter-stable-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: temperature-converter.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: temperature-converter-stable
+            port:
+              number: 5000
+```
+
+Adnotacja `nginx.ingress.kubernetes.io/rewrite-target` pozwala zdefiniować URL udostępniany przez serwis backendowy i zdefiniować przepisywanie ścieżek w ingress.
+
+- [tc.ingress.canary.yaml](./strategies/tc.ingress.canary.yaml):
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: temperature-converter-canary-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-weight: "25"
+spec:
+  rules:
+  - host: temperature-converter.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: temperature-converter-canary
+            port:
+              number: 5000
+```
+
+Adnotacja `nginx.ingress.kubernetes.io/canary` ustawiona na `true` oznacza, że inngress będzie traktował to wdrożenie jako canary. Dzięki temu możemy dodatkowo zdefiniować `nginx.ingress.kubernetes.io/canary-weight`, który określa procent ruchu sieciowego trafiającego do serwsiu odpowiedzialnego za udostępnianianie podów wdrożenia canary.
 
 **3. Uruchomienie wszystkich zdefiniowanych usług**
 
+Wszystkie zdefiniowane usługi uruchamiamiy poprzez polecenie:
+```bash
+kubectl apply -f <yaml_definition_file>
+```
+
+W ten sposób uruchamiamiy 2 wdrożenia, 2 serwisy oraz 2 pliki ingress.
+
 **4. Ustawienie nazwy DNS i wpis do /etc/hosts**
 
-**5. Przekierowanie portów w VB**
+Uruchomienie ingress umożliwia nam na udostępnienie naszej aplikacji poza minikube. Zdefiniowanie samego serwsiu dodaje dostęp do podów w obrębie klastra minikube, gdzie konieczne jest zastosowanie port-forwardingu w celu przekierowania zapytań do klastra (do kontretnego podu i jego udostępnianiego portu). Jest to stosowane tylko do tymczasowego testowania, i umozliwia tylko i wyłącznie skierowanie ruchu z portu maszyny lokalnej na konkretny pod w klastrze  i jest utrzymywane tak długo jak polecenie jest aktywne. Dodanie ingress natomiast (kontrolera nginx-ingress) umożliwia udostepnienie usługi na zewnątrz klastrza bez przekierowania portów, poprzez serwer http. Dzięki temu możemy udostępnić na zewnątrz konretny adres ip do naszej usługi. Aby dodać do tego mapowanie nazw, dodajemy wpis do pliku `/etc/hosts` umieszczając nazwę usługi zdefiniowaną w pliku ingress oraz adres ip minikube uzyskany np. porzez polecenie `minikube ip`. Dzięki temu zapytania do zdefiniowanej domeny przysyłane na klaster minikube, będą obsługiwały ruch, poprzez kierowanie go z przyjętymi regułami do odpowiednich podów w proporcji 1:3.
+
+![outside_cluster](./screenshots/out_cluster.png)
+
+
+
+Po takim wdrożeniu należy dokładnie przetestować wersję canary, i w razie stwierdzenia braku problemów z jej wdrożeniem, możemy skalować w górę liczbę podów canary i w dół starszej wersji aplikacji aż do całkowitego zastąpnia wersji. Jest to najwolniejszy sposób wdrożenia, ale jednocześnie najbezpieczniejszy. 
 
