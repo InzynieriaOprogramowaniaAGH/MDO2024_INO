@@ -96,3 +96,23 @@ Po licznych bataliach nareszcie udało się, aby łączenie przy pomocy komendy 
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/14. udało się połączyć.png">
 </p>
+
+### Inwentaryzacja
+
+Przy pomocy komendy `hostnamectl` sprawdziłem nazwę hosta na nowej maszynie:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/14.5 sprawdzam nazwę ansible hosta.png">
+</p>
+
+Następnie wprowadziłem nazwy DNS dla maszyn wirtualnych modyfikując plik /etc/hosts:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/15. przeszedłem do etc aby zmodyfikowac plik hosts.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/16. dodałem tę drugą linijkę.png">
+</p>
+
+Po czym zwerifikowałem łącznąść używając komendy `ping <hostname>`
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/17. ping.png">
+</p>
