@@ -118,6 +118,6 @@ Po czym zwerifikowałem łącznąść używając komendy `ping <hostname>`
 </p>
 
 O czym świadczą kroki w sekcjach `Instalacja zarządcy Ansible` oraz `Inwentaryzacja` udało się:
-- [ ] Użyć co najmniej dwóch maszyn
-- [ ] Dokonać wymiany kluczy między maszyną-dyrygentem, a końcówkami (`ssh-copy-id`)
-- [ ] Łączność SSH między maszynami jest możliwa i nie potrzebuje haseł
+- [x] Użyć co najmniej dwóch maszyn
+- [x] Dokonać wymiany kluczy między maszyną-dyrygentem, a końcówkami (`ssh-copy-id`)
+- [x] Łączność SSH między maszynami jest możliwa i nie potrzebuje haseł
