@@ -3,7 +3,7 @@ Natalia Borysowska-Ślęczka, IO
 
 ## Streszczenie projektu
 
-...
+Projekt polegał na skonfigurowaniu środowiska do zarządzania systemami za pomocą Ansible, zainstalowaniu oprogramowania oraz skonfigurowaniu komunikacji między maszynami wirtualnymi. Kluczowymi zadaniami były instalacja i konfiguracja Ansible, zarządzanie kontenerami Docker, oraz przygotowanie pliku odpowiedzi do przeprowadzenia nienadzorowanej instalacji systemu Fedora. Efektem końcowym było uruchomienie aplikacji w kontenerze Docker na skonfigurowanym systemie operacyjnym.
 
 ## Wykonane kroki - laboratorium nr 8
 
@@ -393,6 +393,8 @@ Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started
 
   ![](./ss_lab8/lab8_66.png) 
 
+
+
 ## Wykonane kroki - laboratorium nr 9
 
 ## Zadania do wykonania
@@ -414,9 +416,9 @@ Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started
 
   ![](./ss_lab9/lab9_4.png)
 
-  Wybieram automatyczne partycjonowanie (*Miejsce docelowe instalacji -> Automatycznie*, zaznaczam również opcję *Zwolnienie miejsca przez usunięcie lub zmniejszenie instniejących partycji*)
+  Wybieram automatyczne partycjonowanie (*Miejsce docelowe instalacji -> Automatycznie*, zaznaczam również opcję: *Zwolnienie miejsca przez usunięcie lub zmniejszenie instniejących partycji*)
 
-  Później zaznaczam dysk i klikam *usuń wszystko* (dzięki temu zwalniamy miejsce dla tej instalcji)
+  Później zaznaczam dysk i klikam *usuń wszystko* (dzięki temu zwalniamy miejsce dla tej instalcaji)
 
   ![](./ss_lab9/lab9_5.png)
 
@@ -448,7 +450,7 @@ Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started
 
     ```url --mirrorlist="http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-40&arch=x86_64"```
 
-    ```repo --name=updates-released --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f40&arch=x86_64``
+    ```repo --name=updates-released --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f40&arch=x86_64```
 
     * Ustawiam hostname
 
@@ -470,7 +472,7 @@ Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started
     %end
     ```
 
-    * Tworzę sekcję *%post*, któa zawiera polecenia do uruchomienia Dockera, zalogowania do Docker Hub i uruchomienia kontenera
+    * Tworzę sekcję *%post*, która zawiera polecenia do uruchomienia Dockera, zalogowania do Docker Hub i uruchomienia kontenera
 
     ```
     %post
@@ -498,7 +500,7 @@ Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started
 
     Dodajemy linię:
 
-    ```inst.ks=https://raw.githubusercontent.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/NBS411634/INO/GCL1/NBS411634/Sprawozdanie4/anaconda-ks.cfg``
+    ```inst.ks=https://raw.githubusercontent.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/NBS411634/INO/GCL1/NBS411634/Sprawozdanie4/anaconda-ks.cfg```
 
     I uzyskujemy efekt jak niżej
 
