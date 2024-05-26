@@ -2,6 +2,8 @@
 
 ## Wstęp - Automatyzacja i zdalne wykonywanie poleceń za pomocą Ansible, Pliki odpowiedzi dla wdrożeń nienadzorowanych
 
+W ramach tych ćwiczeń laboratoryjnych przeprowadzono proces instalacji Ansible na głównej maszynie wirtualnej oraz konfigurację maszyny docelowej. Następnie przeprowadzono kroki związane z wymianą kluczy SSH, tworzeniem pliku inwentaryzacji, weryfikacją łączności między maszynami, oraz uruchomieniem playbooków Ansible do instalacji Dockera, wdrażania kontenerów i zarządzania nimi.
+
 
 
 ### Instalacja zarządcy Ansible
@@ -282,3 +284,163 @@ A po wykonanie playbook'a otrzymałem taki rezultat:
 W komunikacie o błędzie tym razem widać, że zamiast odrzucenia połączenia to został przekroczony limit czasu połączenia więc wykonanie playbook'a również zakończyło się niepowodzeniem.
 
 ### Zarządzanie kontenerem
+
+Do rozpoczęcia wykonywania tego zadania utworzyłem nowego playbook'a, którego najpierw wykorzystałem do pobrania Docker'a na maszynę docelową *ansible-target*. Plik *inventory.ini* pozostawiłem taki sam jak wcześniej kopiując go po prostu do nowego folderu z nowym playbook'iem. Playbook z instalacją Docker'a wygląda tak:
+
+```
+- name: Instalowanie Docker'a
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: 12345
+  tasks:
+    - name: update
+      become: yes
+      apt:
+        name: '*'
+        state: latest
+    
+    - name: Instalacja Docker'a
+      become: yes
+      apt:
+        name: docker.io
+        state: latest
+
+    - name: Uruchom Dockera przy uruchomieniu systemu
+      become: yes
+      command: systemctl enable --now docker
+```
+
+Przed instalacją sprawdzane jest jeszcze w nim, czy pakiety na maszynie *ansible-target* są zaktualizowane i jeśli nie to najpierw je zaktualizuje. Po instalacji zapewniane jest jeszcze każdorazowe uruchamianie Docker'a podczas uruchamiania systemu.
+
+Teraz mogłem przejść do pobrania aplikacji opublikowanej w ramach kroku `Publish` z poprzednich zajęć. Treść dopisana do playbook'a w tym celu:
+
+```
+- name: Pobranie aplikacji
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: 12345
+  become: yes
+  tasks:
+    - name: Pobierz obraz z DockerHub
+      community.docker.docker_image:
+        name: kopczys/node-app
+        source: pull
+    - name: Uruchom kontener
+      become: yes
+      community.docker.docker_container:
+        name: node-app-container
+        image: kopczys/node-app
+        state: started
+        detach: yes
+        ports:
+          - "3000:3000"
+```
+
+W powyższym fragmencie najpierw zaciągany jest obraz z mojego DockerHub'a a następnie uruchamiany jest kontener w trybie rozłącznym ze zmapowanym portem 3000. Po zalogowaniu na drugą maszynę i sprawdzeniu pobranych obrazów mogę zobaczyć uzyskany rezultat:
+
+![pobrany obraz](images/obraz_kontenera.png)
+
+Gdy sprawdziłem czy jest uruchomiony również zobaczyłem że tak był przez chwilę ale został automatycznie wyłączony:
+
+![uruchomiony kontener](images/kontener_uruchomiony.png)
+
+Ostatnim co należało dopisać to fragment, który zatrzyma kontener (który i tak jest już zatrzymany po uruchomieniu) i usunie go. Tak wygląda kod który to robi:
+
+```
+- name: Zatrzymanie i usunięcie kontenera
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: 12345
+  become: true
+  tasks:
+    - name: Zatrzymaj i usuń kontener
+      docker_container:
+        name: node-app-container
+        state: absent
+
+```
+
+Po wykonaniu playbook'a i sprawdzeniu na maszynie docelowej listę obrazów otrzymałem teraz pustą listę co oznacza że kontener został poprawnie usunięty:
+
+![pusta lista kontenerów](images/pusta_lista_kontenerow.png)
+
+Całość uruchomienia playbook'a wyglądała tak:
+
+![efekt wykonania playbooka zarzadzajacego kontenerami](images/caly_playbook.png)
+
+Ostatnim co należało zrobić na tych ćwiczeniach laboratoryjnych to ubrać powyższe kroki w rolę, za pomocą szkieletowania `ansible-galaxy`. 
+
+Zadanie to zacząłem od utworzenia folderu *roles*, w którym znajdą się moje role. W utworzonym folderze skorzystałem z poniższych poleceń do utworzenia 3 ról:
+
+```
+ansible-galaxy init install_docker
+ansible-galaxy init download_image
+ansible-galaxy init remove_container
+```
+
+W każdej z ról należało przejść do powstałego po użyciu polecenia folderu z rolą, następnie do folderu *tasks* i przekopiować odpowiednie fragmenty poprzedniego playbook'a. W przypadku *install_docker* było to:
+
+```
+- name: update
+  become: yes
+  apt:
+    name: '*'
+    state: latest
+
+- name: Instalacja Docker'a
+  become: yes
+  apt:
+    name: docker.io
+    state: latest
+- name: Uruchom Dockera przy uruchomieniu systemu
+  become: yes
+  command: systemctl enable --now docker
+```
+
+Dla *download_image*:
+
+```
+- name: Pobierz obraz z DockerHub
+  community.docker.docker_image:
+    name: kopczys/node-app
+    source: pull
+- name: Uruchom kontener
+  become: yes
+  community.docker.docker_container:
+    name: node-app-container
+    image: kopczys/node-app
+    state: started
+    detach: yes
+    ports:
+      - "3000:3000"
+```
+
+A dla *remove_container*:
+
+```
+- name: Zatrzymaj i usuń kontener
+  docker_container:
+    name: node-app-container
+    state: absent
+```
+
+Teraz wróciłem do folderu, w którym utworzyłem foler *roles* czyli do *zarzadzanie_kontenerem* i utworzyłem tam nowego playbook'a *roles_playbook.yaml* z następującą zawartością:
+
+```
+- name: Playbook z użyciem roli
+  hosts: Endpoints
+  become: yes
+  vars:
+    ansible_become_pass: 12345
+  roles:
+    - install_docker
+    - download_image
+    - remove_container
+```
+
+Wykonałem teraz poleceniem `ansible-playbook -i inventory.ini roles_playbook.yaml` co zakończyło się powodzeniem:
+
+![roles playbook](images/roles_playbook.png)
+
+## Pliki odpowiedzi dla wdrożeń nienadzorowanych
+
