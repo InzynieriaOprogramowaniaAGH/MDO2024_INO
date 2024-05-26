@@ -74,3 +74,20 @@ Host ansible-target
     User ansible
     IdentityFile ~/.ssh/ansible1
 ```
+Jednakże próbując się połączyć napotkałem nastepujące ostrzeżenie:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/10. za duże uprawnienia do klucz ansible2.pub.png">
+</p>
+
+Dlatego, starając się to naprawić metodą prób i błędów, zmieniłem uprawnienia kilku następujących plików: 
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/11. próba ze zmianą uprawnień.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/12. zmiana uprawnien po stronie nowej maszyny.png">
+</p>
+
+Następnie skorzystałem z poniższej komendy, aby skopiować klucz publiczny do pliku `~/.ssh/known_hosts`
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/13. przesłanie do knownhost do ziutka.png">
+</p>
