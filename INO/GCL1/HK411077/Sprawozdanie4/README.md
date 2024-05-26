@@ -504,3 +504,60 @@ Teraz kliknąłem klawisz *F10*, który rozpoczął boot'owanie systemu. Po inst
 Tak przeprowadzone kroki uruchomiły system:
 
 ![fedora v2](images/fedora_v2.png)
+
+Ostatnią rzeczą do zrobienia było rozszerzyć plik **anaconda-ks.cfg** o repozytoria i oprogramowanie potrzebne do uruchomienia programu zbudowanego w ramach projektu.
+
+Pierwszą dopisaną przeze mnie sekcją jest sekcja `%packages`, która określa pakiety, które mają zostać zainstalowane. W moim przypadku instalowane będzie minimalne środowisko Fedory, narzędzia do zarządzania kontenerami, środowisko serwera, oraz specyficzny pakiet Docker, czyli *moby-engine* który jest używany do uruchamiania i zarządzania kontenerami:
+
+```
+%packages
+@^minimal-environment
+@container-management
+moby-engine
+%end
+```
+
+Następnie przeszedłem do utworzenia sekcji `%post`, w której można zdefiniować kroki, które wykonają się po zakończeniu instalacji pakietów ale przed zakończeniem instalacji systemu. W pierwszej kolejności dodałem do sekcji post opcję *--erroronfail*, która powoduje, że instalacja zakończy się niepowodzeniem w przypadku błedu którejkolwiek z sekcji. Już bezpośrednio w sekcji *%post* dodałem użytkownika root do grupy docker oraz włączyłem usługę docker, tak, żeby była uruchamiana przy każdym starcie systemu.
+
+Następnie skrypt tworzy nowy plik usługi systemd w lokalizacji */etc/systemd/system/*. Sekcja *[Unit]* definiuje, podstawowe informacje o usłudze - opis usługi oraz ustawienie, że ta konkretna usługa zależy od usługi Docker i powinna zostać uruchomiona po jej uruchomieniu.
+
+Sekcja *[Service]* definiuje jak usługa ma być uruchomiona, czyli ma mieć jedno polecenie i się skończyć oraz ma pobrać obraz Dockera z przekierowaniem portu 3000 na 3000.
+
+Ostatnia sekcja *[Install]* deklaruje, jak usługa ma być instalowana. W moim wypadku ma być uruchamiana w trybie wieloużytkowym.
+
+Na koniec, skrypt kończy konfigurację usług - odświeża demona systemd, żeby uwzględnił nowo utworzoną usługę. Kolejne polecenie włącza nową usługę, aby była uruchamiana przy każdym starcie systemu i ostatnie polecenie natychmiast uruchamia nową usługę.
+
+Całość sekcji *%post* wygląda tak:
+
+```
+%post --erroronfail
+usermod -aG docker root
+
+systemctl enable docker
+
+cat << 'EOF' > /etc/systemd/system/docker-java-deploy.service
+
+[Unit]
+Description=Pobranie i uruchomienie konteneru Java
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/docker pull kopczys/node-app
+ExecStart=/usr/bin/docker run -d -p 3000:3000 --name node-app-container kopczys/node-app
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable docker-java-deploy.service
+systemctl start docker-java-deploy.service
+
+%end
+```
+
+Po instalacji i sprawdzeniu, czy obraz został pobrany a kontener utworzony mogłem zobaczyć, że tak:
+
+![ostateczna wersja fedory](images/fedora_v3.png)
