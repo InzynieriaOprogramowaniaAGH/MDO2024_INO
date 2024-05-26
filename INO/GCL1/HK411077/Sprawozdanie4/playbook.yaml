@@ -1,0 +1,42 @@
+- name: Zdalne wywoływanie procedur
+  hosts: all
+  tasks:
+    - name: Wysyłanie żądania ping do wszystkich maszyn
+      ansible.builtin.ping:
+
+
+- name: Zdalne wywoływanie procedur w Endpoints
+  hosts: Endpoints
+  tasks:
+    - name: Kopiowanie pliku inwentaryzacji na maszynę Endpoints
+      copy:
+        src: ~/ansible_quickstart/inventory.ini
+        dest: ~/inventory.ini
+    
+- name: Aktualizacja pakietów w systemie
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: 12345
+  tasks:
+    - name: update
+      become: yes
+      apt:
+        name: '*'
+        state: latest
+
+- name: Restartowanie sshd i rngd
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: 12345
+  tasks:
+  - name: Restart sshd
+    become: yes
+    service:
+      name: sshd
+      state: restarted
+
+  - name: Restart rng-tools
+    become: yes
+    service:
+      name: rng-tools
+      state: restarted

@@ -1,0 +1,10 @@
+---
+- name: Playbook z użyciem roli
+  hosts: Endpoints
+  become: yes
+  vars:
+    ansible_become_pass: 12345
+  roles:
+    - install_docker
+    - download_image
+    - remove_container

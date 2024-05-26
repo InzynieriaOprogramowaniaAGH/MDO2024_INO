@@ -96,7 +96,7 @@ Gdy wszystko już działało sprawdziłem w ten sam sposób, czyli za pomocą po
 
 ![adres nowej maszyny](images/nowa_ip.png)
 
-Na głównej maszynie wirtualnej spróbowałem się połączyć z nową maszyną poleceniem `ssh ansible@10.0.2.5* co zakończyło się pomyślnie:
+Na głównej maszynie wirtualnej spróbowałem się połączyć z nową maszyną poleceniem `ssh ansible@10.0.2.5` co zakończyło się pomyślnie:
 
 ![ssh ansible@10.0.2.5](images/ssh_ansible.png)
 
@@ -444,3 +444,63 @@ Wykonałem teraz poleceniem `ansible-playbook -i inventory.ini roles_playbook.ya
 
 ## Pliki odpowiedzi dla wdrożeń nienadzorowanych
 
+Na początku drugich ćwiczeń laboratoryjnych w ramach tego sprawozdania należało pobrać obraz systemu Fedora, stosując instalator sieciowy (*netinst*). Ja wybrałem obraz Fedora 40.
+
+Podczas instalacji jako źródło instalacji wybrałem typ adresu URL jako *lista serwerów lustrzanych* i wpisałem adres `http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-40&arch=x86_64`:
+
+![fedora źródło instalacji](images/fedora_zrodlo_instalacji.png)
+
+Wybór oprogramowania ustawiłem jako *Minimalna instalacja* z włączonym jednym dodatkowym oprogramowaniem - *Zarządzanie kontenerami*. Po ustawieniu wszystkiego w instalatorze wyglądało to tak:
+
+![instalacja fedory](images/fedora_instalacja.png)
+
+Następnie rozpocząłem instalację.
+
+Po zakończeniu instalacji zalogowałem się na utworzone konto. Będą w katalogu domowym mojego użytkownika przekopiowałem plik **anaconda-ks.cfg** do niego za pomocą polecenia:
+
+```
+sudo cp root/anaconda-ks.cfg .
+```
+
+![plik anaconda-ks.cfg](images/anaconda_ks.png)
+
+Żeby móc zobaczyć zawartość pliku musiałem go również otworzyć z użyciem `sudo` czyli z uprawnieniami administratora. Gdy plik otworzyłem jego zawartość wyglądała tak:
+
+![zawartość anaconda-ks.cfg](images/zawartosc_anaconda_ks.png)
+
+W pliku brakowało wzmianek o repozytorium zatem dodałem w nim linię zawierającą:
+
+```
+repo --name=update --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f40&arch=x86_64
+```
+
+Zmnieniłem również czyszczenie partycji na:
+
+```
+clearpart --all
+```
+
+Oraz dodałem wzmiankę zmiany nazwy hosta i na końcu pliku wzmiankę restartu systemu po ukończeniu instalacji:
+
+```
+network --hostname=kopczys
+reboot
+```
+
+W tym momencie plik był gotowy do uruchomienia instalacji nienadzorowanej. Musiałem w tym celu umieścić go w repozytorium na GitHub'ie. Pobrałem go za pomocą `scp` na komputer lokalny a następnie wstawiłem do repozytorium przedmiotu.
+
+Wyłączyłem maszynę z Fedorą i utworzyłem nową maszynę z tym samym obrazem. Podczas uruchamiania kliknąłem klawisz *e* w celu uruchomienia panelu *GRUB*. W otworzonym okienku dopisałem w linii poleceń polecenie:
+
+```
+inst.ks=https://https://raw.githubusercontent.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/HK411077/INO/GCL1/HK411077/Sprawozdanie4/anaconda-ks.cfg
+```
+
+![grub](images/GRUB.png)
+
+Teraz kliknąłem klawisz *F10*, który rozpoczął boot'owanie systemu. Po instalacji system sam się rzeczywiście zresetował, nie trzeba było tego ręcznie klikać jak w poprzednim przypadku. Gdy się zrestartował wszedłem w opcję *Troubleshooting* a następnie kliknąłem *Boot first drive* co uruchomiło system.
+
+![boot first drive](images/boot_first_drive.png)
+
+Tak przeprowadzone kroki uruchomiły system:
+
+![fedora v2](images/fedora_v2.png)
