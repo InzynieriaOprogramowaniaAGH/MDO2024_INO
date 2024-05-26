@@ -1,0 +1,41 @@
+---
+# tasks file for roles_irssi
+- name: Install Docker
+  dnf:
+    name: docker
+    state: present
+  become: true
+
+- name: Ensure
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+  become: true
+
+- name: Pull image
+  copy:
+    src: /home/kinga/MDO2024_INO/INO/GCL2/KK406795/Sprawozdanie4/
+    dest: /home/ansible/
+
+- name: Build 
+  docker_image:
+    name: deploy
+    build:
+      path: /home/ansible/
+      dockerfile: deploy.Dockerfile
+    source: build
+  become: true
+
+- name: Run build
+  docker_container:
+    name: new_container  
+    image: deploy
+    auto_remove: yes
+    detach: yes
+
+- name: Delete container
+  docker_container:
+    name: new_container
+    image: deploy
+    state: absent

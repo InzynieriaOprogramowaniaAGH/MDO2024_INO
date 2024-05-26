@@ -1,0 +1,5 @@
+- name: Deploy Container
+  hosts: Endpoints
+  become: true
+  roles:
+    - roles_irssi

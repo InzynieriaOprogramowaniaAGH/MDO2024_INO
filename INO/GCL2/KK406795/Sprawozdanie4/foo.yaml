@@ -1,0 +1,23 @@
+- name: Download image and build
+  hosts: Endpoints
+  tasks:
+    - name: Copy Dockerfile
+      copy:
+        src: /MDO2024_INO/INO/GCL2/KK406795/Sprawozdanie4/
+        dest: /ansible/ansibleNow
+
+- name: Build
+  hosts: Endpoints
+  become: true
+  tasks:
+    - name: Build Docker image
+      docker_image:
+        name: deploy
+        build:
+          path: /ansible/ansibleNow/app
+          dockerfile: deploy
+        source: build
+    - name: Run build
+      image: deploy
+      auto-remove: yes
+      detach: yes

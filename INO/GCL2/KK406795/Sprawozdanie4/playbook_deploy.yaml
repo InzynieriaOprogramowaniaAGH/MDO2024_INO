@@ -1,0 +1,43 @@
+- name: Install Docker and enable
+  hosts: Endpoints
+  become: true
+  tasks:
+    - name: Install
+      dnf:
+        name: docker
+        state: present
+      become: true
+
+    - name: Ensure Docker
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
+      become: true
+
+- name: Download image
+  hosts: Endpoints
+  tasks:
+    - name: Copy Dockerfile
+      copy:
+        src: /home/kinga/MDO2024_INO/INO/GCL2/KK406795/Sprawozdanie4/
+        dest: /home/ansible/
+
+- name: Build
+  hosts: Endpoints
+  become: true
+  tasks:
+    - name: Build Docker image
+      docker_image:
+        name: deploy
+        build:
+          path: /home/ansible/
+          dockerfile: deploy.Dockerfile
+        source: build
+
+    - name: Run build
+      docker_container:
+        name: new_container
+        image: deploy
+        auto_remove: yes
+        detach: yes

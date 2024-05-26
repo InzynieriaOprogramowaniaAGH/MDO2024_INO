@@ -1,0 +1,8 @@
+- name: Update
+  hosts: Endpoints
+  tasks:
+    - name: Upgrade
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+      become: true

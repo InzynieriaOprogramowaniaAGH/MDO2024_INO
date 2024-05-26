@@ -1,0 +1,8 @@
+- name: Restart ssh
+  hosts: Endpoints
+  become: true
+  tasks:
+   - name: restart sshd
+     systemd:
+      name: sshd
+      state: restarted
