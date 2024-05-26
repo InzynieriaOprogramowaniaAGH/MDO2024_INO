@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: nginx-canary
   labels:
-    app: nginx
+    app: canary
 spec:
-  replicas: 8
+  replicas: 4
   selector:
     matchLabels:
-      app: nginx
+      app: canary
   template:
     metadata:
-      labels:
-        app: nginx
+      labels: 
+        app: canary
     spec:
       containers:
       - name: nginx
-        image: custom-nginx:1.0.0
+        image: custom-nginx:2.0.0
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
