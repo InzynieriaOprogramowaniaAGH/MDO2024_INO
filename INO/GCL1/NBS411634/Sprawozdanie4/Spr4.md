@@ -394,4 +394,122 @@ Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started
   ![](./ss_lab8/lab8_66.png) 
 
 ## Wykonane kroki - laboratorium nr 9
-  
+
+## Zadania do wykonania
+* Pobieram [system Fedora](https://download.fedoraproject.org/pub/fedora/linux/releases/), stosując instalator sieciowy (*netinst*)
+
+  Wybieram Fedorę 40 i przechodzę do instalcji
+
+  ![](./ss_lab9/lab9_1.png) 
+
+  Wybieram język polski
+
+  ![](./ss_lab9/lab9_2.png)
+
+  Tworzę nowego użytkownika (*nati*)
+
+  ![](./ss_lab9/lab9_3.png)
+
+  Wybieram *Fedora Server Edition*, oraz dodatkowo potrzebne składniki przy instalacji - *zarządzanie konetenerami*
+
+  ![](./ss_lab9/lab9_4.png)
+
+  Wybieram automatyczne partycjonowanie (*Miejsce docelowe instalacji -> Automatycznie*, zaznaczam również opcję *Zwolnienie miejsca przez usunięcie lub zmniejszenie instniejących partycji*)
+
+  Później zaznaczam dysk i klikam *usuń wszystko* (dzięki temu zwalniamy miejsce dla tej instalcji)
+
+  ![](./ss_lab9/lab9_5.png)
+
+  Edytuje źródło instalcji tak jak na screenie poniżej
+
+  ![](./ss_lab9/lab9_6.png)
+
+  Podumowanie konfiguracji fedory prezentuje się następująco
+
+  ![](./ss_lab9/lab9_7.png)
+
+  Fedora została zainstalowana pomyślnie
+
+  ![](./ss_lab9/lab9_10.png)
+
+  ![](./ss_lab9/lab9_8.png)
+
+  Kopiuje pllik odpowiedzi do katalogu domowego, aby mieć do niego prsotszy dostęp
+
+  ![](./ss_lab9/lab9_8.2.png)
+
+  Następnie na swoim komputerze lokalnie pobieram z serweru plik *anaconda-ks.cfg*, umożliwi mi to prostsze modyfikowanie pliku
+
+  ![](./ss_lab9/lab9_9.png)
+
+  Edytuje plik *anaconda-ks.cfg*
+
+    * Dodaje potrzebne repozytoria
+
+    ```url --mirrorlist="http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-40&arch=x86_64"```
+
+    ```repo --name=updates-released --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f40&arch=x86_64``
+
+    * Ustawiam hostname
+
+    ```network --hostname=fedora-server```
+
+    * Plik odpowiedzi może zakładać pusty dysk, dlatego zapewniam, że zawsze będzie formatowana całość, stosując 
+    
+    ```clearpart --all```
+
+    * Dodaje pakiety do instalacji (*docker*, *wget* do sekcji *%packages*)
+
+    ```
+    %packages
+    @^server-product-environment
+    @container-management
+    docker
+    wget
+
+    %end
+    ```
+
+    * Tworzę sekcję *%post*, któa zawiera polecenia do uruchomienia Dockera, zalogowania do Docker Hub i uruchomienia kontenera
+
+    ```
+    %post
+    # Start Docker service
+    systemctl enable docker
+    systemctl start docker
+
+    # Log in to Docker Hub
+    echo "{DOCKER_PASSWORD}" | docker login --username {DOCKER_USERNAME} --password-stdin
+
+    # Pull and run the Docker container
+    docker pull nbsss/tesseractjs:latest
+    docker run -d --name tesseractjs nbsss/tesseractjs:latest
+
+    %end
+    ```
+
+    * Aby system ponownie się uruchomił dodaje
+
+    ```reboot```
+
+    Zeedytowany plik odpowiedzi dodaje do swojego repozytorium.
+
+    Plik konfiguracji do urcuhomienia instalacji nienadzorowanej jest już gotowy. Należy w VirtualBoxie utworzyć nową maszynę, jednak wraz z początkie instalacji należy przenieść się do trybu *GRUB* klikając *e* na klawiaturze.
+
+    Dodajemy linię:
+
+    ```inst.ks=https://raw.githubusercontent.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/NBS411634/INO/GCL1/NBS411634/Sprawozdanie4/anaconda-ks.cfg``
+
+    I uzyskujemy efekt jak niżej
+
+    ![](./ss_lab9/lab9_11.png)
+
+    Edytcję zatwierdzam *Ctrl + x* 
+
+    ![](./ss_lab9/lab9_12.png)
+
+    Czekam aż instalacja się zakończy
+
+    ![](./ss_lab9/lab9_14.png)
+
+    Instalacja przebiegła pomyślnie
