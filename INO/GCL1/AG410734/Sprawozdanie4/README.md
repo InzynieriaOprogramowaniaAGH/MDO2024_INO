@@ -1,8 +1,10 @@
 # Sprawozdanie 4
-**Cel sprawozdania** : 
+**Cel sprawozdania** : Zautomatyzowanie zarządzania wdrożeniem przy użyciu Ansible i pliku odpowiedzi. 
+
 ## Automatyzacja i zdalne wykonywanie poleceń za pomocą Ansible
 
 ### Instalacja zarządcy Ansible
+Ansible to popularne narzędzie do automatyzacji zarządzania konfiguracją, wdrażania aplikacji, orkiestracji zadań oraz zarządzania infrastrukturą IT. 
 
 W pierwszej kolejności utworzyłam nową maszynę wirtualną z takim samym systemem operacyjnym, jak maszyna na której pracuję. System operacyjny to Ubuntu 20.04 LTS.
 
@@ -29,7 +31,12 @@ $ sudo apt install ansible
 
   ![](screeny/4.png)
 
-W Ubuntu zazwyczaj domyślnie jest już zainstalowany tar i OpenSSH, ale żeby się upewnić możemy wpisać polecenia:
+Żeby zainstlować tar i OpenSSH użyłam poleceń:
+```
+sudo apt install openssh-server
+sudo apt install tar
+```
+Poprawność zainstlowania sprawdzam poleceniami:
 
 ```
 which tar
@@ -40,6 +47,7 @@ dpkg -l | grep openssh-server
 ```
 sudo systemctl status ssh
 ```
+  ![](screeny/32.png)
 
 Żeby włączyć:
 
@@ -144,7 +152,7 @@ ansible-inventory -i inventory.ini --list
 Następnie weryfikuję, czy ansible może połączyć się ze zdefiniowaną w pliku maszyną poleceniem:
 
 ```
-ansible-inventory -i inventory.ini --list
+ansible MaszynyDocelowe -m ping inventory.ini
 ```
 
 ![](screeny/17.png)
@@ -168,7 +176,23 @@ Po wywołaniu `ansible ping` pojawił się błąd połaczenia z orchestratorem, 
 
 ![](screeny/18.png)
 
-### Zdalne wywoływanie procedur 
+Różnica pomiędzy poleceniem `ping` i `ansible ping`:
+
+**Zwykły ping:**
+Cel: Sprawdzenie, czy dany host jest osiągalny w sieci.
+
+Jak działa: Wysyła pakiety ICMP Echo Request do docelowego hosta i czeka na ICMP Echo Reply.
+
+Zastosowanie: Diagnostyka sieci, sprawdzanie połączenia sieciowego.
+
+**Ansible ping:**
+Cel: Sprawdzenie, czy Ansible może połączyć się z hostem i wykonać polecenia.
+
+Jak działa: Wysyła moduł ping Ansible do zdalnego hosta i czeka na odpowiedź, używając domyślnego transportu (zazwyczaj SSH).
+
+Zastosowanie: Weryfikacja, czy zdalne hosty są osiągalne przez Ansible, co obejmuje poprawną konfigurację SSH i dostępność Python na zdalnym hoście.
+
+### Zdalne wywyoływanie procedur 
 
 Na podstawie podanej dokumnetacji https://docs.ansible.com/ansible/latest/getting_started/get_started_playbook.html tworzę playbooka Ansible.
 
@@ -252,6 +276,7 @@ Wynik wykonania playbooka:
 
 ![](screeny/20.png)
 
+
 Wyniki wskazują, że wszystkie zadania na obu hostach zostały wykonane pomyślnie, przy czym na hoście 01 wprowadzono sześć zmian w systemie, podczas gdy na hoście orchestrator nie było żadnych zmian. Można zauważyć, że w sumie w raporcie końcowym po wykonaniu playbooka dostępnych jest 7 stanów:
 - `ok` - liczba zadań, które zostały pomyślnie wykonane bez wprowadzania żadnych zmian.
 
@@ -267,7 +292,23 @@ Wyniki wskazują, że wszystkie zadania na obu hostach zostały wykonane pomyśl
 
 - `ignored` - liczba zadań, które zakończyły się błędem, ale błąd został zignorowany (np. dzięki ignore_errors).
 
-!!!!!!!!!!!
+**Wyłączenie sshd**
+Zgodnie z instrukcją próbuję powtórzyć wywołanie playbooka po wyłączeniu `sshd`:
+
+![](screeny/20.1.png)
+
+Zwracany błąd, to informacja, że połączenie zostało odrzucone przez ssh:
+
+![](screeny/20.2.png)
+
+Następnie włączam `sshd` i wyłączam kabel sieciowy:
+
+![](screeny/20.3.png)
+
+Otrzymuję inny komunikat błędu, tym razem " No route to host":
+
+![](screeny/20.4.png)
+
 
 ### Zarządzanie kontenerem
 
@@ -395,3 +436,134 @@ Wynik działania:
 5 zadań zakończyło się sukcesem, w tym 2 spowodowały zmiany w systemie. W pierwszym przypadku kontener został uruchomiony i aplikacja `Irssi` została uruchomiona wewnątrz niego. W drugim przypadku kontener został zatrzymany i usunięty.
 
 Pliki z części sprawozdania **zdalane wywoływania procedur** i **zarządzanie kontenerem**, zostały umieszczone w repozytorium w folderze `Sprawozdanie4/ansible`.
+
+## 2. Pliki odpowiedzi dla wdrożeń nienadzorowanych
+
+**Plik odpowiedzi**, znany także jako plik kickstart, jest specjalnym plikiem konfiguracyjnym używanym w procesie automatycznej instalacji systemów operacyjnych. Plik ten zawiera wszystkie informacje potrzebne do przeprowadzenia instalacji bez interakcji użytkownika, co pozwala na szybkie i powtarzalne wdrażanie systemu na wielu komputerach. W przypadku Fedory jest to plik `anaconda-ks.cfg` i znajduje się w katalogu użytkownika `root`.
+
+W pierwszej kolejności instaluję system Fedora z linku: https://mirroronet.pl/pub/mirrors/fedora/linux/releases/38/Everything/x86_64/iso/ za ponmocą instalatora sieciowego netinst. Początkowo wybrałam wersję 40, ale ze względu na pojawiające się błędy na zajęciach wybrałam bezpieczniejszą wersję - 38. 
+
+Tworzę nową maszynę wirtualną i ustawiam ISO Image na dopiero pobrany plik `Fedory 38`. 
+
+![](screeny/24.png)
+
+Gdy pojawi się okno z możliwością konfiguracji systemu, na podstawie której zostanie utworzony plik `anaconda-ks.cfg`, wyklikuję w:
+
+- źródło instalacji - mirror lista "http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-38&arch=x86_64" (można ją także dokleić później)
+
+- wybór oprogramowania - minimalna instalacja + narzędzie do zarządzania kontenerami
+
+- utworzenie użytkownika - nadanie nazwy i hasła 
+
+- sieć i nazwa komputera - nadaję nazwę komputerowi
+
+Następuje wdrażanie instalacji, po czym loguję się i wchodzę do katalogu `root'a`.
+
+![](screeny/25.png)
+
+Wyświetlam plik `anaconda-ks.cfg` i kopiuję jego zawartość.
+
+![](screeny/26.png)
+
+Do pliku odpowiedzi dodaję takie elementy jak:
+
+1. Konfiguracja repozytoriów, która zapewnia dostęp do aktualnych pakietów:
+
+```
+repo --name=update --mirrorlist="http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f38&arch=x86_64"
+```
+2. Partition clearing, aby upewnić się, że cały dysk zostanie sformatowany
+
+```
+clearpart --all
+```
+
+3. Użytkonika innego niż domyślny localhost, w moim przypadku to użykownik z loginem ignite i zaszyfrowanym hasłem:
+
+```
+user --groups=wheel --name=ignite --password=$y$j9T$udPBpd.XCwrczYvte4YM37Mj$/jI8vRhQgoc84/6uurFbJpt4.2wjji6DQdkMrebzwE/ --iscrypted
+```
+
+4. Sekcję post, w której:
+- Instaluję wtyczki DNF:
+
+```
+dnf -y install dnf-plugins-core
+```
+
+- Dodaję repozytrium Dockera:
+
+```
+dnf config-manager --add-repo=https://download.docker.com/linux/fedora/docker-ce.repo
+```
+
+- Instaluję Dockera:
+
+```
+dnf install -y docker-ce docker-ce-cli containerd.io
+```
+
+- Włączam usługę Dockera przy starcie systemu:
+
+```
+systemctl enable docker
+```
+ - Dodaję użytkownika ignite do grupy docker:
+
+ ```
+ usermod -aG docker ignite
+ ```
+
+ - Tworzę plik /etc/rc.d/rc.local, który będzie uruchamiany przy starcie systemu Zawartość tego pliku to skrypt bashowy, który pobiera obraz Dockera i uruchamia kontener.
+
+ ```
+  cat << 'EOF' > /etc/rc.d/rc.local
+  #!/bin/bash
+  docker pull agnieszka123/deploy:1.0-1
+  docker run -d --name irssi_container agnieszka123/deploy:1.0-1
+  EOF
+```
+- Nadaję prawa wykonywania skryptowi:
+
+```
+chmod +x /etc/rc.d/rc.local
+```
+
+**Instalacja nienadzorowana**
+
+W tym celu przechodzę do maszyny wirtualnej i ją uruchamiam. 
+
+Wybieram opcję "Test this media & install Fedora 38", poprzez kliknięcie na klawiaturze litery `e`:
+
+![](screeny/27.png)
+
+Usuwam `quiet` i zamiast tego wpisuję komędę pobierającą plik odpowiedzi z repozytorium:
+
+```
+inst.ks=https://raw.githubusercontent.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/AG410734/INO/GCL1/AG410734/Sprawozdanie4/ks.cfg
+```
+
+![](screeny/28.png)
+
+Klikam `ctrl+x` i rozpoczynam instalację.
+
+Pojawia się graficzny interfejs, który po kolei wczytuje ustawienia z pliku odpowiedzi. Rozpoczna się instalacja.
+
+![](screeny/29.png)
+
+Gdy skończy się instalacja trzeba zrestartować system i wybrać opcje `Troubleshooting --> Boot firstdrive`. 
+
+Aby sprawdzić logi demona Dockera można użyć polecenia:
+```
+journalctl -u docker
+```
+![](screeny/30.png)
+
+Aby sprawdzić logi ze skryptu z sekcji `%post` można użyć polecenia:
+
+```
+journalctl -u rc-local
+```
+![](screeny/31.png)
+
+Na powyższym zdjęciu można zauważyć, że polecenia w skrypcie wykonały się poprawnie. Poprawnie pobrał się obraz z DockerHub'a i działał kontener z aplikacją `irssi`.
