@@ -918,11 +918,11 @@ Wdrażanie pełne (Recreate):
 - wszystkie bieżące instancje aplikacji są zastępowane nowymi,
 - metoda ta jest prosta i łatwa do zaimplementowania, ale może powodować chwilowe przerwy w działaniu aplikacji.
 
-Wdrażanie stopniowe (Rolling Update) (z parametrami maxUnavailable > 1, maxSurge > 20%:
+Wdrażanie stopniowe (Rolling Update) (z parametrami maxUnavailable > 1, maxSurge > 20%):
 - polega na stopniowym zatrzymywaniu i zastępowaniu podów z aplikacjami nową wersją, podczas gdy pozostałe pody nadal działają,
 - dzięki temu aktualizacja aplikacji nie powoduje przestojów,
 - metoda ta jest bardziej skomplikowana od wdrażania pełnego, ale zapewnia większą dostępność aplikacji,
-- w tym przypadku, maksymalnie 2 pody mogą być niedostępne, a liczba podów może tymczasowo przekroczyć oczekiwaną liczbę o 20%.
+- w tym przypadku, maksymalnie 2 pody mogą być niedostępne, a liczba podów może tymczasowo przekroczyć oczekiwaną liczbę o 30%.
 
 Wdrażanie kanarkowe (Canary Deployment):
 - polega na wprowadzeniu nowej wersji aplikacji dla ograniczonej grupy użytkowników i stopniowym rozszerzaniu jej na większą grupę,
