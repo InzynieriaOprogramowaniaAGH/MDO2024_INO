@@ -700,7 +700,7 @@ Uruchomiłam skrypt:
 ```bash
 kubectl get pods
 ```
-![73](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie5/images72.png)
+![73](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie5/images/72.png)
 
 ### 5. Strategie wdrożenia.
 #### Przygotowałam wersje wdrożeń stosujące następujące strategie wdrożeń:
@@ -709,7 +709,7 @@ Stworzyłam plik
 ```bash
 nano deployment-recreate.yaml
 ```
-![75](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie5/images74.png)
+![75](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie5/images/74.png)
 
 ```bash
 apiVersion: apps/v1
@@ -757,7 +757,7 @@ Stworzyłam plik
 ```bash
 nano deployment-rolling-update.yaml
 ```
-![80](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie5/images79.png)
+![80](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie5/images/79.png)
 
 ```bash
 apiVersion: apps/v1
