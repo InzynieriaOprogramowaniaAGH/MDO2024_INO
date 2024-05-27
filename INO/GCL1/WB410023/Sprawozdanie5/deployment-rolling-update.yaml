@@ -8,7 +8,7 @@ spec:
     type: RollingUpdate
     rollingUpdate:
       maxUnavailable: 2
-      maxSurge: 20%
+      maxSurge: 30%
   selector:
     matchLabels:
       app: react-app
