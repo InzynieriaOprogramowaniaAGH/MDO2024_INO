@@ -124,3 +124,23 @@ Na podstawie działań przedstawionych w sekcjach `Instalacja zarządcy Ansible`
 
 ### Zdalne wywoływanie procedur
 
+Aby wykonać żądanie `ping` do wszystkich maszyn najpierw utworzyłem nowy pliki `inventory.ini` oraz zamieściłem w nim następującą treść:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/18. utworzyłem plik inventory.ini.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/19. zamiescilem tresc do stworzonego pliku .ini.png">
+</p>
+
+Dodatkowo aby móc wykonać `ping` dodałem (ręcznie) swój klucz ssh `ansible1.pub` do authorized keys oraz zamieściłem swoje dane w folderu config:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/20. dodałem swój klucz do authorized_keys.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/21. dodałem swoje dane do folderu config.png">
+</p>
+
+Powyższe działania umożliwiły mi wykonanie pingu:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/22. efekt.png">
+</p>
