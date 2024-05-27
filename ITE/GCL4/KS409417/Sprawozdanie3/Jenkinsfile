@@ -18,7 +18,7 @@ pipeline {
         
         stage('Build') {
             steps {
-                echo 'Building Docker imager'
+                echo 'Building project'
                 dir('MDO2024_INO/ITE/GCL4/KS409417/Sprawozdanie3') {
                     sh "docker build --no-cache -t node_builder:latest -f node_builder.Dockerfile . | tee -a ./build.log"
 
