@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: game-deploy
-  labels:
-    app: guess-the-number
+  name: game-deploy-recreate
 spec:
   replicas: 4
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: guess-the-number
@@ -16,7 +16,6 @@ spec:
     spec:
       containers:
       - name: guess-the-number
-        image: lukoprych/guess-the-number:1.0.1
+        image: lukoprych/guess-the-number:1.0.2
         ports:
         - containerPort: 80
-

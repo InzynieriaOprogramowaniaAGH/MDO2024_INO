@@ -1,22 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: game-deploy
+  name: game-deploy-canary
   labels:
     app: guess-the-number
+    track: canary
 spec:
-  replicas: 4
+  replicas: 1
   selector:
     matchLabels:
       app: guess-the-number
+      track: canary
   template:
     metadata:
       labels:
         app: guess-the-number
+        track: canary
     spec:
       containers:
-      - name: guess-the-number
+      - name: clock-nginx
         image: lukoprych/guess-the-number:1.0.1
         ports:
         - containerPort: 80
-

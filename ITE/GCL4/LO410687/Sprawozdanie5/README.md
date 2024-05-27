@@ -228,4 +228,63 @@ Jak widać aplikacja działa na porcie 3000
 ![](./ss/afterforward.png)
 
 
-### Konwersja wdrożenia ręcznego na wdrożenie deklaratywne YAML
+## Konwersja wdrożenia ręcznego na wdrożenie deklaratywne YAML
+
+
+### Kontrola Wdrożenia
+
+Następnym krokiem było napisanie skryptu weryfikującego czy wdrożenie wykonało się w 60 sekund.
+
+**script.sh**
+```bash
+#!/bin/bash
+
+DEPLOYMENT_NAME="game-deploy"
+NAMESPACE="default" 
+TIMEOUT=60
+INTERVAL=5
+
+end=$((SECONDS + TIMEOUT))
+
+while [ $SECONDS -lt $end ]; do
+    READY_REPLICAS=$(kubectl get deployment "$DEPLOYMENT_NAME" -n "$NAMESPACE" -o jsonpath='{.status.readyReplicas}')
+    REPLICAS=$(kubectl get deployment "$DEPLOYMENT_NAME" -n "$NAMESPACE" -o jsonpath='{.status.replicas}')
+
+    echo "Ready replicas: ${READY_REPLICAS}/${REPLICAS}"
+
+    if [ "$READY_REPLICAS" == "$REPLICAS" ]; then
+        echo "Deployment $DEPLOYMENT_NAME is successfully rolled out on time."
+        exit 0
+    fi
+
+    sleep $INTERVAL
+done
+
+echo "Deployment $DEPLOYMENT_NAME did not roll out within ${TIMEOUT} seconds"
+exit 1
+```
+
+
+Skrypt sprawdza, czy wdrożenie zakończyło się sukcesem w ciągu 60 sekund. Ustawia nazwę wdrożenia, namespace, czas oczekiwania (60 sekund) i interwał sprawdzania (5 sekund).
+Oblicza czas zakończenia, dodając czas oczekiwania do bieżącego czasu.
+W pętli co 5 sekund sprawdza status wdrożenia:
+Pobiera liczbę gotowych replik oraz całkowitą liczbę replik.
+Wyświetla informacje o liczbie gotowych i całkowitych replik.
+Sprawdza, czy liczba gotowych replik jest równa całkowitej liczbie replik.
+Jeśli tak, wyświetla komunikat o sukcesie i kończy działanie.
+Jeśli czas oczekiwania minie, a wdrożenie nie jest gotowe, wyświetla komunikat o niepowodzeniu i kończy działanie.
+
+Wynik:
+
+Po wykonaniu rollback w aktualnej wersji działającej:
+![](./ss/script.png)
+
+Po zastosowaniu zmian w pliku deployment:
+
+![](./ss/script1.png)
+
+Po rollbacku wersji z błędem:
+
+![](./ss/script2.png)
+
+### Strategie wdrożenia
