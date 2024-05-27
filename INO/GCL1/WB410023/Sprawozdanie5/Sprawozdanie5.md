@@ -392,7 +392,7 @@ kubectl apply -f deployment.yaml
 
 ![42](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie5/images/41.png)
 
-#### Wyświetliłem podsy dla wdrożenia:
+#### Wyświetliłam podsy dla wdrożenia:
 ```bash
 kubectl get pods -l app=react-app
 ```
