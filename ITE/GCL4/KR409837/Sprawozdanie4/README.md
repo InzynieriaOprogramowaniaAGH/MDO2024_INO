@@ -144,3 +144,71 @@ Powyższe działania umożliwiły mi wykonanie pingu:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/22. efekt.png">
 </p>
+
+Po udanej operacji `ping` utworzyłem plik `playbook.yml`:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/23. utworzenie pliku do playbook.png">
+</p>
+
+który posiadał następującą treść:
+```
+---
+- name: Pingowanie
+  hosts: all
+  tasks:
+    - name: pingowanie
+      ping:
+
+- name: Kopiowanie
+  hosts: Endpoints
+  tasks:
+    - name: Copy
+      copy:
+        src: ./inventory.ini
+        dest: ~/
+
+- name: Update package
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: <haslo> 
+  tasks:
+  - name: update
+    become: yes
+    apt:
+      name: "*"
+      state: latest
+      
+- name: Restart usług sshd i rngd
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: <haslo>
+  tasks:
+    - name: Restart usługi sshd
+      become: yes
+      service:
+        name: ssh
+        state: restarted
+
+    - name: Restart usługi rngd
+      become: yes
+      service:
+        name: rng-tools
+        state: restarted
+
+```
+
+Na nowej maszynie pobrałem usługę rngd
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/24. pobrałem usługę rngd.png">
+</p>
+
+A następnie wykonałem polecenie `ansible-playbook -i inventory.ini playbook.yaml`, co pozwoliło uzyskać następujący efekt:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/25. succes 1.png">
+</p>
+
+Ponowne wywołanie tej metody daje delikatnie inny wynik, widać to na przykład przy tasku `copy`, gdzie status `changed` zmienił się na `ok`
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/26. copy za drugim razem.png">
+</p>
+
