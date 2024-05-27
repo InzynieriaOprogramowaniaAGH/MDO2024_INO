@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: failer-deployment
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: failer
+  template:
+    metadata:
+      labels:
+        app: failer
+    spec:
+      containers:
+        - name: failer
+          image: grubcio0/failer:latest  
+          ports:
+            - containerPort: 3000

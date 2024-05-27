@@ -1,0 +1,5 @@
+- name: Ensure Python pip is installed on OpenSUSE
+  zypper:
+    name: python3-pip
+    state: present
+  when: ansible_facts['os_family'] == 'Suse'

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodeapp-recreate
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nodeapp-recreate
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: nodeapp-recreate
+    spec:
+      containers:
+        - name: nodeapp
+          image: grubcio0/pipeline-repo:builder
+          ports:
+            - containerPort: 3000
+          command: ["npm", "start"]

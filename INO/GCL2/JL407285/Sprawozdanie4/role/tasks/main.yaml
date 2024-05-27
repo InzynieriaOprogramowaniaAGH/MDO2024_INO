@@ -1,0 +1,9 @@
+- import_tasks: install_dependencies.yaml
+- import_tasks: configure_docker.yaml
+- import_tasks: install_docker_sdk.yaml
+- import_tasks: check_container_status.yaml
+- import_tasks: run_deploy_container.yaml
+- import_tasks: pull_application_image.yaml
+- import_tasks: run_application_container.yaml
+- import_tasks: stop_and_remove_application_container.yaml
+- import_tasks: stop_and_remove_deploy_container.yaml

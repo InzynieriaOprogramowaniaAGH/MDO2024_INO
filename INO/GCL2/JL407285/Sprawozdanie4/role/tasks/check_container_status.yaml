@@ -1,0 +1,4 @@
+- name: Check if the Deploy container is already running
+  command: docker ps --filter 'name={{ docker_deploy_container_name }}' --format '{{"{{.Names}}"}}'
+  register: deploy_container_running
+  ignore_errors: yes
