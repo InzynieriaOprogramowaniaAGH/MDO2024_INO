@@ -913,11 +913,22 @@ kubectl get pods -l app=react-app
 
 Obserwacje i różnice:
 
-Recreate: Wszystkie pods są usuwane, a następnie tworzone na nowo, co powoduje chwilowy brak dostępności aplikacji.
+Wdrażanie pełne (Recreate):
+- polega na całkowitym zatrzymaniu działającej aplikacji i jednoczesnym uruchomieniu jej najnowszej wersji,
+- wszystkie bieżące instancje aplikacji są zastępowane nowymi,
+- metoda ta jest prosta i łatwa do zaimplementowania, ale może powodować chwilowe przerwy w działaniu aplikacji.
 
-Rolling Update: Pods są aktualizowane stopniowo, co zapewnia ciągłą dostępność aplikacji. Parametry maxUnavailable i maxSurge kontrolują tempo aktualizacji - kontrolują liczbę niedostępnych oraz dodatkowych podsów w trakcie aktualizacji.
+Wdrażanie stopniowe (Rolling Update) (z parametrami maxUnavailable > 1, maxSurge > 20%:
+- polega na stopniowym zatrzymywaniu i zastępowaniu podów z aplikacjami nową wersją, podczas gdy pozostałe pody nadal działają,
+- dzięki temu aktualizacja aplikacji nie powoduje przestojów,
+- metoda ta jest bardziej skomplikowana od wdrażania pełnego, ale zapewnia większą dostępność aplikacji,
+- w tym przypadku, maksymalnie 2 pody mogą być niedostępne, a liczba podów może tymczasowo przekroczyć oczekiwaną liczbę o 20%.
 
-Canary Deployment: Nowa wersja aplikacji jest wdrażana tylko do części użytkowników (kanarek), co pozwala na wczesne wykrycie problemów przed pełnym wdrożeniem. Można to zrealizować poprzez tworzenie dodatkowych Deploymentów z nową wersją aplikacji oraz odpowiednie skonfigurowanie serwisów.
+Wdrażanie kanarkowe (Canary Deployment):
+- polega na wprowadzeniu nowej wersji aplikacji dla ograniczonej grupy użytkowników i stopniowym rozszerzaniu jej na większą grupę,
+- pozwala to na monitorowanie działania aplikacji i testowanie jej w realnych warunkach przed udostępnieniem wszystkim użytkownikom,
+- metoda ta jest przydatna w przypadku aplikacji o krytycznym znaczeniu, gdzie awarie mogą mieć poważne konsekwencje.
+
 
 Etykiety i serwisy:
 
