@@ -11,5 +11,5 @@
   - Usuń obecne w projekcie *workflows*, jeżeli istnieją
   - Utwórz własną akcję reagującą na zmianę w `ino_dev`
   - Zweryfikuj, że wybrany program buduje się wewnątrz Akcji po zacommitowaniu zmiany do gałęzi
-  - Jeżeli build jest zbyt duży, zmodyfikuje akcję aby wykonywała inną czynność
+  - Jeżeli build jest zbyt duży, zmodyfikuj akcję aby wykonywała inną czynność
  
