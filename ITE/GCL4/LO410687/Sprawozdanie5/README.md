@@ -226,3 +226,6 @@ Należy też ręcznie przekierować port w `vsc`
 Jak widać aplikacja działa na porcie 3000
 
 ![](./ss/afterforward.png)
+
+
+### Konwersja wdrożenia ręcznego na wdrożenie deklaratywne YAML
