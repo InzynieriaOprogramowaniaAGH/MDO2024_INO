@@ -1,0 +1,5 @@
+ARG BUILDER_VERSION
+
+FROM utt-builder:${BUILDER_VERSION}
+
+CMD ["blad"]

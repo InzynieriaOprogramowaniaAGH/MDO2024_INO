@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: utt-deployer
+  labels:
+    app: utt-deployer
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: utt-deployer
+  template:
+    metadata:
+      labels:
+        app: utt-deployer
+    spec:
+      containers:
+      - name: utt-deployer
+        image: phisiic/utt-deployer:2.0
+        ports:
+        - containerPort: 8000
