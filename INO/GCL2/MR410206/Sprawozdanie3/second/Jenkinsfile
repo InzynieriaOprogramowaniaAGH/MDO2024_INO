@@ -1,0 +1,82 @@
+pipeline {
+    agent any
+     environment {
+         DOCKER_REPO = 'radeckimaciej/deploy'
+         DOCKER_CRE = 'docker-mycredentials'
+        imageTag = '1.1.1'
+    }
+        stages {
+                stage('Start') {
+            steps {
+				        echo 'Start'
+                sh 'rm -rf MDO2024_INO'
+                //sh 'docker container prune --force'
+                sh 'touch build.log'
+                  }
+                }
+                
+                stage('Clone') {
+            steps {
+                sh 'git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+                dir('MDO2024_INO'){
+                    sh 'git checkout MR410206'
+                    }
+                }
+            }
+                stage('Build'){
+            steps{
+                echo 'Build'
+                dir('MDO2024_INO/INO/GCL2/MR410206/Sprawozdanie3/second/build'){
+                   // sh 'sudo du'
+                    sh 'ls'
+                    sh 'docker build -t build .'
+                 }
+            }
+            }
+            stage('Test'){
+            steps{
+                echo 'Test'
+                dir('MDO2024_INO/INO/GCL2/MR410206/Sprawozdanie3/second/test'){
+                    sh 'docker images'
+                    sh 'docker build -t test .'
+                }
+            }
+            }
+                    stage('Deploy') {
+            steps {
+                echo 'Deploy'
+                sh 'docker network create net || true'
+                 dir("MDO2024_INO/INO/GCL2/MR410206/Sprawozdanie3/second/deploy") {
+                    sh "docker build -t deploy ."
+                }
+                
+                sh 'docker rm -f petclinic || true'
+                
+                sh 'docker run -d -p 8081:8080 --name petclinic --network net deploy'
+                
+                sleep 20
+                script {
+                    retry(8) {
+                        sh 'docker run --rm --network net appropriate/curl -sSf http://petclinic:8080/actuator/health'
+                    }
+                }
+            }
+        }
+         stage('Publish'){
+            steps{
+                echo 'Publish'
+                sh 'docker cp petclinic:/my.jar .'
+                archiveArtifacts artifacts: '*.jar', fingerprint: true
+                
+
+                sh "docker tag deploy ${DOCKER_REPO}:${imageTag}"
+                
+                script{
+                   docker.withRegistry("", "docker-mycredentials") {
+                    sh "docker push ${DOCKER_REPO}:${imageTag}"
+                    }  
+                }
+            }  
+        }
+    }
+}
