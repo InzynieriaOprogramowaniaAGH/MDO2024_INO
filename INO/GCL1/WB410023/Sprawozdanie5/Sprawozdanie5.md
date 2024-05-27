@@ -705,6 +705,7 @@ kubectl get pods
 ### 5. Strategie wdrożenia.
 #### Przygotowałam wersje wdrożeń stosujące następujące strategie wdrożeń:
 - **zastosowanie wersji, Recreate**
+
 Stworzyłam plik 
 ```bash
 nano deployment-recreate.yaml
@@ -753,6 +754,7 @@ kubectl get pods -l app=react-app
 ![79](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie5/images/78.png)
 
 - **zastosowanie wersji, Rolling Update (z parametrami maxUnavailable > 1, maxSurge > 20%)**
+
 Stworzyłam plik 
 ```bash
 nano deployment-rolling-update.yaml
@@ -804,6 +806,7 @@ kubectl get pods -l app=react-app
 ![84](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie5/images/83.png)
 
 - **zastosowanie wersji, Canary Deployment workload** 
+
 Stworzyłam plik 
 ```bash
 nano deployment-canary-main.yaml
@@ -909,11 +912,15 @@ kubectl get pods -l app=react-app
 ![93](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/WB410023/INO/GCL1/WB410023/Sprawozdanie5/images/92.png)
 
 Obserwacje i różnice:
+
 Recreate: Wszystkie pods są usuwane, a następnie tworzone na nowo, co powoduje chwilowy brak dostępności aplikacji.
+
 Rolling Update: Pods są aktualizowane stopniowo, co zapewnia ciągłą dostępność aplikacji. Parametry maxUnavailable i maxSurge kontrolują tempo aktualizacji - kontrolują liczbę niedostępnych oraz dodatkowych podsów w trakcie aktualizacji.
+
 Canary Deployment: Nowa wersja aplikacji jest wdrażana tylko do części użytkowników (kanarek), co pozwala na wczesne wykrycie problemów przed pełnym wdrożeniem. Można to zrealizować poprzez tworzenie dodatkowych Deploymentów z nową wersją aplikacji oraz odpowiednie skonfigurowanie serwisów.
 
 Etykiety i serwisy:
+
 Etykiety (labels) są używane do selekcji podsów przez Deploymenty oraz Serwisy. Użycie etykiet umożliwia precyzyjne kontrolowanie, które pods mają być obsługiwane przez dany serwis, co jest szczególnie przydatne w strategiach takich jak Canary Deployment. Serwisy zapewniają dostępność aplikacji poprzez balansowanie ruchu między podsami.
 
 ### Dodałam sprawozdanie, zrzuty ekranu oraz listing historii poleceń i utworzone pliki.
