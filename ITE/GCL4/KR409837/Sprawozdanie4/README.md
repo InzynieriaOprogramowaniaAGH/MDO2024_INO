@@ -113,7 +113,7 @@ Następnie wprowadziłem nazwy DNS dla maszyn wirtualnych modyfikując plik /etc
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/16. dodałem tę drugą linijkę.png">
 </p>
 
-Po czym zwerifikowałem łącznąść używając komendy `ping <hostname>`
+Po czym zwerifikowałem łączność używając komendy `ping <hostname>`
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/17. ping.png">
 </p>
