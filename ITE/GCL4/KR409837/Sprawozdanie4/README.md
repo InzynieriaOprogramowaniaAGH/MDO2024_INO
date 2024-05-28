@@ -301,3 +301,52 @@ Niestety nie pomogło to całkowicie rozwiązać wszystkich problemów, ze wzgl�
         ports:
         - "80:3000"
 ```
+
+Podjęcie takich kroków pozwoliło mi z sukcesem wdrożyć kontener na nową maszynę:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/32. sukces.png">
+</p>
+
+Powyższe kroki ubrałem w role za pomocą szkieletowania `ansible-galaxy`. W tym celu skorzystałem z komendy `ansible-galaxy init deploy-irssi` w dotychczas wykorzystywanym przeze mnie katalogu, co pozwoliło uzyskać następującą strukturę plików:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/34. po odpowiedniej komendzie powstala taka struktura plikow.png">
+</p>
+oraz utworzyłem nowy plik `.yaml`:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/35. utworzyłem nowy yaml.png">
+</p>
+
+Powyżej stworzone pliki uzupełniłem o następującą treść:
+- galaxy.yaml
+```
+- name: Deploy irssi using deploy-irssi role
+  hosts: Endpoints
+  roles:
+    - /home/konrezl2/ansible/roles/deploy-hello
+```
+
+- tasks/main.yml
+```
+---
+- name: Pull docker image from DockerHub
+  vars:
+    ansible_become_pass: <haslo>
+  become: yes
+  docker_image:
+    name: "hello-world"
+    source: pull
+
+- name: Run hello-world
+  vars:
+    ansible_become_pass: <haslo>
+  become: yes
+  docker_container:
+    name: hello-world
+    image: "hello-world"
+    state: started
+```
+
+Co pozwoliło wdrożyć kontener poprzez wykorzystanie szkieletowania `ansible-galaxy`:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/36. ubrałem powyższe powyższe kroki w rolę, za pomocą szkieletowania ansible-galaxy.png">
+</p>
