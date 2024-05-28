@@ -322,7 +322,7 @@ Wykonanie instrukcji ręcznych:
 ![](zrzuty_ekranu/revisions.png)
 
 
-# Kontrola wdrożenia
+## Kontrola wdrożenia
 
 Skrypt weryfikujący, czy wdrożenie "zdążyło" się wdrożyć (60 sekund)
 
@@ -330,6 +330,45 @@ Skrypt weryfikujący, czy wdrożenie "zdążyło" się wdrożyć (60 sekund)
 
 ![](zrzuty_ekranu/finish.png)
 
+
+## Strategie wdrożenia 
+
+
+### Strategia Recreate:
+
+![](zrzuty_ekranu/recreate.png)
+
+Opis: W strategii Recreate, Kubernetes najpierw usuwa wszystkie istniejące podi przed utworzeniem nowych podów z nową wersją obrazu.
+
+Zalety: Prostota.
+
+Wady: Przestój w czasie wdrożenia, ponieważ wszystkie podi są usuwane przed utworzeniem nowych.
+
+
+### Strategia Rolling Update:
+
+![](zrzuty_ekranu/rolling.png)
+
+Opis: Rolling Update stopniowo wymienia stare podi na nowe, minimalizując przestój.
+
+Zalety: Mniejsze przestoje, płynne przejście.
+
+Wady: Może wymagać więcej zasobów w czasie wdrożenia, ponieważ nowe i stare podi mogą działać jednocześnie.
+
+
+### Canary Deployment:
+
+![](zrzuty_ekranu/stable.png)
+
+Opis: W tej strategii nowa wersja aplikacji jest wdrażana tylko na części podów (np. 1 z 4), aby można było przetestować ją na produkcji przed pełnym wdrożeniem.
+
+Zalety: Możliwość testowania nowej wersji z minimalnym ryzykiem.
+
+Wady: Większa złożoność, wymaga dodatkowej konfiguracji i monitorowania.
+
+
+Wyniki:
+![](zrzuty_ekranu/wyniki.png)
 
 
 

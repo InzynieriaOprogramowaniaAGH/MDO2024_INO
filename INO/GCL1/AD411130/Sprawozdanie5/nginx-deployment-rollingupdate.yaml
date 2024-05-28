@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment-rollingupdate
+  labels:
+    app: nginx-deploy1
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: nginx-deploy1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 20%
+  template:
+    metadata:
+      labels:
+        app: nginx-deploy1
+    spec:
+      containers:
+      - name: mynginx
+        image: dankoo4/mynginx:v1
+        ports:
+        - containerPort: 80
