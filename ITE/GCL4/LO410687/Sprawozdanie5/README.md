@@ -581,4 +581,18 @@ spec:
 
 ![](./ss/poprzekierowaniu.png)
 
+**services.yaml**
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: service
+spec:
+  selector:
+    app: guess-the-number
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+```
 ![](./ss/service.png)
