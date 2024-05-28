@@ -240,7 +240,7 @@ Po czym oczywiście ponownie włączyłem kartę sieciową:
 
 ### Zarządzanie kontenerem
 
-Moim pierwszym krokiem było utworzenie nowego pliku o rozszerzoniu `.yaml` :
+Moim pierwszym krokiem było utworzenie nowego pliku z rozszerzeniem `.yaml` :
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/29. utworzyłem nowy plik.png">
 </p>
