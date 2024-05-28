@@ -8,7 +8,7 @@ Celem danego ćwiczenia było wykorzystanie `Kubernetesa` we wdrażaniu kontener
 ### Instalacja kubernetesa
 
 W tym celu zaopatrujemy się w implementację stosu k8s `minikube`.
-Instalacja  została wykonana na podstawie dokumentacji [minikube](https://minikube.sigs.k8s.io/docs/start/). 
+Instalacja  została wykonana na podstawie [dokumentacji]](https://minikube.sigs.k8s.io/docs/start/). 
 
 Wymagania sprzętowe w celu prawidłowego działania to: dwurdzeniowy CPU, 2GB RAM oraz 20GB wolnej pamięci dyskowej.
 
@@ -488,3 +488,97 @@ Wersja z błędem:
 ![](./ss/script2.png)
 
 ### Strategie wdrożenia
+ 
+**recreate-deployment.yaml** 
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: game-deploy-recreate
+spec:
+  replicas: 4
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: guess-the-number
+  template:
+    metadata:
+      labels:
+        app: guess-the-number
+    spec:
+      containers:
+      - name: guess-the-number
+        image: lukoprych/guess-the-number:1.0.2
+        ports:
+        - containerPort: 80
+```
+
+**rolling-update-deployment.yaml**
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  game-deploy-rolling-update
+  labels:
+    app: guess-the-number
+spec:
+  replicas: 4
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 25%
+  selector:
+    matchLabels:
+      app: guess-the-number
+  template:
+    metadata:
+      labels:
+        app: guess-the-number
+    spec:
+      containers:
+      - name: guess-the-number
+        image: lukoprych/guess-the-number:1.0.2
+        ports:
+        - containerPort: 80
+```
+
+![](./ss/rollingupdate.png)
+
+**canary-deployment.yaml**
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: game-deploy-canary
+  labels:
+    app: guess-the-number
+    track: canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: guess-the-number
+      track: canary
+  template:
+    metadata:
+      labels:
+        app: guess-the-number
+        track: canary
+    spec:
+      containers:
+      - name: clock-nginx
+        image: lukoprych/guess-the-number:1.0.2
+        ports:
+        - containerPort: 80
+```
+
+![](./ss/canary.png)
+
+
+![](./ss/strategiewynik.png)
+
+![](./ss/poprzekierowaniu.png)
+
+![](./ss/service.png)
