@@ -366,7 +366,7 @@ Upewniając się, że moja główna maszyna posiada `ssh` wysłałem plik odpowi
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie9-png/2. Pobierz plik odpowiedzi .png">
 </p>
 
-Wspomniany wyżej plik poddałem edycji:
+Wspomniany wyżej plik przeniosłem do repozytorium zajęć oraz poddałem edycji:
 - dodałem linijki zawierające informacje o repozytoriach systemu fedora:
   * `url --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-38&arch=x86_64`
   * `repo --name=update --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f38&arch=x86_64`
