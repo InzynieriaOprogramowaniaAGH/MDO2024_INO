@@ -150,7 +150,7 @@ Po udanej operacji `ping` utworzyłem plik `playbook.yml`:
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/23. utworzenie pliku do playbook.png">
 </p>
 
-który posiadał następującą treść:
+który posiadał następującą treść, gdzie w miejscach `<haslo>` zamieściłem hasło do maszyny wirtualnej:
 ```
 ---
 - name: Pingowanie
@@ -212,3 +212,27 @@ Ponowne wywołanie tej metody daje delikatnie inny wynik, widać to na przykład
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/26. copy za drugim razem.png">
 </p>
 
+Powyższe operację przeprowadziłem również dla dwóch dodatkowych przypadków:
+- względem maszyny z wyłączonym serwerem SSH:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/27. wyłączanie ssh na nowej maszynie.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/27.1 status po zastopowaniu.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/27.2 łącznąść po wyłączeniu ssh.png">
+</p>
+
+- względem maszyny z wyłączoną kartą sieciową
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/27.3 wyłączanie karty sieciowej.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/27.4 łączenie po wylączeniu karty sieciowej.png">
+</p>
+
+Po czym oczywiście ponownie włączyłem kartę sieciową:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/28. spowrotem włączyłem kartę sieciową.png">
+</p>
