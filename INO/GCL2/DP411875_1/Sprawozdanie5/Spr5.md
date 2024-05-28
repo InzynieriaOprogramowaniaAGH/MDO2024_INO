@@ -200,8 +200,40 @@ Utworzone zostały 4 pody w ramach jednego deploymentu.
 # Przygotowanie nowego obrazu
 Zarejestrowałam nową wersję swojego obrazu Deploy w Docker Hub. Aby to zrobić wykorzystałam komendę:
 ```
-docker commit
+docker commit <id kontenera> 
 ```
-Przepakowałam wybrany obraz, tworząc nowe wersje z tagami 2.0 i 3.0. To pozwoliło utworzyć nowe warianty obrazu, każdy z oznaczeniem kolejnej wersji, bez konieczności zmieniania czegokolwiek poza tagiem. 
+Przepakowałam wybrany obraz, tworząc nowe wersje z tagami 2.0 i 3.0.  To pozwoliło utworzyć nowe warianty obrazu, każdy z oznaczeniem kolejnej wersji, bez konieczności zmieniania czegokolwiek poza tagiem. 
+Id kontenera uzyskałam poprzez wykonanie polecenia:
+```
+docker ps
+```
+![](./screeny/5doccom.png)
+
+Ponownie opublikowałam obie wersje na Docker Hub stosując:
+```
+docker push dagappp/custom-nginx:2.0
+```
+oraz 
+
+```
+docker push dagappp/custom-nginx:3.0
+```
+![](./screeny/5dh2.png)
+
+Przygotowałam również wersję obrazu, którego uruchomienie kończyło się błędem. Dodałam do mojego Dockerfile linijkę:
+```
+CMD ["ERR"]
+```
+Nadałam tej wersji tag 3.1 podczas budowania.
+
+![](./screeny/5bud.png)
+
+Kontener nie uruchomił się, sprawdziłam to w Dashboardzie:
+
+![](./screeny/5er.png)
+
+Wyświetlony był status "ImagePull" co oznaczało, że Kubernetes próbował pobrać obraz kontenera z zewnętrznego repozytorium, jednak nie udawało się to. 
+
+# Zmiany w deploymencie
 
 
