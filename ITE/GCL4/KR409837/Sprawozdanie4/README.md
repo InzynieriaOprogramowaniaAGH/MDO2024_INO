@@ -236,3 +236,15 @@ Po czym oczywiście ponownie włączyłem kartę sieciową:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/28. spowrotem włączyłem kartę sieciową.png">
 </p>
+
+### Zarządzanie kontenerem
+
+Moim pierwszym krokiem było utworzenie nowego pliku o rozszerzonu `.yaml`:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/29. utworzyłem nowy plik.png">
+</p>
+
+oraz na nowej maszynie zainstalowałem docker (łącząc się z nią za pomocą komendy `ssh ansible@ansible-target`):
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/30. zainstalowałem docker na nowej maszynie łącząc się przez ssh.png">
+</p>
