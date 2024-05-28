@@ -62,10 +62,33 @@ Wywołałam je w terminalu wewnątrz maszyny, przez co od razu wyświetlało si�
 Po otwarciu Dashboard,  możliwe było zobaczenie wizualizacji statusu klastra Kubernetes, w tym informacji o podach, deploymentach, usługach i innych zasobach klastra.
 
 # Analiza posiadanego kontenera:
-Poprzedni projekt - Irssi nie nadawał się do pracy jako kontener, ponieważ jego charakterystyka nie pozwalała na ciągłą pracę. Zmieniłem projekt na serwer Nginx, co umożliwiło lepsze dostosowanie go do kontenera, który może działać w tle. Dodatkowo, wzbogaciłem funkcjonalność serwera Nginx poprzez dodanie własnej strony powitalnej, wyświetlającej wiadomość "HELLO FROM NGINX", oraz podpisanie serwera własnymi danymi.
+Poprzedni projekt - Irssi nie nadawał się do pracy jako kontener, ponieważ jego charakterystyka nie pozwalała na ciągłą pracę. Zmieniłem projekt na serwer Nginx, co umożliwiło lepsze dostosowanie go do kontenera, który może działać w tle. Dodatkowo, wzbogaciłem funkcjonalność serwera Nginx poprzez dodanie własnej strony powitalnej, wyświetlającej wiadomość "Hello from NGINX", oraz podpisanie serwera własnymi danymi.
 Utworzyłam więc osobny katalog o nazwie custom-nginx i zawarłam w nim Dockerfile oraz prosty plik html. 
 
+```
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to NGINX</title>
+</head>
+<body>
+    <h1>Hello from NGINX!</h1>
+    <p>Created by Dagmara Pasek</p>
+</body>
+</html>
+```
 
+Dockerfile wyglądał tak:
 
+```
+FROM nginx:latest
+COPY ./index.html /usr/share/nginx/html
+```
+Dockerfile definiował bazowy obraz, na którym został zbudowany nowy obraz. Kopiował również plik index.html z lokalnego systemu plików do katalogu /usr/share/nginx/html w kontenerze. 
 
+Zbudowałam obraz stosując:
+```
+docker build -t custom-nginx .
+```
 
+![](./screeny/5b.png)
