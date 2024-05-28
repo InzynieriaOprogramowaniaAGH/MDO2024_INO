@@ -235,5 +235,32 @@ Kontener nie uruchomił się, sprawdziłam to w Dashboardzie:
 Wyświetlony był status "ImagePull" co oznaczało, że Kubernetes próbował pobrać obraz kontenera z zewnętrznego repozytorium, jednak nie udawało się to. 
 
 # Zmiany w deploymencie
+Aktualizowałam plik YAML z wdrożeniem i przeprowadzałam je ponownie po zastosowaniu następujących zmian:
+-zwiększenie replik do 8
+Dokonałam tego jedynie w miejscu:
+```
+spec:
+  replicas: 8
+```
+Reszta pliku pozostała bez zmian.
 
+![](./screeny/58.png)
 
+W Dashboardzie wyglądało to tak:
+
+![](./screeny/58d.png)
+
+-zmniejszenie replik do 1
+```
+spec:
+  replicas: 1
+```
+
+![](./screeny/51d.png)
+
+-zmniejszenie replik do 0
+```
+spec:
+  replicas: 0
+```
+![](./screeny/50d.png)
