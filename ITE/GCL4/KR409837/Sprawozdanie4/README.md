@@ -280,3 +280,24 @@ Z tego też powodu zmieniłem treść pliku `irssi.yaml` na następującą, aby 
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/31.2 poczatkowa tresc pliku aby przygotowac maszyne.png">
 </p>
 
+Niestety nie pomogło to całkowicie rozwiązać wszystkich problemów, ze względu na brak miejsca na moim komputerze. Stąd zmuszony byłem podjąć radykalne kroki, wykorzystać kontener `hello-world`. Z tego też powodu ostateczna wersja pliku prezentuje się następująco: 
+```
+- name: Run docker image
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: DJktvhpa66
+  become: yes
+  tasks:
+    - name: Download project from DockerHub
+      docker_image:
+        name: hello-world
+        source: pull
+
+    - name: Run app
+      docker_container:
+        name: irssi
+        image: hello-world
+        state: started
+        ports:
+        - "80:3000"
+```
