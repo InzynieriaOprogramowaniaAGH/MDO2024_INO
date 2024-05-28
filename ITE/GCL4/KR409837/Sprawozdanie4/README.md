@@ -361,7 +361,7 @@ Zainstalowałem system Fedora, stosując instalator sieciowy (neist). Następnie
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie9-png/1. Zainstaluj system Fedora, stosując instalator sieciowy (netinst).png">
 </p>
 
-Upewniając się, że maszyna posiada ssh, wysłałem plik odpowiedzi do `anaconda-ks.cfg` na moją główną maszynę wirtualną:
+Upewniając się, że moja główna maszyna posiada `ssh` wysłałem plik odpowiedzi `anaconda-ks.cfg` na moją główną maszynę wirtualną:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie9-png/2. Pobierz plik odpowiedzi .png">
 </p>
