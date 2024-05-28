@@ -378,7 +378,9 @@ Zastosowanie nowej wersji obrazu wiąże się z modyfikacją parametru image w s
         - containerPort: 80
 ```
 Wynik:
+
 ![](./ss/nowawersjaobrazu.png)
+
 ![](./ss/nowawersjadashb.png)
 
 
