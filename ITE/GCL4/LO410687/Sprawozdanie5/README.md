@@ -574,6 +574,8 @@ Podsumowując:
 - Strategia Rolling Update pozwala na płynne przejście z jednej wersji aplikacji na drugą, ponieważ aktualizacja odbywa się stopniowo replika po replice. Dzięki temu unika się długotrwałej niedostępności, a użytkownicy mogą korzystać z aplikacji podczas aktualizacji.
 - Strategia Canary Deployment umożliwia wprowadzenie nowej wersji aplikacji dla części replik, co pozwala na wczesne testowanie i ocenę wpływu nowej wersji na wybraną grupę użytkowników. Pozwala to na zminimalizowanie ryzyka wprowadzenia błędnej wersji do produkcji.
 
+### Użycie serwisów 
+
 W Kubernetes, serwisy są kluczowym elementem, który pozwala na komunikację pomiędzy podami oraz na udostępnianie aplikacji na zewnątrz klastra. Serwis zapewnia, że ruch jest kierowany tylko do działających podów, co zwiększa niezawodność aplikacji. Może być on zaaplikowany wewnątrz deploymentu danej aplikacji, bądź w osobnym.
 
 W tym przypadku utworzono osobny plik yaml, używający aplikacji z ćwiczenia. Serwis przekierowuje port 80 dostepny wewnatrz klastra na 80-ty port na podach, do którego serwis przekieruje ruch.
