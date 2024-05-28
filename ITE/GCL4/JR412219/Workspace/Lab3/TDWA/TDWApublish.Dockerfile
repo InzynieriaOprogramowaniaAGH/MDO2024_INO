@@ -2,4 +2,4 @@ FROM tdwabuild
 
 WORKDIR /root/TDWA
 
-RUN npm publish --registry http://localhost:4873/
+RUN npm publish --registry http://verdaccio:4873/
