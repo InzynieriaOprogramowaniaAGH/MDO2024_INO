@@ -264,3 +264,76 @@ spec:
   replicas: 0
 ```
 ![](./screeny/50d.png)
+
+-zastosowanie nowej wersji obrazu
+Zastosowałam nową wersję obrazu - 2.0. Użyłam strategii Rolling Update. Polega ona na stopniowym wprowadzaniu nowej wersji aplikacji, zamiast aktualizowania wszystkich instancji jednocześnie. Plik aktualizuje 4 repliki custom-nginx z wersji 1.0 na wersję 2.0. Zmodyfikowałam do tego poprzedni plik depl.yaml:
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customnginx
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: custom-nginx
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+	app: custom-nginx
+    spec:
+      containers:
+      - name: customnginx
+        image: dagappp/custom-nginx:2.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always
+
+```
+
+![](./screeny/5ro2.png)
+
+Przywracałam poprzednie wersje wdrożeń za pomocą poleceń:
+```
+kubectl rollout history
+kubectl rollout undo
+```
+![](./screeny/5und.png)
+
+# Kontrola wdrożenia
+
+Napisałam skrypt weryfikujący czy wdrożenie zdążyło się wdrożyć. Skrypt czeka 60 sekund, aby dać czas na przeprowadzenie aktualizacji. Sprawdza status wdrożenia Deploymentu custom-nginx za pomocą polecenia kubectl rollout status i zapisuje wynik w zmiennej status. Jeśli status zawiera słowo "successfully", oznacza to, że wdrożenie zakończyło się pomyślnie. Skrypt wypisuje "Zakonczono" i ponownie wyświetla status wdrożenia. W przeciwnym razie skrypt wypisuje "W trakcie", ponownie wyświetla status wdrożenia i wycofuje zmiany za pomocą polecenia kubectl undo.
+
+```
+#!/bin/bash
+
+kubectl apply -f depl.yaml
+
+sleep 60
+
+status=$(minikube kubectl rollout status deployment/custom-nginx)
+
+if [[ "$status" = *"successfully"* ]];
+then
+       echo "Zakonczono"
+       minikube kubectl rollout status deployment custom-nginx
+else
+       echo "W trakcie"
+       minikube kubectl rollout status deployment custom-nginx
+       minikube kubectl undo deployment custom-nginx
+fi
+```
+
+
+![](./screeny/5stat.png)
+
+
+
