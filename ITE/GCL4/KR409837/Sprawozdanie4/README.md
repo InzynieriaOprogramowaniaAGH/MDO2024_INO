@@ -312,7 +312,8 @@ Powyższe kroki ubrałem w role za pomocą szkieletowania `ansible-galaxy`. W ty
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/34. po odpowiedniej komendzie powstala taka struktura plikow.png">
 </p>
-oraz utworzyłem nowy plik `.yaml`:
+
+oraz utworzyłem nowy plik `galaxy.yaml`:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/35. utworzyłem nowy yaml.png">
 </p>
