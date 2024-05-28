@@ -400,6 +400,7 @@ Następnie dokonujemy w pliku deployment zmianę ponownie na starszą wersję 1.
 
 
 Wynik `apply`
+
 ![](./ss/starawersja.png)
 
 ![](./ss/starawersjadash.png)
