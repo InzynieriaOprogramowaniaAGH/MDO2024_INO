@@ -3,7 +3,7 @@ Dagmara Pasek
 411875
 
 ### Cel ćwiczenia:
-Celem tych zajęć było zainstalowanie i uruchomienie klastra Kubernetes za pomocą Minikube oraz kubectl, zapewniając jednocześnie bezpieczeństwo instalacji i zgodność z wymaganiami sprzętowymi. Należało przygotować i wdrożyć własny obraz Docker, uruchamiając aplikację jako kontener na Minikube oraz sprawdzając poprawność działania przez Dashboard i kubectl. Finalnie zapisano wdrożenie w pliku YML i przeprowadzono próbne wdrożenie przykładowego deploymentu. 
+Celem tych zajęć było zainstalowanie i uruchomienie klastra Kubernetes za pomocą Minikube oraz kubectl, zapewniając jednocześnie bezpieczeństwo instalacji i zgodność z wymaganiami sprzętowymi. Należało przygotować i wdrożyć własny obraz Docker, uruchamiając aplikację jako kontener na Minikube oraz sprawdzając poprawność działania przez Dashboard i kubectl. Finalnie zapisano wdrożenie w pliku YML i przeprowadzono próbne wdrożenie przykładowego deploymentu. Należało upewnić się o dostępności co najmniej dwóch wersji obrazu, przygotować nową wersję obrazu oraz wprowadzić zmiany w deploymencie, takie jak zmiana liczby replik, aktualizacja obrazu oraz przywracanie poprzednich wersji wdrożeń. Następnie należało napisać skrypt weryfikujący poprawność wdrożenia oraz przygotować wersje wdrożeń stosujące różne strategie wdrożenia, takie jak Recreate, Rolling Update i Canary Deployment, analizując i opisując różnice między nimi. 
 
 ### Przebieg ćwiczenia 010:
 # Instalacja klastra Kubernetes:
@@ -129,4 +129,14 @@ Użyłam również:
  aby wyświetlić listę działających podów. (Screen z trochę późniejszego etapu):
 
 ![](./screeny/5gp.png)
- 
+
+Wyprowadziłam porty, używając polecenia:
+```
+kubectl port-forward pod/<nazwa-wdrożenia> <LO_PORT>:<PODMAIN_CNTNR_PORT>
+```
+
+![](./screeny/5wp.png)
+
+Uruchomiłam przeglądarkę w której wyświetliło się:
+
+![](./screeny/5hn.png)
