@@ -3,7 +3,7 @@ Dagmara Pasek
 411875
 
 ### Cel ćwiczenia:
-Celem tych zajęć było zapoznanie się i praktyczne wykorzystanie narzędzia 
+Celem tych zajęć było zainstalowanie i uruchomienie klastra Kubernetes za pomocą Minikube oraz kubectl, zapewniając jednocześnie bezpieczeństwo instalacji i zgodność z wymaganiami sprzętowymi. Należało przygotować i wdrożyć własny obraz Docker, uruchamiając aplikację jako kontener na Minikube oraz sprawdzając poprawność działania przez Dashboard i kubectl. Finalnie zapisano wdrożenie w pliku YML i przeprowadzono próbne wdrożenie przykładowego deploymentu. 
 
 ### Przebieg ćwiczenia 010:
 # Instalacja klastra Kubernetes:
