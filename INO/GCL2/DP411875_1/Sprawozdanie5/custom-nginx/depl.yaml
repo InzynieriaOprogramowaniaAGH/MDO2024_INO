@@ -1,28 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: customnginx
+  name: custom-nginx
 spec:
   replicas: 4
   selector:
     matchLabels:
       app: custom-nginx
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 1
-      maxSurge: 1
   template:
     metadata:
       labels:
         app: custom-nginx
     spec:
       containers:
-      - name: customnginx
-        image: dagappp/custom-nginx:2.0
+      - name: custom-nginx
+        image: dagappp/customnginx:1.0
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
         resources: {}
       restartPolicy: Always
+
 
