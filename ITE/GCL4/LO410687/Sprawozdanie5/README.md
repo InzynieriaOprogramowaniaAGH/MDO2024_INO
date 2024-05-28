@@ -8,7 +8,7 @@ Celem danego ćwiczenia było wykorzystanie `Kubernetesa` we wdrażaniu kontener
 ### Instalacja kubernetesa
 
 W tym celu zaopatrujemy się w implementację stosu k8s `minikube`.
-Instalacja  została wykonana na podstawie [dokumentacji]](https://minikube.sigs.k8s.io/docs/start/). 
+Instalacja  została wykonana na podstawie [dokumentacji](https://minikube.sigs.k8s.io/docs/start/). 
 
 Wymagania sprzętowe w celu prawidłowego działania to: dwurdzeniowy CPU, 2GB RAM oraz 20GB wolnej pamięci dyskowej.
 
