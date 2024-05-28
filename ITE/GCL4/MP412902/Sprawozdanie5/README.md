@@ -420,3 +420,127 @@ Po rollbacku do wersji 'error':
 Po zmianie `utt-deployment.yaml` i zatwierdzeniu zmian:
 
 ![alt text](image-43.png)
+
+### Strategie wdrożenia
+
+W celu wykorzystania różnych strategii wdrożenia będę modyfikował plik `utt-deployment.yaml` i tworzył odpowiednie pliki ze zmianami.
+
+**1.** **Recreate**
+Strategia Recreate polega na tym, że wszystkie istniejące instancje aplikacji są zatrzymywane i usuwane, a następnie tworzone są zupełnie nowe instancje z najnowszą wersją aplikacji. Używa się jej w sytuacjach, gdy chcemy całkowicie zastąpić obecną wersję aplikacji nową wersją, np. kiedy zmiany w kodzie są na tyle istotne, że potrzeba zbudować wszystko od podstaw. Jest to domyślnie stosowana strategia, więc sposób jej działania został udokumentowany wyżej.
+
+**2.** **Rolling Update**
+Strategia Rolling Update polega na stopniowej aktualizacji instancji aplikacji. Wersja aplikacji jest stopniowo wprowadzana do środowiska, a stare instancje są usuwane dopiero po tym, jak nowe są w pełni uruchomione. Używa się jej w celu minimalizacji przestojów w działaniu aplikacji podczas aktualizacji. Parametry `maxUnavailable` i `maxSurge` kontrolują, ile podów może być niedostępnych i ile nowych może być dodanych ponad żądaną liczbę replik.
+
+`utt-deployment-rolling.yaml`
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: utt-deployer-rolling
+  labels:
+    app: utt-deployer
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: utt-deployer
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 30%
+  template:
+    metadata:
+      labels:
+        app: utt-deployer
+    spec:
+      containers:
+      - name: utt-deployer
+        image: phisiic/utt-deployer:2.0
+        ports:
+        - containerPort: 8000
+```
+
+Aplikując te zmiany przy użyciu `kubectl apply -f utt-deployment-rolling.yaml` uzyskujemy tak wynik w dashboard:
+
+![alt text](image-44.png)
+
+Mamy działający deployment ze strategią rolling update. Wprowadźmy zatem zmianę - zmienię liczbę replik z 4 na 8, oraz obraz na wersję 3.0. 
+
+![alt text](image-45.png)
+
+Jak widać - maxSurge = 30% pozwolił na utworzenie jedynie dwóch podów w jednym czasie. 
+
+Zmiana wersji na 2.0:
+
+![alt text](image-46.png)
+
+Parametr maxUnavailable spowodował zatrzymanie jedynie dwóch podów.
+
+**3.** **Canary Deployment Workload**
+Strategia Canary Deployment polega na wdrożeniu nowej wersji aplikacji na niewielki podzbiór ruchu produkcyjnego, aby przetestować jej stabilność i wydajność przed pełnym wdrożeniem. Używa się jej w celu testowania nowej wersji aplikacji na małym podzbiorze użytkowników lub ruchu.
+
+W moim przypadku wersją bazową jest utt-deployer:2.0, a "testową" będzie wersja 3.0.
+
+`utt-deployment-canary.yaml`
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: utt-deployer-canary
+  labels:
+    app: utt-deployer
+    track: canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: utt-deployer
+      track: canary
+  template:
+    metadata:
+      labels:
+        app: utt-deployer
+        track: canary
+    spec:
+      containers:
+      - name: utt-deployer
+        image: phisiic/utt-deployer:2.0
+        ports:
+        - containerPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: utt-deployer-stable
+  labels:
+    app: utt-deployer
+    track: stable
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: utt-deployer
+      track: stable
+  template:
+    metadata:
+      labels:
+        app: utt-deployer
+        track: stable
+    spec:
+      containers:
+      - name: utt-deployer
+        image: phisiic/utt-deployer:3.0
+        ports:
+        - containerPort: 8000
+```
+
+Zatwierdzenie zmian z powyższego pliku powoduje powstanie dwóch nowych deploymentów: canary oraz stable.
+
+![alt text](image-49.png)
+
+Wprowadzając zmianę wersji na canary, przykładowo na błędną, zmiany są wdrażane jedynie na jednej ścieżce - nie na wszystkich. Ponieważ mam mniej podów na canary - mniej "uzytkowników" będzie miało błędną aplikację.
+
+Strategia Recreate polega na zatrzymaniu i usunięciu wszystkich istniejących instancji aplikacji, a następnie utworzeniu nowych instancji z najnowszą wersją aplikacji, co może prowadzić do krótkotrwałej niedostępności aplikacji podczas procesu aktualizacji. Rolling Update stopniowo aktualizuje instancje aplikacji, minimalizując przerwy w działaniu aplikacji poprzez stopniowe zastępowanie starej wersji nową, co umożliwia płynne przejście do nowej wersji bez większych zakłóceń w działaniu. Natomiast Canary Deployment pozwala na testowanie nowej wersji aplikacji na niewielkim podzbiorze ruchu produkcyjnego przed pełnym wdrożeniem, co pozwala na ocenę stabilności i wydajności nowej wersji przed jej wprowadzeniem dla wszystkich użytkowników.

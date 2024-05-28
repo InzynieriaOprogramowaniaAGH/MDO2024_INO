@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: utt-deployer-canary
+  labels:
+    app: utt-deployer
+    track: canary
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: utt-deployer
+      track: canary
+  template:
+    metadata:
+      labels:
+        app: utt-deployer
+        track: canary
+    spec:
+      containers:
+      - name: utt-deployer
+        image: phisiic/utt-deployer:error
+        ports:
+        - containerPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: utt-deployer-stable
+  labels:
+    app: utt-deployer
+    track: stable
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: utt-deployer
+      track: stable
+  template:
+    metadata:
+      labels:
+        app: utt-deployer
+        track: stable
+    spec:
+      containers:
+      - name: utt-deployer
+        image: phisiic/utt-deployer:2.0
+        ports:
+        - containerPort: 8000

@@ -1,14 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: utt-deployment
+  name: utt-deployer-rolling-update
   labels:
     app: utt-deployer
 spec:
-  replicas: 4
+  replicas: 8
   selector:
     matchLabels:
       app: utt-deployer
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 30%
   template:
     metadata:
       labels:
