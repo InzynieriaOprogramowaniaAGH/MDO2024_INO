@@ -33,6 +33,7 @@ Efekt wykonanych poleceń:
 ![1](./ss/1.png)
 
 Następnie uruchamiamy dashboard, który w sposób graficzny pozwala na zarządzanie kontenerami oraz pozostałymi zasobami. 
+
 ```bash
 minikube dashboard
 ```
@@ -489,30 +490,8 @@ Wersja z błędem:
 
 ### Strategie wdrożenia
  
-**recreate-deployment.yaml** 
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: game-deploy-recreate
-spec:
-  replicas: 4
-  strategy:
-    type: Recreate
-  selector:
-    matchLabels:
-      app: guess-the-number
-  template:
-    metadata:
-      labels:
-        app: guess-the-number
-    spec:
-      containers:
-      - name: guess-the-number
-        image: lukoprych/guess-the-number:1.0.2
-        ports:
-        - containerPort: 80
-```
+ Strategia **Recreate** to strategia domyślnie stosowana przy deploymencie. Polega na usunięciu wszystkich podów przed uruchomieniem nowych. Powoduje to krótką przerwę w dostępności aplikacji, ponieważ stare pody są usuwane zanim nowe zostaną uruchomione. Przydatne, gdy nowa wersja nie jest kompatybilna z poprzednią lub gdy chce się uniknąć konfliktów pomiędzy starymi i nowymi podami. Przykład został ukazany we wcześniejszym etapie ćwiczenia.
+
 
 **rolling-update-deployment.yaml**
 ```yaml
@@ -544,6 +523,8 @@ spec:
         - containerPort: 80
 ```
 
+Strategia **Rolling Update** stopniowo zastępuje stare pody nowymi. Ustawienie parametru `maxUnavailable` na 2 oznacza, że maksymalnie dwa pody mogą być niedostępne podczas aktualizacji. Parametr maxSurge: 25% oznacza, że można uruchomić dodatkowe 25% podów ponad zadeklarowaną liczbę replik (czyli w przypadku czterech replik jest to jeden dodatkowy pod). Rolling update umożliwia ciągłe działanie aplikacji z minimalnymi przerwami w dostępności, ponieważ nowe pody są uruchamiane zanim stare zostaną usunięte. Zaobserwowane efekty obejmują płynne przejście pomiędzy wersjami, co jest widoczne na obrazku 
+
 ![](./ss/rollingupdate.png)
 
 **canary-deployment.yaml**
@@ -574,12 +555,28 @@ spec:
         - containerPort: 80
 ```
 
+Strategia **Canary** wdraża nową wersję aplikacji na małej liczbie podów (w tym przypadku 1) przed pełnym wdrożeniem. 
+
+```yaml
+track: canary 
+```
+Powyższa etykieta służy do identyfikacji tych podów. 
+
+Canary pozwala na testowanie nowej wersji w środowisku produkcyjnym na niewielkiej grupie użytkowników, zanim pełne wdrożenie zostanie wykonane. Jest to przydatne do wykrywania problemów przed wdrożeniem na większą skalę.
+
 ![](./ss/canary.png)
 
 
 ![](./ss/strategiewynik.png)
 
-![](./ss/poprzekierowaniu.png)
+Podsumowując:
+- Strategia Recreate jest najprostszą  strategią, ale podczas wdrożenia może wystąpić krótkotrwałe niedostępność aplikacji, ponieważ wszystkie repliki są zatrzymywane i usuwane jednocześnie.
+- Strategia Rolling Update pozwala na płynne przejście z jednej wersji aplikacji na drugą, ponieważ aktualizacja odbywa się stopniowo replika po replice. Dzięki temu unika się długotrwałej niedostępności, a użytkownicy mogą korzystać z aplikacji podczas aktualizacji.
+- Strategia Canary Deployment umożliwia wprowadzenie nowej wersji aplikacji dla części replik, co pozwala na wczesne testowanie i ocenę wpływu nowej wersji na wybraną grupę użytkowników. Pozwala to na zminimalizowanie ryzyka wprowadzenia błędnej wersji do produkcji.
+
+W Kubernetes, serwisy są kluczowym elementem, który pozwala na komunikację pomiędzy podami oraz na udostępnianie aplikacji na zewnątrz klastra. Serwis zapewnia, że ruch jest kierowany tylko do działających podów, co zwiększa niezawodność aplikacji. Może być on zaaplikowany wewnątrz deploymentu danej aplikacji, bądź w osobnym.
+
+W tym przypadku utworzono osobny plik yaml, używający aplikacji z ćwiczenia. Serwis przekierowuje port 80 dostepny wewnatrz klastra na 80-ty port na podach, do którego serwis przekieruje ruch.
 
 **services.yaml**
 ```yaml
@@ -596,3 +593,16 @@ spec:
       targetPort: 80
 ```
 ![](./ss/service.png)
+
+Następnie po wykonaniu `apply `możemy przekierować port lokalny na serwis poleceniem:
+
+```bash
+kubectl port-forward service/service 9090:80
+```
+
+Wynik: 
+
+![](./ss/poprzekierowaniu.png)
+
+
+
