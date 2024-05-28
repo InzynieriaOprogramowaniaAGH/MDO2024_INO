@@ -143,3 +143,50 @@ Uruchomiłam przeglądarkę i przeszłam do http://localhost:8082 w której wyś
 
 ![](./screeny/5hn.png)
 
+# Konwersja wdrożenia ręcznego na wdrożenie deklaratywne YAML
+
+Utworzyłam plik depl.yaml, który opisuje deployment, który posiada cztery repliki kontenera aplikacji. Każdy kontener działał na porcie 80 i używał obrazu dagappp/customnginx:1.0. Kontenery były zawsze restartowane w przypadku zakończenia działania.
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: custom-nginx
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: custom-nginx
+  template:
+    metadata:
+      labels:
+        app: custom-nginx
+    spec:
+      containers:
+      - name: custom-nginx
+        image: dagappp/customnginx:1.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always
+```
+
+Wdrożenie przeprowadziłam za pomocą:
+```
+kubectl -- apply -f ./depl.yaml 
+```
+
+![](./screeny/5a.png)
+
+Zbadałam stan za pomocą:
+```
+kubectl rollout status deployments/custom-nginx
+```
+
+![](./screeny/5ro.png)
+
+Otrzymano komunikat "successfully rolled out" po zakończeniu wdrażania, co oznacza, że proces zakończył się sukcesem. 
+
+# Przygotowanie nowego obrazu
+
