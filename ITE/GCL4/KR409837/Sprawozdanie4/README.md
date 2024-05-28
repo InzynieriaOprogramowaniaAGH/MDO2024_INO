@@ -350,3 +350,16 @@ Co pozwoliło wdrożyć kontener poprzez wykorzystanie szkieletowania `ansible-g
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/36. ubrałem powyższe powyższe kroki w rolę, za pomocą szkieletowania ansible-galaxy.png">
 </p>
+
+## Zajęcia 09
+## Pliki odpowiedzi dla wdrożeń nienadzorowanych
+
+Zainstalowałem system Fedora, stosując instalator sieciowy (neist). Następnie stworzyłem nową maszynę wirtualną:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/1. Zainstaluj system Fedora, stosując instalator sieciowy (netinst).png">
+</p>
+
+Upewniając się, że maszyna posiada ssh, wysłałem plik odpowiedzi do `anaconda-ks.cfg` na moją główną maszynę wirtualną, oraz wspomniany plik zamieściłem w repozytorium:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/2. Pobierz plik odpowiedzi .png">
+</p>
