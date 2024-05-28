@@ -344,7 +344,43 @@ http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-40&arch=x86_64:
 ```
 ![zrodlo instalacji](./zrzuty_ekranu/31.jpg)
 
+W oknie wyboru oprogramowania wybrałem minimalną instalacje z dodatkowym oprogramowaniem do zarządzania kontenerami:
 
+![dodatkowe oprogramowanie](./zrzuty_ekranu/32.jpg)
+
+Utworzyłem użytkownika: 
+
+![nowy uzytkownik](./zrzuty_ekranu/33.jpg)
+
+Po czym uruchomiłem instalację.
+
+Gdy instalacja dobiegła końca skopiowałem plik **/root/anaconda-ks.cfg** do katalogu domowego poleceniem:
+```
+sudo cp root/anaconda-ks.cfg .
+```
+![kopiowanie anaconda-ks.cfg ](./zrzuty_ekranu/34.jpg)
+
+Następnie otworzyłem w edytorze nano ten plik:
+
+![anaconda-ks.cfg ](./zrzuty_ekranu/35.jpg)
+
+Oraz dodałem repozytorium do systemu instalacyjnego, poleceniem:
+```
+repo --name=update --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f40&arch=x86_64
+```
+
+Czyszczenie partycji zmieniłem na **--all**:
+```
+clearpart --all
+```
+Oraz ustawiłem nazwe hosta na **krystian**:
+```
+network --hostname=krystian
+```
+i na koniec dodałem restart systemu:
+```
+reboot
+```
 
 
 
