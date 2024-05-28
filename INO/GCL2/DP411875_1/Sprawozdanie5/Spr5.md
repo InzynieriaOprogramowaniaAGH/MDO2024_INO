@@ -137,6 +137,9 @@ kubectl port-forward pod/<nazwa-wdrożenia> <LO_PORT>:<PODMAIN_CNTNR_PORT>
 
 ![](./screeny/5wp.png)
 
-Uruchomiłam przeglądarkę w której wyświetliło się:
+Port 8082 był przekierowany na lokalny host.
+
+Uruchomiłam przeglądarkę i przeszłam do http://localhost:8082 w której wyświetliło się:
 
 ![](./screeny/5hn.png)
+
