@@ -368,6 +368,8 @@ spec:
       restartPolicy: Always
 ```
 
+![](./screeny/5ruu.png)
+
 -Rolling Update: stopniowo aktualizuje aplikację poprzez zastępowanie starych instancji nowymi, minimalizując przestoje i zapewniając ciągłą dostępność usług. W przeciwieństwie do tego, strategia Recreate wyłącza i usuwa cały klaster lub grupę instancji aplikacji. Rolling Update umożliwia płynne przejście między wersjami, podczas gdy Recreate wymaga przełączenia na nową wersję jednocześnie, co może być bardziej ryzykowne dla stabilności systemu.
 
 ```
@@ -399,6 +401,9 @@ spec:
         resources: {}
       restartPolicy: Always
 ```
+
+![](./screeny/5ru.png)
+
 -Canary Development: nowa wersja aplikacji jest stopniowo wprowadzana do produkcji poprzez udostępnienie jej tylko dla niewielkiego, kontrolowanego podzbioru. W tym podejściu podzbiór otrzymuje nową wersję aplikacji, podczas gdy pozostałe części infrastruktury pozostają na starszej wersji. 
 
 ```
@@ -466,6 +471,9 @@ spec:
   selector:
     app: custom-nginx
 ```
+
+![](./screeny/5cd.png)
+
 Główną różnicą między Canary Deployment a innymi strategiami, takimi jak Rolling Update czy Recreate, jest to, że Canary Deployment umożliwia wdrażanie nowej wersji aplikacji w małych, kontrolowanych krokach, co pozwala na monitorowanie jej wydajności i stabilności przed pełnym wdrożeniem dla wszystkich użytkowników. 
 
 
