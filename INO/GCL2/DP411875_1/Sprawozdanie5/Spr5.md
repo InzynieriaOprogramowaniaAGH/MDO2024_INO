@@ -335,5 +335,137 @@ fi
 
 ![](./screeny/5stat.png)
 
+W moim przypadku wdrożenie zakończyło się pomyślnie. 
+
+# Strategie wdrożenia
+Przygotowałam wersje wdrożeń stosujące następujące strategie wdrożeń:
+-Recreate: usuwa wszystkie istniejące pody aplikacji przed wdrożeniem nowych, zapewniając brak współistnienia starych i nowych wersji aplikacji. W rezultacie, aplikacja doświadcza przestoju, gdy stare pody są zatrzymywane, a nowe uruchamiane. Jest to przydatne, gdy konieczne jest całkowite wyłączenie starej wersji przed wprowadzeniem nowej, aby uniknąć problemów z kompatybilnością.
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customnginx
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: custom-nginx
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: custom-nginx
+    spec:
+      containers:
+      - name: customnginx
+        image: dagappp/custom-nginx:1.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always
+```
+
+-Rolling Update: stopniowo aktualizuje aplikację poprzez zastępowanie starych instancji nowymi, minimalizując przestoje i zapewniając ciągłą dostępność usług. W przeciwieństwie do tego, strategia Recreate wyłącza i usuwa cały klaster lub grupę instancji aplikacji. Rolling Update umożliwia płynne przejście między wersjami, podczas gdy Recreate wymaga przełączenia na nową wersję jednocześnie, co może być bardziej ryzykowne dla stabilności systemu.
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customnginx
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: custom-nginx
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 20%
+  template:
+    metadata:
+      labels:
+        app: custom-nginx
+    spec:
+      containers:
+      - name: customnginx
+        image: dagappp/custom-nginx:3.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always
+```
+-Canary Development: nowa wersja aplikacji jest stopniowo wprowadzana do produkcji poprzez udostępnienie jej tylko dla niewielkiego, kontrolowanego podzbioru. W tym podejściu podzbiór otrzymuje nową wersję aplikacji, podczas gdy pozostałe części infrastruktury pozostają na starszej wersji. 
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customnginx-canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: custom-nginx
+      version: canary
+  template:
+    metadata:
+      labels:
+        app: custom-nginx
+        version: canary
+    spec:
+      containers:
+      - name: customnginx
+        image: dagappp/custom-nginx:2.0-canary
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customnginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: custom-nginx
+  template:
+    metadata:
+      labels:
+        app: custom-nginx
+        version: stable
+    spec:
+      containers:
+      - name: customnginx
+        image: dagappp/custom-nginx:2.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: customnginx
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: custom-nginx
+```
+Główną różnicą między Canary Deployment a innymi strategiami, takimi jak Rolling Update czy Recreate, jest to, że Canary Deployment umożliwia wdrażanie nowej wersji aplikacji w małych, kontrolowanych krokach, co pozwala na monitorowanie jej wydajności i stabilności przed pełnym wdrożeniem dla wszystkich użytkowników. 
 
 
