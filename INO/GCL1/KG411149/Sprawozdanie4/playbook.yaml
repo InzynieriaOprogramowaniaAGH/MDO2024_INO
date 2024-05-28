@@ -1,0 +1,41 @@
+- name: Wysyłanie żądania ping do wszystkich maszyn
+  hosts: all
+  tasks:
+    - name: Wysyłanie żądania ping do wszystkich maszyn
+      ping:
+
+- name: Skopiowanie pliku inwentaryzacji na maszyny/ę Endpoints
+  hosts: Endpoints
+  tasks:
+    - name: Skopiowanie pliku inventory.ini na maszyny Endpoints
+      copy:
+        src: ~/ansible_quickstart/inventory.ini
+        dest: ~/inventory/inventory.ini
+
+- name: Aktualizacja pakietów w systemie
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: krystian
+  tasks:
+    - name: Aktualizacja pakietów
+      become: yes
+      apt:
+        name: '*'
+        state: latest
+
+- name: Restart usług
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: krystian
+  tasks:
+    - name: Restart sshd
+      become: yes
+      service:
+        name: sshd
+        state: restarted
+
+    - name: Restart rngd
+      become: yes
+      service:
+        name: rng-tools
+        state: restarted

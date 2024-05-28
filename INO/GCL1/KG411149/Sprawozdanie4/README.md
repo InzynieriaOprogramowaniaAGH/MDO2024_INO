@@ -382,9 +382,24 @@ i na koniec dodałem restart systemu:
 reboot
 ```
 
+Potem pobrałem z tej wirtualnej maszyny plik anacona-ks na moj komputer i wrzuciłem go do mojego katalogu **Sprawozdanie4** na githubie.
+Następnie uruchomiłem ponownie instalator fedory lecz teraz nie klikałem aby przeprowadzić instalacje tylko nacisnąłem klawisz **e** w celu uruchomienia panelu GRUB. W nim dodałem następującą linie 
+```
+inst.ks=https://https://raw.githubusercontent.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/KG411149/INO/GCL1/KG411149/Sprawozdanie4/anaconda-ks.cfg
+```
+Po czym kliknąłem klawisz **F10** aby rozpocząć bootowanie systemu.
 
+Po instalacji system sam się zrestartował, a ja wybrałem opcję: 
 
+![troubleshooting ](./zrzuty_ekranu/36.jpg)
 
+A następnie: 
+
+![boot frist drive ](./zrzuty_ekranu/37.jpg)
+
+Po czym system się uruchomił:
+
+![uruchomiony system ](./zrzuty_ekranu/38.jpg)
 
 
 

@@ -1,0 +1,9 @@
+- name: Zarządzanie kontenerem z użyciem roli
+  hosts: Endpoints
+  become: yes
+  vars:
+    ansible_become_pass: krystian
+  roles:
+    - install_docker
+    - download_app
+    - container_cleanup
