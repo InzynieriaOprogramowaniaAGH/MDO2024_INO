@@ -420,7 +420,7 @@ Polecenie to pozwala nam wrócić do poprzedniej rewizji deploymentu.
 
 ![](./ss/undo.png)
 
-Dodatkowo przetestowano działanie obrazu z błędem:
+Dodatkowo w innym czasie przetestowano działanie obrazu z błędem:
 Wprowadzenie wersji z błędem prezentuje się w następujący sposób (wersja obrazu 1.0.3)
 
 ![](./ss/blad.png)
@@ -475,7 +475,8 @@ Jeśli czas oczekiwania minie, a wdrożenie nie jest gotowe, wyświetla komunika
 
 Wynik:
 
-Po wykonaniu rollback w aktualnej wersji działającej:
+Po wykonaniu apply w aktualnej wersji działającej:
+
 ![](./ss/script.png)
 
 Po zastosowaniu zmian w pliku deployment:
