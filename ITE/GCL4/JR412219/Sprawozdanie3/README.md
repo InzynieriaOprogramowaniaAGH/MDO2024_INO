@@ -104,7 +104,7 @@ docker build -t tdwabuild -f TDWAbuild.Dockerfile .
 docker build -t tdwatest -f TDWAtest.Dockerfile .
 cd ~ && rm -rf Repo
 ```
-  Na tym etapie zrozumiałem, że godzina systemu na maszynie wirtualnej z której korzystałem i z której godzinę zaciągał docker i jego kontenery była błędna pomimo konfiguracji dla naszego regionu. Założyłem że wynikało to z faktu, że przez pewien czas maszyny nie wyłączałem a godzina była aktualizowana przy uruchomieniu systemu. 
+  Na tym etapie zrozumiałem, że godzina systemu na maszynie wirtualnej z której korzystałem i z której godzinę zaciągał docker i jego kontenery była błędna pomimo konfiguracji dla naszego regionu. Założyłem że wynikało to z faktu, że przez pewien czas maszyny nie wyłączałem a jedynie zapisywałem stan a godzina była aktualizowana przy uruchomieniu systemu. 
 ### Sprawozdanie (wstęp)
 * Opracuj dokument z diagramami UML, opisującymi proces CI. Opisz:
   * Wymagania wstępne środowiska

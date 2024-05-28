@@ -4,14 +4,25 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                sh '''
+                #!/bin/bash
+                docker image prune -f
+                docker container prune -f
+                rm -rf ITE
+                '''
                 git branch: 'JR412219', url: 'https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
             }
         }
         stage('Build') {
             steps {
                 dir('ITE/GCL4/JR412219/Workspace/Lab3/TDWA'){
-                sh 'ls'
-                sh 'docker build -t tdwabuild -f TDWAbuild.Dockerfile .'
+                    script{
+                        def logname = "build_logs_${env.BUILD_NUMBER}.log"
+                        sh'''
+                        ls
+                        docker build -t tdwabuild -f TDWAbuild.Dockerfile . > ${logname}
+                        '''
+                    }
                 }
                
             }
@@ -19,29 +30,38 @@ pipeline {
         stage('Test') {
             steps {
                  dir('ITE/GCL4/JR412219/Workspace/Lab3/TDWA'){
-                 sh 'docker build -t tdwatest -f TDWAtest.Dockerfile .'
+                 sh '''
+                 #!/bin/bash
+                 docker build -t tdwatest -f TDWAtest.Dockerfile . > test_logs_${env.BUILD_NUMBER}
+                 '''
                  }
             }
         }
         stage('Deploy') {
             steps {
                  dir('ITE/GCL4/JR412219/Workspace/Lab3/TDWA'){
-                 sh 'docker build -t tdwadeploy -f TDWAdeploy.Dockerfile . && docker run -rm -p 3000:3000 tdwadeploy'
+                 sh '''
+                 #!/bin/bash
+                 docker build -t tdwadeploy -f TDWAdeploy.Dockerfile . > deploy_logs_${env.BUILD_NUMBER}
+                 '''
                  }
             }
         }
         stage('Conection Test') {
             steps {
                 script {
-                def responseCode = sh(script: 'curl -s -o /dev/null -w "%{http_code}" http://localhost:3000', returnStatus: true)
-                if (responseCode == 200) {
-                echo 'Usluga dostepna.'
-                 } 
-                else {
-                error 'ERROR Usluga niedostepna.'
-                }
-                }
+                    sh '''
+                        #!/bin/bash
+                        docker run tdwadeploy . > deploy_logs_${env.BUILD_NUMBER}
+                        sleep 5
+                        if nc -zv service 3000; then
+                            echo 'TDWA is reachable'
+                        else
+                            echo 'TDWA is not reachable'
+                        fi
+                        '''
             }
+        }
         }
         stage('Publish') {
             steps {
