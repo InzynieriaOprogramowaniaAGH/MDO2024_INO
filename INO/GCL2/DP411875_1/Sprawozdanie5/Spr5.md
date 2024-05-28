@@ -92,3 +92,41 @@ docker build -t custom-nginx .
 ```
 
 ![](./screeny/5b.png)
+
+Aby wykazać, że aplikacja pracuje jako kontener ponownie użyłam polecenia:
+```
+docker ps
+```
+![](./screeny/5pss.png)
+
+Zalogowałam się również w DockerHub i opublikowałam obraz. Nadałam mu tag 1.0.
+```
+docker push dagappp/custom-nginx:1.0
+```
+
+# Uruchamianie oprogramowania
+Uruchomiłam kontener na stosie k8s za pomocą polecenia:
+```
+minikube kubectl run -- <nazwa-wdrożenia> --image=<obraz-docker> --port=<wyprowadzany port> --labels app=<nazwa-wdrożenia>
+```
+Kontener uruchomiony w minikubie został automatycznie ubrany w pod.
+
+
+Stosując 
+```
+minikube dashboard
+```
+można to zauważyć:
+
+![](./screeny/5pod.png)
+
+![](./screeny/5pod2.png)
+
+Użyłam również:
+```
+ kubectl get pods
+```
+ aby wyświetlić listę działających podów. (Screen z trochę późniejszego etapu):
+
+![](./screeny/5gp.png)
+ 
