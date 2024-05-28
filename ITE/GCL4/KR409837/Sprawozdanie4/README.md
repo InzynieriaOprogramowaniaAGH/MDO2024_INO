@@ -281,7 +281,7 @@ Z tego też powodu zmieniłem treść pliku `irssi.yaml` na następującą, aby 
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/31.2 poczatkowa tresc pliku aby przygotowac maszyne.png">
 </p>
 
-Niestety nie pomogło to całkowicie rozwiązać wszystkich problemów, ze względu na brak miejsca na moim komputerze. Stąd zmuszony byłem podjąć radykalne kroki, wykorzystać kontener `hello-world`. Z tego też powodu ostateczna wersja pliku prezentuje się następująco: 
+Niestety nie pomogło to całkowicie rozwiązać wszystkich problemów, ze względu na brak miejsca na moim komputerze. W związku z czym zostałem zmuszony podjąć radykalne kroki - wykorzystać kontener `hello-world`. Z tego też powodu ostateczna wersja pliku prezentuje się następująco: 
 ```
 - name: Run docker image
   hosts: Endpoints
