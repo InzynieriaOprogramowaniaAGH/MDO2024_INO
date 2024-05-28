@@ -1,4 +1,4 @@
-<img width="928" alt="image" src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/94080090/07fd58ed-4292-4562-8eb1-33d1052000af"># Sprawozdanie 5
+# Sprawozdanie 5
 Dagmara Pasek
 411875
 
