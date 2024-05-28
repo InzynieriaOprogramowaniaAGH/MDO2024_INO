@@ -244,7 +244,39 @@ Moim pierwszym krokiem było utworzenie nowego pliku o rozszerzoniu `.yaml` :
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/29. utworzyłem nowy plik.png">
 </p>
 
-oraz na nowej maszynie zainstalowałem docker (łącząc się z nią za pomocą komendy `ssh ansible@ansible-target`) :
+w którym zamieściłem następującą treść: 
+```
+- name: Run docker image
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: <haslo>
+  become: yes
+  tasks:
+    - name: Download project from DockerHub
+      docker_image:
+        name: krezler21/irssi_fork:latest
+        source: pull
+
+    - name: Run app
+      docker_container:
+        name: irssi
+        image: krezler21/irssi_fork:latest
+        state: started
+        ports:
+        - "80:3000"
+```
+oraz na nowej maszynie zainstalowałem dockera (łącząc się z nią za pomocą komendy `ssh ansible@ansible-target`) :
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/30. zainstalowałem docker na nowej maszynie łącząc się przez ssh.png">
 </p>
+
+Jednakże realizując zadanie poprzez powyższe czynności napotkałem błąd: 
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/31. zaczal pojawiac sie blad.png">
+</p>
+
+Z tego też powodu zmieniłem treść pliku `irssi.yaml` na następującą, aby przygotować maszynę:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie8-png/31.2 poczatkowa tresc pliku aby przygotowac maszyne.png">
+</p>
+
