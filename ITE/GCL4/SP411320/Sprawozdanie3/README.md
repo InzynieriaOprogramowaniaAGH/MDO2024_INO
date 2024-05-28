@@ -53,3 +53,18 @@ Zgodnie z [instrukcją do ćwiczenia](../../../../READMEs/005-Task.md#uruchomien
 - Sklonowanie repozytorium **MDO2024_INO**
 - Przejście na osobistą gałąź SP411320
 - Zbudowanie obrazów z Dockerfiles lub/i kompozycji *docker-compose*
+
+Możemy to zrealizować za pomocą poniższego skryptu:
+```bash
+mkdir repo
+cd repo
+git clone -b SP411320 --single-branch https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO .
+cd ITE/GCL4/SP411320/Sprawozdanie2/src/dummy
+docker build -t dummy_build - < build.Dockerfile
+```
+
+![](img/5/jnks-proj-serious-setup.png)
+![](img/5/jnks-proj-serious-logs.png)
+
+## Sprawozdanie
+###
