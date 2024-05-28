@@ -230,6 +230,205 @@ Jak widać aplikacja działa na porcie 3000
 
 ## Konwersja wdrożenia ręcznego na wdrożenie deklaratywne YAML
 
+Powyższe kroki wdrożeniowe, które wykonano ręcznie, zostaną teraz wykonane za pomocą pliku YAML na podstawie [dokumentacji](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#creating-a-deployment), co pozwoli nam częściowo zautomatyzować wdrażanie.
+
+W pliku określamy liczbę replik aplikacji na 4, wykorzystywany jest obraz wcześniej załączony na DockerHuba, działanie będzie odbywać się na porcie 80.
+
+**guess-the-number-deployment.yaml**
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: game-deploy
+  labels:
+    app: guess-the-number
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: guess-the-number
+  template:
+    metadata:
+      labels:
+        app: guess-the-number
+    spec:
+      containers:
+      - name: guess-the-number
+        image: lukoprych/guess-the-number:1.0.0
+        ports:
+        - containerPort: 80
+```
+
+Następnie wdrażamy plik znajdując się w tym samym katalogu, poleceniem: 
+```bash 
+kubectl -- apply -f ./guess-the-number-deployment.yaml
+```
+
+Poleceniem `get deployments` możemy sprawdzić stan naszego deploya.
+```bash
+kubectl get deployments
+```
+
+Status wdrażania w trakcie, można sprawdzić poleceniem:
+```bash
+kubectl rollout status deployments/game-deploy
+```
+
+![](./ss/start.png) 
+![](./ss/rolloutstat.png)
+
+Wynik z dashboardu:
+
+![](./ss/pods1.png)
+
+### Przygotowanie nowego obrazu
+
+Do ćwiczenia wykorzystano ponownie obraz **nginx** z własną konfiguracją.
+Zapewniono 2 nowe wersje obrazu, w których dodano modyfikację w postaci przedstawienia za pomocą paragrafu mówiącym o wersji oprogramowania, dodatkowo wersję z błędem, zamieszczając wywołanie programu false, który zawsze zwraca status zakończenia 1, czyli błąd.
+
+Przykładowa zmiana
+```html
+    <div class="game">
+        <h1>Przykładowa konfiguracja - nginx</h1>
+        <p>Wersja 1.0.2</p>
+        <h2>Łukasz Oprych</h2>
+        <h2>Zgadnij liczbę!</h2>
+        <p>Wybierz spośród przedziału od 1 do 100.</p>
+        <input type="number" id="guess" placeholder="Wprowadź liczbę">
+        <button onclick="checkGuess()">Guess</button>
+        <p id="message"></p>
+    </div>
+```
+
+Wersja z błędem
+```
+FROM nginx:1.26
+
+COPY ./index.html /usr/share/nginx/html/index.html
+
+CMD ["false"]
+```
+
+Następnie nowe wersje obrazów wdrażano ręcznie z użyciem **Dockera**
+
+Zbudowanie obrazu
+```bash
+docker build -t guess-the-number .
+```
+Otagowanie obrazu
+```bash
+docker tag guess-the-number lukoprych/guess-the-number:<version>
+```
+Wypchnięcie obrazu na **Dockerhub**
+```bash
+docker push lukoprych/guess-the-number:<version>
+```
+![](./ss/dockerhubver.png)
+
+Wynik jednego ze zmienionych obrazów:
+
+![](./ss/check1.png)
+
+### Zmiany w deploymencie
+
+Następnym krokiem w ćwiczeniu było zaaktualizowanie pliku YAML o następujące zmiany:
+* zwiększenie replik np. do 8
+* zmniejszenie liczby replik do 1
+* zmniejszenie liczby replik do 0
+
+Dla powyższych zmian wystarczyło w pliku deploymentowym zaaktualizować parametr ilości replik np do 8.:
+```yaml
+spec:
+  replicas: 8
+``` 
+Następnie mogliśmy zaaplikować zmiany ponownie poleceniem `apply`
+
+```bash 
+kubectl -- apply -f ./guess-the-number-deployment.yaml
+```
+Wynik wprowadzenia 8 replik:
+![](./ss/8replik.png)
+![](./ss/8replik2.png)
+
+Zmniejszenie replik do 1:
+![](./ss/1replika.png)
+![](./ss/1replika1.png)
+
+Zmniejszenie replik do 0:
+![](./ss/0replik.png)
+![](./ss/0replik1.png)
+
+Ustawienie liczby replik na 0 skutkuje usunięciem wszystkich podów związanych z tym Deploymentem. Taka operacja jest często używana w różnych scenariuszach, takich jak:
+
+Wyłączenie aplikacji: Tymczasowe wyłączenie aplikacji bez usuwania definicji Deploymentu. To może być przydatne w celach konserwacyjnych lub podczas aktualizacji aplikacji.
+
+Oszczędność zasobów: Zatrzymanie aplikacji w celu oszczędności zasobów, np. w kwestii kosztów użycia chmury, bez konieczności usuwania całej konfiguracji.
+
+* Zastosowanie nowej wersji obrazu
+
+Zastosowanie nowej wersji obrazu wiąże się z modyfikacją parametru image w spec containers, w tym przypadku dokonujemy zmiany z 1.0.0 na 1.0.1. Następnie wykonujemy krok `apply`. W tym przypadku zastosowano 4 repliki.
+
+```yaml
+    spec:
+      containers:
+      - name: guess-the-number
+        image: lukoprych/guess-the-number:1.0.1
+        ports:
+        - containerPort: 80
+```
+Wynik:
+![](./ss/nowawersjaobrazu.png)
+![](./ss/nowawersjadashb.png)
+
+
+* Zastosowanie starszej wersji obrazu
+
+Następnie dokonujemy w pliku deployment zmianę ponownie na starszą wersję 1.0.0
+
+```yaml
+    spec:
+      containers:
+      - name: guess-the-number
+        image: lukoprych/guess-the-number:1.0.0
+        ports:
+        - containerPort: 80
+```
+
+
+
+Wynik `apply`
+![](./ss/starawersja.png)
+
+![](./ss/starawersjadash.png)
+
+
+* Przywrócenie poprzednich wersje wdrożeń za pomocą poleceń
+* ```kubectl rollout history```
+
+```bash
+kubectl rollout history deployment/guess-the-number
+```
+Polecenie to zwraca nam historię zmian deploymentu, wraz z powodem.
+
+![](./ss/rollouthistoryrecov.png)
+
+* ```kubectl rollout undo```
+```bash
+kubectl rollout undo deployment/guess-the-number
+```
+Polecenie to pozwala nam wrócić do poprzedniej rewizji deploymentu.
+
+![](./ss/undo.png)
+
+Dodatkowo przetestowano działanie obrazu z błędem:
+Wprowadzenie wersji z błędem prezentuje się w następujący sposób (wersja obrazu 1.0.3)
+
+![](./ss/blad.png)
+![](./ss/bladdash.png)
+
+Kontener niestety się nie uruchomi, otrzymujemy błąd, k8s podejmuje ponowną próbę uruchomienia obrazu.
+
+
 
 ### Kontrola Wdrożenia
 
@@ -283,7 +482,7 @@ Po zastosowaniu zmian w pliku deployment:
 
 ![](./ss/script1.png)
 
-Po rollbacku wersji z błędem:
+Wersja z błędem:
 
 ![](./ss/script2.png)
 
