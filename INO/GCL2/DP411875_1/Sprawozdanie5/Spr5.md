@@ -1,4 +1,4 @@
-# Sprawozdanie 5
+<img width="928" alt="image" src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/94080090/07fd58ed-4292-4562-8eb1-33d1052000af"># Sprawozdanie 5
 Dagmara Pasek
 411875
 
@@ -188,5 +188,16 @@ kubectl rollout status deployments/custom-nginx
 
 Otrzymano komunikat "successfully rolled out" po zakończeniu wdrażania, co oznacza, że proces zakończył się sukcesem. 
 
+![](./screeny/5depp.png)
+
+Wynik wdrożenia w Dashboardzie wyglądał następująco:
+![](./screeny/5deppdash.png)
+![](./screeny/5depppody.png)
+
+Utworzone zostały 4 pody w ramach jednego deploymentu. 
+
+
 # Przygotowanie nowego obrazu
+Zarejestrowałam nową wersję swojego obrazu Deploy w Docker Hub. Aby to zrobić 
+
 
