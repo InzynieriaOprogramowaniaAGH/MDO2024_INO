@@ -198,6 +198,10 @@ Utworzone zostały 4 pody w ramach jednego deploymentu.
 
 
 # Przygotowanie nowego obrazu
-Zarejestrowałam nową wersję swojego obrazu Deploy w Docker Hub. Aby to zrobić 
+Zarejestrowałam nową wersję swojego obrazu Deploy w Docker Hub. Aby to zrobić wykorzystałam komendę:
+```
+docker commit
+```
+Przepakowałam wybrany obraz, tworząc nowe wersje z tagami 2.0 i 3.0. To pozwoliło utworzyć nowe warianty obrazu, każdy z oznaczeniem kolejnej wersji, bez konieczności zmieniania czegokolwiek poza tagiem. 
 
 
