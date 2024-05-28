@@ -447,7 +447,66 @@ Aby uprościć instalację zhostowałem plik anaconda-ks.cfg, dzięki czemu syst
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie9-png/4. sklonowalem repo i wrzucilem do niego plik anaconda.png">
 </p>
 
-Ręcznie skopiowałem ten plik do sklonowanego repozytorium po czym spuszhowałem zmiany:
+Ręcznie skopiowałem ten plik do sklonowanego repozytorium po czym spushowałem zmiany:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie9-png/5. push do repo.png">
+</p>
+
+W folderze na moim prywatnym urządzeniu utworzyłem plik `file.ps1`, który umożliwił mi automatyczne tworzenie maszyny. Zdecydowałem się na taki krok, aby posiadać łatwy dostęp do zainstalowanego na początku zajęć instalatora sieciowgo (neist).
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie9-png/6. utworzylem plik, który ma pomoc w automatycznym tworzeniu maszyny.png">
+</p>
+
+Powyższy plik uzupełniłem o następującą treść:
+```
+# Ustawienia ścieżki do VBoxManage.exe
+$VBoxManagePath = "C:\Program Files\Oracle\VirtualBox\VBoxManage.exe"
+
+# Ustawienia maszyny wirtualnej
+$vmName = "Fedora"
+$isoPath = "C:\Users\sromk\Downloads\Fedora-Server-netinst-x86_64-39-1.5.iso"
+
+# Utwórz maszynę wirtualną
+& "$VBoxManagePath" createvm --name $vmName --ostype "RedHat_64" --register
+
+# Skonfiguruj parametry maszyny wirtualnej
+& "$VBoxManagePath" modifyvm $vmName --memory 2048 --acpi on --boot1 dvd --nic1 nat
+
+# Utwórz dysk twardy wirtualnej maszyny
+& "$VBoxManagePath" createhd --filename "$vmName.vdi" --size 8000
+
+# Dodaj kontroler dysków SATA
+& "$VBoxManagePath" storagectl $vmName --name "SATA Controller" --add sata
+
+# Podłącz dysk twardy do kontrolera SATA
+& "$VBoxManagePath" storageattach $vmName --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium "$vmName.vdi"
+
+# Podłącz obraz ISO jako napęd DVD
+& "$VBoxManagePath" storageattach $vmName --storagectl "SATA Controller" --port 1 --device 0 --type dvddrive --medium $isoPath
+
+# Uruchom maszynę wirtualną
+& "$VBoxManagePath" startvm $vmName
+```
+
+Umożliwiłem w PowerShellu uruchamianie skryptów oraz uruchomiłem skrypt:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie9-png/7. w powershell umożliwienie uruchamiania skryptów.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie9-png/8. uruchamianie skryptu.png">
+</p>
+
+Tworząc nową maszynę w taki sposób przy starcie maszyny należało zmienić szczegóły instalacji, mianowicie zamieścić link do zhostowanego wcześniej pliku:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie9-png/9. tworzac nowa maszyna przy pomocy skryptu podaje link do shostowanego wczesniej pliku.png">
+</p>
+
+Następnie instalacja rozpoczęła się bez potrzeby ustawiania czegokolwiek:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie9-png/10. system sie samodzielnie instaluje.png">
+</p>
+
+Po uruchomieniu ukazał się następujący widok, co świadczy o poprawnym zainstalowaniu systemu oraz uruchomieniu kontenera z aplikacją:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie9-png/11. startuje serwis z dockerem.png">
 </p>
