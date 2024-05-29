@@ -3,7 +3,7 @@ Natalia Borysowska-Ślęczka, IO
 
 ## Streszczenie projektu
 
-...
+Projekt polegał na skonfigurowaniu środowiska do zarządzania systemami za pomocą Ansible, zainstalowaniu oprogramowania oraz skonfigurowaniu komunikacji między maszynami wirtualnymi. Kluczowymi zadaniami były instalacja i konfiguracja Ansible, zarządzanie kontenerami Docker, oraz przygotowanie pliku odpowiedzi do przeprowadzenia nienadzorowanej instalacji systemu Fedora. Efektem końcowym było uruchomienie aplikacji w kontenerze Docker na skonfigurowanym systemie operacyjnym.
 
 ## Wykonane kroki - laboratorium nr 8
 
@@ -56,11 +56,11 @@ Do tego będę potrzebować adresów IP obu maszyn, używam do tego polecenia ``
 
 Maszyna "główna":
 
-![](./ss_lab8/lab8_34.png)
+![](./ss_lab8/lab8_70.png)
 
 Maszyna ansible-target:
 
-![](./ss_lab8/lab8_33.png)
+![](./ss_lab8/lab8_69.png)
 
 Ustawiam hostname za pomocą polecenia
 
@@ -80,11 +80,11 @@ aktualizuje tylko wiersz z nową nazwą hostname'a
 
 Na maszynie "głównej":
 
-![](./ss_lab8/lab8_38.png)
+![](./ss_lab8/lab8_71.png)
 
 Na maszynie ansible-target:
 
-![](./ss_lab8/lab8_37.png)
+![](./ss_lab8/lab8_72.png)
 
 Aktualizuje hostname
 
@@ -100,9 +100,17 @@ Sprawdzam czy hostname został ustawiony poprawnie poleceniem
 
 ```hostname```
 
+Następnie na głównej maszynie wirtualnej przechodzę do edycji pliku */etc/hosts*
+
+```sudo nano /etc/hosts```
+
+W nowej linii dodaje adres IP maszyny *ansible-target* oraz nazwę hosta (*ansible-target*). 
+
 Na maszynie "głównej":
 
 ![](./ss_lab8/lab8_39.png)
+
+Analogicznie postępuje w przypadku maszyny ansible-target. Tam w nowej linii dodaje adres IP maszyny "głównej" oraz nazwę hosta (*natalia*).
 
 Na maszynie ansible-target:
 
@@ -166,25 +174,17 @@ Kopiuje klucze publiczne między maszynami
 
 ```ssh-copy-id -i ~/.ssh/id_rsa.pub nazwa_użytkownika@adres_IP_maszyny```
 
-U mnie IP "głównej" maszyny to: 192.168.0.131, a mszyny ansible-target to: 192.168.0.49 (można to sprawdzić komendą ```hostname -I``` jak wyżej)
+U mnie IP "głównej" maszyny to: 192.168.100.75, a mszyny ansible-target to: 192.168.100.74 (można to sprawdzić komendą ```hostname -I``` jak wyżej)
 
 Na "głównej" maszynie:
 
-![](./ss_lab8/lab8_42.png)
+![](./ss_lab8/lab8_73.png)
 
 Na maszynie ansible-target:
 
-![](./ss_lab8/lab8_43.png)
+![](./ss_lab8/lab8_74.png)
 
 Dzięki temu, jesteśmy w stanie logować się pomiędzy maszynami, tak by logowanie ssh nie wymagało podawania hasła.
-
-Na maszynie "głównej":
-
-![](./ss_lab8/lab8_44.png)
-
-Na mszynie ansible-target:
-
-![](./ss_lab8/lab8_45.png)
 
 ### Inwentaryzacja
 * Dokonaj inwentaryzacji systemów
@@ -205,7 +205,7 @@ Na mszynie ansible-target:
   Otwieram plik konfiguracyjny *system-resolved.conf*
 
   ```sudo nano /etc/systemd/resolved.conf```
-
+  
   ![](./ss_lab8/lab8_22.png)
 
   W sekcji *[Resolve]* usuwam komenatrze przy *DNS* i ustalam serwery DNS
@@ -218,23 +218,35 @@ Na mszynie ansible-target:
 
   Te same kroki wykonuje na maszynie "głównej" oraz na *ansible-target*
 
-  Następnie na głównej maszynie wirtualnej przechodzę do edycji pliku */etc/hosts*
+  ![](./ss_lab8/lab8_77.png)
 
-  ```sudo nano /etc/hosts```
-
-  W nowej linii dodaje adres IP maszyny *ansible-target* oraz nazwę hosta 
-
-  ![](./ss_lab8/lab8_26.png)
+  ![](./ss_lab8/lab8_78.png)
 
   * Zweryfikuj łączność
 
   Weryfikuje łączność poleceniem ```ping``` z nazwą hosta, aby sprawdzić, czy moja maszyna może komunikować się z innymi hostami w sieci
 
-  ![](./ss_lab8/lab8_25.png)
+  Na maszynie "głównej":
 
-  Otrzymuje odpowiedzi na ping od *ansible-target* także połączenie zostało wykonane prawidłowo
+  ![](./ss_lab8/lab8_80.png)
 
-  * Stwórz [plik inwentaryzacji](https://docs.ansible.com/ansible/latest/getting_started/get_started_inventory.html)
+  Na maszynie ansible-target:
+
+  ![](./ss_lab8/lab8_79.png)
+
+  Możliwe jest teraz logowanie się między maszynami za pomocą:
+
+  ```ssh nati@natalia```
+
+  ![](./ss_lab8/lab8_83.png)
+
+  oraz
+
+  ```ssh ansible@ansible-target```
+
+  ![](./ss_lab8/lab8_82.png)
+
+  * Stwórz plik inwentaryzacji
 
   Tworzę folder *ansible_quickstart*
 
@@ -270,11 +282,11 @@ Na mszynie ansible-target:
   
   Klucz SSH nie był dodany do agenta SSH. Dodałam klucz maszyny na której pracuje do niej samej
 
-  ```ssh-copy-id -i ~/.ssh/id_rsa.pub nati@192.168.0.131```
+  ```ssh-copy-id -f -i ~/.ssh/id_rsa.pub nati@192.168.100.75```
 
-  ![](./ss_lab8/lab8_49.png)  
+  ![](./ss_lab8/lab8_81.png)  
   
-  Tym razem ping zakończył się pomyślnie
+  Tym razem ping zakończył się pomyślnie.
 
   ![](./ss_lab8/lab8_48.png) 
    
@@ -381,5 +393,125 @@ Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started
 
   ![](./ss_lab8/lab8_66.png) 
 
+
+
 ## Wykonane kroki - laboratorium nr 9
-  
+
+## Zadania do wykonania
+* Pobieram [system Fedora](https://download.fedoraproject.org/pub/fedora/linux/releases/), stosując instalator sieciowy (*netinst*)
+
+  Wybieram Fedorę 40 i przechodzę do instalcji
+
+  ![](./ss_lab9/lab9_1.png) 
+
+  Wybieram język polski
+
+  ![](./ss_lab9/lab9_2.png)
+
+  Tworzę nowego użytkownika (*nati*)
+
+  ![](./ss_lab9/lab9_3.png)
+
+  Wybieram *Fedora Server Edition*, oraz dodatkowo potrzebne składniki przy instalacji - *zarządzanie konetenerami*
+
+  ![](./ss_lab9/lab9_4.png)
+
+  Wybieram automatyczne partycjonowanie (*Miejsce docelowe instalacji -> Automatycznie*, zaznaczam również opcję: *Zwolnienie miejsca przez usunięcie lub zmniejszenie instniejących partycji*)
+
+  Później zaznaczam dysk i klikam *usuń wszystko* (dzięki temu zwalniamy miejsce dla tej instalcaji)
+
+  ![](./ss_lab9/lab9_5.png)
+
+  Edytuje źródło instalcji tak jak na screenie poniżej
+
+  ![](./ss_lab9/lab9_6.png)
+
+  Podumowanie konfiguracji fedory prezentuje się następująco
+
+  ![](./ss_lab9/lab9_7.png)
+
+  Fedora została zainstalowana pomyślnie
+
+  ![](./ss_lab9/lab9_10.png)
+
+  ![](./ss_lab9/lab9_8.png)
+
+  Kopiuje pllik odpowiedzi do katalogu domowego, aby mieć do niego prsotszy dostęp
+
+  ![](./ss_lab9/lab9_8.2.png)
+
+  Następnie na swoim komputerze lokalnie pobieram z serweru plik *anaconda-ks.cfg*, umożliwi mi to prostsze modyfikowanie pliku
+
+  ![](./ss_lab9/lab9_9.png)
+
+  Edytuje plik *anaconda-ks.cfg*
+
+    * Dodaje potrzebne repozytoria
+
+    ```url --mirrorlist="http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-40&arch=x86_64"```
+
+    ```repo --name=updates-released --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f40&arch=x86_64```
+
+    * Ustawiam hostname
+
+    ```network --hostname=fedora-server```
+
+    * Plik odpowiedzi może zakładać pusty dysk, dlatego zapewniam, że zawsze będzie formatowana całość, stosując 
+    
+    ```clearpart --all```
+
+    * Dodaje pakiety do instalacji (*docker*, *wget* do sekcji *%packages*)
+
+    ```
+    %packages
+    @^server-product-environment
+    @container-management
+    docker
+    wget
+
+    %end
+    ```
+
+    * Tworzę sekcję *%post*, która zawiera polecenia do uruchomienia Dockera, zalogowania do Docker Hub i uruchomienia kontenera
+
+    ```
+    %post
+    # Start Docker service
+    systemctl enable docker
+    systemctl start docker
+
+    # Log in to Docker Hub
+    echo "{DOCKER_PASSWORD}" | docker login --username {DOCKER_USERNAME} --password-stdin
+
+    # Pull and run the Docker container
+    docker pull nbsss/tesseractjs:latest
+    docker run -d --name tesseractjs nbsss/tesseractjs:latest
+
+    %end
+    ```
+
+    * Aby system ponownie się uruchomił dodaje
+
+    ```reboot```
+
+    Zeedytowany plik odpowiedzi dodaje do swojego repozytorium.
+
+    Plik konfiguracji do urcuhomienia instalacji nienadzorowanej jest już gotowy. Należy w VirtualBoxie utworzyć nową maszynę, jednak wraz z początkie instalacji należy przenieść się do trybu *GRUB* klikając *e* na klawiaturze.
+
+    Dodajemy linię:
+
+    ```inst.ks=https://raw.githubusercontent.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/NBS411634/INO/GCL1/NBS411634/Sprawozdanie4/anaconda-ks.cfg```
+
+    I uzyskujemy efekt jak niżej
+
+    ![](./ss_lab9/lab9_11.png)
+
+    Edytcję zatwierdzam *Ctrl + x* 
+
+    ![](./ss_lab9/lab9_12.png)
+
+    Czekam aż instalacja się zakończy
+
+    ![](./ss_lab9/lab9_14.png)
+
+    Instalacja przebiegła pomyślnie
