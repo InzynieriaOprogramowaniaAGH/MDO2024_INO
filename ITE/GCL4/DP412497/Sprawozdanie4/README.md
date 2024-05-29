@@ -42,7 +42,7 @@ Na głównej maszynie instalujemy oprogramowanie Ansible zgodnie z powyższą in
 
 * Wymień klucze SSH między użytkownikiem w głównej maszynie wirtualnej, a użytkownikiem `ansible` z nowej tak, by logowanie `ssh ansible@ansible-target` nie wymagało podania hasła
 
-!!! DO ZROBIENIA !!!
+
 
 ### Inwentaryzacja
 * Dokonaj inwentaryzacji systemów
@@ -124,10 +124,3 @@ Ustawiamy formatowanie całego dysku korzystając z `clearpart --all`, oraz doda
   * Użyj pliku odpowiedzi do przeprowadzenia [instalacji nienadzorowanej](https://docs.fedoraproject.org/en-US/fedora/f36/install-guide/advanced/Kickstart_Installations/)
 * Zapewnij, by od razu po pierwszym uruchomieniu systemu, oprogramowanie zostało uruchomione (w dowolny sposób)
 
-
-
-
-### Zakres rozszerzony
-* Połącz plik odpowiedzi z nośnikiem instalacyjnym lub zmodyfikuj nośnik tak, by wskazywał na plik odpowiedzi w sieci (plan minimum: wskaź nośnikowi, aby użył pliku odpowiedzi)
-* Zautomatyzuj proces tworzenia maszyny wirtualnej i uruchomienia instalacji nienadzorowanej. Użyj np. [wiersza poleceń VirtualBox](https://www.virtualbox.org/manual/ch08.html) lub [cmdletów Hyper-V](https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/try-hyper-v-powershell)
-* Wykaż, że system zainstalował się, a wewnątrz pracuje odpowiedni program
