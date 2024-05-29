@@ -1,0 +1,68 @@
+name: Build irssi on ino_dev
+
+on:
+  push:
+    branches:
+      - ino_dev
+  pull_request:
+    branches:
+      - ino_dev
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Dispatecher'
+  
+
+
+    
+
+env:
+  apt_build_deps: libutf8proc-dev libperl-dev libotr5-dev ninja-build
+  get_pip_build_deps_meson: pip3 install setuptools${setuptools_ver}; pip3 install wheel; pip3 install meson${meson_ver}
+  build_options_meson: -Dwith-proxy=yes -Dwith-bot=yes -Dwith-perl=yes -Dwith-otr=yes
+  prefix: ~/irssi-build
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    env:
+      CC: ${{ matrix.compiler }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ubuntu-20.04, ubuntu-latest]
+        compiler: [gcc]
+        include:
+          - os: ubuntu-20.04
+            meson_ver: ==0.53.2
+            setuptools_ver: <51
+          - os: ubuntu-latest
+            meson_ver: <0.63.0
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Prepare required software
+        env:
+          meson_ver: ${{ matrix.meson_ver }}
+          setuptools_ver: ${{ matrix.setuptools_ver }}
+        run: |
+          sudo apt update && sudo apt install -y $apt_build_deps
+          eval "$get_pip_build_deps_meson"
+
+      - name: List directory contents
+        run: |
+          ls -la
+
+      - name: Build and install with meson
+        run: |
+          meson Build $build_options_meson --prefix=${prefix}
+          ninja -C Build
+          ninja -C Build install
+        working-directory: .
+
+      - name: Check current branch
+        run: |
+          GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          echo "Build successfully done on branch $GIT_BRANCH"
+
