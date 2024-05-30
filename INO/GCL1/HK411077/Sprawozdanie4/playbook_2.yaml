@@ -1,0 +1,49 @@
+- name: Instalowanie Docker'a
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: 12345
+  tasks:
+    - name: update
+      become: yes
+      apt:
+        name: '*'
+        state: latest    
+    - name: Instalacja Docker'a
+      become: yes
+      apt:
+        name: docker.io
+        state: latest
+    - name: Uruchom Dockera przy uruchomieniu systemu
+      become: yes
+      command: systemctl enable --now docker
+
+- name: Pobranie aplikacji
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: 12345
+  become: yes
+  tasks:
+    - name: Pobierz obraz z DockerHub
+      community.docker.docker_image:
+        name: kopczys/node-app
+        source: pull
+    - name: Uruchom kontener
+      become: yes
+      community.docker.docker_container:
+        name: node-app-container
+        image: kopczys/node-app
+        state: started
+        detach: yes
+        ports:
+          - "3000:3000"
+
+- name: Zatrzymanie i usunięcie kontenera
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: 12345
+  become: true
+  tasks:
+    - name: Zatrzymaj i usuń kontener
+      docker_container:
+        name: node-app-container
+        state: absent
