@@ -1,6 +1,9 @@
 # Sprawozdanie 4
 
 ## Cel ćwiczenia
+
+Celem ćwiczenia było zapoznanie się ze zdalnym wykonywaniem poleceń za pomocą `ansible'a` oraz ze wdrożeniami nienadzorowanymi
+
 ## Przebieg ćwiczenia - zajęcia 8 
 
 ### Utworzenie drugiej maszyny wirtualnej
