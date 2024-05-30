@@ -3,7 +3,7 @@ Natalia Borysowska-Ślęczka, IO
 
 ## Streszczenie projektu
 
-...
+Podczas wykonywania projektu zapoznano się z podstawowymi koncepcjami, strategiami wdrażania oraz narzędziami do monitorowania i kontrolowania procesu wdrożenia w klastrze Kubernetes. Dodatkowo, przetestowano skrypty automatyzujące procesy kontroli i wdrożeń, co pozwoliło na lepsze zrozumienie mechanizmów działania klastra Kubernetes.
 
 ## Wykonane kroki - laboratorium nr 10
 
