@@ -17,6 +17,7 @@ Celem tych ćwiczeń było zapoznanie się z Kubernetes'em.
  * Zaopatrz się w implementację stosu k8s: [minikube](https://minikube.sigs.k8s.io/docs/start/)
 
 ![ss](./ss/ss01.png)
+
 Wchodzimy na podaną stronę i wybieramy interesujący nas system i typ instalacji. W naszym przypadku (Fedora) jest to Linux i wybieramy RPM package.
 
  * Przeprowadź instalację, wykaż poziom bezpieczeństwa instalacji
@@ -27,6 +28,7 @@ Korzystamy z podanych nam na stronie komend w celu instalacji minikube'a.
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
 sudo rpm -Uvh minikube-latest.x86_64.rpm
 ```
+
 ![ss](./ss/ss02.png)
 
  * Zaopatrz się w polecenie `kubectl` w wariancie minikube, może być alias `minikubctl`, jeżeli masz już "prawdziwy" `kubectl`
@@ -50,6 +52,7 @@ Uruchamiamy dashboard komendą:
 ```
 minikube dashboard
 ```
+
 ![ss](./ss/ss04.png)
 
 I następnie (jeśli nie otworzy się automatycznie) przechodzimy na adres który pojawi się w konsoli.
@@ -71,7 +74,7 @@ Jako iż poprzednio pracowaliśmy na `irssi`, które nie jest stale działający
 Przygotujemy sobie `Dockerfile'a`, aby stworzyć swoją wersję obrazu lokalnie. Chcemy coś w nim dodatkowo zmienić, więc postawmy na stronę startową, czyli plik `index.html`.
 Nasz plik Dockerfile będzie wyglądał następująco:
 ```
-FROM nginx:1.26.1
+FROM nginx:1.26.0
 COPY index.html /usr/share/nginx/html/index.html
 ```
 > Pobieramy obraz nginx w wersji 1.26.0, która jest najnowszą dostępną stabilną wersją i następnie podmieniamy plik strony na nasz. (Jest to ten sam plik ze zmienioną treścią).
@@ -190,35 +193,48 @@ docker push kogucik1519/my-nginx:0.2
 ```
 
 ![ss](./ss/ss12.png)
+
 Jak widać druga wersja jest gotowa do korzystania.
   
 ### Zmiany w deploymencie
  * Aktualizuj plik YAML z wdrożeniem i przeprowadzaj je ponownie po zastosowaniu następujących zmian:
 
    * Nasze bazowe ustawienia
+
     ![ss](./ss/ss13_1.png)
 
    * zwiększenie replik np. do 8
+
     ![ss](./ss/ss13_2.png)
+
     Dodatkowe repliki są dodawane do naszego set'u.
 
    * zmniejszenie liczby replik do 1
+
     ![ss](./ss/ss13_3.png)
     ![ss](./ss/ss13_4.png)
+
     Nadmiar replik jest terminowany.
 
    * zmniejszenie liczby replik do 0
+
     ![ss](./ss/ss13_5.png)
+
     Nie mamy żadnych pod'ów, ale nasz deployment i set dalej jest, mimo że pusty.
 
    * Zastosowanie nowej wersji obrazu
+
     ![ss](./ss/ss13_6.png)
+
     Pojawił się nowy set dla nowej wersji
     ![ss](./ss/ss13_7.png)
+
     Widzimy drugi wpis w historii.
 
    * Zastosowanie starszej wersji obrazu
+
     ![ss](./ss/ss13_8.png)
+
     Pojawił się kolejny wpis, nasza 'nowa' (stara) wersja, a zniknęła pierwsza.
     Stało się tak ponieważ wskoczyła ona po prostu na nowe miejsce, stała się tą nową, ponieważ już była gotowa.
 
@@ -226,12 +242,6 @@ Jak widać druga wersja jest gotowa do korzystania.
  * Przywracaj poprzednie wersje wdrożeń za pomocą poleceń
    * ```kubectl rollout history```
    * ```kubectl rollout undo```
-
-
-
-
-
-
 
 
 ### Kontrola wdrożenia
