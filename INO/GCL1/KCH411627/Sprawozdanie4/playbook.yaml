@@ -1,0 +1,44 @@
+- name: Ping play
+  hosts: All
+  tasks:
+  - name: Ping all hosts
+    ansible.builtin.ping:
+
+- name: Endpoints play
+  hosts: Endpoints
+  tasks:
+  - name: Creating directory
+    become: true    
+    ansible.builtin.file:
+      path: ~/ansible
+      state: directory
+      mode: '0755'
+
+  - name: Copying inventory file
+    copy:
+      src: inventory.ini
+      dest: ~/ansible/inventory.ini
+
+  - name: Copying inventory file again 
+    copy:
+      src: inventory.ini
+      dest: ~/ansible/inventory.ini
+      
+  - name: Package update
+    become: true
+    ansible.builtin.apt:
+      name: "*"
+      state: latest
+
+  - name: Sshd restart
+    become: true 
+    ansible.builtin.service:
+      name: sshd
+      state: restarted
+
+  - name: Rngd restart
+    become: true
+    ansible.builtin.service:
+      name: rng-tools
+      state: restarted
+  

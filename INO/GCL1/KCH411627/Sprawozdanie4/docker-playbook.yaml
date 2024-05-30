@@ -1,0 +1,62 @@
+- name: Docker prepare
+  hosts: Endpoints
+  tasks:
+  - name: Download docker
+    become: true
+    ansible.builtin.apt:
+      name: docker.io
+      state: latest
+
+  - name: Creating directory
+    become: true    
+    ansible.builtin.file:
+      path: ~/ansible
+      state: directory
+      mode: '0755'
+
+  - name: Copying jar file 
+    copy:
+      src: ~/devops/maven-demo/target/maven-demo-0.1-SNAPSHOT.jar
+      dest: ~/ansible/app.jar
+      
+- name: Docker play
+  hosts: Endpoints
+  tasks:
+  - name: Start docker
+    become: true
+    ansible.builtin.service:
+      name: docker
+      state: started
+  
+  - name: Create a deploy container
+    become: true
+    community.docker.docker_container:
+      name: deploy 
+      image: openjdk 
+      detach: true
+      interactive: true
+      
+  - name: Copy a jar file into the deploy container
+    become: true
+    community.docker.docker_container_copy_into:
+      container: deploy 
+      path: /home/ansible/ansible/app.jar
+      container_path: app.jar
+
+  - name: Run app in deploy container
+    become: true
+    community.docker.docker_container_exec:
+      container: deploy
+      command: java -jar app.jar
+    register: result
+
+  - name: Print stdout
+    ansible.builtin.debug:
+      var: result.stdout
+
+  - name: Remove deploy container
+    become: true
+    community.docker.docker_container:
+      name: deploy
+      state: absent
+  

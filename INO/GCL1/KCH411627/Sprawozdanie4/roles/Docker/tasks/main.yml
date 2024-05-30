@@ -1,0 +1,39 @@
+---
+# tasks file for Docker
+- name: Start docker
+  become: true
+  ansible.builtin.service:
+    name: docker
+    state: started
+
+- name: Create a deploy container
+  become: true
+  community.docker.docker_container:
+    name: deploy 
+    image: openjdk 
+    detach: true
+    interactive: true
+    
+- name: Copy a jar file into the deploy container
+  become: true
+  community.docker.docker_container_copy_into:
+    container: deploy 
+    path: /home/ansible/ansible/app.jar
+    container_path: app.jar
+
+- name: Run app in deploy container
+  become: true
+  community.docker.docker_container_exec:
+    container: deploy
+    command: java -jar app.jar
+  register: result
+
+- name: Print stdout
+  ansible.builtin.debug:
+    var: result.stdout
+
+- name: Remove deploy container
+  become: true
+  community.docker.docker_container:
+    name: deploy
+    state: absent

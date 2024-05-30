@@ -1,0 +1,19 @@
+---
+# tasks file for Docker_prepare
+- name: Download docker
+  become: true
+  ansible.builtin.apt:
+    name: docker.io
+    state: latest
+
+- name: Creating directory
+  become: true    
+  ansible.builtin.file:
+    path: ~/ansible
+    state: directory
+    mode: '0755'
+
+- name: Copying jar file 
+  copy:
+    src: ~/devops/maven-demo/target/maven-demo-0.1-SNAPSHOT.jar
+    dest: ~/ansible/app.jar
