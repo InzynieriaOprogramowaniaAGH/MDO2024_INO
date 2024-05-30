@@ -6,6 +6,7 @@ pipeline {
             steps {
                 sh '''
                 #!/bin/bash
+                docker system prune -f
                 docker image prune -f
                 docker container prune -f
                 rm -rf ITE
@@ -17,11 +18,7 @@ pipeline {
             steps {
                 dir('ITE/GCL4/JR412219/Workspace/Lab3/TDWA'){
                     script{
-                        def logname = "build_logs_${env.BUILD_NUMBER}.log"
-                        sh'''
-                        ls
-                        docker build -t tdwabuild -f TDWAbuild.Dockerfile . > ${logname}
-                        '''
+                        docker.build('tdwabuild','-f TDWAbuild.Dockerfile .')
                     }
                 }
                
@@ -30,48 +27,51 @@ pipeline {
         stage('Test') {
             steps {
                  dir('ITE/GCL4/JR412219/Workspace/Lab3/TDWA'){
-                 sh '''
-                 #!/bin/bash
-                 docker build -t tdwatest -f TDWAtest.Dockerfile . > test_logs_${env.BUILD_NUMBER}
-                 '''
+                     script{
+                     docker.build('tdwatest', '-f TDWAtest.Dockerfile .')
+                     }
                  }
             }
         }
         stage('Deploy') {
             steps {
-                 dir('ITE/GCL4/JR412219/Workspace/Lab3/TDWA'){
-                 sh '''
-                 #!/bin/bash
-                 docker build -t tdwadeploy -f TDWAdeploy.Dockerfile . > deploy_logs_${env.BUILD_NUMBER}
-                 '''
-                 }
-            }
-        }
-        stage('Conection Test') {
-            steps {
                 script {
-                    sh '''
-                        #!/bin/bash
-                        docker run tdwadeploy . > deploy_logs_${env.BUILD_NUMBER}
-                        sleep 5
-                        if nc -zv service 3000; then
-                            echo 'TDWA is reachable'
-                        else
-                            echo 'TDWA is not reachable'
-                        fi
-                        '''
+                    //Tworzymy siec do przeprowadzenia testu łączności.
+                    sh 'docker network create deploy || true'
+                    //Uruchamiamy petenta
+                    def TDWA = docker.build('tdwadeploy', '-f ITE/GCL4/JR412219/Workspace/Lab3/TDWA/TDWAdeploy.Dockerfile .')
+                    TDWA.run("-d -p 3000:3000 --network=deploy --name tdwa")
+                    //Uruchamiamy kontener curla by wykonć test łączności
+                    sh 'docker run --rm --network=deploy curlimages/curl:latest -L -v  http://tdwa:3000'
+                    //Czyszczenie
+                    sh 'docker stop tdwa'
+                    sh 'docker container rm tdwa'
+                    sh 'docker network rm deploy'
+                    sh 'docker rmi tdwadeploy'
+                }
             }
-        }
         }
         stage('Publish') {
             steps {
-            sh'''
-            npm install -g verdaccio
-            verdaccio
-            npm config set registry http://localhost:4873/
-            npm publish --registry http://localhost:4873/
-            '''
+                script{
+                sh 'docker network create publish || true'
+                sh'''
+                docker run --network=publish --name verdaccio -d -p 4873:4873 verdaccio/verdaccio || docker start verdaccio
+                '''
+                def publishImg = docker.build('tdwapublish', '-f ITE/GCL4/JR412219/Workspace/Lab3/TDWA/TDWApublish.Dockerfile .')
+                def container = publishImg.run(" --network=publish --name tdwa")
+                sleep 5;
+                sh 'docker stop tdwa'
+                sh 'docker network rm publish'
+                }
             }
         }
     }
+    post {
+            always {
+                // Czyszczenie po zakończeniu
+                sh 'docker system prune -af'
+                sh 'rm -rf ITE'
+            }
+        }
 }
