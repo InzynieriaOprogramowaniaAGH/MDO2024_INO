@@ -1,0 +1,47 @@
+- name: Install Docker
+  hosts: Endpoints
+  become: true
+  tasks:
+    - name: Update apt
+      apt:
+        update_cache: yes   
+    - name: Install Docker
+      ansible.builtin.apt:
+        name: docker.io
+        state: latest
+    - name: start Docker
+      command: systemctl enable --now docker
+- name: deploy aplication from image
+  hosts: Endpoints
+  become: true
+  tasks:
+    - name: Pull Image from dockerhub
+      community.docker.docker_image:
+        name: benek2002/java_deploy
+        source: pull
+    - name: Run container 
+      docker_container:
+        name: java_deploy
+        image: benek2002/java_deploy
+        state: started
+        detach: yes
+        ports:
+          - "8080:8080"
+- name: Stop and remove container
+  hosts: Endpoints
+  become: true
+  tasks:
+    - name: stop and remove container
+      docker_container:
+        name: java_deploy
+        state: absent
+
+
+
+
+
+
+
+    
+
+   

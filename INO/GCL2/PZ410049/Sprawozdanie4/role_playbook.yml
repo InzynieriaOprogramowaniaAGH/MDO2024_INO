@@ -1,0 +1,9 @@
+- name: application deploy 
+  hosts: Endpoints
+  roles: 
+  - install_docker
+  - deploy
+  - remove_container
+
+
+
