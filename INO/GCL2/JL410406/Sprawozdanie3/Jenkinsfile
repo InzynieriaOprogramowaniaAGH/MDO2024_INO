@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Collect') {
+            steps {
+                sh "docker network create node-network"
+                sh "rm -rf MDO2024_INO"
+                sh "git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git"
+                dir("MDO2024_INO/INO/GCL2/JL410406/Sprawozdanie2"){
+                    sh "git checkout JL410406"
+                    sh "touch build.log"
+                    sh "touch test.log"
+                }
+            }
+        }
+        stage('Build') {
+            steps {dir("MDO2024_INO/INO/GCL2/JL410406/Sprawozdanie2"){
+                    sh "docker build -t node-builder -f node-builder.Dockerfile . | tee build.log"
+                    archiveArtifacts artifacts: "build.log"
+                }
+            }
+        }
+        stage('Test') {
+            steps {dir("MDO2024_INO/INO/GCL2/JL410406/Sprawozdanie2"){
+                    sh "docker build -t node-tester -f node-tester.Dockerfile . | tee test.log"
+                    archiveArtifacts artifacts: "test.log"
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {dir("MDO2024_INO/INO/GCL2/JL410406/Sprawozdanie2"){
+                    sh "docker build -t node-deploy -f node-deploy.Dockerfile ."
+                    
+                    sh 'docker rm -f node || true'
+                    sh 'docker run -d -p 3000:3000 --name node --network node-network node-deploy'
+                }
+            }
+        }
+        stage('Publish') {
+            steps {dir("MDO2024_INO/INO/GCL2/JL410406/Sprawozdanie2"){
+                    sh "echo '$DOCKERHUB_TOKEN' | docker login --username jladz --password-stdin"
+                    sh "docker tag node-deploy jladz/node-deploy"
+                    sh "docker push jladz/node-deploy"
+                }
+            }
+        }
+    }
+}
