@@ -591,3 +591,64 @@ Uruchomiłem nowy playbook, wynik jest taki sam jak poprzednio.
 <div align="center">
     <img src="screenshots/ss_28.png" width="850"/>
 </div>
+
+## Przebieg ćwiczenia - zajęcia 9 
+
+### Pobranie i zainstalowanie fedory
+
+Pobrałem obraz [fedory](https://mirroronet.pl/pub/mirrors/fedora/linux/releases/40/Server/x86_64/iso/) server 40, utworzyłem nową maszynę wirtualną i rozpocząłem instalacje
+
+
+<div align="center">
+    <img src="screenshots/ss_29.png" width="850"/>
+</div>
+
+<br>
+
+Wybrałem minimalną instalację oprogramowania
+
+<div align="center">
+    <img src="screenshots/ss_30.png" width="850"/>
+</div>
+
+<br>
+
+Ustawiłem hostname `fedora-server`
+
+<div align="center">
+    <img src="screenshots/ss_31.png" width="850"/>
+</div>
+
+<br>
+
+Utworzyłem użytkownika `fedora`
+
+<div align="center">
+    <img src="screenshots/ss_32.png" width="850"/>
+</div>
+
+<br>
+
+Dodałem link do repozytoriów
+
+<div align="center">
+    <img src="screenshots/ss_33.png" width="850"/>
+</div>
+
+<br>
+
+Instalacja fedory przebiegła pomyślnie
+
+<div align="center">
+    <img src="screenshots/ss_34.png" width="850"/>
+</div>
+
+<br>
+
+Połączyłem się z fedorą przez ssh i skopiowałem plik `root/anaconda-ks.cfg`
+
+Aby plik odpowiedzi zawsze formatował cały dysk dodałem do niego polecenie
+
+```
+clearpart --all
+```
