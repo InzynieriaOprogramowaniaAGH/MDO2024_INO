@@ -107,6 +107,13 @@ docker build -t tdwatest -f TDWAtest.Dockerfile .
 cd ~ && rm -rf Repo
 ```
   Na tym etapie zrozumiałem, że godzina systemu na maszynie wirtualnej z której korzystałem i z której godzinę zaciągał docker i jego kontenery była błędna pomimo konfiguracji dla naszego regionu. Założyłem że wynikało to z faktu, że przez pewien czas maszyny nie wyłączałem a jedynie zapisywałem stan a godzina była aktualizowana przy uruchomieniu systemu.
+### Diagramy
+## Interakcje pomiędzy najważniejszymy elementami rozwiązania:
+![interaction](image-4.png)
+## Etapy pipelinu:
+![Stages](image-6.png)
+
+
 
 ### Pipeline
 Pipeline został oparty o apliakcaje ToDoWebApp (TDWA) któego konteneryzopwałem na potrzeby labboratorium 3. Projekt oparty jest na Node-dzie dlatego poszczególne kroki nie prezentowały się zbyt wymagająco. Zgodnie z założeniami przebiegu diagramu ustalonego w porozumieniu z prowadzącym pipline miał skłądać się na poniższe etapy:
