@@ -1,0 +1,78 @@
+pipeline {
+    agent any
+        parameters {
+        string(name: 'IRRSI', defaultValue: '2.7', description: 'version')
+    }
+    stages {
+        stage('Prepare') {
+            steps {
+                
+                    sh '''
+                    rm -rf MDO2024_INO
+                    git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git
+                    cd MDO2024_INO
+                    git checkout DP411875_1
+                    '''
+            
+            }
+        }
+        stage('Create logs') {
+            steps {
+                dir('MDO2024_INO/INO/GCL2/DP411875_1/Sprawozdanie3/Build'){
+                    sh 'touch b.log'
+                }
+                dir('MDO2024_INO/INO/GCL2/DP411875_1/Sprawozdanie3/Test'){
+                    sh 'touch t.log'
+                }
+            }
+            
+        }
+        stage('Build '){
+            steps{
+                dir('MDO2024_INO/INO/GCL2/DP411875_1/Sprawozdanie3/Build'){
+                    sh 'docker build -t build_container -f Dockerfile_build . | tee b.log'
+                    archiveArtifacts artifacts: "b.log"
+
+                }
+            }
+        }
+        stage('Tests'){
+            steps{
+                dir('MDO2024_INO/INO/GCL2/DP411875_1/Sprawozdanie3/Test'){
+                    sh 'docker build -t test_container -f Dockerfile_test . | tee t.log'
+                    archiveArtifacts artifacts: "t.log"
+                }
+                
+            }
+        }
+        
+        
+         stage('Deploy'){
+    steps{
+        dir('MDO2024_INO/INO/GCL2/DP411875_1/Sprawozdanie3/Deploy') {
+            sh 'docker build -t deploy . -f Dockerfile_deploy'
+            
+            sh 'docker run -t -d -e TERM=xterm --name depl_1 -v output:/output build_container'
+            sh 'docker run -t -d -e TERM=xterm --name copy_1 -v output:/output deploy'
+            
+            sh 'docker cp depl_1:./irssi/Build/src/fe-text/irssi ./irssi_deployed'
+            sh 'docker cp ./irssi_deployed copy_1:/output'
+            
+            sh 'tar -cvf artifacts/art.tar ./irssi_deployed ../artifacts/README.md'
+        
+            sh 'docker stop depl_1'
+            sh 'docker stop copy_1' 
+        }    
+   }
+}
+        
+        stage('Publish'){
+        steps{
+            dir('MDO2024_INO/INO/GCL2/DP411875_1/Sprawozdanie3/Deploy'){
+            archiveArtifacts artifacts: "artifacts/art.tar"
+            sh 'docker system prune --all --volumes --force'
+                }    
+            }
+        }
+    }
+}

@@ -1,0 +1,5 @@
+- name: Deploy Docker container
+  hosts: endpoints
+  become: true
+  roles:
+    - irssi_roles

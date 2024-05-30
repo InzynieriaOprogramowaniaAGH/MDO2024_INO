@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customnginx-canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: custom-nginx
+      version: canary
+  template:
+    metadata:
+      labels:
+        app: custom-nginx
+        version: canary
+    spec:
+      containers:
+      - name: customnginx
+        image: dagappp/custom-nginx:2.0-canary
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customnginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: custom-nginx
+  template:
+    metadata:
+      labels:
+        app: custom-nginx
+        version: stable
+    spec:
+      containers:
+      - name: customnginx
+        image: dagappp/custom-nginx:2.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: customnginx
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: custom-nginx
+
