@@ -1,0 +1,49 @@
+- name: Instalowanie Dockera
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: krystian
+  become: yes
+  tasks:
+    - name: Aktualizacja pakietów
+      apt:
+        name: '*'
+        state: latest
+    
+    - name: Instalacja Dockera
+      apt:
+        name: docker.io
+        state: latest
+
+    - name: Uruchomianie Dockera przy uruchomieniu systemu
+      command: systemctl enable --now docker
+
+- name: Pobieranie aplikacji
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: krystian
+  become: yes
+  tasks:
+    - name: Pobieranie obrazu z Docker Hub
+      community.docker.docker_image:
+        name: krystian3243/first-app
+        source: pull
+    - name: Uruchomienie kontenera
+      become: yes
+      community.docker.docker_container:
+        name: first-app-con
+        image: krystian3243/first-app
+        state: started
+        detach: yes
+        ports:
+          - "3000:3000"
+
+- name: Zatrzymanie i usunięcie kontenera
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: krystian
+  become: true
+  tasks:
+    - name: Zatrzymanie i usunięcie kontenera
+      docker_container:
+        name: first-app-con
+        state: absent
