@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-broken
+  labels:
+    app: nginx-deploy-broken
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-deploy-broken
+  template:
+    metadata:
+      labels:
+        app: nginx-deploy-broken
+    spec:
+      containers:
+      - name: mynginx
+        image: nbsss/my-nginx:v3
+        ports:
+        - containerPort: 80
+
+
