@@ -514,4 +514,8 @@ Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started
 
     ![](./ss_lab9/lab9_14.png)
 
+<<<<<<< HEAD
     Instalacja przebiegła pomyślnie
+=======
+    Instalacja przebiegła pomyślnie
+>>>>>>> refs/remotes/origin/NBS411634
