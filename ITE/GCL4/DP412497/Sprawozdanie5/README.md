@@ -227,6 +227,7 @@ Jak widać druga wersja jest gotowa do korzystania.
     ![ss](./ss/ss13_6.png)
 
     Pojawił się nowy set dla nowej wersji
+    
     ![ss](./ss/ss13_7.png)
 
     Widzimy drugi wpis w historii.
