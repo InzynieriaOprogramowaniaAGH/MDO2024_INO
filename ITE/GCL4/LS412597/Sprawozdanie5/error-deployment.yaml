@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: error-take-note-app
+  labels:
+    app: error-take-note-app
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: error-take-note-app
+  template:
+    metadata:
+      labels:
+        app: error-take-note-app
+    spec:
+      containers:
+        - name: error-take-note-app
+          image: lukaszsawina/take_note_pipeline:120.0.0
+          ports:
+            - containerPort: 5000

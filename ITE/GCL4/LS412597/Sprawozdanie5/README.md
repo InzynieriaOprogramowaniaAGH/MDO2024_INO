@@ -116,3 +116,167 @@ Teraz możemy sprawdzić czy nasza aplikacja otworzy się gdy wejdziemy na adres
 ![Instalcja kubernates](Images/13.png)
 
 SUKCES, jak widać udało się nam uruchomić poda z wykorzystaniem obrazu naszej aplikacji i skonfigurować przekierowywanie portów tak, abyśmy mogli dostać się do aplikacji.
+
+### Konwersja wdrożenia ręcznego na wdrożenie deklaratywne YAML
+
+Naszym kolejnym zadaniem będzie zautomatyzowanie poprzednich kroków, będziemy chcieli przygotować plik YAML, który będzie opisywał nasze wdrozenie i na jego podstawie robić apply kubernatesa.
+
+W tym celu musimy przygotować plik yaml:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: take-note-app
+  labels:
+    app: take-note-app
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: take-note-app
+  template:
+    metadata:
+      labels:
+        app: take-note-app
+    spec:
+      containers:
+        - name: take-note-app
+          image: lukaszsawina/take_note_pipeline:latest
+          ports:
+            - containerPort: 5000
+```
+
+Gdy mamy już gotowy plik do wdrożenia możemy go wykorzystać przy pomocy polecenia:
+
+```bash
+minikube kubectl -- apply -f deployment.yaml
+```
+
+![Instalcja kubernates](Images/14.png)
+
+Jak widać nasz plik został wykorzystany do wdrożenia aplikacji, dodatkowo przy pomocy polecenia:
+
+```bash
+minikube kubectl -- rollout status deployment/take-note-app
+```
+
+Możemy zauważyć status naszego deploymentu, teraz zobaczmy jak to wygląda w dashboardzie.
+
+![Instalcja kubernates](Images/15.png)
+
+Jak widać pojawiło się dużo nowych rzeczy, po pierwsze co można zauwaćyć, to aż 4 pody, jest to spowodowane tym, że w pliku z konfiguracją deploymentu ustawiliśmy `replicas` na 4. Możemy również zobaczyć status naszego deploymentu oraz poszczególnych podów które pracują.
+
+### Przygotowanie nowego obrazu
+
+Teraz do dalszego działania z kubernatesem musimy zrobić kilka przygotować, w tym celu musimy utworzyć kilka wersji obrazu naszej aplikacji, jak widać ja już wcześniej miałem utworzone inne wersje.
+
+![Instalcja kubernates](Images/16.png)
+
+Dodatkowo musimy przygotować wersję obrazu, którego próba uruchomienia zakończy się błędem. W tym celu lokalnie wykorzystuję stare pliki dockerfile i zmieniam zawartość pliku deploy.Dockerfile na następującą
+
+```Dockerfile
+FROM takenote_build
+
+# WORKDIR /takenote
+# RUN npm run build
+
+# EXPOSE 5000
+
+# ENTRYPOINT npm run prod
+
+CMD ["false"];
+```
+
+W ten sposób po uruchomieniu kontenera z takim obrazem zostanie zwrócony błąd. Dodatkowo zakomentowałem pozostałe linie, aby skrócić czas oczekiwania na zbudowanie obrazu.
+
+![Instalcja kubernates](Images/17.png)
+
+Jak widać obraz został zbudowany, konener uruchomiony, ale możemy zauważyć, że zakończył się z kodem 1, czyli tak jak chcieliśmy.
+
+Teraz wystarczy nasz obraz pushnąć na dockerhub z odpowiednim tagiem. (przykładowo 120.0.0)
+
+![Instalcja kubernates](Images/18.png)
+
+Teraz przetestujmy jak zachowa się nasz deployment, gdy wykorzystamy niedziałający obraz:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: error-take-note-app
+  labels:
+    app: error-take-note-app
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: error-take-note-app
+  template:
+    metadata:
+      labels:
+        app: error-take-note-app
+    spec:
+      containers:
+        - name: error-take-note-app
+          image: lukaszsawina/take_note_pipeline:120.0.0
+          ports:
+            - containerPort: 5000
+```
+
+W tym celu przygotowałem nowy plik yaml, który wykorzystuje odpowiednią wersję obrazu:
+
+![Instalcja kubernates](Images/19.png)
+
+Jak widać po uruchomieniu naszego błędnego deploymentu na wszystkich podach otrzymujemy informację, że wystąpił błąd.
+
+### Zmiany w deploymencie
+
+Teraz będziemy testowali deployment z różnymi wartościami replik oraz wersjami obrazu.
+
+- 8 replik
+
+Zmianiamy `replicas` z 4 na 8 i następnie robimy apply:
+
+![Instalcja kubernates](Images/21.png)
+![Instalcja kubernates](Images/20.png)
+
+- 1 replika
+
+![Instalcja kubernates](Images/22.png)
+![Instalcja kubernates](Images/23.png)
+
+- 0 replik
+
+![Instalcja kubernates](Images/24.png)
+![Instalcja kubernates](Images/25.png)
+
+Jak widać dla tej wersji nie pojawił się nam żaden pod.
+
+- Wykorzystanie nowej wersji programu
+
+`image: lukaszsawina/take_note_pipeline:2.0.0` jak widać pojawia się nam tutaj 2.0.0 co jest w moim repozytorium nowszą wersją niż latest (latest jest wersją 1.0.4)
+
+![Instalcja kubernates](Images/27.png)
+
+Przy pomocy polecenia:
+
+```bash
+minikube kubectl -- rollout history deployment/take-note-app
+```
+
+Jesteśmy w stanie przeglądać historię naszego wdrożenia
+
+![Instalcja kubernates](Images/26.png)
+
+Jak widać pojawiają się nam dwie wersje, ponieważ wykorzystaliśmy dwie różne wersje obrazów.
+
+Jeśli chcielibyśmy się cofnąć do poprzedniej wersji wdrożenia możemy użyć polecenia:
+
+```bash
+minikube kubectl -- rollout undo deployment/take-note-app
+```
+
+![Instalcja kubernates](Images/28.png)
+
+Po wykonaniu tego polecenia automatycznie zmieniła się wersja przy naszym obrazie w deploymencie.

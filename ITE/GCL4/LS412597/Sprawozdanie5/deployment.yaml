@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-node-app
+  name: take-note-app
   labels:
-    app: my-node-app
+    app: take-note-app
 spec:
-  replicas: 4
+  replicas: 0
   selector:
     matchLabels:
-      app: my-node-app
+      app: take-note-app
   template:
     metadata:
       labels:
-        app: my-node-app
+        app: take-note-app
     spec:
       containers:
-        - name: my-node-app
-          image: lukaszsawina/take_note_pipeline:latest
+        - name: take-note-app
+          image: lukaszsawina/take_note_pipeline:2.0.0
           ports:
             - containerPort: 5000
