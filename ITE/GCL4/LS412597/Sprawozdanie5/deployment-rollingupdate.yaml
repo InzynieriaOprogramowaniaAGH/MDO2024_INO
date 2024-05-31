@@ -9,6 +9,11 @@ spec:
   selector:
     matchLabels:
       app: take-note-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 25%
   template:
     metadata:
       labels:

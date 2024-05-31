@@ -280,3 +280,172 @@ minikube kubectl -- rollout undo deployment/take-note-app
 ![Instalcja kubernates](Images/28.png)
 
 Po wykonaniu tego polecenia automatycznie zmieniła się wersja przy naszym obrazie w deploymencie.
+
+### Kontrola wdrożenia
+
+Naszym kolejnym zadniem będzie stworzenie skryptu, który będzie wykonywał wdrożenie i sprawdzał czy w czasie 60 sekund udało się wykonać wdrożenie, w przeciwnym wypadku wrócimy wersją do poprzedniej.
+
+W tym celu tworzymy skrypt bashowy:
+
+```bash
+#!/bin/bash
+
+DEPLOYMENT_FILE="deployment.yaml"
+DEPLOYMENT_NAME="error-take-note-app"
+TIMEOUT_SECONDS=60
+INTERVAL_SECONDS=5
+TIME_PASSED=0
+
+minikube kubectl -- apply -f $DEPLOYMENT_FILE
+
+while [ $TIME_PASSED -lt $TIMEOUT_SECONDS ]; do
+    STATUS=$(minikube kubectl -- get deployment $DEPLOYMENT_NAME -o jsonpath='{.status.conditions[?(@.type=="Available")].status}')
+
+    if [ "$STATUS" == "True" ]; then
+        echo "Wdrożenie $DEPLOYMENT_NAME zostało zakończone pomyślnie."
+        exit 0
+    fi
+
+    sleep $INTERVAL_SECONDS
+    TIME_PASSED=$((TIME_PASSED + INTERVAL_SECONDS))
+done
+
+echo "Przekroczono limit czasu ($TIMEOUT_SECONDS sekund) oczekiwania na zakończenie wdrożenia $DEPLOYMENT_NAME."
+exit 1
+
+```
+
+Nadajemy mu odpowiednie uprawnienia:
+
+```bash
+chmod +x wdrozenie.sh
+```
+
+![Instalcja kubernates](Images/29.png)
+
+Testujemy z wykorzystaniem pliku deployment.yaml
+
+Teraz zobaczmy jak działa z wykorzystaniem error-deployment.yaml
+
+![Instalcja kubernates](Images/30.png)
+
+### Strategie wdrożenia
+
+Teraz będziemy chcieli przetestować działąnie różnych strategii wdrażania:
+
+- Recreate:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: take-note-app
+  labels:
+    app: take-note-app
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: take-note-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: take-note-app
+    spec:
+      containers:
+        - name: take-note-app
+          image: lukaszsawina/take_note_pipeline:2.0.0
+          ports:
+            - containerPort: 5000
+```
+
+Recreate działa na zasadzie usunięcia istniejących podów i utworzenie nowych, niestety problemem takiego podejścia jest pewien moment, w którym nie ma żadnych działających podów.
+
+- RollingUpdate
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: take-note-app
+  labels:
+    app: take-note-app
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: take-note-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 3
+      maxSurge: 50%
+  template:
+    metadata:
+      labels:
+        app: take-note-app
+    spec:
+      containers:
+        - name: take-note-app
+          image: lukaszsawina/take_note_pipeline:2.0.0
+          ports:
+            - containerPort: 5000
+```
+
+Strategia ta działa na stopniowym zastępowaniu istniejących podów nowymi, nie usuwa jednocześnie wszystkich tylko kolejno usuwa i tworzy nowy pod. Jest to domyślna strategia. Parametr maxUnavailable określa ile maksymalnie podów może nie działać, w moim przypadku ustawiłem, że minimum jeden pod musi być działający, maxSurge określa ile dodatkowych podów można uruchomić ponad określoną ilość.
+
+- Canary
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: take-note-app
+  labels:
+    app: take-note-app
+    track: canary
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: take-note-app
+      track: canary
+  template:
+    metadata:
+      labels:
+        app: take-note-app
+        track: canary
+    spec:
+      containers:
+        - name: take-note-app
+          image: lukaszsawina/take_note_pipeline:2.0.0
+          ports:
+            - containerPort: 5000
+```
+
+Wdrozenie canary wdraża nową wersję aplikacji stopniowo, pozwalając testować aplikację na niewielkiej ilości podów przed pełnym wdrożeniem.
+
+### Service
+
+Aby wykorzystać service musimy przygotować sobie osobny plik yaml:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: service
+spec:
+  selector:
+    app: take-note-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+```
+
+A następnie zrobić jego apply i ustawić przekierowanie portów:
+
+![Instalcja kubernates](Images/31.png)
+![Instalcja kubernates](Images/32.png)
