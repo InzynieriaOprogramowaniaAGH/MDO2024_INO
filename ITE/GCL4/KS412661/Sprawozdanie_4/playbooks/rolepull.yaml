@@ -1,0 +1,4 @@
+- name: Deploy
+  hosts: Endpoints
+  roles:
+    - /home/root2/MDO2024_INO/ITE/GCL4/KS412661/Sprawozdanie_4/dummy

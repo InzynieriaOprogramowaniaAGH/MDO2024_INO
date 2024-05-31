@@ -1,0 +1,12 @@
+- name: Copy and ping 
+  hosts: Endpoints
+  remote_user: ansible
+
+  tasks:
+    - name: Copy
+      copy:
+        src: /home/root2/MDO2024_INO/ITE/GCL4/KS412661/Sprawozdanie_4/inventory.ini
+        dest: /home/ansible/
+
+    - name: Ping
+      ansible.builtin.ping:

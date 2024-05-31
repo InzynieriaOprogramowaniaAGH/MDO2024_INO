@@ -1,0 +1,14 @@
+- name: Restart
+  hosts: Endpoints
+  become: yes
+  tasks:
+    - name: Restart
+      ansible.builtin.service:
+        daemon_reload: yes
+        name: sshd
+        state: restarted
+
+    - name: Restart
+      ansible.builtin.service:
+        name: rng-tools-debian
+        state: restarted

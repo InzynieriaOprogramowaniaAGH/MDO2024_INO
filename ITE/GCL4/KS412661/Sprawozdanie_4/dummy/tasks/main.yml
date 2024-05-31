@@ -1,0 +1,13 @@
+---
+- name: Pull
+  docker_image:
+    name: "flafyking/node-js-dummy-test:{{ VERSION }}"
+    source: pull
+
+- name: Run
+  docker_container:
+    name: dummy-test
+    image: "flafyking/node-js-dummy-test:{{ VERSION }}"
+    state: started
+    tty: yes
+    interactive: yes
