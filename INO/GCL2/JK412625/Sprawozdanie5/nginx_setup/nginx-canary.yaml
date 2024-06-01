@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-canary
+  labels:
+    app: canary
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: canary
+  template:
+    metadata:
+      labels: 
+        app: canary
+    spec:
+      containers:
+      - name: nginx
+        image: custom-nginx:2.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        resources:
+          limits:
+            memory: "512Mi"
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
