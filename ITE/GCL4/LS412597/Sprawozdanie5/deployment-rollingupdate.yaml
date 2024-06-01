@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: take-note-app
+  labels:
+    app: take-note-app
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: take-note-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 25%
+  template:
+    metadata:
+      labels:
+        app: take-note-app
+    spec:
+      containers:
+        - name: take-note-app
+          image: lukaszsawina/take_note_pipeline:2.0.0
+          ports:
+            - containerPort: 5000

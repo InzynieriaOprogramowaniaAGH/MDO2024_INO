@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: take-note-app
+  labels:
+    app: take-note-app
+    track: canary
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: take-note-app
+      track: canary
+  template:
+    metadata:
+      labels:
+        app: take-note-app
+        track: canary
+    spec:
+      containers:
+        - name: take-note-app
+          image: lukaszsawina/take_note_pipeline:2.0.0
+          ports:
+            - containerPort: 5000

@@ -1,8 +1,10 @@
 FROM takenote_build
 
-WORKDIR /takenote
-RUN npm run build
+# WORKDIR /takenote
+# RUN npm run build
 
-EXPOSE 5000
+# EXPOSE 5000
 
-ENTRYPOINT npm run prod
+# ENTRYPOINT npm run prod
+
+CMD ["false"];
