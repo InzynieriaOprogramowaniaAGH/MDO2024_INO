@@ -197,3 +197,96 @@ Nowy Playbook, który uruchomi powyższy kod:
 Wynik uruchomienia Playbooka:
 
 ![alt text](image-17.png)
+
+
+### Instalacje nienadzorowane
+
+Pierwszym krokiem było pobranie Fedory z podanego na zajęciach linku. Wybrałem wersje 39. Należało pamiętać aby pobrać wersję netinst. 
+
+Po pobraniu, utworzyłem nową maszynę wirtualną i ją skonfigurowałem.
+
+Następnie należało utworzyć użytkownika root'a. 
+
+Fedora instaluje się:
+
+![alt text](image-18.png)
+
+Po pomyślnym zainstalowaniu, możemy dostać się do pliku `anaconda-ks.cfg` i dodać następujący kod:
+
+```
+url --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-39&arch=x86_64
+repo --name=update --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f39&arch=x86_64
+```
+
+Zapisałem plik anaconda-ks.cfg w repozytorium przedmiotowym. Dzięki temu będziemy mogli odnieść się do niego w kolejnej instalacji.
+
+Utworzyłem drugą maszynę w ten sam sposób lecz w menu GRUB, kliknąłem przycisk `e`. Otworzyło to edytor w którym sprecyzujemy adres pliku `anaconda-ks.cfg`:
+
+```
+init.ks=https://raw.githubusercontent.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/KS412661/ITE/GCL4/KS412661/Sprawozdanie_4/anaconda-ks.cfg
+```
+
+Fedora instaluje się kolejny raz. 
+
+![alt text](image-19.png)
+
+Po pomyślnej instalacji, możemy dodać dodatkowe instruckję do `anaconda-ks.cfg`:
+
+
+```
+%packages
+@^production-server
+moby-engine
+
+%end
+
+```
+
+`Moby Engine` umożliwi nam uruchomienie obrazu z Docker Hub.
+
+Następnie dodajemy sekcję `%post`, która wykonuje polecenia po instalacji.
+
+
+
+```
+%post --erroronfail --log=/root/ks-post.log
+```
+
+W tej sekcji, zapewniamy obsługę błędów i precyzujemy ścieżkę do zapisywania logów.
+
+
+```
+[Unit]
+Description=Download docker and run
+Requires=docker.service
+After=docker.service
+```
+
+W tej sekcji precyzujemy metadane dla usługi. 
+
+```
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/docker pull flafyking/node-js-dummy-test:1.0.2
+ExecStart=/usr/bin/docker run -t --name node-dummy -e TERM=xterm flafyking/node-js-dummy-test:1.0.2
+```
+
+W tej sekcji precyzujemy jakie usługi mają zostać wykonane. 
+
+```
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+
+Tutaj precyzujemy gdzie usługa zostanie zainstalowana w systemie.
+
+
+Kolejnym krokiem będzie odpalenie systemu w trybie `rescue` oraz wybranie opcji `Boot First Drive`:
+
+![alt text](image-20.png)
+
+Ostanim krokiem będzie sprawdzenie statusu usługi aby upewnić się że wszystko działa:
+
+![alt text](image-21.png)
