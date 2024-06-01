@@ -1,0 +1,77 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                sh '''
+                #!/bin/bash
+                docker system prune -f
+                docker image prune -f
+                docker container prune -f
+                rm -rf ITE
+                '''
+                git branch: 'JR412219', url: 'https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('ITE/GCL4/JR412219/Workspace/Lab3/TDWA'){
+                    script{
+                        docker.build('tdwabuild','-f TDWAbuild.Dockerfile .')
+                    }
+                }
+               
+            }
+        }
+        stage('Test') {
+            steps {
+                 dir('ITE/GCL4/JR412219/Workspace/Lab3/TDWA'){
+                     script{
+                     docker.build('tdwatest', '-f TDWAtest.Dockerfile .')
+                     }
+                 }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                script {
+                    //Tworzymy siec do przeprowadzenia testu łączności.
+                    sh 'docker network create deploy || true'
+                    //Uruchamiamy petenta
+                    def TDWA = docker.build('tdwadeploy', '-f ITE/GCL4/JR412219/Workspace/Lab3/TDWA/TDWAdeploy.Dockerfile .')
+                    TDWA.run("-d -p 3000:3000 --network=deploy --name tdwa")
+                    //Uruchamiamy kontener curla by wykonć test łączności
+                    sh 'docker run --rm --network=deploy curlimages/curl:latest -L -v  http://tdwa:3000'
+                    //Czyszczenie
+                    sh 'docker stop tdwa'
+                    sh 'docker container rm tdwa'
+                    sh 'docker network rm deploy'
+                    sh 'docker rmi tdwadeploy'
+                }
+            }
+        }
+        stage('Publish') {
+            steps {
+                script{
+                sh 'docker network create publish || true'
+                sh'''
+                docker run --network=publish --name verdaccio -d -p 4873:4873 verdaccio/verdaccio || docker start verdaccio
+                '''
+                def publishImg = docker.build('tdwapublish', '-f ITE/GCL4/JR412219/Workspace/Lab3/TDWA/TDWApublish.Dockerfile .')
+                def container = publishImg.run(" --network=publish --name tdwa")
+                sleep 5;
+                sh 'docker stop tdwa'
+                sh 'docker network rm publish'
+                }
+            }
+        }
+    }
+    post {
+            always {
+                // Czyszczenie po zakończeniu
+                sh 'docker system prune -af'
+                sh 'rm -rf ITE'
+            }
+        }
+}
