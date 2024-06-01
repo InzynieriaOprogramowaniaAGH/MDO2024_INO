@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: game-deploy
+  labels:
+    app: guess-the-number
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: guess-the-number
+  template:
+    metadata:
+      labels:
+        app: guess-the-number
+    spec:
+      containers:
+      - name: guess-the-number
+        image: lukoprych/guess-the-number:1.0.1
+        ports:
+        - containerPort: 80
+
