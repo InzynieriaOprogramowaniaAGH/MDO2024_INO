@@ -1,0 +1,55 @@
+- name: Ensure Docker is installed
+  apt:
+    name: docker.io
+    state: present
+  become: yes
+
+- name: Start Docker service
+  service:
+    name: docker
+    state: started
+    enabled: yes
+  become: yes
+
+- name: Build Builder image
+  command: docker build -t build_image -f /home/ansible/Dockerfile.build /home/ansible
+  become: yes
+
+- name: Build Tester image
+  command: docker build -t test_image -f /home/ansible/Dockerfile.test /home/ansible
+  become: yes
+
+- name: Run application container
+  command: docker run -itd --name app build_image
+  register: container
+  become: yes
+
+- name: Wait for container to start
+  pause:
+    seconds: 10
+
+- name: Run tests
+  command: docker exec app sh -c 'cd maven-simple && mvn test'
+  become: yes
+
+- name: Deploy application
+  command: docker exec app sh -c 'cd maven-simple && mvn deploy -DaltDeploymentRepository=myRepo::default::file:/maven-simple/artifact'
+  become: yes
+
+- name: Create artifacts directory
+  command: mkdir /home/ansible/artifact
+  become: yes
+
+- name: Copy artifacts from container
+  command: docker cp app:/maven-simple/artifact /home/ansible/artifact
+  become: yes
+
+- name: Stop container
+  command: docker stop app
+  ignore_errors: yes
+  become: yes
+
+- name: Remove container
+  command: docker rm app
+  ignore_errors: yes
+  become: yes

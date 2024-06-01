@@ -1,0 +1,4 @@
+FROM build_image:latest
+
+RUN cd maven-simple && \
+    mvn test

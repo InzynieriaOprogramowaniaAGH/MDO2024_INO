@@ -1,0 +1,24 @@
+- name: Copy Dockerfiles to endpoints
+  hosts: Orchestrators
+  tasks:
+    - name: Copy Dockerfile.build to endpoints
+      copy:
+        src: "/home/magda/devops/MDO2024_INO/ITE/GCL4/MR412777/Sprawozdanie4/Dockerfile.build"
+        dest: /home/ansible/Dockerfile.build
+      become: yes
+      delegate_to: "{{ item }}"
+      with_items: "{{ groups['Endpoints'] }}"
+
+    - name: Copy Dockerfile.test to endpoints
+      copy:
+        src: "/home/magda/devops/MDO2024_INO/ITE/GCL4/MR412777/Sprawozdanie4/Dockerfile.test"
+        dest: /home/ansible/Dockerfile.test
+      become: yes
+      delegate_to: "{{ item }}"
+      with_items: "{{ groups['Endpoints'] }}"
+
+- name: Import Docker images and manage containers
+  hosts: Endpoints
+  become: yes
+  roles:
+    - docker-role

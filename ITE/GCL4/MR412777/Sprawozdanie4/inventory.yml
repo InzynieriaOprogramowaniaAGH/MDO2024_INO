@@ -1,0 +1,12 @@
+all:
+  children:
+    Orchestrators:
+      hosts:
+        orchestrator:
+          ansible_host: ubuntuserver
+          ansible_user: magda
+    Endpoints:
+      hosts:
+        endpoint1:
+          ansible_host: ansible-target
+          ansible_user: ansible
