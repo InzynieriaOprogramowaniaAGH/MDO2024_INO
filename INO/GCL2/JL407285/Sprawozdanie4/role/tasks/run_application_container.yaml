@@ -1,0 +1,7 @@
+- name: Run application container from Deploy/Publish image
+  docker_container:
+    name: "{{ docker_app_container_name }}"
+    image: "{{ docker_image }}"
+    state: started
+    ports:
+      - "{{ docker_app_port }}:80"

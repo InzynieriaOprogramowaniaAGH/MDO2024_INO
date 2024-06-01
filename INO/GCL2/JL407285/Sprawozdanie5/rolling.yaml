@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodeapp-rolling-update
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nodeapp-rolling-update
+  template:
+    metadata:
+      labels:
+        app: nodeapp-rolling-update
+    spec:
+      containers:
+      - name: nodeapp
+        image: grubcio0/pipeline-repo:builder
+        ports:
+        - containerPort: 3000
+        command: ["npm", "start"]
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 20%

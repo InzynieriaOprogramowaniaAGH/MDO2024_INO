@@ -1,0 +1,4 @@
+docker_image: grubcio0/pipeline-repo:builder
+docker_deploy_container_name: deploy_container
+docker_app_container_name: app_container
+docker_app_port: 8080

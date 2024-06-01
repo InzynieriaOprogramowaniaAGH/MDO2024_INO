@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodeapp-canary
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nodeapp-canary
+  template:
+    metadata:
+      labels:
+        app: nodeapp-canary
+    spec:
+      containers:
+      - name: nodeapp
+        image: grubcio0/pipeline-repo:builder
+        ports:
+        - containerPort: 3000
+        command: ["npm", "start"]

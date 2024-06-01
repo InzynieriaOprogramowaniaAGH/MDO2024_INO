@@ -1,0 +1,8 @@
+- name: Run Deploy container if not running
+  docker_container:
+    name: "{{ docker_deploy_container_name }}"
+    image: "{{ docker_image }}"
+    state: started
+    ports:
+      - "{{ docker_app_port }}:80"
+  when: deploy_container_running.stdout_lines is defined and deploy_container_running.stdout_lines == []
