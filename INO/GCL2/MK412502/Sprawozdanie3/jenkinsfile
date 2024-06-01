@@ -1,0 +1,58 @@
+pipeline {
+    agent any
+    environment {
+        CREDS=credentials('reizde-dockerhub')
+    }
+    stages {
+        stage('Clone') {
+            steps {
+                script {
+                    sh "rm -rf MDO2024_INO || true"
+                    sh "git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git MDO2024_INO"
+                    sh "docker network create pipeline || true"
+                    dir ("MDO2024_INO/INO/GCL2/MK412502/Sprawozdanie3") {
+                        sh "git checkout MK412502"
+                    }
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                dir ("MDO2024_INO/INO/GCL2/MK412502/Sprawozdanie3") {
+                    sh "docker build -t node-builder -f ./builder.dockerfile ."
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                dir ("MDO2024_INO/INO/GCL2/MK412502/Sprawozdanie3") {
+                    sh "docker build -t node-test -f ./tester.dockerfile ."
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                dir ("MDO2024_INO/INO/GCL2/MK412502/Sprawozdanie3") {
+                    sh "docker build -t app-jenkins -f ./deploy.dockerfile ."
+                    sh "docker tag app-jenkins reizde/node-jenkins"
+                    sh "docker rm -f node-jenkins || true"
+                    sh "docker run --name node-jenkins --rm -d -p 3000:3000 --network=pipeline reizde/node-jenkins"
+                }
+            }
+        }
+        stage('Publish') {
+            steps {
+                sh "docker rmi curlimages/curl || true"
+                script {
+                    def response = sh script: "docker run --network=pipeline --rm curlimages/curl:latest -L -v http://node-jenkins:3000", returnStdout: true
+                    if (response.contains("Express")) {
+                        sh "echo $CREDS_PSW | docker login -u reizde --password-stdin"
+                        sh 'docker push reizde/node-jenkins'
+                    } else {
+                        error "Response does not contain App!"
+                    }
+                }
+            }
+        }
+    }
+}

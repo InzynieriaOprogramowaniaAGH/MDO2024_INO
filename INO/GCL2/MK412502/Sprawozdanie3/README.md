@@ -164,15 +164,134 @@ Teraz logujemy się na Jenkinsa oraz wstępnie jego konfigurujemy.
 ---
 ### Tworzenie pipeline
 
-- Tworzenie projektu
+Jenkins Pipeline to narzędzie do automatyzacji pracy, które pomaga w budowaniu, testowaniu i wdrażaniu aplikacji. Umożliwia stworzenie skryptu, który opisuje cały proces tworzenia oprogramowania, dzięki czemu jest on szybszy i bardziej niezawodny. To rozwiązanie jest przydatne szczególnie w dużych projektach, gdzie wiele osób pracuje nad jednym programem.
+Zawartość mojego skryptu pipeline znajduje się w katalogu sprawozdania w pliku jenkinsfile.
 
-- Przejście na prywatną gałąź
+Poniżej opiszemy każdy z elementów skryptu:
 
-- budowanie obrazów z dockerfiles
+    agent any
 
+
+W Jenkins Pipeline, pojęcie "agenta" odnosi się do maszyn lub środowisk, na których będą uruchamiane poszczególne kroki pipeline'a. Agent jest kluczowym elementem, który pozwala na elastyczne zarządzanie zasobami, gdzie mogą być wykonywane różne zadania pipeline'a.
+W naszym przypadku **agent any** mówi nam o możliwości uruchomienia pipelina na dowolnym agencie jenkins'a.
+
+### Kolejne bloki (stages) pipeline'a:
 ---
 
-W tym celu tworzę pipeline, w którym definiuję dwa etapy: 'git clone' oraz 'build'. W pierwszym etapie sprawdzam istnienie katalogu MDO2024_INO. Jeśli istnieje, usuwam go, a jeśli nie, zwracany jest ```true```, co oznacza sukces nawet w przypadku braku katalogu. Następnie przechodzimy do określonego katalogu w repozytorium za pomocą 'dir' i przechodzę na osobistą gałąź. W etapie 'build' ponownie wchodzę do katalogu 'MDO2024_INO/INO/GCL2/MK412502/Sprawozdanie3' i buduję obraz Dockera o nazwie 'build-app' korzystając z pliku 'builder.Dockerfile'.
+#### Environment:
+
+    environment {
+    CREDS=credentials('reizde-dockerhub')
+    }
+
+Ustawia zmienną środowiskową CREDS, która przechowuje dane uwierzytelniające do logowania w Docker Hub, zdefiniowane w Jenkins jako reizde-dockerhub.
+Aby dodać te dane należy wykonać następującą sekwencję kroków:
+
+1. Zaloguj się do Jenkins
+2. Przejdź do zarządzania Jenkins - Na stronie głównej Jenkins kliknij na opcję "Manage Jenkins" (Zarządzaj Jenkinsem).
+3. Przejdź do zarządzania danymi uwierzytelniającymi
+![Widok główny](./Screenshots/jenkins_creds.png)
+4. Wybierz domenę - Wybierz domenę, do której chcesz dodać dane uwierzytelniające. Najczęściej używa się domeny (global).
+![Widok domen](./Screenshots/jenkins_creds2.png)
+5. Dodaj nowe dane uwierzytelniające
+![Lista z danymi](./Screenshots/jenkins_creds3.png)
+
+
+#### Stage 'Clone':
+
+    stage('Clone') {
+        steps {
+            script {
+                sh "rm -rf MDO2024_INO || true"
+                sh "git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git MDO2024_INO"
+                sh "docker network create pipeline || true"
+                dir ("MDO2024_INO/INO/GCL2/MK412502/Sprawozdanie3") {
+                    sh "git checkout MK412502"
+                }
+            }
+        }
+    }
+
+- Usuwa istniejący katalog MDO2024_INO, jeśli istnieje.
+- Klonuje repozytorium z GitHub.
+- Tworzymy sieć Docker pipeline, jeżeli jeszcze nie istnieje.
+- Przechodzi do określonego katalogu i wykonuje git checkout na gałęzi MK412502.
+
+#### Stage 'Build':
+
+    stage('Build') {
+        steps {
+            dir ("MDO2024_INO/INO/GCL2/MK412502/Sprawozdanie3") {
+                sh "docker build -t node-builder -f ./builder.dockerfile ."
+            }
+        }
+    }
+
+Blok ten odpowiedzialny jest za przeprowadzenie procesu budowania projektu, i zamknięcie go w obrazie dockera.
+- Wskazuje katalog z kodem.
+- Buduje obraz Docker o nazwie node-builder przy użyciu pliku builder.dockerfile.
+
+#### Stage 'Test':
+
+    stage('Test') {
+        steps {
+            dir ("MDO2024_INO/INO/GCL2/MK412502/Sprawozdanie3") {
+                sh "docker build -t node-test -f ./tester.dockerfile ."
+            }
+        }
+    }
+
+Blok ten zleca przeprowadzenie testów w nowym kontenerze bazującym na obrazie uzyskanym w bloku Build.
+- Przechodzi do katalogu z kodem.
+- Buduje obraz Docker o nazwie node-test używając pliku tester.dockerfile.
+
+#### Stage 'Deploy':
+
+    stage('Deploy') {
+        steps {
+            dir ("MDO2024_INO/INO/GCL2/MK412502/Sprawozdanie3") {
+                sh "docker build -t app-jenkins -f ./deploy.dockerfile ."
+                sh "docker tag app-jenkins reizde/node-jenkins"
+                sh "docker rm -f node-jenkins || true"
+                sh "docker run --name node-jenkins --rm -d -p 3000:3000 --network=pipeline reizde/node-jenkins"
+            }
+        }
+    }
+
+- Buduje obraz Docker o nazwie app-jenkins z pliku deploy.dockerfile.
+- Oznacza ten obraz jako reizde/node-jenkins.
+- Usuwa istniejący kontener node-jenkins, jeśli taki istnieje.
+- Uruchamia nowy kontener node-jenkins z portem 3000 otwartym na zewnątrz, korzystając z sieci pipeline.
+
+#### Stage 'Publish':
+
+    stage('Publish') {
+        steps {
+            sh "docker rmi curlimages/curl || true"
+            script {
+                def response = sh script: "docker run --network=pipeline --rm curlimages/curl:latest -L -v http://node-jenkins:3000", returnStdout: true
+                if (response.contains("Express")) {
+                    sh "echo $CREDS_PSW | docker login -u reizde --password-stdin"
+                    sh 'docker push reizde/node-jenkins'
+                } else {
+                    error "Response does not contain App!"
+                }
+            }
+        }
+    }
+
+- Usuwa istniejący obraz curlimages/curl, jeśli taki istnieje.
+- Uruchamia kontener curl i sprawdza odpowiedź serwera aplikacji uruchomionej na node-jenkins.
+- Jeśli odpowiedź zawiera słowo "Express", loguje się do Docker Hub i przesyła obraz reizde/node-jenkins.
+- Jeśli odpowiedź nie zawiera słowa "Express", pipeline kończy się błędem.
+
+Czasy ostatniego przejścia pipelina:
+
+![Pipeline final](./Screenshots/pipeline_final.png)
+
+
+Finalnym wynikiem naszego pipelina jest stworzenie obrazu dockera oraz umieszczenie go na dockerHub.
+![DockerHub](./Screenshots/docker_hub.png)
 
 
 **[X] Pliki Dockerfile i Jenkinsfile dostępne w sprawozdaniu w kopiowalnej postaci oraz obok sprawozdania, jako osobne pliki**
