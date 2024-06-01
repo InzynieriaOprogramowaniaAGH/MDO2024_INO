@@ -1,0 +1,156 @@
+  627  curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+  628  snap install curl
+  629  curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+  630  sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
+  631  minikube version
+  632  minikube start
+  633  minikube start --driver=docker
+  634  minikube profile list
+  635  sudo apt-get update
+  636  sudo apt-get install -y kubectl
+  637  kubectl cluster-info
+  638  snap install kubectl
+  639  sudo snap install kubectl
+  640  sudo snap install kubectl --classic
+  641  kubectl cluster-info
+  642  kubectl get po -A
+  643  minikube dashboard
+  644  docker login
+  645  docker ps -a
+  646  docker pull weronikaabednarz/react-app:latest
+  647  nano conf.yaml
+  648  apiVersion: apps/v1
+  649  kind: Deployment
+  650  metadata:
+  651  spec:
+  652  kubectl apply -f conf.yaml
+  653  kubectl get pods -l app=react-app
+  654  kubectl get pods
+  655  kubectl logs react-app-5c5f799dd5-hjll4
+  656  nano conf.yaml
+  657  kubectl apply -f conf.yaml
+  658  kubectl get pods -l app=react-app
+  659  kubectl get pods
+  660* 
+  661  minikube status
+  662  nano conf.yaml
+  663  minikube dashboard
+  664  nano conf.yaml
+  665  minikube dashboard
+  666  kubectl logs react-app-655b997fd9-j427z
+  667  kubectl get nodes -o wide
+  668  kubectl get svc
+  669  nano conf.yml
+  670  nano conf.yaml
+  671  kubectl get svc
+  672  nano conf.yaml
+  673  nano service.yaml
+  674  kubectl apply -f conf.yaml
+  675  kubectl apply -f service.yaml
+  676  minikube ip
+  677  kubectl get svc
+  678  kubectl port-forward service/react-app-service 3000:31798
+  679  minikube dashboard
+  680  nano conf.yaml
+  681  kubectl apply -f conf.yaml
+  682  minikube dashboard
+  683  kubectl apply -f conf.yaml
+  684  minikube dashboard
+  685  kubectl get deployments
+  686  kubectl get pods
+  687  kubectl post-forward react-app-85ccd5f5f5-jvphs 3000:3000
+  688  kubectl port-forward react-app-85ccd5f5f5-jvphs 3000:3000
+  689  kubectl get pods
+  690  kubectl get deployments
+  691  kubectl apply -f conf.yaml
+  692  kubectl get deployments
+  693  kubectl get pods
+  694  kubectl port-forward react-app-85ccd5f5f5-8ssj5 3000:3000
+  695  nano conf.yaml
+  696  nano service.yaml
+  697  kubectl apply -f service.yaml
+  698  kubectl get services
+  699  kubectl delete service react-app-service
+  700  minikube service react-app --url
+  701  kubectl delete service react-app
+  702  kubectl get services
+  703  minikube dashboard
+  704  history
+  712  nano deployment.yaml 
+  713  kubectl get deployments
+  714  ls
+  715  rm deployment.yaml 
+  716  nano deployment.yaml
+  717  kubectl apply -f deployment.yaml
+  718  kubectl get pods -l app=react-app
+  719  kubectl rollout status deployment/react-app
+  720  nano deployment.yaml
+  721  kubectl apply -f deployment.yaml
+  722  nano deployment.yaml
+  723  kubectl apply -f deployment.yaml
+  724  kubectl get pods -l app=react-app
+  725  nano deployment.yaml
+  726  kubectl apply -f deployment.yaml
+  727  kubectl get pods -l app=react-app
+  728  nano deployment.yaml
+  729  kubectl apply -f deployment.yaml
+  730  kubectl get pods -l app=react-app
+  731  nano deployment.yaml
+  732  kubectl apply -f deployment.yaml
+  733  kubectl get pods -l app=react-app
+  734  nano deployment.yaml
+  735  kubectl apply -f deployment.yaml
+  736  kubectl get pods -l app=react-app
+  737  nano deployment-2.yaml
+  738  kubectl apply -f deployment-2.yaml
+  739  kubectl get pods
+  740  kubectl rollout history deployment/react-app
+  741  kubectl rollout undo deployment/react-app
+  742  kubectl get pods
+  743  nano check_deployment.sh
+  744  chmod +x check_deployment.sh
+  745  ./check_deployment.sh
+  746  kubectl get pods
+  747  ls
+  748  nano deployment.yaml
+  749  kubectl apply -f deployment.yaml
+  750  ls
+  751  rm deployment.yaml 
+  752  kubectl apply -f deployment.yaml
+  753  nano deployment.yaml
+  754  kubectl apply -f deployment.yaml
+  755  minikube dashboard
+  756  ls
+  757  cd Pulpit/
+  758  ls
+  759  cd MDO2024_INO/
+  760  ls
+  761  cd INO
+  762  ls
+  763  cd GCL1/
+  764  ls
+  765  cd WB410023/
+  766  ls
+  767  cd Sprawozdanie5
+  768  ls
+  769  nano Pipeline
+  770  history
+  771  nano deployment-recreate.yaml
+  772  kubectl apply -f deployment-recreate.yaml
+  773* 
+  774  kubectl get pods -l app=react-app
+  775  kubectl apply -f deployment-rolling-update.yaml
+  776  kubectl get pods -l app=react-app
+  777  nano deployment-canary.yaml
+  778  ls
+  779  rm deployment-canary.yaml
+  780  nano deployment-canary.yaml
+  781  ls
+  782  nano deployment-canary-main.yaml
+  783  nano service.yaml
+  784  kubectl apply -f deployment-canary-main.yaml
+  785  kubectl apply -f deployment-canary.yaml
+  786  kubectl apply -f service.yaml
+  787  kubectl get pods -l app=react-app
+  788  history
+

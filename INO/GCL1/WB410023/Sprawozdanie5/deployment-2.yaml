@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-deploy-bug-version
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-deploy
+  template:
+    metadata:
+      labels:
+        app: spring-deploy
+    spec:
+      containers:
+        - name: spring-deploy
+          image: weronikaabednarz/spring-deploy:latest
+          ports:
+            - containerPort: 80
