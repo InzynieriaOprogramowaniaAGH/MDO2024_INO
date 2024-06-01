@@ -186,3 +186,100 @@ A output w konsoli zmienił się w:
 ![port-forward aktualizacja](images/output_port_forward.png)
 
 ### Konwersja wdrożenia ręcznego na wdrożenie deklaratywne YAML
+
+Do wykonania tego zadania musiałem utworzyć plik *deployment.yaml*, który będzie zawierał definicję wdrożenia. W pliku zdefiniowałem wymaganą liczbę replik równą 4 a do jego utworzenia wykorzystałem przykładową konfigurację dostępną w dokumentacji Kubernetes'a.
+
+Treść mojego pliku *deployment.yaml* jest następująca:
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-nginx-app
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: my-nginx-app
+  template:
+    metadata:
+      labels:
+        app: my-nginx-app
+    spec:
+      containers:
+      - name: my-nginx-app
+        image: kopczys/my-nginx-app:1.0
+        ports:
+        - containerPort: 80
+```
+
+Posiadając plik z konfiguracją należało go teraz zastosować za pomocą polecenia `kubectl apply` do klastra Kubernetes. Moje polecenie wyglądało w ten sposób:
+
+```
+minikube kubectl apply -f deployment.yaml
+```
+
+A po utworzeniu jego status sprawdziłem poleceniem:
+
+```
+minikube kubectl rollout status deployments/my-nginx-app
+```
+
+![nginx get deployments](images/nginx_rollout_status.png)
+
+Oraz w Dashboardzie Kubernetes'a:
+
+![dashboard deployments](images/dashboard_deployments.png)
+
+### Przygotowanie nowego obrazu
+
+Nową wersję obrazu przygotowałem w ten sposób, że w pliku konfiguracyjny z jednego z poprzednich kroków dodałem jedynie w tytule i nagłówku dopisek *v1.1*. Następnie zbudowałem obraz za pomocą polecenia:
+
+```
+docker build -f nginx.Dockerfile -t my-nginx-app .
+```
+
+Otagowałem nowy obraz:
+
+```
+docker tag my-nginx-app kopczys/my-nginx-app:1.1
+```
+
+Oraz opublikowałem w serwisie DockerHub:
+
+```
+docker push kopczys/my-nginx-app:1.1
+```
+
+Przeszedłem do serwisu DockerHub i sprawdziłem czy pojawił się nowy obraz:
+
+![nowy obraz](images/nowy_obraz.png)
+
+Sprawdziłem jeszcze, czy po uruchomienia kontenera z tym obrazem zaszły oczekiwane zmiany:
+
+![nowa wersja nginx](images/nginx_1.1.png)
+
+Do utworzenia obrazu, którego uruchomienie kończy się błędem posłużyłem się użyciem polecenia `CMD ["false"]` na końcu poprzedniego Dockerfile, który poza dodaniem tej linii kodu pozostał taki sam jak wcześniej a w pliku konfiguracyjny *index.html* jedynie dodałem tam gdzie wcześniej numer wersji, czyli *v1.2*.
+
+Dockerfile z obrazem którego uruchomienie kończy się błędem:
+
+```
+FROM nginx
+COPY index.html /usr/share/nginx/html/index.html
+CMD ["false"]
+```
+
+Tą wersję również dodałem na DockerHub jako wersję *1.2* i tak teraz to wyglądało po wejściu i sprawdzeniu wersji mojej aplikacji:
+
+![dockerhub wszystkie tagi](images/dockerhub_all_tags.png)
+
+Tę wersję z błędem postanowiłem od razu sprawdzić w Deploymencie a wynik tego był taki:
+
+![deployment error version 1](images/error_3.png)
+
+Najpierw dostałem błąd, następnie kubernetes próbował zrestartować poda i uruchomić go ponownie i tak w kółko:
+
+![deployment error version 2](images/error_2.png)
+
+### Zmiany w deploymencie
+
