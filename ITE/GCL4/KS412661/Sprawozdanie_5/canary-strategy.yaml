@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deploy-canary
+  labels:
+    app: nginx-app
+    track: canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-app
+      track: canary
+  template:
+    metadata:
+      labels:
+        app: nginx-app
+        track: canary
+    spec:
+      containers:
+      - name: nginx-app
+        image: flafyking/my-nginx-app:1.0.2
+        ports:
+        - containerPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-app-stable
+  labels:
+    app: nginx-app
+    track: stable
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx-app
+      track: stable
+  template:
+    metadata:
+      labels:
+        app: nginx-app
+        track: stable
+    spec:
+      containers:
+      - name: nginx-app
+        image: flafyking/my-nginx-app:1.0.1
+        ports:
+        - containerPort: 8000
