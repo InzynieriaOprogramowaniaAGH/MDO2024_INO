@@ -2,6 +2,8 @@
 
 ## Wstęp - Wdrażanie na zarządzalne kontenery: Kubernetes
 
+W trakcie tych dwóch ćwiczeń laboratoryjnych przeprowadziłem serię działań związanych z wdrażaniem aplikacji w klastrze Kubernetes - konfigurację klastra, instalację aplikacji za pomocą plików YAML oraz eksperymentowaniu z różnymi strategiami wdrażania.
+
 ### Instalacja klastra Kubernetes
 
 W ramach tych zajęć laboratoryjnych nr 10 pierwszą do wykonania rzeczą było zainstalowanie klastry Kubernetes. Należało zaopatrzyć się w implementację stosu k8s. Przeszedłem na stronę podaną w instrukcji, tam wybrałem system operacyjny *Linux* z architekturą *x86_64* i typem instalatora *Debian package*. Pobrałem najnowszą stabilną wersję *minikube* za pomocą polecenia z instrukcji:
@@ -216,7 +218,7 @@ spec:
 Posiadając plik z konfiguracją należało go teraz zastosować za pomocą polecenia `kubectl apply` do klastra Kubernetes. Moje polecenie wyglądało w ten sposób:
 
 ```
-minikube kubectl apply -f deployment.yaml
+minikube kubectl -- apply -f deployment.yaml
 ```
 
 A po utworzeniu jego status sprawdziłem poleceniem:
@@ -283,3 +285,285 @@ Najpierw dostałem błąd, następnie kubernetes próbował zrestartować poda i
 
 ### Zmiany w deploymencie
 
+W tym zadaniu należało dokonywać zmian w pliku YAML z deploymentem. Pierwszą zmianą, którą trzeba było wykonać było zwiększenie liczby replik. Ja zwiększyłem ich liczbę do 8 edytując w pliku *deployment.yaml* fragment:
+
+```
+spec:
+  replicas: 8
+```
+
+Następnie zastosowałem polecenie `minikube kubectl -- apply -f deployment.yaml` i od razu po nim użyłem polecenia `minikube kubectl rollout status deployments/my-nginx-app` żeby na bieżąco sprawdzać zachodzące zmiany. Wynik zwiększenia podów w konsoli był taki:
+
+![8 replik](images/8_replik.png)
+
+A w Dashboardzie wyglądało to w ten sposób:
+
+![dashboard 8 replik](images/dashboard_8_replik.png)
+
+W ten sam sposób co zwiększenie liczby replik do 8, zmniejszyłem ich liczbę do 1. Sprawdzając status od razu po zastosowaniu nowej ilości replik, zobaczyłem jedynie, że deployment został poprawnie wykonany:
+
+![status dla 1 repliki](images/1_replika_status.png)
+
+W Dashboardzie zauważyłem, że pody zostały usunięte w odwrotnej kolejności niż ich tworzenie, tj. pierwszy utworzony pod nie został usunęty. Całość w Dashboardzie wyglądała tak:
+
+![dashboard 1 replika](images/dashboard_1_replika.png)
+
+Zmniejszenie liczby replik do 0 również wykonałem w ten sam sposób, w wyniku czego status ponownie pokazał jedynie, że deployment wykonał się poprawnie a w Dashboardzie wyglądało to w ten sposób:
+
+![dashboard 0 replik](images/dashboard_0_replik.png)
+
+Widać, że po ustawieniu 0 replik Kubernetes usunął wszystkie uruchomione pody. Ustawienie takiej liczb replik pozwala tymczasowo zatrzymać aplikację bez jej usuwania, oszczędzając zasoby i umożliwiając łatwe ponowne uruchomienie.
+
+Kolejnym punktem było zastosowanie nowej wersji obraz (najpierw zwiększyłem też liczbę replik do 4 dla starej wersji i dla nowej pozostawiłem tą samą liczbę). Do zmiany wersji dokonałem takiej zmiany w pliku YAML:
+
+```
+containers:
+- name: my-nginx-app
+  image: kopczys/my-nginx-app:1.1
+  ports:
+  - containerPort: 80
+```
+
+Czyli zmieniłem obraz *image* z `kopczys/my-nginx-app:1.0` na `kopczys/my-nginx-app:1.1`. Wynikiem takiej zmiany w statusie było:
+
+![nowa wersja obrazu](images/nowa_wersja.png)
+
+A w Dashboardzie, w sekcji *Pods*:
+
+![nowa wersja obrazu w dashboardzie](images/dashboard_nowa_wersja.png)
+
+Widać tutaj, że pody starszej wersji obrazu zostają usunięte a w ich miejsce tworzone są nowe pody dla nowej wersji obrazu. Po usunięciu podów, pozostały już tylko 4 pody nowej wersji obrazu.
+
+Ponownie zmieniłem wersję obrazu na starszą zmieniając treść w pliku YAML w wyniku czego miałem takie same wyniki jak w przypadku zmiany wersji na nową:
+
+![stara wersja obrazu](images/stara_wersja.png)
+
+Rezultat w Dashboardzie:
+
+![stara wersja obrazu w dashboardzie](images/dashboard_stara_wersja.png)
+
+Za pomocą polecenia `kubectl rollout history` można sprawdzić listę zmian deploymentu. W moim przypadku polecenie to wyglądało tak:
+
+```
+minikube kubectl rollout history deployment/my-nginx-app
+```
+
+Zwrócony rezultat był taki:
+
+![rollout history my-nginx-app](images/rollout_history.png)
+
+Na podstawie kolumny *REVISION* możemy wybierać wersję, do której chcemy wrócić. Do tego celu służy polecenie `kubectl rollout undo` w której poza nazwą deploymentu możemy na końcu dodać opcję `--to-revision=<REVISION>` i  w miejscu `<REVISION>` wpisać numer konkretnej wersji. Ja cofnąłem się o dokładnie jedną wersję do tyłu (bez dodawania tej opcji domyślnie za REVISION ustawione jest 0, w wyniku czego przywracana jest poprzednia wersja) za pomocą polecenia:
+
+```
+minikube kubectl rollout undo deployment/my-nginx-app
+```
+
+Wynikiem którego było cofnięcie podów do wersji *1.1*, i w statusie wyglądało to w ten sposób:
+
+![rollout undo my-nginx-app](images/rollout_undo.png)
+
+W Dashboardzie również zaszły oczekiwane zmiany:
+
+![dashboard po rollout undo](images/dashboard_rollout_undo.png)
+
+### Kontrola wdrożenia
+
+Aby upewnić się, że wdrożenie zdołało wykonać się w ciągu 60 sekund, można napisać skrypt, który będzie cyklicznie sprawdzał status wdrożenie w określonych odstępach czasowych. Skrypt, który ja napisałem prezentuje się następująco:
+
+```
+#!/bin/bash
+
+DEPLOYMENT_NAME="my-nginx-app"
+DEPLOYMENT_FILE="deployment.yaml"
+
+CHECK_DURATION=60
+INTERVAL=5
+
+check_deployment() {
+  minikube kubectl rollout status deployment/$DEPLOYMENT_NAME --timeout=${INTERVAL}s
+  return $?
+}
+
+echo "Wdrażanie aplikacji za pomocą pliku $DEPLOYMENT_FILE..."
+minikube kubectl apply -f $DEPLOYMENT_FILE
+
+start_time=$(date +%s)
+
+echo "Sprawdzanie wdrożenia $DEPLOYMENT_NAME przez $CHECK_DURATION sekund..."
+
+while true; do
+  check_deployment
+  if [ $? -eq 0 ]; then
+    echo "Wdrożenie $DEPLOYMENT_NAME zakończyło się sukcesem."
+    exit 0
+  fi
+
+  current_time=$(date +%s)
+  elapsed_time=$((current_time - start_time))
+
+  if [ $elapsed_time -ge $CHECK_DURATION ]; then
+    echo "Wdrożenie $DEPLOYMENT_NAME nie zakończyło się w ciągu $CHECK_DURATION sekund."
+    exit 1
+  fi
+
+  sleep $INTERVAL
+done
+```
+
+Pliku *script.sh* w którym znajduje się powyższy skrypt nadałem uprawnienia do wykonywania za pomocą polecenia:
+
+```
+chmod +x script.sh
+```
+
+W wyniku uruchomienia skryptu, z updatem do wersji *1.1* mojej aplikacji otrzymałem:
+
+![skrypt w mniej niż 60 sekund](images/skrypt_powodzenie.png)
+
+Żeby sprawdzić, czy skrypt działa poprawnie wykonałem go jeszcze dla wersji *1.2* mojego programu, czyli zawierającą błąd. Wynik był następujący:
+
+![skrypt w więcej niż 60 sekund](images/skrypt_niepowodzenie.png)
+
+![dashboard po niepomyślnym skrypcie](images/dashboard_skrypt_niepowodzenie.png)
+
+Po zastosowaniu tego skryptu wróciłem jednak do poprzedniej wersji wdrożenia poleceniem:
+
+```
+minikube kubectl -- rollout undo deployment/my-nginx-app
+```
+
+### Strategie wdrożenia
+
+Pierwszą strategią wdrożenia była strategia *Recreate*, która powoduje wyłączenie i usunięcie wszystkich istniejących podów a następnie utworzenie nowych. Podczas tego procesu aplikacja jest niedostępna dla użytkowników. Do przetestowania tej strategii utworzyłem nowy plik YAML o nazwie *recreate.yaml*, którego zawartość wyglądała tak:
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-nginx-app
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: my-nginx-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: my-nginx-app
+    spec:
+      containers:
+      - name: my-nginx-app
+        image: kopczys/my-nginx-app:1.0
+        ports:
+        - containerPort: 80
+```
+
+Strategia została tutaj określona w części `spec` i przyjęta została jako `Recreate`. Wynikiem uruchomienia tego pliku wdrożeniowego było:
+
+![recreate status](images/recreate_status.png)
+
+![recreate pods](images/recreate_pods.png)
+
+Drugą strategią do przetestowania było *Rolling Update* z parametrami `maxUnavailable` > 1, `maxSurge` > 20%. Ta strategia polega na stopniowej aktualizacji podów, pozwalając na równoczesne istnienie starych i nowych wersji aplikacji. Dzięki temu strategia ta minimalizuje czas niedostępności aplikacji. Do jej przetestowania utworzyłem nowy plik wdrożeniowy *rolling-update.yaml* o następującej zawartości:
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-nginx-app
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: my-nginx-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 25%
+  template:
+    metadata:
+      labels:
+        app: my-nginx-app
+    spec:
+      containers:
+      - name: my-nginx-app
+        image: kopczys/my-nginx-app:1.0
+        ports:
+        - containerPort: 80
+```
+
+Jak widać w kodzie powyżej, wartość `maxUnavailable` ustawiłem na 2 i oznacza ona maksymalną ilość podów, które mogą być niedostępne podczas wdrażania. Wartość `maxSurge` przyjąłem jako 25% i oznaczna ona maksymalną liczbę instancji, które mogą być utworzone ponad ich docelową liczbę (może być wartością liczbową lub procentową). Wynikiem działania tego pliku było:
+
+![rolling update status](images/rolling_update_status.png)
+
+![rolling update pods](images/rolling_update_pods.png)
+
+Ostatnia wersja wdrożenia to *Canary Deployment workload*, która polega na wdrażaniu nowej wersji aplikacji na małą cześć ruchu w celu przetestowania jej stabilności i wydajności przed pełnym wdrożeniem. Jest to użyteczna strategia do minimalizacji ryzyka wprowadzania błędów w aplikacji. Do jej przetestowania utworzyłem plik *canary-deployment.yaml*, w którym było:
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-nginx-app-canary
+  labels:
+    app: my-nginx-app
+    track: canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-nginx-app
+      track: canary
+  template:
+    metadata:
+      labels:
+        app: my-nginx-app
+        track: canary
+    spec:
+      containers:
+      - name: my-nginx-app
+        image: kopczys/my-nginx-app:1.1
+        ports:
+        - containerPort: 80
+```
+
+Etykieta `track: canary` zastosowana jest w tym wypadku jedynie do rozróżnienia wersji.
+
+W wyniku uruchomienia otrzymałem:
+
+![canary status](images/canary_status.png)
+
+![canary pods](images/canary_pods.png)
+
+Ostatnim zdaniem w ramach tych ćwiczeń laboratoryjnych było użycie serwisów. *Service* to abstrakcja umożliwiająca logiczny dostęp do zestawu podów, zapewniając stabilny punkt komunikacji wewnątrz lub z zewnątrz klastra. 
+
+Dla swojego wdrożenia *my-nginx-app* utworzyłem plik *service.yaml* o poniższej zawartości:
+
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-nginx-service
+spec:
+  selector:
+    app: my-nginx-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+```
+
+Serwis utworzyłem za pomocą polecenia `minikube kubectl -- apply -f service.yaml`, a następnie przekierowałem port:
+
+```
+minikube kubectl port-forward service/my-nginx-service 8080:80
+```
+
+I przekierowałem port w Visual Studio Code co pozwoliło mi przejść na stronę aplikacji:
+
+![nginx service](images/service_nginx.png)
+
+![service port forward](images/service_port_forward.png)
