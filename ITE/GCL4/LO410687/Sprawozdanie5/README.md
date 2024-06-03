@@ -552,7 +552,7 @@ spec:
         track: canary
     spec:
       containers:
-      - name: clock-nginx
+      - name: guess-the-number
         image: lukoprych/guess-the-number:1.0.2
         ports:
         - containerPort: 80
