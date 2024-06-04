@@ -1,0 +1,16 @@
+Orchestrators:
+    hosts:
+        host-serv:
+          ansible_host: server
+          ansible_user: maciek
+
+Endpoints:
+    hosts:
+        target-hosts:
+          ansible_host: ansible
+          ansible_user: maciek
+
+network:
+  children:
+    Orchestrators:
+    Endpoints:
