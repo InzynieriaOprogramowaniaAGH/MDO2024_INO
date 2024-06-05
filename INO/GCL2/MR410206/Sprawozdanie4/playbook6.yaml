@@ -1,0 +1,11 @@
+- name: Stop and remove container
+  hosts: Endpoints
+  become: yes
+  vars:
+    ansible_become_pass: hdzzd123
+
+  tasks:
+    - name: Stop and Remove
+      community.docker.docker_container:
+        name: deploy
+        state: absent

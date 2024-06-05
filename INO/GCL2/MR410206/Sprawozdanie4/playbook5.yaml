@@ -1,0 +1,29 @@
+- name: Installation and Deploy
+  hosts: Endpoints
+  become: yes
+  vars:
+    ansible_become_pass: hdzzd123
+
+  tasks:
+    - name: Install docker
+      apt:
+        name: docker.io
+        state: latest
+
+    - name: Start Docker
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
+
+    - name: Pull Docker image
+      docker_image:
+        name: radeckimaciej/deploy:1.1.1
+        source: pull
+
+    - name: Run
+      docker_container:
+        name: deploy
+        image: radeckimaciej/deploy:1.1.1
+        state: started
+        restart_policy: always

@@ -1,0 +1,4 @@
+- name: Role
+  hosts: Endpoints
+  roles:
+    - deployment_role

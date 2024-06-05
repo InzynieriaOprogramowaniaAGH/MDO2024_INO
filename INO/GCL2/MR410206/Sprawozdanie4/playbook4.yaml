@@ -1,0 +1,17 @@
+- name: Restart sshd and rngd
+  hosts: Endpoints
+  become: yes
+  vars:
+    ansible_become_pass: hdzzd123
+  tasks:
+    - name: Restart sshd
+      become: yes
+      service:
+        name: ssh
+        state: restarted
+
+    - name: Restart rngd
+      become: yes
+      service:
+        name: rng-tools
+        state: restarted

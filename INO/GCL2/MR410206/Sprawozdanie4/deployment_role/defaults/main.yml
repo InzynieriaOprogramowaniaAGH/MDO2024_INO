@@ -1,0 +1,2 @@
+# defaults file for deployment_role
+ansible_become_pass: hdzzd123
