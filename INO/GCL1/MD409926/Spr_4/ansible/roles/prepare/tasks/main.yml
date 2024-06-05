@@ -1,9 +1,11 @@
-r- name: Pobieranie docker
-  hosts: network
-  become: true
-  tasks:
     - name: Aktualizacja repozytoriów
       ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Remove conflicting packages
+      ansible.builtin.apt:
+        name: containerd.io
+        state: absent
         update_cache: yes
 
     - name: Instalacja Docker
@@ -21,16 +23,4 @@ r- name: Pobieranie docker
     - name: Pobieranie obrazu do zbudowania/do deployu programu
       copy:
         src: /home/maciek/MDO2024_INO/INO/GCL1/MD409926/Spr_4/Deploy.Dockerfile
-        dest: /home/maciek/docker
-
-    - name: Budowanie obrazu Docker
-      community.docker.docker_image:
-        name: deploy
-        build:
-          path: /home/maciek/app/
-        source: build
-
-    - name: Uruchomienie kontenera Docker
-      community.docker.docker_container:
-        name: app
-        image: deploy
+        dest: /home/maciek/app/Dockerfile
