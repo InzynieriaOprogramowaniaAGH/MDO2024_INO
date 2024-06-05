@@ -223,21 +223,67 @@ Aby lepiej zorganizować proces, użyjemy roli ze szkieletowaniem ```ansible-gal
 
 ![ ](./SS/31.png)
 
+**3. Wykonanie nienadzorowanej instalacji:**
+Naszym zadaniem jest przygotowanie pliku do nienadzorowanej instalacji systemu (wybrałem Fedora 40), który ma hostować naszą aplikację.
 
+Uzyskanie pliku anaconda-ks.cfg:
+- zaczynamy od zainstalowania Fedory w sposób nadzorowany, to znaczy instalujemy ją ręcznie. Ustalamy nazwę użytkownika, hosta, wybieramy wersję minimalną i inne potrzebne pakiety (menedżer kontenerów).
+- po instalacji powstaje plik ```anaconda-ks.cfg```, który powtarza nasze kroki przy onstalacji i jego uzyjemy jako podstawy do instalacji naszego systemu w sposób nienadzorowany
+- możemy go wyświetlić i ręcznie skopiować:
 
+```sudo cat /root/anaconda-ks.cfg```
 
+![ ](./SS/44.png)
 
+- do uruchomienia naszej aplikacji dodamy skrypt do naszego repozytorium. Jego zadaniem będzie pobranie plików, wejście do repozytorium, pobranie paczki i wykonanie testów
 
+![ ](./SS/46.png)
 
+Teraz możemy przejśc do modyfikacji ```anaconda-ks.cfg``` poprzez dodanie:
+- użycia domyślnych repozytoriów fedory
+- doinstalowanie ```nodejs```, ```git``` i ```wget``` potrzebnych do naszej aplikacji
+- czyszczenie partycji
+- zapisanie logów
+- zapisanie naszego skryptu i uruchomienie go
+- ponowne uruchomienie po instalacji:
 
+![ ](./SS/45.png)
 
+Gdy plik jest gotowy możemy zainstalować nasz system w sposób nienadzorowany:
+- na początku instalacji wybieramy opcję ```e```, aby otworzyć tryb GRUB, gdzie podajemy link (po wyrazie ```quiet```) w wersji raw do naszego repozytorium gdzie zapisaliśmy nasz plik ```anaconda-ks.cfg```
 
+```inst.ks=https://raw.githubusercontent.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/MD409926/INO/GCL1/MD409926/Spr_4/anaconda-ks.cfg```
 
+![ ](./SS/47.png)
 
+- uruchamiamy instalację za pomocą klawisza ```F10```
 
+![ ](./SS/32.png)
 
+- ukazuje nam się wypis z wybranymi przez nas opcjami podczas instalacji pierwszego systemu z Fedorą:
 
+![ ](./SS/33.png)
 
+- następuje doinstalowywanie pakietów:
 
+![ ](./SS/34.png)
 
+- gdy instalacja dobiegnie końca i ujrzymy ponownie ekran z menu instalacji to przechodzimy do opcji ```Troubleshooting```
 
+![ ](./SS/48.png)
+
+- następnie ```Boot first drive```
+
+![ ](./SS/49.png)
+
+- i ```Fedora Linux```
+
+![ ](./SS/50.png)
+
+- możemy zalogować się do naszego systemu i wykonać testy ręcznie:
+
+![ ](./SS/35.png)
+
+- lub wyświetlić treść logów i zobaczyć, że testy wykonały się podczas instalacji systemu:
+
+![ ](./SS/36.png)
