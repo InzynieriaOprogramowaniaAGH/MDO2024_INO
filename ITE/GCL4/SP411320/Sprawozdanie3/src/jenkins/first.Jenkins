@@ -61,9 +61,9 @@ pipeline {
     stage('Collect') {
       steps {
         sh '===[Collect]==='
-        sh 'sudo apt install -y tar'
         dir("$LOG_DIR") {
-          sh "tar cvJf build_${BUILD_NUMBER}.tar.xz *"
+          // sh "tar cvJf build_${BUILD_NUMBER}.tar.xz *"
+          sh "zip build_${BUILD_NUMBER}.zip *"
         }
         archiveArtifacts artifacts: "$LOG_DIR/build_${BUILD_NUMBER}.tar.xz"
       }
