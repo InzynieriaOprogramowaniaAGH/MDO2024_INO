@@ -28,7 +28,6 @@ pipeline {
         sh 'echo ===[Build]==='
         dir("$SRC_DIR") {
           sh "docker build -t irssi-build --no-cache - < build.Dockerfile 2>&1 | tee $BUILD_LOGS/docker_build-${BUILD_NUMBER}.log"
-          docker.build('irssi-build', '-f build.Dockerfile')
         }
       }
     }
