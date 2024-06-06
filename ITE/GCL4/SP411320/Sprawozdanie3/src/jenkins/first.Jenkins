@@ -35,7 +35,7 @@ pipeline {
       steps {
         sh 'echo ===[Test]==='
         dir("$SRC_DIR") {
-          sh "docker build -t irssi-test -f test.Dockerfile --no-cache | tee $LOG_DIR/docker_build_test-${BUILD_NUMBER}.log"
+          sh "docker build --no-cache -t irssi-test - < test.Dockerfile  | tee $LOG_DIR/docker_build_test-${BUILD_NUMBER}.log"
         }
       }
     }
