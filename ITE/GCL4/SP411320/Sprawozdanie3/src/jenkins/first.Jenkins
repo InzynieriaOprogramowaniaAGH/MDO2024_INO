@@ -2,7 +2,7 @@ pipeline {
   agent any
   environment {
     VERSION = '1.0.0'
-    LOG_DIR = "/var/log/pipeline/build_${BUILD_NUMBER}"
+    LOG_DIR = "/tmp/build_${BUILD_NUMBER}"
     REPO = "https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO"
     SRC_DIR = "repo/ITE/GCL4/SP411320/Sprawozdanie3/src/irssi"
     USER = 'pixel48'
