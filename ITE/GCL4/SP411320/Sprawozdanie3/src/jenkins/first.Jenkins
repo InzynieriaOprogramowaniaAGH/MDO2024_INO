@@ -42,26 +42,32 @@ pipeline {
       }
     }
     stage('Deploy') {
-      sh 'echo ===[Deploy]==='
-      sh 'docker run --rm --name irssi-build -tde TERM=xterm irssi-build'
-      sh "docker ps > $BUILD_LOGS/docker_ps-${BUILD_NUMBER}.log"
-      sh 'docker stop irssi-build'
-      archiveArtifacts artifacts: "$BUILD_LOGS/docker_ps-${BUILD_NUMBER}.log"
+      steps {
+        sh 'echo ===[Deploy]==='
+        sh 'docker run --rm --name irssi-build -tde TERM=xterm irssi-build'
+        sh "docker ps > $BUILD_LOGS/docker_ps-${BUILD_NUMBER}.log"
+        sh 'docker stop irssi-build'
+        archiveArtifacts artifacts: "$BUILD_LOGS/docker_ps-${BUILD_NUMBER}.log"
+      }
     }
     stage('Publish') {
       environment {
         DOCKER_TOKEN = credentials('DOCKER_TOKEN')
       }
-      sh 'echo ===[Publish]==='
-      sh "docker login -u $USER -p $DOCKER_TOKEN"
-      sh "docker tag irssi-build $USER/irssi:$VERSION"
-      sh "docker push $USER/irssi:$VERSION"
+      steps {
+        sh 'echo ===[Publish]==='
+        sh "docker login -u $USER -p $DOCKER_TOKEN"
+        sh "docker tag irssi-build $USER/irssi:$VERSION"
+        sh "docker push $USER/irssi:$VERSION"
+      }
     }
     stage('Cleanup') {
-      sh 'echo ===[Cleanup]==='
-      sh 'docker rm $(docker ps -aq) || true'
-      sh 'dokeer rmi $(docker images -q) || true'
-      sh 'docker logout || true'
+      steps {
+        sh 'echo ===[Cleanup]==='
+        sh 'docker rm $(docker ps -aq) || true'
+        sh 'dokeer rmi $(docker images -q) || true'
+        sh 'docker logout || true'
+      }
     }
   }
 }
