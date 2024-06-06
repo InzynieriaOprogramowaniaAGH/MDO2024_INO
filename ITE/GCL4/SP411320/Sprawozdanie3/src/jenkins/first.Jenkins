@@ -62,7 +62,7 @@ pipeline {
       steps {
         sh '===[Collect]==='
         dir("$LOG_DIR") {
-          sh "tar cvJf build_${BUILD_NUMBER}.tar.xz $LOG_DIR/*"
+          sh "tar cvJf build_${BUILD_NUMBER}.tar.xz *"
         }
         archiveArtifacts artifacts: "$LOG_DIR/build_${BUILD_NUMBER}.tar.xz"
       }
