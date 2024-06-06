@@ -62,10 +62,9 @@ pipeline {
       steps {
         sh '===[Collect]==='
         dir("$LOG_DIR") {
-          // sh "tar cvJf build_${BUILD_NUMBER}.tar.xz *"
-          sh "zip build_${BUILD_NUMBER}.zip *"
+
         }
-        archiveArtifacts artifacts: "$LOG_DIR/build_${BUILD_NUMBER}.tar.xz"
+        archiveArtifacts artifacts: "$LOG_DIR/*${BUILD_NUMBER}"
       }
     }
     stage('Cleanup') {
