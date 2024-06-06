@@ -2,7 +2,7 @@ pipeline {
   agent any
   environment {
     VERSION = '1.0.0'
-    BUILD_LOGS = "$BUILD_LOGS/build_${BUILD_NUMBER}"
+    LOG_DIR = "/var/log/pipeline/build_${BUILD_NUMBER}"
     REPO = "https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO"
     SRC_DIR = "repo/ITE/GCL4/SP411320/Sprawozdanie3/src/irssi"
     USER = 'pixel48'
@@ -11,7 +11,7 @@ pipeline {
     stage('Prep') {
       steps {
         sh 'echo ===[Prep]==='
-        sh "mkdir -p $BUILD_LOGS"
+        sh "mkdir -p $LOG_DIR"
         sh 'rm -rfv repo || true'
         sh 'docker rm $(docker ps -aq) || true'
         sh 'docker rmi $(docker images -q) || true'
@@ -27,7 +27,7 @@ pipeline {
       steps {
         sh 'echo ===[Build]==='
         dir("$SRC_DIR") {
-          sh "docker build -t irssi-build --no-cache - < build.Dockerfile 2>&1 | tee $BUILD_LOGS/docker_build-${BUILD_NUMBER}.log"
+          sh "docker build -t irssi-build --no-cache - < build.Dockerfile 2>&1 | tee $LOG_DIR/docker_build-${BUILD_NUMBER}.log"
         }
       }
     }
@@ -35,18 +35,16 @@ pipeline {
       steps {
         sh 'echo ===[Test]==='
         dir("$SRC_DIR") {
-          sh "docker build -t irssi-test -f test.Dockerfile --no-cache | tee $BUILD_LOGS/docker_build_test-${BUILD_NUMBER}.log"
+          sh "docker build -t irssi-test -f test.Dockerfile --no-cache | tee $LOG_DIR/docker_build_test-${BUILD_NUMBER}.log"
         }
-        archiveArtifacts artifacts: "$BUILD_LOGS/docker_build_test-${BUILD_NUMBER}/test_${BUILD_NUMBER}.log"
       }
     }
     stage('Deploy') {
       steps {
         sh 'echo ===[Deploy]==='
         sh 'docker run --rm --name irssi-build -tde TERM=xterm irssi-build'
-        sh "docker ps > $BUILD_LOGS/docker_ps-${BUILD_NUMBER}.log"
+        sh "docker ps > $LOG_DIR/docker_ps-${BUILD_NUMBER}.log"
         sh 'docker stop irssi-build'
-        archiveArtifacts artifacts: "$BUILD_LOGS/docker_ps-${BUILD_NUMBER}.log"
       }
     }
     stage('Publish') {
@@ -58,6 +56,15 @@ pipeline {
         sh "docker login -u $USER -p $DOCKER_TOKEN"
         sh "docker tag irssi-build $USER/irssi:$VERSION"
         sh "docker push $USER/irssi:$VERSION"
+      }
+    }
+    stage('Collect') {
+      steps {
+        sh '===[Collect]==='
+        dir("$LOG_DIR") {
+          sh "tar cvJf build_${BUILD_NUMBER}.tar.xz $LOG_DIR/*"
+        }
+        archiveArtifacts artifacts: "$LOG_DIR/build_${BUILD_NUMBER}.tar.xz"
       }
     }
     stage('Cleanup') {
