@@ -61,6 +61,7 @@ pipeline {
     stage('Collect') {
       steps {
         sh '===[Collect]==='
+        sh 'sudo apt install -y tar'
         dir("$LOG_DIR") {
           sh "tar cvJf build_${BUILD_NUMBER}.tar.xz *"
         }
