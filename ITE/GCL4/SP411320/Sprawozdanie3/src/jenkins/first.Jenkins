@@ -1,0 +1,67 @@
+pipeline {
+  agent any
+  environment {
+    VERSION = 1.0.0
+    BUILD_LOGS = "$BUILD_LOGS/build_${BUILD_NUMBER}"
+    REPO = "https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO"
+    SRC_DIR = "repo/ITE/GCL4/SP411320/Sprawozdanie3/src/irssi"
+    USER = 'pixel48'
+  }
+  stages {
+    stage('Prep') {
+      steps {
+        sh 'echo ===[Prep]==='
+        sh "mkdir -p $BUILD_LOGS"
+        sh 'rm -rfv repo || true'
+        sh 'docker rm $(docker ps -aq) || true'
+        sh 'docker rmi $(docker images -q) || true'
+      }
+    }
+    stage('Clone') {
+      steps {
+        sh 'echo ===[Clone]==='
+        sh "git clone -b SP411320 --single-branch $REPO repo"
+      }
+    }
+    stage('Build') {
+      steps {
+        sh 'echo ===[Build]==='
+        dir("$SRC_DIR") {
+          sh "docker build -t irssi-build --no-cache - < build.Dockerfile 2>&1 | tee $BUILD_LOGS/docker_build-${BUILD_NUMBER}.log"
+          docker.build('irssi-build', '-f build.Dockerfile')
+        }
+      }
+    }
+    stage('Test') {
+      steps {
+        sh 'echo ===[Test]==='
+        dir("$SRC_DIR") {
+          sh "docker build -t irssi-test -f test.Dockerfile --no-cache | tee $BUILD_LOGS/docker_build_test-${BUILD_NUMBER}.log"
+        }
+        archiveArtifacts artifacts: "$BUILD_LOGS/docker_build_test-${BUILD_NUMBER}/test_${BUILD_NUMBER}.log"
+      }
+    }
+    stage('Deploy') {
+      sh 'echo ===[Deploy]==='
+      sh 'docker run --rm --name irssi-build -tde TERM=xterm irssi-build'
+      sh "docker ps > $BUILD_LOGS/docker_ps-${BUILD_NUMBER}.log"
+      sh 'docker stop irssi-build'
+      archiveArtifacts artifacts: "$BUILD_LOGS/docker_ps-${BUILD_NUMBER}.log"
+    }
+    stage('Publish') {
+      environment {
+        DOCKER_TOKEN = credentials('DOCKER_TOKEN')
+      }
+      sh 'echo ===[Publish]==='
+      sh "docker login -u $USER -p $DOCKER_TOKEN"
+      sh "docker tag irssi-build $USER/irssi:$VERSION"
+      sh "docker push $USER/irssi:$VERSION"
+    }
+    stage('Cleanup') {
+      sh 'echo ===[Cleanup]==='
+      sh 'docker rm $(docker ps -aq) || true'
+      sh 'dokeer rmi $(docker images -q) || true'
+      sh 'docker logout || true'
+    }
+  }
+}
