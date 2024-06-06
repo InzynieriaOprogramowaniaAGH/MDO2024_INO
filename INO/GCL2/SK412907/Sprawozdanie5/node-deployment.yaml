@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-deployment
+  labels:
+    app: node-jenkins
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: node-jenkins
+  template:
+    metadata:
+      labels:
+        app: node-jenkins
+    spec:
+      containers:
+      - name: node-jenkins
+        image: szkrzykwa/node-jenkins
+        ports:
+        - containerPort: 3000
