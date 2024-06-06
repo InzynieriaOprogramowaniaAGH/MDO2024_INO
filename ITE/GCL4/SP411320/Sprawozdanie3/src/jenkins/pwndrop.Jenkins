@@ -1,0 +1,31 @@
+pipeline {
+  agent any
+  stages {
+    stage('Prep') {
+      steps {
+        sh 'rm -rf pwndrop'
+        sh 'docker rm $(docker ps -aq) || true'
+        sh 'docker rmi $(docker images ls -q) || true'
+      }
+    }
+    stage('Clone') {
+      steps {
+        sh 'git clone -b docker --single-branch https://github.com/aghrapidpro/pwndrop'
+      }
+    }
+    stage('Build') {
+      steps {
+        dir('pwndrop') {
+          script {
+            docker.build('pwndrop', '.')
+          }
+        }
+      }
+    }
+    stage('Deploy') {
+      steps {
+        sh 'docker run --rm -d -p 81:80 -p 8081:8080 -p 443:443 pwndrop'
+      }
+    }
+  }
+}

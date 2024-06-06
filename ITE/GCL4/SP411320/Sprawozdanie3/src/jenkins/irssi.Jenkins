@@ -1,0 +1,34 @@
+pipeline {
+  agent any
+  stages {
+    stage('Prep') {
+      steps {
+        sh 'rm -rf repo'
+        sh 'docker system prune -f'
+      }
+    }
+    stage('Clone') {
+      steps {
+        sh "git clone -b SP411320 --single-branch https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO repo"
+      }
+    }
+    stage('Build') {
+      steps {
+        dir("repo/ITE/GCL4/SP411320/Sprawozdanie2/src/irssi") {
+          script {
+            docker.build("irssi-build", '-f build.Dockerfile .')
+          }
+        }
+      }
+    }
+    stage('Test') {
+      steps {
+        dir("repo/ITE/GCL4/SP411320/Sprawozdanie2/src/irssi") {
+          script {
+            docker.build("irssi-test", '-f test.Dockerfile .')
+          }
+        }
+      }
+    }
+  }
+}

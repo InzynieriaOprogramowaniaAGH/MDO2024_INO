@@ -1,0 +1,42 @@
+version: '3.0'
+
+services:
+  jnks-dind:
+    image: docker:dind
+    privileged: true
+    restart: on-failure
+    environment:
+      - DOCKER_TLS_CERTDIR=/certs
+    networks:
+      - jenkins
+    volumes:
+      - jenkins-docker-certs:/certs/client
+      - jenkins-data:/var/jenkins_home
+    ports:
+      - "2376:2376"
+    command: --storage-driver overlay2
+
+  jnks:
+    build:
+      context: .
+      dockerfile: jnks.Dockerfile
+    restart: on-failure
+    environment:
+      - DOCKER_HOST=tcp://jnks-dind:2376
+      - DOCKER_CERT_PATH=/certs/client
+      - DOCKER_TLS_VERIFY=1
+    networks:
+      - jenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins-docker-certs:/certs/client
+      - jenkins-data:/var/jenkins_home
+
+networks:
+  jenkins:
+
+volumes:
+  jenkins-docker-certs:
+  jenkins-data:
