@@ -62,9 +62,9 @@ pipeline {
       steps {
         sh 'echo ===[Collect]==='
         dir("$LOG_DIR") {
-
+          sh "tar cJvf build_${BUILD_NUMBER}.tar.xz *"
+          archiveArtifacts artifacts: "build_${BUILD_NUMBER}.tar.xz"
         }
-        archiveArtifacts artifacts: "$LOG_DIR/*${BUILD_NUMBER}"
       }
     }
     stage('Cleanup') {
