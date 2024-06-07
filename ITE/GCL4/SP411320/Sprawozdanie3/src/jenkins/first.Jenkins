@@ -60,7 +60,7 @@ pipeline {
     }
     stage('Collect') {
       steps {
-        sh '===[Collect]==='
+        sh 'echo ===[Collect]==='
         dir("$LOG_DIR") {
           sh "tar cvJf build_${BUILD_NUMBER}.tar.xz $LOG_DIR/*"
         }
