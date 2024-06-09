@@ -78,7 +78,7 @@ Kolejnym krokiem było utworzenie playbooka w którym wysyłam ping do wszystkic
         state: restarted
 ```
 
-Napotkałem problem z hasłem - otórz udało mi się na mojej maszynie za pomocą *sudo visudo* ustawić, bym nie musiał podawać hasła przy korzystaniu z komend sudo, natomiast na drugiej maszynie z jakiegoś powodu nie chciało to działać - więc dodałem plain text w playbooku - wiem, niezbyt dobra taktyka, ale jedyne inne rozwiązanie które przychodziło mi do głowy to podanie tego jako argumentu przy odpalaniu playbooka - co trochę zabiera mu automatyczności - na potrzeby opublikowania tego w sprawozdaniu hasła zamieniłem na <passwd>
+Napotkałem problem z hasłem - otórz udało mi się na mojej maszynie za pomocą *sudo visudo* ustawić, bym nie musiał podawać hasła przy korzystaniu z komend sudo, natomiast na drugiej maszynie z jakiegoś powodu nie chciało to działać - więc dodałem plain text w playbooku - wiem, niezbyt dobra taktyka, ale jedyne inne rozwiązanie które przychodziło mi do głowy to podanie tego jako argumentu przy odpalaniu playbooka - co trochę zabiera mu automatyczności - na potrzeby opublikowania tego w sprawozdaniu hasła zamieniłem na "<passwd>"
 
 ![](images/ansible_playbook.png)
 
