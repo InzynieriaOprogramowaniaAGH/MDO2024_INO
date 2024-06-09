@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: click-deployment
+  labels:
+    app: click 
+spec:
+  strategy:
+    type: RollingUpdate 
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 30%
+  replicas: 4
+  selector:
+    matchLabels:
+      app: click 
+  template:
+    metadata:
+      labels:
+        app: click 
+    spec:
+      containers:
+      - name: click 
+        image: chlebiej/click:1.0
+        ports:
+        - containerPort: 80

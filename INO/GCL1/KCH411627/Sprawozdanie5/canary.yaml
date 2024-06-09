@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: click-canary
+  labels:
+    app: click 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: click 
+  template:
+    metadata:
+      labels:
+        app: click 
+        track: canary
+    spec:
+      containers:
+      - name: click 
+        image: chlebiej/click:1.1
+        ports:
+        - containerPort: 80

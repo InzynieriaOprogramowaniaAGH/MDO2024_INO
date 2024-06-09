@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: click-deployment
+  labels:
+    app: click 
+spec:
+  strategy:
+    type: Recreate
+  replicas: 4
+  selector:
+    matchLabels:
+      app: click 
+  template:
+    metadata:
+      labels:
+        app: click 
+    spec:
+      containers:
+      - name: click 
+        image: chlebiej/click:1.1
+        ports:
+        - containerPort: 80
