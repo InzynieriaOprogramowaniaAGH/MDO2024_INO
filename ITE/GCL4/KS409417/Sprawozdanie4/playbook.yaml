@@ -1,0 +1,42 @@
+---
+- name: Ping
+  hosts: all
+  tasks:
+    - name: ping
+      ping:
+
+- name: Copy
+  hosts: Endpoints
+  tasks:
+    - name: Copy
+      copy:
+        src: ./inventory.ini
+        dest: ~/
+
+- name: Update package
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: <passwd>
+  tasks:
+  - name: update
+    become: yes
+    apt:
+      name: "*"
+      state: latest
+      
+- name: Restart sshd & rngd
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: <passwd>
+  tasks:
+    - name: Restart sshd
+      become: yes
+      service:
+        name: ssh
+        state: restarted
+
+    - name: Restard rngd
+      become: yes
+      service:
+        name: rng-tools
+        state: restarted

@@ -1,0 +1,23 @@
+---
+- name: Download project from DockerHub
+  docker_image:
+    name: "{{ docker_image_name }}:{{ docker_image_tag }}"
+    source: pull
+
+- name: Run app
+  docker_container:
+    name: "{{ container_name }}"
+    image: "{{ docker_image_name }}:{{ docker_image_tag }}"
+    state: started
+    ports:
+      - "{{ host_port }}:{{ container_port }}"
+
+- name: Stop the container
+  docker_container:
+    name: "{{ container_name }}"
+    state: stopped
+
+- name: Remove the container
+  docker_container:
+    name: "{{ container_name }}"
+    state: absent

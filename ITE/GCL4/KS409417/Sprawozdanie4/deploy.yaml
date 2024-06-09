@@ -1,0 +1,29 @@
+---
+- name: Run docker image
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: admin
+  become: yes
+  tasks:
+    - name: Download project from DockerHub
+      docker_image:
+        name: ksagan23/node_deploy:latest
+        source: pull
+
+    - name: Run app
+      docker_container:
+        name: node
+        image: ksagan23/node_deploy:latest
+        state: started
+        ports:
+        - "80:3000"
+    
+    - name: Stop the container
+      docker_container:
+        name: node
+        state: stopped
+
+    - name: Remove the container
+      docker_container:
+        name: node
+        state: absent

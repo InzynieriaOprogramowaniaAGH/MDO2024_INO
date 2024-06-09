@@ -1,0 +1,6 @@
+---
+docker_image_name: ksagan23/node_deploy
+docker_image_tag: latest
+container_name: node
+host_port: 80
+container_port: 3000

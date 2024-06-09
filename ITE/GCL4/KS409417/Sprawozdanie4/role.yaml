@@ -1,0 +1,8 @@
+---
+- name: Deploy Docker Container
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: admin
+  become: yes
+  roles:
+    - role: deploy
