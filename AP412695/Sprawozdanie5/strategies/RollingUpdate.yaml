@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-nginx-rolling
+spec:
+  replicas: 20
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 3
+      maxSurge: 30%
+  selector:
+    matchLabels:
+      app: simple-nginx
+  template:
+    metadata:
+      labels:
+        app: simple-nginx
+    spec:
+      containers:
+      - name: simple-nginx
+        image: simple-nginx:1.0
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 80

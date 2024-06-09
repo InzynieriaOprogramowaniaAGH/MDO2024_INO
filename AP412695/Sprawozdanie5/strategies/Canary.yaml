@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-nginx-recreate
+  labels:
+    app: simple-nginx
+    version: v2.0
+    track: canary
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: simple-nginx
+      track: canary
+  template:
+    metadata:
+      labels:
+        app: simple-nginx
+        track: canary
+    spec:
+      containers:
+      - name: simple-nginx
+        image: simple-nginx:2.0
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 80

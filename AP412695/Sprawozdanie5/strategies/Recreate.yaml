@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-nginx-recreate
+spec:
+  replicas: 20
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: simple-nginx
+  template:
+    metadata:
+      labels:
+        app: simple-nginx
+    spec:
+      containers:
+      - name: simple-nginx
+        image: simple-nginx:2.0
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 80
