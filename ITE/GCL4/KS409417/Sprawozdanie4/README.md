@@ -192,3 +192,100 @@ oraz utworzyłem nowy playbook
 ![](images/ansible_role.png)
 
 I również sukces!
+
+# Pliki odpowiedzi dla wdrożeń nienadzorowanych
+
+Zainstalowałem system Fedora 40 pobrany z mirror'a onetu w wersji netinst
+Po instalacji, przesłałem na swoją główną maszynę plik odpowiedzi anaconda-ks.cfg
+
+![](images/fedora_download.png)
+
+Do niego wrzuciłem kilka wzmianek na temat potrzebnych repozytoriów:
+
+```
+url --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-40&arch=x86_64
+repo --name=update --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f40&arch=x86_64
+```
+
+Musiałem uzupełnić plik o kolejne dodatkowe instrukcje
+
+```
+%packages
+@^production-server
+moby-engine
+
+%end
+```
+
+tu by być w stanie uruchomić obraz z Docker Hub'a
+
+dodałem również instrukcje wykonujące się już po instalacji systemu:
+
+```kickstart
+%post --erroronfail --log=/root/ks-post.log
+```
+
+Ten fragment ustawia zapisy logów do pliku /root/ks-post.log, a opcja --erroronfail sprawaia, że jeśli jakieś polecenie w bloku zakończy się błędem to skrypt instalacyjny również zakończy się błędem
+
+```kickstart
+network  --bootproto=dhcp --hostname=kacper
+```
+
+tutaj ustawiamy hostname na kacper oraz konfigurację sieci na DHCP
+
+```kickstart
+usermod -aG docker root
+systemctl enable docker
+cat << 'EOF' > /etc/systemd/system/node_deploy.service
+```
+
+następnie dodajemy root'a do grupy docker, by umożliwić wykonywanie poleceń Docker bez sudo, włączamy usługę Docker, by przy starcie systemu się włączała automatycznie oraz tworzymy nowy plik usługi
+
+```kickstart
+[Unit]
+Description=Download app and run container
+Requires=docker.service
+After=docker.service
+```
+
+Definiujemy metadane:
+- Description: opis usługi
+- Requires: wymagania - potrzebuje uruchomionej usługi docker
+- After: określa, że uruchamiamy ją po dockerze
+
+```kickstart
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+
+ExecStart=/usr/bin/docker pull ksagan23/node_deploy:latest
+ExecStart=/usr/bin/docker run --name node ksagan23/node_deploy:latest
+```
+
+Definiujemy jak powinna być zarządzana i uruchomiona usługa. Wykonuje jedno polecenie i się kończy, jest aktywna po zakończeniu wykonania polecenia. 
+ExecStart - polecenia, które wykonujemy - pobieramy apkę z dockerhuba a następnie uruchamiamy kontener z tym obrazem.
+
+```kickstart
+[Install]
+WantedBy=multi-user.target
+```
+
+Usługa będzie uruchomiona w trybie multiuser
+
+```kickstart
+systemctl daemon-reload
+systemctl enable node_deploy.service
+systemctl start node_deploy.service
+```
+
+Następnie przeładowujemy demona, by uwzględnił konfigurację usługi, włączamy usługę node_deploy by włączała się przy rozruchu systemu oraz ją uruchamiamy 
+
+Finalnie udało się nam postawić drugą maszynę z konfiguracją opartą o nasz plik anaconda-ks.cfg. By to osiągnąć, trzeba było zmienić źródło instalacji na nasz plik:
+
+```
+inst.ks=https://raw.githubusercontent.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/KS409417/ITE/GCL4/KS409417/Sprawozdanie4/anaconda/anaconda-ks.cfg
+```
+
+![](images/fedora_download_2.png)
+
+![](images/fedora_docker_ps.png)
