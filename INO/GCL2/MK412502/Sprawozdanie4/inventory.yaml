@@ -1,0 +1,16 @@
+Orchestrators:
+    hosts:
+        host-maks-ubuntu:
+          ansible_host: maks-ubuntu
+          ansible_user: maks
+
+Endpoints:
+    hosts:
+        target-hosts:
+          ansible_host: ansible-target
+          ansible_user: ansible
+        
+network:
+  children:
+    Orchestrators:
+    Endpoints:

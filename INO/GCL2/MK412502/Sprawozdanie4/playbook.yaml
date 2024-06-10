@@ -1,0 +1,38 @@
+- name: Żądanie ping do wszystkich maszyn
+  hosts: network
+  tasks:
+  - name: Ping all
+    ansible.builtin.ping:
+
+- name: Zadania dotyczące hostów w Endpoints
+  hosts: Endpoints
+  tasks:
+    - name: Kopiowanie pliku inwentaryzacji na maszynę Endpoints
+      copy:
+        src: ~/MDO2024_INO/INO/GCL2/MK412502/Sprawozdanie4/inventory.yaml
+        dest: ~/inventory.yaml
+
+    - name: Ponowna operacja kopiowania
+      copy:
+        src: ~/MDO2024_INO/INO/GCL2/MK412502/Sprawozdanie4/inventory.yaml
+        dest: ~/inventory.yaml
+
+    - name: Aktualizacja pakietów
+      become: true
+      ansible.builtin.apt:
+        name: "*"
+        state: latest
+
+    - name: Restart usługi sshd
+      become: true
+      ansible.builtin.service:
+        name: sshd
+        state: restarted
+
+    - name: Restart usługi rng-tools
+      become: true
+      ansible.builtin.service:
+        name: rng-tools
+        state: restarted
+          
+        

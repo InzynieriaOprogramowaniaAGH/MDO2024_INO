@@ -1,0 +1,37 @@
+- name: Zarządzanie kontenerem
+  hosts: Endpoints
+  tasks:
+    - name: Pobieranie dockera
+      become: true
+      ansible.builtin.apt:
+        name: docker.io
+        state: latest
+  
+    - name: Umożliewienie jego dzialania bez reboota
+      become: true
+      command: systemctl enable --now docker
+
+    - name: Pobieranie obrazu do zbudowania/do deployu programu
+      copy:
+        src: ~/MDO2024_INO/INO/GCL2/MK412502/Sprawozdanie4/deploy.dockerfile
+        dest: ~/node_app/Dockerfile
+
+    - name: Budowanie obrazu.
+      become: true
+      community.docker.docker_image:
+        name: deploy
+        build:
+          path: /home/ansible/node_app/
+        source: build
+
+    - name: Run container - and application in this
+      become: true
+      community.docker.docker_container:
+        name: app
+        image: deploy
+
+    - name: Remove container
+      become: true
+      community.docker.docker_container:
+        name: app
+        state: absent
