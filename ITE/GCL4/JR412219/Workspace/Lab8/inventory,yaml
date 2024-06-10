@@ -1,0 +1,6 @@
+[Endpoints]
+ansible-target
+
+[Orchestrators]
+oversear
+root

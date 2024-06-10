@@ -1,0 +1,6 @@
+- name: AppInstall
+  hosts: Endpoints
+  remote_user: oversear
+  become: yes
+  roles:
+    - my_role
