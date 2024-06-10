@@ -231,6 +231,46 @@ Dodatkowo widzimy na maszynie, że obraz został poprawnie zbudowany:
   ![docker image](./Screenshots/14.png)
 
 
-### Automatyzacja i zdalne wykonywanie poleceń za pomocą Ansible
+### Nienadzorowana instalacja
 
-### Cel projektu
+Głównym celem zajęć jest przygotowanie źródła służącego do instalacji systemu dla maszyny wirtualnej.
+
+Finalnym efektem zajęć będzie uzyskanie nienadzorowanej instalacji wybranego systemy operacyjnego (w moim przypadku będzie to fedora 39). Dodatkowo na maszynie uruchomimy aplikację w trybie ciągłym.
+
+Pierwszym krokiem będzie przeprowadzenie standardowej instalacji fedory w trybie nadzorowanym. Po pomyślnym przejściu całego procesu instalacyjnego utworzy się plik **anaconda-ks.cfg** znajdujący się w lokalizacji : /root/:. Jest to plik zawierający odpowiedzi na pytania zadaniwane podczas procesu instalacyjnego. Dlatego też kopiujemy go i umieszczamy na naszej gałęzi w repozytorium w folderze ze sprawozdaniem.
+Kolejnym krokiem jest edycja pliku, tak ayb uzupełnić go o wymagane elementy.
+
+  ![anaconda-ks.cfg](./Screenshots/k1.png)
+
+Dopisanie wzmianek o wykorzystanych repozytoriach, ponieważ pliki nie zawierają o nich żadnych informacji:
+
+    url --mirrorlist="http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-39&arch=x86_64"
+    repo --name=updates-released --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f39&arch=x86_64
+
+Czyszczenie partycji przy instalacji
+
+    clearpart --all
+
+Nadanie hostname:
+
+    network  --hostname=mkubiczek
+
+I na samym końcu dodajemy polecenie do ponownego boot'a
+
+    reboot
+
+W tym momencie otrzymujemy kompletny plik pozwalający na nienadzorowana instalację systemu fedora 39.
+Teraz skoro aktualny plik znajduje się na naszej gałęzi jesteśmy w stanie przekazać go do instalatora. Wykorzystamy do tego zmienną inst.ks, którą uzupełnimy podczas instalacji.
+W virtualboxie podczas instalacji używamy tego wraz z początkiem instalacji. Przy uruchomieniu pierwszych opcji naciskamy przyciks **e**, która otwiera tryb GRUB, gdzie dodajemy wcześniej wspomniają zmienną i przypisujemy jej link do pliku anaconda-ks.cfg w trybie RAW na githubie (umożliwia to pobranie pliku poprzez wget).
+Dlatego w moim przypadku będzie to wyglądać w następujący sposób:
+
+    inst.ks=https://raw.githubusercontent.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/MK412502/INO/GCL2/MK412502/Sprawozdanie4/anaconda-ks.cfg
+
+  ![inst.ks](./Screenshots/k2.png)
+
+I po uruchomieniu cała instalacja przebiega w sposób automatyczny:
+
+  ![](./Screenshots/k3.png)
+  ![](./Screenshots/k4.png)
+
+Po zakończeniu instalacji po raz kolejny pojawia się ekran instalacyjny. Tym razem jednak należy wejść w zakładkę Troubleshooting i wejść w opcję Boot first drive.
