@@ -1,0 +1,48 @@
+- name: playbook2
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: ansible 
+  tasks:
+    - name: Install Docker
+      become: yes
+      apt:
+        name: docker
+        state: present
+
+    - name: Start docker
+      become: yes
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Copy Dockerfile
+      copy:
+          src: /home/jladz/MDO2024_INO/INO/GCL2/JL410406/Sprawozdanie2/node-deploy.Dockerfile
+          dest: /home/ansible
+        
+    - name: Build
+      become: yes
+      docker_image:
+        name: node-deploy
+        build:
+          path: /home/ansible
+          dockerfile: node-deploy.Dockerfile
+        source: build
+
+    - name: Run
+      docker_container:
+        name: node-deploy
+        image: node-deploy
+        auto_remove: yes
+        detach: yes
+      
+    - name: Delete
+      docker_container:
+        name: node-deploy
+        image: node-deploy
+        state: absent
+        
+        
+        
+
