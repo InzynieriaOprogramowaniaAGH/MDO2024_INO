@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: nginx-rolling-update-deployment
   labels:
     app: nginx
 spec:
@@ -9,6 +9,11 @@ spec:
   selector:
     matchLabels:
       app: nginx
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 20%
   template:
     metadata:
       labels:
@@ -16,7 +21,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: ksagan23/nginx_success:latest
+        image: nginx
         ports:
         - containerPort: 80
           protocol: TCP
