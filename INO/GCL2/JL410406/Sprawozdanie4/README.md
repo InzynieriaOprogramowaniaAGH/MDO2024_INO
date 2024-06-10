@@ -31,7 +31,7 @@ sudo apt upgrade
 sudo apt install ansible
 ```
 
-![1.1](screenshots/1.1.png)
+![1.2](screenshots/1.2.png)
 
 * Wymiana kluczy SSH
 
@@ -39,7 +39,7 @@ W celu logowania się na maszyny bez koniecznośći podawania haseł muszę utwo
 
 W pierwszej kolejności dodaję nową kartę sieciową dla obu maszyn:
 
-![1.1](screenshots/1.1.png)
+![1.3](screenshots/1.3.png)
 
 A następnie poleceniem
 
@@ -53,11 +53,11 @@ uzyskuję adres IP za pomocą DHCP dla intefrejsu sieciowego enp0s8. Teraz mogę
 ssh-copy-id -i ~/.ssh/id_rsa ansible@192.168.56.102
 ```
 
-![1.1](screenshots/1.1.png)
+![1.4](screenshots/1.4.png)
 
 W celu sprawdzenia działania zalogowałam się na drugą maszynę z pierwszej:
 
-![1.1](screenshots/1.1.png)
+![1.5](screenshots/1.5.png)
 
 ## Inwentaryzacja
 
@@ -65,19 +65,19 @@ W celu sprawdzenia działania zalogowałam się na drugą maszynę z pierwszej:
 
 Wykorzystując ```hostnamectl status``` sprawdzam statyczną nazwę hosta głównej maszyny:
 
-![1.1](screenshots/1.1.png)
+![2.1](screenshots/2.1.png)
 
 Uważam, że jest ona w porządku, dlatego nie wprowadzam zmian, a nazwa drugiej została zmieniona podczas instalacji zarządcy Ansible.
 
 Gdy chciałam wymienić klucze pomiędzy maszynami i zamiast wpisać adres IP użyłam hostname'u maszyny napotkałam błąd. Dlatego by móc wywoływać maszynę bez konieczności wpisywania jej adresu IP należy przypisać jej nazwę DNS, dodając odpowiednie wpisy do pliku /etc/hosts:
 
-![1.1](screenshots/1.1.png)
+![2.2](screenshots/2.2.png)
 
 Łączność zweryfikowałam logując się na maszynę wirtualną za pomocą ```ssh ansible@ansible-target```.
 
 Po zapoznaniu się z dokumentacją [plik inwentaryzacji](https://docs.ansible.com/ansible/latest/getting_started/get_started_inventory.html) utworzyłam plik ```inventory.ini``` i umieściłam w nim sekcje Orchestrators - zarządzającą oraz Endpoints - odbierającą:
 
-![1.1](screenshots/1.1.png)
+![2.3](screenshots/2.3.png)
 
 Zweryfikowałam inwentarz i wysłałam żądanie ping do maszyny Endpoints:
 
@@ -86,7 +86,7 @@ ansible-inventory -i inventory.ini --list
 ansible Endpoints -m ping -i inventory.ini
 ```
 
-![1.1](screenshots/1.1.png)
+![2.4](screenshots/2.4.png)
 
 ## Zdalne wywoływanie procedur
 
@@ -151,13 +151,13 @@ ansible-playbook -i inventory.ini playbook.yaml
 
 Wydruk terminala:
 
-![1.1](screenshots/1.1.png)
+![3.1](screenshots/3.1.png)
 
 dla usługi ```rngd``` otrzymujemy błąd, ponieważ nie jest ona zainstalowana na serwerze.
 
 Przy próbie wykonania operacji na maszynie z wyłączonym serwerem SSH otrzymałam nastęujące logi:
 
-![1.1](screenshots/1.1.png)
+![3.2](screenshots/3.2.png)
 
 ## Zarządzanie kontenerem
 
@@ -229,5 +229,12 @@ Drugi playbook służy do uruchomienia kontenera node-deploy wykorzystywanego na
 
 ## Pliki odpowiedzi dla wdrożeń nienadzorowanych
 
-Zainstalowałam system fedora stosując instalator sieciowy oraz wyciągnęłąm z niego plik odpowiedzi ```anaconda-ks.cfg```. Dodałam do niego repozytorium podane w instrukcji oraz zmieniłam ustawienia formatowania dysku, by móc uruchamiać go wielokrotnie stosując ```clearpart --all```. Mój hostname ustawiony jest na "jladz".
+Zainstalowałam system fedora stosując instalator sieciowy oraz wyciągnęłąm z niego plik odpowiedzi ```anaconda-ks.cfg```. 
 
+![5.1](screenshots/5.1.png)
+
+Dodałam do niego repozytorium podane w instrukcji oraz zmieniłam ustawienia formatowania dysku, by móc uruchamiać go wielokrotnie stosując ```clearpart --all```. Mój hostname ustawiony jest na "jladz".
+
+Po przesłaniu pliku na githuba ponownie uruchomiłam instalację Fedory tym razem wykorzystując opcję "e" i dodając po ```inst.ks=``` link do mojego pliku Kickstart. Już przy wyświetlonym oknie instalacji widzimy, że wszystkie opcje zostały uzupełnione według naszego pliku odpowiedzi i po zatwierdzeniu przechodzimy do dalszej instalacji:
+
+![5.2](screenshots/5.2.png)
