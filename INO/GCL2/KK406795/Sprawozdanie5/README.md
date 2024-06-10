@@ -34,7 +34,6 @@ to narzędzie pozwala tworzyć, aktualizować i monitorować zasoby takie jak po
 * Uruchomiłam Kubernetes stosując komendę:
 ```
 minikube start
-
 ```
 
 ![screen1](../Sprawozdanie2/screenshots/z3.png)
@@ -43,7 +42,6 @@ Status klastra sprawdzam poprzez:
 
 ```
 minikube status
-
 ```
 
 ![screen1](../Sprawozdanie2/screenshots/z4.png)
@@ -56,10 +54,9 @@ Sprawdzam działający kontener:
 
 * Odnośnie wymagań sprzętowych, które były zawarte w dokumentacji, czyli co najmniej 2 procesory, 2 GB wolnej pamięci oraz 20 GB wolnego miejsca na dysku poprzednia zmiana urządzenia okazałaby się być niezbędna przy wykonywaniu poleceń z tego sprawozdania, wymienione wyżej wartości przydzielone zostały mojej maszynie.
 
-* Uruchomiłam Dashboard wpisując w terminalu polecenie
+* Uruchomiłam Dashboard wpisując w terminalu polecenie:
 ```
 minikube dashboard
-
 ```
 poprzez to otworzyłam od razu w przeglądarce:
 
@@ -83,13 +80,9 @@ Kod HTML tworzy prostą stronę internetową z nagłówkiem "Hello from NGINX!" 
 
 Plik Dockerfile tworzy obraz Docker na bazie najnowszej wersji Nginx i kopiuje plik index.html do katalogu /usr/share/nginx/html, aby serwer Nginx mógł serwować tę stronę internetową.
 
-Następnie zbudowałam obraz komendą docker build:
+Następnie zbudowałam obraz komendą docker build.
 
-
-![screen1](../Sprawozdanie2/screenshots/z9.png)
-
-
-* Aplikacja pracuje jako kontener:
+* Wykazałam, że aplikacja pracuje jako kontener:
 
 ![screen1](../Sprawozdanie2/screenshots/zdod.png)
 
@@ -114,16 +107,16 @@ minikube kubectl run -- <nazwa-wdrożenia> --image=<obraz-docker> --port=<wyprow
 ```
 * Kontener uruchomiony w minikubie zostanie automatycznie ubrany w pod.
 * Przedstawiam, że pod działa (via Dashboard oraz kubectl):
+  
 via Dashboard stosuje komendę:
 ``` 
 minikube dashboard
-
 ```
 
 
 ![screen1](../Sprawozdanie2/screenshots/z12.png)
 
-kubectl – stosuje komendę:
+przez kubectl – stosuję komendę:
 
 ```
 kubectl get pods
@@ -146,7 +139,7 @@ Port 8082 był przekierowany na lokalny host.
 ## LAB 012
 
 ### Konwersja wdrożenia ręcznego na wdrożenie deklaratywne YAML
-Plik który jest manifestem YAML dla Kubernetes, definiującym zasób typu Deployment o nazwie depl.yaml wzbogaciłam o 4 repliki kontenera aplikacji. Plik wygląda następująco:
+Plik, który jest manifestem YAML dla Kubernetes, definiującym zasób typu Deployment o nazwie depl.yaml wzbogaciłam o 4 repliki kontenera aplikacji. Plik wygląda następująco:
 
 ![screen1](../Sprawozdanie2/screenshots/z15.png)
 
@@ -192,7 +185,7 @@ Przedstawiam Dashboard mojego wdrożenia:
 docker commit <contener id>
 ```
  * Potrzebny jest "gotowiec" → **własny** kontener: zmodyfikowany względem oryginału i opublikowany na własnym koncie DH.
- * Wymagało to prze zemnie:
+ * Wymagało to przeze mnie:
 * przepakowania wybranego obrazu samodzielnie przez ```commit```, przez co stworzyłam dwie wersje zawierające tag 2.0 i 3.0. W takim przypadku tylko zmiana tagu była potrzebna do utworzenia nowych wariantów obrazu.
 
 Obie wersje wypchnęłam na Docker Hub przez polecenie push:
