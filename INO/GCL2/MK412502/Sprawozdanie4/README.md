@@ -274,3 +274,45 @@ I po uruchomieniu cała instalacja przebiega w sposób automatyczny:
   ![](./Screenshots/k4.png)
 
 Po zakończeniu instalacji po raz kolejny pojawia się ekran instalacyjny. Tym razem jednak należy wejść w zakładkę Troubleshooting i wejść w opcję Boot first drive.
+
+#### Docker i dependencje
+
+Wcześniej instalowaliśmy tylko pusty system, dlatego uzupełniamy nasz plik kickstart o skrytp, który uruchomi się po zainstalowaniu systemu. Skrytp ten oznaczamy poprzez %post. 
+
+Oto sekcja zawierająca skrypt:
+
+    %post --erroronfail --log=/root/ks-post.log
+    cat << 'EOF' > /etc/systemd/system/docker-nginx.service
+
+    [Unit]
+    Description=Download and run Docker
+    Requires=docker.service
+    After=docker.service
+
+    [Service]
+    Type=oneshot
+    RemainAfterExit=yes
+    ExecStart=/usr/bin/docker pull nginx:latest
+    ExecStart=/usr/bin/docker run -t -d --name nginx -e TERM=xterm -p 80:80 nginx
+
+    [Install]
+    WantedBy=multi-user.target
+    EOF
+
+    usermod -aG docker root
+    systemctl enable docker
+
+    systemctl daemon-reload
+    systemctl enable docker-nginx.service
+    systemctl start docker-nginx.service
+    %end
+
+Teraz przy instalacji od razu zostaną dodane wszystkie narzędzia potrzebne do uruchomienia naszej aplikacji w kontenerze Dockera. W przypadku błędu, będzie on widoczny w logach systemowych.
+
+Zakładka [Unit] opisuje usługę i wymaga Dockera do uruchomienia. Usługa zostanie uruchomiona dopiero po zainstalowaniu Dockera.
+
+Sekcja [Service] określa typ usługi (jednorazowa, uruchamia pojedyncze polecenie) oraz jej działanie po wykonaniu polecenia. Po uruchomieniu usługi, kontener z nginx zostanie pobrany i uruchomiony.
+
+W sekcji [Install] jest określone, że usługa zostanie uruchomiona w trybie wieloużytkownikowym. Użytkownik root zostanie dodany do grupy docker, po czym Docker zostanie uruchomiony i włączy się usługa.
+
+  ![kontener](./Screenshots/k5.png)
