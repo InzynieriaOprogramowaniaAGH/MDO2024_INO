@@ -29,7 +29,9 @@ pipeline {
         dir("$SRC_DIR") {
           sh "docker build -t irssi-build --no-cache - < build.Dockerfile 2>&1 > $LOG_DIR/docker_build-${BUILD_NUMBER}.log"
         }
-        archiveArtifacts artifacts: "$LOG_DIR/"
+        dir("$LOG_DIR") {
+          archiveArtifacts artifacts: "docker_build-${BUILD_NUMBER}.log"
+        }
       }
     }
     stage('Test') {
@@ -38,7 +40,9 @@ pipeline {
         dir("$SRC_DIR") {
           sh "docker build --no-cache -t irssi-test - < test.Dockerfile 2>&1 > $LOG_DIR/docker_test-${BUILD_NUMBER}.log"
         }
-        archiveArtifacts artifacts: "$LOG_DIR/docker_test-${BUILD_NUMBER}.log"
+        dir("$LOG_DIR") {
+          archiveArtifacts artifacts: "$docker_test-${BUILD_NUMBER}.log"
+        }
       }
     }
     stage('Deploy') {
