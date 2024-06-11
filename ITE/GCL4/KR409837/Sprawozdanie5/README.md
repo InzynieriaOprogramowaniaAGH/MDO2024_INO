@@ -46,3 +46,77 @@ Pozwoliło mi to ostatecznie otworzyć stronę z przeglądarki mojego komputera:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie10-png/4. otworzenie strony po przekierowaniu portow.png">
 </p>
+
+## Zajęcia 11
+## Wdrażanie na zarządzalne kontenery: Kubernetes (2)
+### Konwersja wdrożenia ręcznego na wdrożenie deklaratywne YAML
+
+Na potrzeby zajęć utworzyłem folder `files`, w którym zamieściłem wszystkie pliki utworzone w ramach zajęć, między innimi plik `deployment.yaml`, który okaże się niezbędny, aby móc rozpocząć wdrożenie i zbadać stan aplikacji. 
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/1. utworzenie folderu i pliku.png">
+</p>
+
+Wspomniany plik `deployment.yaml` posiada następującą treść oraz pozwala na posiadanie 5 replik:
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-hot-cold
+  labels:
+    app: react
+
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: react
+  template:
+    metadata:
+      labels:
+        app: react
+    spec:
+      containers:
+      - name: react
+        image: krezler21/react-hot-cold:0.2.0
+        ports:
+        - containerPort: 3000
+```
+
+Następnie uruchomiłem dashboard i przełączyłem się do innego terminala, aby dashboard pozostał włączony:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/3. wystartowalem minikube'a.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/4. w drugim terminalu uruchomilem dashboard.png">
+</p>
+
+Powyższe działania pozwoliły mi na rozpoczęcie wdrożenia przy pomocy `kubectl aplly` oraz zbadanie stanu za pomocą `kubectl rollout status`:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/5. Rozpocznij wdrożenie za pomocą kubectl apply.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/6. Zbadaj stan za pomocą kubectl rollout status.png">
+</p>
+
+Co oczywiście znalazło swoje odzwierciedlenie w wyświetlanej zawartości dashboard:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/7.2 dashboard po wdrożeniu za pomocą kubectl apply.png">
+</p>
+
+Postanowiłem przetestować uruchomienie aplikacji, dlatego przekierowałem port i wszedłem na `localhost:3001`:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/7. przekierowalem port.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/7.1 przekierowalem port.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/8. uruchomilem aplikacje.png">
+</p>
+
+### Konwersja wdrożenia ręcznego na wdrożenie deklaratywne YAML
+
+W Docker Hubie dwie nowe wersje swojego obrazu, przy czego wersja `error` podczas uruchomienia kończy się problemem:
+ <p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/9.  Przygotowanie nowego obrazu">
+</p>
