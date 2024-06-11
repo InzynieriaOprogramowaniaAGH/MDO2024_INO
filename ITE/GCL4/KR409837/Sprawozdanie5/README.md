@@ -29,8 +29,20 @@ Uruchamiając link zamieszczony na końcu wydruku wywołanego uruchomienie `mini
 </p>
 
 ### Instalacja klastra Kubernetes
-Utworzyłem pod i przekeirowałem port aplikacji
+Utworzyłem pod i przekeirowałem port aplikacji, co odzwierciedliło swój efekt w dashboardzie
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie10-png/3. utworzenie poda i przekierowanie portu.png">
 </p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie10-png/3.2 widok z dashboarda.png">
+</p>
 
+Dodatkowo w zakładce `PORTS` obecnej w Visual Studio Code dodatkowo przekierowałem port `3000` na `localhost:3001`
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie10-png/3.1 przekierowalem port.png">
+</p>
+
+Pozwoliło mi to ostatecznie otworzyć stronę z przeglądarki mojego komputera:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie10-png/4. otworzenie strony po przekierowaniu portow.png">
+</p>
