@@ -27,7 +27,7 @@ pipeline {
       steps {
         sh 'echo ===[Build]==='
         dir("$SRC_DIR") {
-          sh "docker build -t irssi-build --no-cache - < build.Dockerfile 2>&1 | tee $LOG_DIR/docker_build-${BUILD_NUMBER}.log"
+          sh "docker build -t irssi-build --no-cache - < build.Dockerfile 2>&1 > $LOG_DIR/docker_build-${BUILD_NUMBER}.log"
         }
         archiveArtifacts artifacts: "$LOG_DIR/docker_build-${BUILD_NUMBER}.log"
       }
@@ -36,7 +36,7 @@ pipeline {
       steps {
         sh 'echo ===[Test]==='
         dir("$SRC_DIR") {
-          sh "docker build --no-cache -t irssi-test - < test.Dockerfile  | tee $LOG_DIR/docker_build_test-${BUILD_NUMBER}.log"
+          sh "docker build --no-cache -t irssi-test - < test.Dockerfile 2>&1 > $LOG_DIR/docker_build_test-${BUILD_NUMBER}.log"
         }
         archiveArtifacts artifacts: "$LOG_DIR/docker_build_test-${BUILD_NUMBER}.log"
       }
