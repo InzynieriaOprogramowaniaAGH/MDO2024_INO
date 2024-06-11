@@ -198,3 +198,11 @@ Usuwając wcześniej obecne podsy w dashboardzie uruchomiłem skrpty aby sprawdz
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/24. uruchomienie skryptu (dodaj zawartosc skryptu).png">
 </p>
+Jak widać test zakończył się sukcesem.
+
+### Kontrola wdrożenia
+
+Podczas tego etapu zajęć zająłem się wddrożenie następujących strategii wdrożeń:
+- `Recreate` - Jest to domyślne wdrożenie. Wstrzymuje działanie aplikacji i wymienia wszystkie pody jednocześnie, co prowadzi do przerwy w działaniu. Jest łatwy do wdrożenia i nie powoduje problemów z kompatybilnością, ale aplikacja jest niedostępna podczas aktualizacji.
+- `RollingUpdate` - Wymienia pody stopniowo, zapewniając ciągłą dostępność aplikacji. Minimalizuje przestoje i utrzymuje dostępność, ale może prowadzić do problemów z synchronizacją danych i wymaga zgodności między starymi i nowymi wersjami.
+- `Canary` - Nowa wersja aplikacji jest wdrażana tylko dla części użytkowników. Pozwala na testowanie nowej wersji w ograniczonym zakresie przed pełnym wdrożeniem, co umożliwia wczesne wykrywanie problemów, ale wymaga dodatkowej konfiguracji i zarządzania ruchem użytkowników. 
