@@ -129,3 +129,6 @@ Wykorzystując komendę `kubectl apply -f deployment.yaml deployment.apps/react-
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/11. widok z dashboard, dolozono nowe repliki tak aby sumarycznie bylo 8, a nie po prostu dodano 8.png>
 </p>
+
+- zmniejszenie liczby replik do 1
+- zmniejszenie liczby replik do 0
