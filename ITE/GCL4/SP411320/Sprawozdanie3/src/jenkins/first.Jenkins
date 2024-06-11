@@ -29,9 +29,6 @@ pipeline {
         dir("$SRC_DIR") {
           sh "docker build -t irssi-build --no-cache - < build.Dockerfile 2>&1 > $LOG_DIR/docker_build-${BUILD_NUMBER}.log"
         }
-        dir("$LOG_DIR") {
-          archiveArtifacts artifacts: "docker_build-${BUILD_NUMBER}.log"
-        }
       }
     }
     stage('Test') {
@@ -39,9 +36,6 @@ pipeline {
         sh 'echo ===[Test]==='
         dir("$SRC_DIR") {
           sh "docker build --no-cache -t irssi-test - < test.Dockerfile 2>&1 > $LOG_DIR/docker_test-${BUILD_NUMBER}.log"
-        }
-        dir("$LOG_DIR") {
-          archiveArtifacts artifacts: "$docker_test-${BUILD_NUMBER}.log"
         }
       }
     }
@@ -62,7 +56,15 @@ pipeline {
         sh 'echo ===[Publish]==='
         sh "docker login -u $USER -p $DOCKER_TOKEN"
         sh "docker tag irssi-build $USER/irssi:$VERSION"
-        sh "docker push $USER/irssi:$VERSION"
+        sh "docker push $USER/irssi:$VERSION > $LOG_DIR/docker_push-${BUILD_NUMBER}.log"
+      }
+    }
+    stage('Artifact') {
+      steps {
+        dir("$LOG_DIR") {
+          sh "tar czvf build_logs-${BUILD_NUMBER}.tar.xz *"
+          archiveArtifacts artifacts: "build_logs-${BUILD_NUMBER}.tar.xz"
+        }
       }
     }
     stage('Cleanup') {
@@ -71,6 +73,9 @@ pipeline {
         sh 'docker rm $(docker ps -aq) || true'
         sh 'dokeer rmi $(docker images -q) || true'
         sh 'docker logout || true'
+        dir("$LOG_DIR") {
+          sh 'rm -rfv *'
+        }
       }
     }
   }
