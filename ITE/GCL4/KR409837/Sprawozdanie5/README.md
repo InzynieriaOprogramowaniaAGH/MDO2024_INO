@@ -150,13 +150,51 @@ Wykorzystując komendę `kubectl apply -f deployment.yaml deployment.apps/react-
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/19. widok z dashboard.png">
 </p>
 
-Przywróciłem poprzednie wersję wdrożeń następującymi komendami: 
+Przywróciłem poprzednią wersję wdrożeń następującymi komendami: 
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/20. Przywracaj poprzednie wersje wdrożeń za pomocą poleceń kubectl rollout history.png">
 </p>
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/21. Przywracaj poprzednie wersje wdrożeń za pomocą poleceń kubectl rollout undo.png">
 </p>
+
+Co wywołało następujący efekt:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/22. widok z dashboard.png">
+</p>
+
+### Kontrola wdrożenia
+
+Utworzyłem nowy plik i nadałem mu odpowiednie uprawnienia.
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/23. utworzyłem plik i nadałem mu uprawnienia.png">
+</p>
+
+Następnie przygotowałem skrypt tak, aby weryfikował czy wdrożenie "zdążyło" wykonać się w 60 sekund:
+```
+#!/bin/bash
+
+DEPLOYMENT_NAME="react-hot-cold"
+
+kubectl apply -f deployment.yaml
+
+end_time=$((SECONDS + 60))
+
+while [ $SECONDS -lt $end_time ]; do
+    status=$(kubectl rollout status deployment/$DEPLOYMENT_NAME)
+    if [[ $status == *"successfully rolled out"* ]]; then
+        echo "Aplikacja została wdrożona w ciągu 60 sekund."
+        exit 0
+    fi
+    
+    sleep 5
+done
+
+echo "Aplikacja nie została wdrożona w ciągu 60 sekund."
+exit 1
+```
+
+Usuwając wcześniej obecne podsy w dashboardzie uruchomiłem skrpty aby sprawdzić czy test zakończy się sukcesem:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/24. uruchomienie skryptu (dodaj zawartosc skryptu).png">
 </p>
