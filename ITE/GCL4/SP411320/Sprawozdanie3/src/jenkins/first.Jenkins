@@ -44,7 +44,7 @@ pipeline {
       steps {
         sh 'echo ===[Deploy]==='
         sh 'docker run --rm --name irssi-build -tde TERM=xterm irssi-build'
-        sh "docker ps > $LOG_DIR/docker_ps-${BUILD_NUMBER}.log"
+        sh "docker ps 2>&1 > $LOG_DIR/docker_ps-${BUILD_NUMBER}.log"
         sh 'docker stop irssi-build'
       }
     }
@@ -56,7 +56,7 @@ pipeline {
         sh 'echo ===[Publish]==='
         sh "docker login -u $USER -p $DOCKER_TOKEN"
         sh "docker tag irssi-build $USER/irssi:$VERSION"
-        sh "docker push $USER/irssi:$VERSION > $LOG_DIR/docker_push-${BUILD_NUMBER}.log"
+        sh "docker push $USER/irssi:$VERSION 2>&1 > $LOG_DIR/docker_push-${BUILD_NUMBER}.log"
       }
     }
     stage('Artifact') {
