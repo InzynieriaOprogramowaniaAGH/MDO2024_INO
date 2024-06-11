@@ -126,3 +126,18 @@ Oraz zgodnie z instrukcją upenwiono się że plik zawsze będzie formatowac ca�
 ```
 clearpart --all
 ```
+Kolejnym krokiem było utworzneie skecji %packages oraz %post, tak jak poniżej:
+![](../Screeny/4.1.5.3.png)
+Sekcja %packages określa pakiety, które mają zostać zainstalowane. Instalujemy minimalne środowisko, narzędzia do zarządzania kontenerami oraz środowisko serwera.
+![](../Screeny/4.1.5.4.png)
+Sekcja %post zawiera polecenia, które zostaną wykonane po zainstalowaniu pakietów, ale przed zakończeniem instalacji systemu. Dodaje użytkownika root do grupy docker.
+Włączam usługę docker. Tworzę nową usługę systemową docker-java-deploy.service, która pobiera obraz kontenera radeckimaciej/deploy:1.1.1 i uruchamia go na porcie 8080. Uruchamiamy usługę docker-java-deploy.service.
+Następnie plik ten został umieszczony na githubie. Uruchomiono instalator w visualBox i za pomocą `e` zaraz po odpaleniu wpisano odpowiednią linikę, w okienku które się pojawiło:
+```
+init.ks=https://raw.githubusercontent.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/MR410206/INO/GCL2/MR410206/Sprawozdanie4/anaconda-ks.cfg
+```
+Po uruchomieniu instalatora wszystko zadziałało prawidłowo.
+![](../Screeny/4.1.5.5.png)
+![](../Screeny/4.1.5.6.png)
+![](../Screeny/4.1.5.7.png)
+![](../Screeny/4.1.5.8.png)
