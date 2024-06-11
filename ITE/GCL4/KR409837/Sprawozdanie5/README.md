@@ -7,23 +7,23 @@ Kubernetes to otwartoźródłowy system orkiestracji kontenerów. Umożliwia aut
 
 Następującą komendą zaopatrzyłem się w implementację stosu k8s (minikube):
 <p align="center">
- <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie10-png/1.1 Zaopatrz się w implementację stosu k8s minikube">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie10-png/1.1 Zaopatrz się w implementację stosu k8s minikube.png">
 </p>
 
 Przy pomocy polecenia `minikube start` uruchomiłem instalację, konfigurację oraz kontener minikube:
 <p align="center">
- <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie10-png/1.2 Zaopatrz się w implementację stosu k8s minikube">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie10-png/1.2 Zaopatrz się w implementację stosu k8s minikube.png">
 </p>
 
 Zainstalowałem `kubectl` oraz na koniec uruchomiłem dashboard komendą `minikube dashboard`, tak uruchomiony dashboard zostawiłem w dotychczasowym terminalu i na potrzeby dalszej pracy uruchomiłem kolejny terminal:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie10-png/2. intalacja kubectl">
 </p>
-<p align="center">
- <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie10-png/2.1 intalacja kubectl">
+<p align="center.png">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie10-png/2.1 intalacja kubectl.png">
 </p>
 
 Następnie utworzyłem pod i przekeirowałem port aplikacji
 <p align="center">
- <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie10-png/3. utworzenie poda i przekierowanie portu">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie10-png/3. utworzenie poda i przekierowanie portu.png">
 </p>
