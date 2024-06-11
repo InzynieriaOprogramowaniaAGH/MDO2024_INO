@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-hot-cold
+spec:
+  replicas: 15
+  selector:
+    matchLabels:
+      app: react
+      version: stable
+  template:
+    metadata:
+      labels:
+        app: react
+        version: stable
+    spec:
+      containers:
+      - name: react
+        image: krezler21/react-hot-cold:0.2.0
