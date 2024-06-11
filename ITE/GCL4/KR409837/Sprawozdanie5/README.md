@@ -130,4 +130,22 @@ Wykorzystując komendę `kubectl apply -f deployment.yaml deployment.apps/react-
 </p>
 
 - zmniejszenie liczby replik do 1
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/13. widok z dashboard.png">
+</p>
+
 - zmniejszenie liczby replik do 0
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/15. widok z dashboard.png">
+</p>
+
+- Zastosowanie nowej wersji obrazu
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/17. widok z dashboard.png">
+</p>
+
+
+- Zastosowanie starszej wersji obrazu
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/19. widok z dashboard.png">
+</p>
