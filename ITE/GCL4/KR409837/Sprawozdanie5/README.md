@@ -403,3 +403,13 @@ spec:
       - name: react
         image: krezler21/react-hot-cold:0.2.0
 ```
+
+oraz powyższe pliki uruchomiłem:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/32. uruchomilem 5 plikow.png">
+</p>
+
+Co powozliło uzyskać następujący efekt, jak widać 15 podów zostało uruchomionych w wersji stabilnej, a 5 w nowszej wersji:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/32.1 widok z dashboarda.png">
+</p>
