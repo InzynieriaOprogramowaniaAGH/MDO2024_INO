@@ -7,7 +7,7 @@ Kubernetes to otwartoźródłowy system orkiestracji kontenerów. Umożliwia aut
 
 Następującą komendą zaopatrzyłem się w implementację stosu k8s (minikube):
 <p align="center">
- <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie4/Sprawozdanie10-png/1.1 Zaopatrz się w implementację stosu k8s minikube.png">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie10-png/1.1%20Zaopatrz%20si%C4%99%20w%20implementacj%C4%99%20stosu%20k8s%20minikube.png">
 </p>
 
 Przy pomocy polecenia `minikube start` uruchomiłem instalację, konfigurację oraz kontener minikube:
