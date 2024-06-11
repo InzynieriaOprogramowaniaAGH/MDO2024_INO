@@ -78,11 +78,15 @@ pipeline {
         sh 'echo ===[Cleanup]==='
         sh 'docker rm $(docker ps -aq) || true'
         sh 'dokeer rmi $(docker images -q) || true'
-        sh 'docker logout || true'
         dir("$LOG_DIR") {
           sh 'rm -rfv *'
         }
       }
+    }
+  }
+  post {
+    always {
+        sh 'docker logout'
     }
   }
 }
