@@ -149,3 +149,14 @@ Wykorzystując komendę `kubectl apply -f deployment.yaml deployment.apps/react-
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/19. widok z dashboard.png">
 </p>
+
+Przywróciłem poprzednie wersję wdrożeń następującymi komendami: 
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/20. Przywracaj poprzednie wersje wdrożeń za pomocą poleceń kubectl rollout history.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/21. Przywracaj poprzednie wersje wdrożeń za pomocą poleceń kubectl rollout undo.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/22. widok z dashboard.png">
+</p>
