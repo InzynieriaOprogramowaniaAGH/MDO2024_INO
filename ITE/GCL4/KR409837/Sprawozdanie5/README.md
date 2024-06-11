@@ -5,7 +5,7 @@
 
 Kubernetes to otwartoźródłowy system orkiestracji kontenerów. Umożliwia automatyzację wdrażania, skalowania i zarządzania aplikacjami kontenerowymi w klastrze serwerów. Kubernetes zarządza cyklem życia kontenerów, obsługuje balansowanie obciążenia, automatyczne przydzielanie zasobów, oraz monitorowanie stanu aplikacji. Dzięki temu umożliwia tworzenie skalowalnych, odporne na awarie i łatwo zarządzalnych środowisk produkcyjnych, co znacznie upraszcza operacje DevOpsowe.
 
-Następującą komendą zaopatrzyłem się w implementację stosu k8s (minikube):
+Za pomocą następującej komendy zainstalowałem implementację stosu k8s (minikube)::
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie10-png/1.1%20Zaopatrz%20si%C4%99%20w%20implementacj%C4%99%20stosu%20k8s%20minikube.png">
 </p>
@@ -15,7 +15,7 @@ Przy pomocy polecenia `minikube start` uruchomiłem instalację, konfigurację o
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie10-png/1.2 Zaopatrz się w implementację stosu k8s minikube.png">
 </p>
 
-Zainstalowałem `kubectl` oraz na koniec uruchomiłem dashboard komendą `minikube dashboard`, tak uruchomiony dashboard zostawiłem w dotychczasowym terminalu i na potrzeby dalszej pracy uruchomiłem kolejny terminal:
+Zainstalowałem `kubectl`, a na koniec uruchomiłem dashboard komendą `minikube dashboard`. Tak uruchomiony dashboard zostawiłem w dotychczasowym terminalu i na potrzeby dalszej pracy uruchomiłem kolejny terminal:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie10-png/2. intalacja kubectl.png">
 </p>
@@ -23,13 +23,13 @@ Zainstalowałem `kubectl` oraz na koniec uruchomiłem dashboard komendą `miniku
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie10-png/2.1 intalacja kubectl.png">
 </p>
 
-Uruchamiając link zamieszczony na końcu wydruku wywołanego uruchomienie `minikube dashboard` uzyskujemy dostęp do dashboarda
+Uruchamiając link zamieszczony na końcu wydruku wywołanego uruchomieniem `minikube dashboard`, uzyskujemy dostęp do dashboarda:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie10-png/3.1.1 pusty dashboard.png">
 </p>
 
 ### Instalacja klastra Kubernetes
-Utworzyłem pod i przekeirowałem port aplikacji, co odzwierciedliło swój efekt w dashboardzie
+Utworzyłem pod i przekierowałem port aplikacji, co miało swoje odzwierciedlenie w dashboardzie
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie10-png/3. utworzenie poda i przekierowanie portu.png">
 </p>
@@ -42,7 +42,7 @@ Dodatkowo w zakładce `PORTS` obecnej w Visual Studio Code dodatkowo przekierowa
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie10-png/3.1 przekierowalem port.png">
 </p>
 
-Pozwoliło mi to ostatecznie otworzyć stronę z przeglądarki mojego komputera:
+Pozwoliło mi to ostatecznie otworzyć stronę w przeglądarce mojego komputera:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie10-png/4. otworzenie strony po przekierowaniu portow.png">
 </p>
@@ -51,12 +51,12 @@ Pozwoliło mi to ostatecznie otworzyć stronę z przeglądarki mojego komputera:
 ## Wdrażanie na zarządzalne kontenery: Kubernetes (2)
 ### Konwersja wdrożenia ręcznego na wdrożenie deklaratywne YAML
 
-Na potrzeby zajęć utworzyłem folder `files`, w którym zamieściłem wszystkie pliki utworzone w ramach zajęć, między innimi plik `deployment.yaml`, który okaże się niezbędny, aby móc rozpocząć wdrożenie i zbadać stan aplikacji. 
+Na potrzeby zajęć utworzyłem folder `files`, w którym zamieściłem wszystkie pliki utworzone w ramach zajęć, między innymi plik `deployment.yaml`, który okaże się niezbędny do rozpoczęcia wdrożenia i zbadania stanu aplikacji 
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/1. utworzenie folderu i pliku.png">
 </p>
 
-Wspomniany plik `deployment.yaml` posiada następującą treść oraz pozwala na posiadanie 5 replik:
+Wspomniany plik `deployment.yaml` ma następującą treść i pozwala na posiadanie 5 replik:
 ```
 apiVersion: apps/v1
 kind: Deployment
@@ -90,7 +90,7 @@ Następnie uruchomiłem dashboard i przełączyłem się do innego terminala, ab
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/4. w drugim terminalu uruchomilem dashboard.png">
 </p>
 
-Powyższe działania pozwoliły mi na rozpoczęcie wdrożenia przy pomocy `kubectl aplly` oraz zbadanie stanu za pomocą `kubectl rollout status`:
+Powyższe działania pozwoliły mi na rozpoczęcie wdrożenia przy pomocy `kubectl apply` oraz zbadanie stanu za pomocą `kubectl rollout status`:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/5. Rozpocznij wdrożenie za pomocą kubectl apply.png">
 </p>
@@ -116,7 +116,7 @@ Postanowiłem przetestować uruchomienie aplikacji, dlatego przekierowałem port
 
 ### Konwersja wdrożenia ręcznego na wdrożenie deklaratywne YAML
 
-W Docker Hubie dwie nowe wersje swojego obrazu, przy czego wersja `error` podczas uruchomienia kończy się problemem:
+W Docker Hubie umieściłem dwie nowe wersje swojego obrazu, przy czym wersja 'error' podczas uruchomienia kończy się problemem:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/9.  Przygotowanie nowego obrazu.png">
 </p>
@@ -129,28 +129,28 @@ Wykorzystując komendę `kubectl apply -f deployment.yaml deployment.apps/react-
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/11. widok z dashboard, dolozono nowe repliki tak aby sumarycznie bylo 8, a nie po prostu dodano 8 .png">
 </p>
 
-- zmniejszenie liczby replik do 1
+- zmniejszenie liczby replik do 1:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/13. widok z dashboard.png">
 </p>
 
-- zmniejszenie liczby replik do 0
+- zmniejszenie liczby replik do 0:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/15. widok z dashboard.png">
 </p>
 
-- Zastosowanie nowej wersji obrazu
+- Zastosowanie nowej wersji obrazu:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/17. widok z dashboard.png">
 </p>
 
 
-- Zastosowanie starszej wersji obrazu
+- Zastosowanie starszej wersji obrazu:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/19. widok z dashboard.png">
 </p>
 
-Przywróciłem poprzednią wersję wdrożeń następującymi komendami: 
+Przywróciłem poprzednią wersję wdrożeń następującymi komendami:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/20. Przywracaj poprzednie wersje wdrożeń za pomocą poleceń kubectl rollout history.png">
 </p>
@@ -170,7 +170,7 @@ Utworzyłem nowy plik i nadałem mu odpowiednie uprawnienia.
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/23. utworzyłem plik i nadałem mu uprawnienia.png">
 </p>
 
-Następnie przygotowałem skrypt tak, aby weryfikował czy wdrożenie "zdążyło" wykonać się w 60 sekund:
+Następnie przygotowałem skrypt, aby weryfikował, czy wdrożenie zostało wykonane w ciągu 60 sekund:
 ```
 #!/bin/bash
 
@@ -194,7 +194,7 @@ echo "Aplikacja nie została wdrożona w ciągu 60 sekund."
 exit 1
 ```
 
-Usuwając wcześniej obecne podsy w dashboardzie uruchomiłem skrpty aby sprawdzić czy test zakończy się sukcesem:
+Usuwając wcześniej obecne pody w dashboardzie, uruchomiłem skrypt, aby sprawdzić, czy test zakończy się sukcesem:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/24. uruchomienie skryptu (dodaj zawartosc skryptu).png">
 </p>
@@ -202,12 +202,12 @@ Jak widać test zakończył się sukcesem.
 
 ### Kontrola wdrożenia
 
-Podczas tego etapu zajęć zająłem się wddrożenie następujących strategii wdrożeń:
-- `Recreate` - Jest to domyślne wdrożenie. Wstrzymuje działanie aplikacji i wymienia wszystkie pody jednocześnie, co prowadzi do przerwy w działaniu. Jest łatwy do wdrożenia i nie powoduje problemów z kompatybilnością, ale aplikacja jest niedostępna podczas aktualizacji.
+Podczas tego etapu zajęć zajmowałem się wdrażaniem następujących strategii wdrożeń:
+- `Recreate` - Wstrzymuje działanie aplikacji i wymienia wszystkie pody jednocześnie, co prowadzi do przerwy w działaniu. Jest łatwy do wdrożenia i nie powoduje problemów z kompatybilnością, ale aplikacja jest niedostępna podczas aktualizacji.
 - `RollingUpdate` - Wymienia pody stopniowo, zapewniając ciągłą dostępność aplikacji. Minimalizuje przestoje i utrzymuje dostępność, ale może prowadzić do problemów z synchronizacją danych i wymaga zgodności między starymi i nowymi wersjami.
 - `Canary` - Nowa wersja aplikacji jest wdrażana tylko dla części użytkowników. Pozwala na testowanie nowej wersji w ograniczonym zakresie przed pełnym wdrożeniem, co umożliwia wczesne wykrywanie problemów, ale wymaga dodatkowej konfiguracji i zarządzania ruchem użytkowników. 
 
-#### Strategoia Recreate
+#### Strategia Recreate
 Utworzyłem nowy plik `recreate.yaml`, który uruchomiłem komendą `kubectl apply -f recreate.yaml` w którym zamieściłem następującą treść:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/25. utworzylem nowy plik do reacreate.png">
@@ -244,7 +244,7 @@ Co pozwoliło uzyskać następujący efekt:
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/26. Przygotuj wersje wdrożeń stosujące następujące strategie wdrożeń reacreate.png">
 </p>
 
-#### Strategoia RollingUpdate
+#### Strategia RollingUpdate
 Utworzyłem nowy plik `rolling-update.yaml`, który uruchomiłem komendą `kubectl apply -f rolling-update.yaml` w którym zamieściłem następującą treść:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/27. utworzylem nowy plik do rolling update.png">
@@ -284,7 +284,7 @@ Co pozwoliło uzyskać następujący efekt:
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/29. po udpateowaniu tylko pewien procent jednoczesnie sie usuwa dzieki parametrom, drugi parametr tez cos robi.png">
 </p>
 
-#### Strategoia Canary
+#### Strategia Canary
 W celu realizacji tej strategii utworzyłem 5 plików oraz pobrałem usługę istio:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/30. utworzyłem 5 plikow.png">
@@ -404,17 +404,17 @@ spec:
         image: krezler21/react-hot-cold:0.2.0
 ```
 
-oraz powyższe pliki uruchomiłem:
+oraz uruchomiłem powyższe pliki:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/32. uruchomilem 5 plikow.png">
 </p>
 
-Co powozliło uzyskać następujący efekt, jak widać 15 podów zostało uruchomionych w wersji stabilnej, a 5 w nowszej wersji:
+Co pozwoliło uzyskać następujący efekt. Jak widać, 15 podów zostało uruchomionych w wersji starszej, a 5 w nowszej wersji:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/32.1 widok z dashboarda.png">
 </p>
 
-Następnie uruchomiłem service oraz przekierowałem jego port
+Następnie uruchomiłem service oraz przekierowałem jego port.
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/33. odpaliłem service.png">
 </p>
@@ -422,12 +422,12 @@ Następnie uruchomiłem service oraz przekierowałem jego port
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/34. przekierowalem port.png">
 </p>
 
-Dodatkowo pobrałem wtyczkę w Google Chrome `ModHeader`, która pozwoliła mi na odróżnienie jednej wersji programu od drugiej:
+Dodatkowo pobrałem wtyczkę w Google Chrome `ModHeader`, która pozwoliła mi na odróżnienie jednej wersji programu od drugiej
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/35. pobrałem wtyczke modheader, aby moc odroznic wersje aplikacji.png">
 </p>
 
-Oraz ostatecznie uruchomiłem aplikację w przeglądarce:
+Ostatecznie uruchomiłem aplikację w przeglądarce:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/36. Po uzyciu mod headera wersja canary rozni sie niebieskim paskiem u gory.png">
 </p>
