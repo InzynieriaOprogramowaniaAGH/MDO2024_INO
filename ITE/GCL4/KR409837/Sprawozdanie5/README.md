@@ -260,7 +260,10 @@ metadata:
 spec:
   replicas: 15
   strategy:
-    type : Recreate
+    type : RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 8
+      maxSurge: 30%
   selector:
     matchLabels:
       app: react
@@ -271,7 +274,7 @@ spec:
     spec:
       containers:
       - name: react
-        image: krezler21/react-hot-cold:0.2.0
+        image: krezler21/react-hot-cold:0.3.0
         ports:
         - containerPort: 3000
 ```
@@ -279,4 +282,13 @@ spec:
 Co pozwoliło uzyskać następujący efekt:
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/29. po udpateowaniu tylko pewien procent jednoczesnie sie usuwa dzieki parametrom, drugi parametr tez cos robi.png">
+</p>
+
+#### Strategoia Canary
+W celu realizacji tej strategii utworzyłem 5 plików oraz pobrałem usługę istio:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/30. utworzyłem 5 plikow.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/31. pobrałem usługę istio .png">
 </p>
