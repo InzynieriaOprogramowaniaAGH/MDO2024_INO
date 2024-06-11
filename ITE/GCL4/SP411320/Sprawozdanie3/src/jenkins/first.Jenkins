@@ -65,6 +65,14 @@ pipeline {
         }
       }
     }
+    stage('Tarball') {
+      steps{
+        dir("$LOG_DIR") {
+          sh "tar czf build_logs-${BUILD_NUMBER}.tar.xz *"
+          archiveArtifacts artifacts: "build_logs-${BUILD_NUMBER}.tar.xz"
+        }
+      }
+    }
     stage('Cleanup') {
       steps {
         sh 'echo ===[Cleanup]==='
