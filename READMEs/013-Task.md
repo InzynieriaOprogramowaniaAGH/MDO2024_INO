@@ -24,7 +24,8 @@
 ### Zadanie do wykonania
  1. Utwórz własny resource group
  2. Wdróż swój kontener z Docker Hub w swoim Azure
- 3. Zatrzymaj i usuń kontener (to bardzo ważne!)
+ 3. Wykaż, że kontener został uruchomiony i pracuje, pobierz logi, przedstaw metodę dostępu do serwowanej usługi HTTP
+ 4. Zatrzymaj i usuń kontener, pamiętaj o *resource group* (to bardzo ważne!)
 
 # Wykorzystanie chmury AWS do wdrożenia aplikacji webowej
 ## Zadania do wykonania
