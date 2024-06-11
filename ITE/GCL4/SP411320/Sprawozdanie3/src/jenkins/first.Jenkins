@@ -44,9 +44,11 @@ pipeline {
       steps {
         sh 'echo ===[Deploy]==='
         sh 'docker run --rm --name irssi-build -tde TERM=xterm irssi-build'
+        sh "docker cp irssi-build:/usr/local/bin/irssi $LOG_DIR"
         sh "docker ps > $LOG_DIR/docker_ps-${BUILD_NUMBER}.log 2>&1"
         dir("$LOG_DIR") {
           archiveArtifacts artifacts: "docker_ps-${BUILD_NUMBER}.log"
+          archiveArtifacts artifacts: "irssi"
         }
         sh 'docker stop irssi-build'
       }
