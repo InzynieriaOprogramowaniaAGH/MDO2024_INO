@@ -206,3 +206,77 @@ Podczas tego etapu zajęć zająłem się wddrożenie następujących strategii 
 - `Recreate` - Jest to domyślne wdrożenie. Wstrzymuje działanie aplikacji i wymienia wszystkie pody jednocześnie, co prowadzi do przerwy w działaniu. Jest łatwy do wdrożenia i nie powoduje problemów z kompatybilnością, ale aplikacja jest niedostępna podczas aktualizacji.
 - `RollingUpdate` - Wymienia pody stopniowo, zapewniając ciągłą dostępność aplikacji. Minimalizuje przestoje i utrzymuje dostępność, ale może prowadzić do problemów z synchronizacją danych i wymaga zgodności między starymi i nowymi wersjami.
 - `Canary` - Nowa wersja aplikacji jest wdrażana tylko dla części użytkowników. Pozwala na testowanie nowej wersji w ograniczonym zakresie przed pełnym wdrożeniem, co umożliwia wczesne wykrywanie problemów, ale wymaga dodatkowej konfiguracji i zarządzania ruchem użytkowników. 
+
+#### Strategoia Recreate
+Utworzyłem nowy plik `recreate.yaml`, który uruchomiłem komendą `kubectl apply -f recreate.yaml` w którym zamieściłem następującą treść:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/25. utworzylem nowy plik do reacreate.png">
+</p>
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-hot-cold
+  labels:
+    app: react
+spec:
+  replicas: 15
+  strategy:
+    type : Recreate
+  selector:
+    matchLabels:
+      app: react
+  template:
+    metadata:
+      labels:
+        app: react
+    spec:
+      containers:
+      - name: react
+        image: krezler21/react-hot-cold:0.2.0
+        ports:
+        - containerPort: 3000
+```
+
+Co pozwoliło uzyskać następujący efekt:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/26. Przygotuj wersje wdrożeń stosujące następujące strategie wdrożeń reacreate.png">
+</p>
+
+#### Strategoia RollingUpdate
+Utworzyłem nowy plik `rolling-update.yaml`, który uruchomiłem komendą `kubectl apply -f rolling-update.yaml` w którym zamieściłem następującą treść:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/27. utworzylem nowy plik do rolling update.png">
+</p>
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-hot-cold
+  labels:
+    app: react
+spec:
+  replicas: 15
+  strategy:
+    type : Recreate
+  selector:
+    matchLabels:
+      app: react
+  template:
+    metadata:
+      labels:
+        app: react
+    spec:
+      containers:
+      - name: react
+        image: krezler21/react-hot-cold:0.2.0
+        ports:
+        - containerPort: 3000
+```
+
+Co pozwoliło uzyskać następujący efekt:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/29. po udpateowaniu tylko pewien procent jednoczesnie sie usuwa dzieki parametrom, drugi parametr tez cos robi.png">
+</p>
