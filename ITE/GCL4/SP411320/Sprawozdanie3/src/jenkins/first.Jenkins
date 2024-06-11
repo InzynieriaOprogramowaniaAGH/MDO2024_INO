@@ -13,6 +13,7 @@ pipeline {
         sh 'echo ===[Prep]==='
         sh "mkdir -p $LOG_DIR"
         sh 'rm -rfv repo || true'
+        sh 'docker kill $(docker ps -aq) || true'
         sh 'docker rm $(docker ps -aq) || true'
         sh 'docker rmi $(docker images -q) || true'
       }
