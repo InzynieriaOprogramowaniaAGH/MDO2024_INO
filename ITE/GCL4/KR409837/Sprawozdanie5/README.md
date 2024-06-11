@@ -413,3 +413,21 @@ Co powozliło uzyskać następujący efekt, jak widać 15 podów zostało urucho
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/32.1 widok z dashboarda.png">
 </p>
+
+Następnie uruchomiłem service oraz przekierowałem jego port
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/33. odpaliłem service.png">
+</p>
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/34. przekierowalem port.png">
+</p>
+
+Dodatkowo pobrałem wtyczkę w Google Chrome `ModHeader`, która pozwoliła mi na odróżnienie jednej wersji programu od drugiej:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/35. pobrałem wtyczke modheader, aby moc odroznic wersje aplikacji.png">
+</p>
+
+Oraz ostatecznie uruchomiłem aplikację w przeglądarce:
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/36. Po uzyciu mod headera wersja canary rozni sie niebieskim paskiem u gory.png">
+</p>
