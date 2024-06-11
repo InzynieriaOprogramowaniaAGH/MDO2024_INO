@@ -292,3 +292,114 @@ W celu realizacji tej strategii utworzyłem 5 plików oraz pobrałem usługę is
 <p align="center">
  <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/31. pobrałem usługę istio .png">
 </p>
+
+Pliki uzupełniłem w następujący sposób:
+- canary.yaml
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-hot-cold-canary
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: react
+      version: canary
+  template:
+    metadata:
+      labels:
+        app: react
+        version: canary
+    spec:
+      containers:
+      - name: react
+        image: krezler21/react-hot-cold:0.3.0
+```
+
+- destination.yaml
+```
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: react
+spec:
+  host: react
+  subsets:
+  - name: stable
+    labels:
+      version: stable
+  - name: canary
+    labels:
+      version: canary
+```
+
+- istio-service.yaml
+```
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: react
+spec:
+  hosts:
+  - "localhost"
+  http:
+  - match:
+    - headers:
+        x-canary:
+          exact: "true"
+    route:
+    - destination:
+        host: react
+        subset: canary
+      weight: 100
+  - route:
+    - destination:
+        host: react
+        subset: stable
+      weight: 90
+    - destination:
+        host: react
+        subset: canary
+      weight: 10
+```
+
+- service.yaml
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: react
+spec:
+  type: NodePort
+  selector:
+    app: react
+  ports:
+    - nodePort: 32137
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+```
+
+- stable.yaml 
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-hot-cold
+spec:
+  replicas: 15
+  selector:
+    matchLabels:
+      app: react
+      version: stable
+  template:
+    metadata:
+      labels:
+        app: react
+        version: stable
+    spec:
+      containers:
+      - name: react
+        image: krezler21/react-hot-cold:0.2.0
+```
