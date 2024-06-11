@@ -117,6 +117,14 @@ Postanowiłem przetestować uruchomienie aplikacji, dlatego przekierowałem port
 ### Konwersja wdrożenia ręcznego na wdrożenie deklaratywne YAML
 
 W Docker Hubie dwie nowe wersje swojego obrazu, przy czego wersja `error` podczas uruchomienia kończy się problemem:
- <p align="center">
- <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/9.  Przygotowanie nowego obrazu">
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/9.  Przygotowanie nowego obrazu".png>
+</p>
+
+### Zmiany w deploymencie
+
+Wykorzystując komendę `kubectl apply -f deployment.yaml deployment.apps/react-hot-cold configured` oraz zmieniając ilość replik/wersję obrazu w pliku `deployment.yaml` przetestowałem kilka następujących przypadków:
+- zwiększenie replik do 8 (Warto zauważyć, że posiadając wcześniej 5 replik, zostały dołożone 3 repliki, a nie na przykład usunięte pozostałe repliki i utworzone nowych 8 replik):
+<p align="center">
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/11. widok z dashboard, dolozono nowe repliki tak aby sumarycznie bylo 8, a nie po prostu dodano 8 .png>
 </p>
