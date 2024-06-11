@@ -59,15 +59,6 @@ pipeline {
         sh "docker push $USER/irssi:$VERSION"
       }
     }
-    // stage('Collect') {
-    //   steps {
-    //     sh 'echo ===[Collect]==='
-    //     dir("$LOG_DIR") {
-    //       sh "tar build_${BUILD_NUMBER}.tar *"
-    //       archiveArtifacts artifacts: "build_${BUILD_NUMBER}.tar.xz"
-    //     }
-    //   }
-    // }
     stage('Cleanup') {
       steps {
         sh 'echo ===[Cleanup]==='
