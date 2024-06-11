@@ -118,7 +118,7 @@ Postanowiłem przetestować uruchomienie aplikacji, dlatego przekierowałem port
 
 W Docker Hubie dwie nowe wersje swojego obrazu, przy czego wersja `error` podczas uruchomienia kończy się problemem:
 <p align="center">
- <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/9.  Przygotowanie nowego obrazu".png>
+ <img src="https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/blob/KR409837/ITE/GCL4/KR409837/Sprawozdanie5/Sprawozdanie11-png/9.  Przygotowanie nowego obrazu.png">
 </p>
 
 ### Zmiany w deploymencie
