@@ -5,7 +5,7 @@ metadata:
   labels:
     app: tdwa
 spec:
-  replicas: 5
+  replicas: 4
   selector:
     matchLabels:
       app: tdwa
@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: tdwa
-          image: pangoo404/tdwadeploy:1.1
+          image: pangoo404/tdwadeploy:1.0
           ports:
             - containerPort: 3000
