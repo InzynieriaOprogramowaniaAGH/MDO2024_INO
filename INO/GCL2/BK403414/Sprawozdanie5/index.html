@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Aktualna Data i Godzina</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            position: relative;
+        }
+        #clock {
+            font-size: 2em;
+        }
+        #hello {
+            text-align: center;
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+        #lab10 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            font-size: 1.5em;
+            margin-top: 10px;
+        }
+	h1 {
+	   margin-top: 120px;
+    </style>
+</head>
+<body>
+    <div id="hello">Hello2! :)</div>
+    <div id="lab10">lab11</div>
+    <h1>Aktualna Data i Godzina</h1>
+    <div id="clock"></div>
+
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0'); // Miesiące są liczone od 0 do 11
+            const year = now.getFullYear();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+
+            const formattedDate = `${day}-${month}-${year}`;
+            const formattedTime = `${hours}:${minutes}:${seconds}`;
+
+            document.getElementById('clock').innerText = `${formattedDate} ${formattedTime}`;
+        }
+
+        setInterval(updateTime, 1000);
+        updateTime(); // Aktualizuj czas od razu po załadowaniu strony
+    </script>
+</body>
+</html>
+

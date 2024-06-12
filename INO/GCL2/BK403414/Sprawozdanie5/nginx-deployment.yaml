@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment-recreate
+  labels:
+    app:  nginxmy
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app:  nginxmy
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app:  nginxmy
+    spec:
+      containers:
+      - name:  nginxmy
+        image: barkowalska/nginxmy:1.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
