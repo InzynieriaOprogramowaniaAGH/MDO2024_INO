@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html>
-    <body style="background-color:black;padding:25px;color:white" onload="startTime()">
+    <body style="background-color:aliceblue;padding:25px;color:#454035" onload="startTime()">
         <div style="width: 600px;margin: auto;text-align:center;">
-            <h1>Aktualna godzina</h1>
+            <h1>Aplikacja wypisujaca godzine :)</h1>
+            <p>Zmieniona konfiguracja webservera nginx poprzez dodanie autorskiej strony startowej.</p>
+            <p>Wersja 1.2 - latest </p>
             <div id="txt" style="font-size:50px;"></div>
         </div>
+
         <script>
             function startTime() {
                 const today = new Date();
@@ -16,10 +19,12 @@
                 document.getElementById('txt').innerHTML =  h + ":" + m + ":" + s;
                 setTimeout(startTime, 1000);
             }
+
             function checkTime(i) {
-                if (i < 10) {i = "0" + i};
+                if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
                 return i;
             }
         </script>
+
     </body>
 </html>
