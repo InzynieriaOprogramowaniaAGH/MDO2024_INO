@@ -2,8 +2,50 @@
 Stanisław Pigoń
 
 ## Wstęp
-### Wstępne wymagania środowiska [WIP]
-### Diagram aktywności [WIP]
+### Wstępne wymagania środowiska
+Między innymi meson, ninja, gcc, glib2... Szczegółowe wymagania umieszczone zostały w [oryginalnym repozytorium projektu](https://github.com/irssi/irssi/blob/master/INSTALL)
+
+### Diagram aktywności
+```mermaid
+flowchart TD
+  scm{{"Checkout SCM
+    1. Pobranie gałęzi SP411320 z przedmiotowego repozytorium
+    2. Załadowanie Jenkinsfile z podanej ścieżki"}}
+  scm --> prep
+  classDef left text-align:left
+  subgraph jnks[first.Jenkinsfile]
+    prep("Prep
+      1. Utworzenie folderu artefaktów (jeżeli nie istnieje)
+      2. Wyczyszczenie dockera"):::left
+    prep --> build
+    build["Build
+      1. Zbudowanie obrazu w oparciu o oryginalne repozytorium"]:::left
+    build --> test
+    test["Test
+      1. Zbudowanie obrazu testowego w oparciu do `Build`"]:::left
+    test --> deploy
+    deploy["Deploy
+      1. Zbudowanie obrazu weryfikującego wersję aplikacji
+      2. Uruchomienie kontenera w oparciu o zbudowany obraz
+      3. Wyłuskanie pliku wykonywalengo"]:::left
+    deploy --> publish
+    publish["Publish
+      1. Zalogowanie do DockerHub z wykorzystaniem tokena użytkownika
+      2. Otagowanie najnowszej wersji obrazu
+      3. Wypchnięcie otagowanego obrazu na DockerHub"]:::left
+    publish --> cleanup
+    cleanup("Cleanup
+      1. Usunięcie utworzonych kontenerów i obrazów Docker
+      2. Wyczyszczenie folderu artefaktów"):::left
+  end
+  cleanup --> post
+  jnks -.-> post
+  scm -.-> post
+  post{{"Post (niezależnie od wyniku pipeline'u)
+    1. Wylogowanie z dockera"}}
+
+```
+
 ### Diagram wdrożeniowy [WIP]
 
 ## Przygotowanie
