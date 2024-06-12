@@ -100,10 +100,7 @@ stage('Prep') {
   steps {
     sh 'echo ===[Prep]==='
     sh "mkdir -p $LOG_DIR"
-    sh 'rm -rfv repo || true'
-    sh 'docker kill $(docker ps -aq) || true'
-    sh 'docker rm $(docker ps -aq) || true'
-    sh 'docker rmi $(docker images -q) || true'
+    sh 'docker system prune -af'
   }
 }
 ```
@@ -131,7 +128,7 @@ stage('Build') {
       sh "docker build -t irssi-build --no-cache - < build.Dockerfile > $LOG_DIR/docker_build-${BUILD_NUMBER}.log 2>&1"
     }
     dir("$LOG_DIR") {
-      archiveArtifacts artifacts: "docker_build-${BUILD_NUMBER}.log"
+      archiveArtifacts artifacts: "docker_build-${BUILD_NUMBER}.log", onlyIfSuccessful: false
     }
   }
 }
@@ -147,33 +144,37 @@ RUN ninja test
 
 ```groovy
 stage('Test') {
-      steps {
-        sh 'echo ===[Test]==='
-        dir("$SRC_DIR") {
-          sh "docker build --no-cache -t irssi-test - < test.Dockerfile > $LOG_DIR/docker_test-${BUILD_NUMBER}.log 2>&1"
-        }
-        dir("$LOG_DIR") {
-          archiveArtifacts artifacts: "docker_test-${BUILD_NUMBER}.log"
-        }
-      }
+  steps {
+    sh 'echo ===[Test]==='
+    dir("$SRC_DIR") {
+      sh "docker build --no-cache -t irssi-test - < test.Dockerfile > $LOG_DIR/docker_test-${BUILD_NUMBER}.log 2>&1"
     }
+    dir("$LOG_DIR") {
+      archiveArtifacts artifacts: "docker_test-${BUILD_NUMBER}.log", onlyIfSuccessful: false
+    }
+  }
+}
 ```
 
 ##### `Deploy`
-W tym kroku utworzony zosatje kontener z obrazu powstałego w kroku [`Build`](#build), a w nim uruchamiana jest aplikacja z flagą `--version` oraz wyłuskany zostaje artefakt. Wyizolowany numer wersji zostaje zapisany w osobnej lokalizacji dla kroku [`Publish`](#publish)
+W tym kroku budowany jest kontener `irssi-build`, którego jedynym zadaniem jest uruchomienie irssi z flagą `--version`. Wyizolowany numer wersji zostaje zapisany w osobnej lokalizacji dla kroku [`Publish`](#publish)
+```dockerfile
+FROM irssi-build AS deploy
+CMD ["irssi", "--version"]
+```
+
 ```groovy
 stage('Deploy') {
   steps {
     sh 'echo ===[Deploy]==='
-    sh 'docker create --name irssi irssi-build'
-    sh "docker exec irssi sh -c 'irssi --version' > $LOG_DIR/irssi_version-${BUILD_NUMBER}.log"
-    sh "docker logs irssi > $LOG_DIR/docker_ps-${BUILD_NUMBER}.log 2>&1"
-    sh "cat $LOG_DIR/irssi_version-${BUILD_NUMBER}.log | cut -d\  -f2 > .version"
-    dir("$LOG_DIR") {
-      archiveArtifacts artifacts: "irssi_version-${BUILD_NUMBER}.log"
-      archiveArtifacts artifacts: "docker_ps-${BUILD_NUMBER}.log"
+    dir("$SRC_DIR") {
+      sh 'docker build -t irssi-deploy - < deploy.Dockerfile'
     }
-    sh 'docker stop irssi'
+    sh "docker run --name irssi irssi-deploy > $LOG_DIR/docker_deploy-${BUILD_NUMBER}.log"
+    dir("$LOG_DIR") {
+      archiveArtifacts artifacts: "docker_deploy-${BUILD_NUMBER}.log", onlyIfSuccessful: false
+    }
+    sh 'docker kill -f irssi'
   }
 }
 ```
@@ -191,29 +192,16 @@ stage('Publish') {
   steps {
     sh 'echo ===[Publish]==='
     sh "docker login -u $USER -p $DOCKER_TOKEN"
-    sh "docker tag irssi-build $USER/irssi:$VERSION"
-    sh "docker push $USER/irssi:$(cat .version) 2>&1 > $LOG_DIR/docker_push-${BUILD_NUMBER}.log"
+    sh "docker tag irssi-build $USER/irssi:`cat $LOG_DIR/docker_deploy-${BUILD_NUMBER}.log | cut -d' '  -f2 | cut -d- -f1 | sed -e 's/[^0-9]/./g'`"
+    sh "docker push $USER/irssi:`cat $LOG_DIR/docker_deploy-${BUILD_NUMBER}.log | cut -d' '  -f2 | cut -d- -f1 | sed -e 's/[^0-9]/./g'` 2>&1 > $LOG_DIR/docker_push-${BUILD_NUMBER}.log"
     dir("$LOG_DIR") {
-      archiveArtifacts artifacts: "docker_push-${BUILD_NUMBER}.log"
+      archiveArtifacts artifacts: "docker_push-${BUILD_NUMBER}.log", onlyIfSuccessful: false
     }
   }
 }
 ```
 
-![](img/5/)
-
-##### `Tarball`
-W tym kroku zostaje przygotowany tarball z uzyskanych do tej pory artefaktów, wyłącznie dla wygody urzytkownika - w interfejsie Jenkins bardzo łatwo przeglądać jest zawartość pojedynczych plików, natomiast archiwizaja archiwum z pozostałymi artefaktami znacznie uwygadnia pobranie plików czy ich udostępnianie
-```groovy
-stage('Tarball') {
-  steps {
-    dir("$LOG_DIR") {
-      sh "tar czf build_logs-${BUILD_NUMBER}.tar.xz *"
-      archiveArtifacts artifacts: "build_logs-${BUILD_NUMBER}.tar.xz"
-    }
-  }
-}
-```
+![](img/5/docker-deploy.png)
 
 ##### `Cleanup`
 W ostatnim kroku usunięte zostają wszystkie kontenery i obrazy docker. Szyczone są również wszystkie powstałe pliki
@@ -226,7 +214,6 @@ stage('Cleanup') {
     dir("$LOG_DIR") {
       sh 'rm -rfv *'
     }
-    sh 'rm .version'
   }
 }
 ```
