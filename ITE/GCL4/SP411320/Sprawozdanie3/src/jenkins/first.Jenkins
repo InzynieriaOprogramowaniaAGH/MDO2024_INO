@@ -15,7 +15,7 @@ pipeline {
         // sh 'docker kill $(docker ps -aq) || true'
         // sh 'docker rm $(docker ps -aq) || true'
         // sh 'docker rmi $(docker images -q) || true'
-        sh 'docker system prune -y'
+        sh 'docker system prune -af'
       }
     }
     stage('Build') {
