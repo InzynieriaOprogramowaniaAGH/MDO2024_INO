@@ -1,6 +1,11 @@
 # Pipeline, Jenkins, izolacja etapów
 Stanisław Pigoń
 
+## Wstęp
+### Wstępne wymagania środowiska [WIP]
+### Diagram aktywności [WIP]
+### Diagram wdrożeniowy [WIP]
+
 ## Przygotowanie
 - Uruchomienie kontenerów Jenkins
 
@@ -62,22 +67,166 @@ Zgodnie z [instrukcją do ćwiczenia](../../../../READMEs/005-Task.md#uruchomien
 - Przejście na osobistą gałąź SP411320
 - Zbudowanie obrazów z Dockerfiles lub/i kompozycji *docker-compose*
 
-Możemy to zrealizować za pomocą poniższego skryptu:
-```bash
-mkdir repo
-cd repo
-git clone -b SP411320 --single-branch https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO .
-cd ITE/GCL4/SP411320/Sprawozdanie2/src/dummy
-docker build -t dummy_build - < build.Dockerfile
+#### Sklonowanie repozytorium, wybranie gałęzi i zbudowanie projektu
+W celu automatycznego pobrania repozytorium (oraz eliminację potrzeby ciągłego kopiowania nowych wersji pipeline-script'u do ustawień obiektu Jenkins) możemy ustawić pipeline, aby przy każdym uruchomieniu pobierał pipeline-script z wybranej gałęzi wybarnego repozytorium git
+
+![](img/5/jnks-pipeline-full-scm.png)
+
+### Jenkins /w Docker-in-Docker pros/cons
+```diff
++ Całkowita izolacja środowiska wykonania procesu od środowiska Jenkins i innych procesów
++ Zwiększona kontrola nad środowiskiem
++ Brak dostępu do systemu plików hosta (ułatwienie procesu budowy bardziej zaawansowanych procesów)
+- Brak dostępu do systemu plików hosta (zwiększone bezpieczeństwo)
+- Większe zużycie zasobów
+- Zwiększony poziom skomplikowania konfiguracji
 ```
 
-![](img/5/jnks-proj-serious-setup.png)
-![](img/5/jnks-proj-serious-logs.png)
+### Pipeline
+#### Zmienne
+```groovy
+environment {
+  LOG_DIR = "/tmp/build_${BUILD_NUMBER}"
+  REPO = "https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO"
+  SRC_DIR = "ITE/GCL4/SP411320/Sprawozdanie3/src/irssi"
+  USER = 'pixel48'
+}
+```
+#### Etapy
+##### `Prep`
+Przed uruchomieniem właściwej części pipeline'u przygotowywane jest środowisko - usunięte zostają ewentualne pozostałości po poprzedniej iteracji oraz zapewniona jest obecność folderu na wszelkiego rodzaju logi i artefakty
+```groovy
+stage('Prep') {
+  steps {
+    sh 'echo ===[Prep]==='
+    sh "mkdir -p $LOG_DIR"
+    sh 'rm -rfv repo || true'
+    sh 'docker kill $(docker ps -aq) || true'
+    sh 'docker rm $(docker ps -aq) || true'
+    sh 'docker rmi $(docker images -q) || true'
+  }
+}
+```
 
-## Sprawozdanie
-### Wstępne wymagania środowiska [WIP]
-### Diagram aktywności [WIP]
-### Diagram wdrożeniowy [WIP]
+##### `Build`
+W pierwszym etapie przeprowadzamy build aplikacji - uzyskany obraz kontenera będzie potem wykorzystywany do przeprowadzenia testów. Sam build zawiera się w dedykowanym pliku Dockerfile i przeprowadza proces budowy aplikacji w oparciu o fedorę 39 z doinstalowanymi wymaganymi zależnościami. Umożliwia również uruchomienie aplikacji w konsoli po przekierowaniu standardowych strumieni wejścia/wyjścia w trybie interaktywnego kontenera
+```dockerfile
+FROM fedora
+RUN dnf -y update && dnf -y install git meson ninja* gcc glib2* utf8* ncurses* openssl* perl-Ext*
+WORKDIR /root/irssi
+RUN git clone https://github.com/irssi/irssi .
+RUN meson Build
+RUN ninja -C /root/irssi/Build && ninja -C Build install
+ENTRYPOINT ["irssi"]
+CMD ["irssi"]
+```
 
-## Pipeline
-###
+Repozytorium zostaje sklonowane do bierzącego folderu jescze na etapie pobrania Jenkinsfile.
+
+```groovy
+stage('Build') {
+  steps {
+    sh 'echo ===[Build]==='
+    dir("$SRC_DIR") {
+      sh "docker build -t irssi-build --no-cache - < build.Dockerfile > $LOG_DIR/docker_build-${BUILD_NUMBER}.log 2>&1"
+    }
+    dir("$LOG_DIR") {
+      archiveArtifacts artifacts: "docker_build-${BUILD_NUMBER}.log"
+    }
+  }
+}
+```
+
+##### `Test`
+Wykonanie testów również opiera się o Dockerfile, który bazuje na obrazie z poprzedniego etapu, a następnie przeprowadza testy aplikacji. W przypadku niepowodzenia budowa obrazu, a przez to również sam pipeline, zostaną przerwane.
+```dockerfile
+FROM irssi-build
+WORKDIR /root/irssi/Build
+RUN ninja test
+```
+
+```groovy
+stage('Test') {
+      steps {
+        sh 'echo ===[Test]==='
+        dir("$SRC_DIR") {
+          sh "docker build --no-cache -t irssi-test - < test.Dockerfile > $LOG_DIR/docker_test-${BUILD_NUMBER}.log 2>&1"
+        }
+        dir("$LOG_DIR") {
+          archiveArtifacts artifacts: "docker_test-${BUILD_NUMBER}.log"
+        }
+      }
+    }
+```
+
+##### `Deploy`
+W tym kroku utworzony zosatje kontener z obrazu powstałego w kroku [`Build`](#build), a w nim uruchamiana jest aplikacja z flagą `--version` oraz wyłuskany zostaje artefakt. Wyizolowany numer wersji zostaje zapisany w osobnej lokalizacji dla kroku [`Publish`](#publish)
+```groovy
+stage('Deploy') {
+  steps {
+    sh 'echo ===[Deploy]==='
+    sh 'docker create --name irssi irssi-build'
+    sh "docker exec irssi sh -c 'irssi --version' > $LOG_DIR/irssi_version-${BUILD_NUMBER}.log"
+    sh "docker logs irssi > $LOG_DIR/docker_ps-${BUILD_NUMBER}.log 2>&1"
+    sh "cat $LOG_DIR/irssi_version-${BUILD_NUMBER}.log | cut -d\  -f2 > .version"
+    dir("$LOG_DIR") {
+      archiveArtifacts artifacts: "irssi_version-${BUILD_NUMBER}.log"
+      archiveArtifacts artifacts: "docker_ps-${BUILD_NUMBER}.log"
+    }
+    sh 'docker stop irssi'
+  }
+}
+```
+
+##### `Publish`
+W kolejnym kroku obraz jest tagowany i publikowany w repozytorium DockerHub. Do autentyfikacji wykorzystany został token konta DockerHub, który przechowywany jest jako **secret** w Jenkins. Secrety Jenkins ustawić można w panelu administracyjnym, w zakładce `Credentials` w konfiguracji Jenkinsa
+
+![](img/5/jnks-secret.png)
+
+```groovy
+stage('Publish') {
+  environment {
+    DOCKER_TOKEN = credentials('DOCKER_TOKEN')
+  }
+  steps {
+    sh 'echo ===[Publish]==='
+    sh "docker login -u $USER -p $DOCKER_TOKEN"
+    sh "docker tag irssi-build $USER/irssi:$VERSION"
+    sh "docker push $USER/irssi:$(cat .version) 2>&1 > $LOG_DIR/docker_push-${BUILD_NUMBER}.log"
+    dir("$LOG_DIR") {
+      archiveArtifacts artifacts: "docker_push-${BUILD_NUMBER}.log"
+    }
+  }
+}
+```
+
+![](img/5/)
+
+##### `Tarball`
+W tym kroku zostaje przygotowany tarball z uzyskanych do tej pory artefaktów, wyłącznie dla wygody urzytkownika - w interfejsie Jenkins bardzo łatwo przeglądać jest zawartość pojedynczych plików, natomiast archiwizaja archiwum z pozostałymi artefaktami znacznie uwygadnia pobranie plików czy ich udostępnianie
+```groovy
+stage('Tarball') {
+  steps {
+    dir("$LOG_DIR") {
+      sh "tar czf build_logs-${BUILD_NUMBER}.tar.xz *"
+      archiveArtifacts artifacts: "build_logs-${BUILD_NUMBER}.tar.xz"
+    }
+  }
+}
+```
+
+##### `Cleanup`
+W ostatnim kroku usunięte zostają wszystkie kontenery i obrazy docker. Szyczone są również wszystkie powstałe pliki
+```groovy
+stage('Cleanup') {
+  steps {
+    sh 'echo ===[Cleanup]==='
+    sh 'docker rm $(docker ps -aq) || true'
+    sh 'dokeer rmi $(docker images -q) || true'
+    dir("$LOG_DIR") {
+      sh 'rm -rfv *'
+    }
+    sh 'rm .version'
+  }
+}
+```

@@ -43,14 +43,15 @@ pipeline {
     stage('Deploy') {
       steps {
         sh 'echo ===[Deploy]==='
-        sh 'docker run --rm --name irssi-build -tde TERM=xterm irssi-build'
-        sh "docker cp irssi-build:/usr/local/bin/irssi $LOG_DIR"
-        sh "docker ps > $LOG_DIR/docker_ps-${BUILD_NUMBER}.log 2>&1"
+        sh 'docker create --name irssi irssi-build'
+        sh "docker exec irssi sh -c 'irssi --version' > $LOG_DIR/irssi_version-${BUILD_NUMBER}.log"
+        sh "docker logs irssi > $LOG_DIR/docker_ps-${BUILD_NUMBER}.log 2>&1"
+        sh "cat $LOG_DIR/irssi_version-${BUILD_NUMBER}.log | cut -d\  -f2 > .version"
         dir("$LOG_DIR") {
+          archiveArtifacts artifacts: "irssi_version-${BUILD_NUMBER}.log"
           archiveArtifacts artifacts: "docker_ps-${BUILD_NUMBER}.log"
-          archiveArtifacts artifacts: "irssi"
         }
-        sh 'docker stop irssi-build'
+        sh 'docker stop irssi'
       }
     }
     stage('Publish') {
@@ -61,14 +62,14 @@ pipeline {
         sh 'echo ===[Publish]==='
         sh "docker login -u $USER -p $DOCKER_TOKEN"
         sh "docker tag irssi-build $USER/irssi:$VERSION"
-        sh "docker push $USER/irssi:$VERSION 2>&1 > $LOG_DIR/docker_push-${BUILD_NUMBER}.log"
+        sh "docker push $USER/irssi:$(cat .version) 2>&1 > $LOG_DIR/docker_push-${BUILD_NUMBER}.log"
         dir("$LOG_DIR") {
           archiveArtifacts artifacts: "docker_push-${BUILD_NUMBER}.log"
         }
       }
     }
     stage('Tarball') {
-      steps{
+      steps {
         dir("$LOG_DIR") {
           sh "tar czf build_logs-${BUILD_NUMBER}.tar.xz *"
           archiveArtifacts artifacts: "build_logs-${BUILD_NUMBER}.tar.xz"
@@ -83,6 +84,7 @@ pipeline {
         dir("$LOG_DIR") {
           sh 'rm -rfv *'
         }
+        sh 'rm .version'
       }
     }
   }
