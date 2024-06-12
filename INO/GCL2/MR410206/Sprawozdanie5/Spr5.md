@@ -177,7 +177,7 @@ Oraz otrzymane logi po uruchomieniu.
 ![](../Screeny/5.1.5.2.png)
 
 ## Strategie wdrożenia
-Ostatnią częściął do wykonania sprawozdania było przygotowanie wdrożeń stosując:
+Ostatnim elementem do wykonania sprawozdania było przygotowanie wdrożeń stosując:
 ### Recreate:
 Utworzono następujący plik o nazwie pet-recreate.yaml.
 
