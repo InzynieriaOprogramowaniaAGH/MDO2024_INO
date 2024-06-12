@@ -43,13 +43,13 @@ pipeline {
         dir("$SRC_DIR") {
           sh 'docker build -t irssi-deploy - < deploy.Dockerfile'
         }
-        sh "cat $LOG_DIR/docker_deploy-${BUILD_NUMBER}.log | cut -d' '  -f2 | cut -d- -f1 | sed -e 's/[^0-9]/./g' > .version"
-        sh "cat $LOG_DIR/docker_deploy-${BUILD_NUMBER}.log | cut -d' '  -f2 | cut -d- -f1 | sed -e 's/[^0-9]/./g'"
         sh "docker run --name irssi irssi-deploy > $LOG_DIR/docker_deploy-${BUILD_NUMBER}.log"
+        sh "docker cp irssi:/root/irssi/Build/src/fe-text/irssi $LOG_DIR"
         dir("$LOG_DIR") {
           archiveArtifacts artifacts: "docker_deploy-${BUILD_NUMBER}.log", onlyIfSuccessful: false
+          archiveArtifacts artifacts: "irssi", onlyIfSuccessful: false
         }
-        sh 'docker stop irssi'
+        sh 'docker stop irssi || true'
       }
     }
     stage('Publish') {
@@ -74,7 +74,6 @@ pipeline {
         dir("$LOG_DIR") {
           sh 'rm -rfv *'
         }
-        sh 'rm .version'
       }
     }
   }
