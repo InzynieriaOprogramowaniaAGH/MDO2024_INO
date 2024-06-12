@@ -12,9 +12,6 @@ pipeline {
       steps {
         sh 'echo ===[Prep]==='
         sh "mkdir -p $LOG_DIR"
-        // sh 'docker kill $(docker ps -aq) || true'
-        // sh 'docker rm $(docker ps -aq) || true'
-        // sh 'docker rmi $(docker images -q) || true'
         sh 'docker system prune -af'
       }
     }
@@ -25,7 +22,7 @@ pipeline {
           sh "docker build -t irssi-build --no-cache - < build.Dockerfile > $LOG_DIR/docker_build-${BUILD_NUMBER}.log 2>&1"
         }
         dir("$LOG_DIR") {
-          archiveArtifacts artifacts: "docker_build-${BUILD_NUMBER}.log"
+          archiveArtifacts artifacts: "docker_build-${BUILD_NUMBER}.log", onlyIfSuccessful: false
         }
       }
     }
@@ -36,20 +33,21 @@ pipeline {
           sh "docker build --no-cache -t irssi-test - < test.Dockerfile > $LOG_DIR/docker_test-${BUILD_NUMBER}.log 2>&1"
         }
         dir("$LOG_DIR") {
-          archiveArtifacts artifacts: "docker_test-${BUILD_NUMBER}.log"
+          archiveArtifacts artifacts: "docker_test-${BUILD_NUMBER}.log", onlyIfSuccessful: false
         }
       }
     }
     stage('Deploy') {
       steps {
         sh 'echo ===[Deploy]==='
-        sh 'docker create --name irssi irssi-build'
-        sh "docker exec irssi sh -c 'irssi --version' > $LOG_DIR/irssi_version-${BUILD_NUMBER}.log"
-        sh "docker logs irssi > $LOG_DIR/docker_ps-${BUILD_NUMBER}.log 2>&1"
-        sh "cat $LOG_DIR/irssi_version-${BUILD_NUMBER}.log | cut -d' '  -f2 > .version"
+        dir("$SRC_DIR") {
+          sh 'docker build -t irssi-deploy - < deploy.Dockerfile'
+        }
+        sh "cat $LOG_DIR/docker_deploy-${BUILD_NUMBER}.log | cut -d' '  -f2 | cut -d- -f1 | sed -e 's/[^0-9]/./g' > .version"
+        sh "cat $LOG_DIR/docker_deploy-${BUILD_NUMBER}.log | cut -d' '  -f2 | cut -d- -f1 | sed -e 's/[^0-9]/./g'"
+        sh "docker run --name irssi irssi-deploy > $LOG_DIR/docker_deploy-${BUILD_NUMBER}.log"
         dir("$LOG_DIR") {
-          archiveArtifacts artifacts: "irssi_version-${BUILD_NUMBER}.log"
-          archiveArtifacts artifacts: "docker_ps-${BUILD_NUMBER}.log"
+          archiveArtifacts artifacts: "docker_deploy-${BUILD_NUMBER}.log", onlyIfSuccessful: false
         }
         sh 'docker stop irssi'
       }
@@ -61,18 +59,10 @@ pipeline {
       steps {
         sh 'echo ===[Publish]==='
         sh "docker login -u $USER -p $DOCKER_TOKEN"
-        sh "docker tag irssi-build $USER/irssi:$VERSION"
-        sh "docker push $USER/irssi:`cat .version` 2>&1 > $LOG_DIR/docker_push-${BUILD_NUMBER}.log"
+        sh "docker tag irssi-build $USER/irssi:`cat $LOG_DIR/docker_deploy-${BUILD_NUMBER}.log | cut -d' '  -f2 | cut -d- -f1 | sed -e 's/[^0-9]/./g'`"
+        sh "docker push $USER/irssi:`cat $LOG_DIR/docker_deploy-${BUILD_NUMBER}.log | cut -d' '  -f2 | cut -d- -f1 | sed -e 's/[^0-9]/./g'` 2>&1 > $LOG_DIR/docker_push-${BUILD_NUMBER}.log"
         dir("$LOG_DIR") {
-          archiveArtifacts artifacts: "docker_push-${BUILD_NUMBER}.log"
-        }
-      }
-    }
-    stage('Tarball') {
-      steps {
-        dir("$LOG_DIR") {
-          sh "tar czf build_logs-${BUILD_NUMBER}.tar.xz *"
-          archiveArtifacts artifacts: "build_logs-${BUILD_NUMBER}.tar.xz"
+          archiveArtifacts artifacts: "docker_push-${BUILD_NUMBER}.log", onlyIfSuccessful: false
         }
       }
     }
