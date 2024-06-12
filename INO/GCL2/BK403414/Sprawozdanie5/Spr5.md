@@ -4,11 +4,11 @@
 
 ### Cel projektu
 
-Celem zajęć jest skonfigurowanie środowiska Kubernetes za pomocą minikube i narzędzia kubectl, wdrożenie aplikacji kontenerowych oraz zarządzanie zasobami klastra. Uczestnicy nauczą się instalować i konfigurować klaster, tworzyć oraz wdrażać obrazy Docker, a także monitorować stan wdrożenia i eksponować usługi. Dodatkowo, zajęcia obejmują automatyzację procesu wdrażania za pomocą plików YAML oraz analizę bezpieczeństwa i rozwiązywanie problemów sprzętowych.
+Celem zajęć jest skonfigurowanie środowiska Kubernetes za pomocą minikube i narzędzia kubectl, wdrożenie aplikacji kontenerowych oraz zarządzanie zasobami klastra. Nauka instalacji i konfigurowania klastra, tworzenie oraz wdrażanie obrazu Docker, a także monitorowanie stanu wdrożenia. Dodatkowo, zajęcia obejmują automatyzację procesu wdrażania za pomocą plików YAML oraz analizę bezpieczeństwa i rozwiązywanie problemów sprzętowych.
 
 ### Streszczenie projektu
 
-Projekt rozpoczyna się od skonfigurowania lokalnego środowiska Kubernetes przy użyciu minikube i narzędzia kubectl, umożliwiającego zarządzanie klastrem. Po instalacji minikube oraz skonfigurowaniu kubectl, uczestnicy wdrażają aplikacje kontenerowe, tworzą obrazy Docker i uruchamiają je w klastrze Kubernetes, monitorując ich działanie oraz zapewniając dostęp do usług poprzez eksponowanie portów. Kolejnym krokiem jest uruchomienie Kubernetes Dashboard, który pozwala na wizualne monitorowanie stanu klastra oraz zarządzanie zasobami. Uczestnicy uczą się także koncepcji podstawowych zasobów Kubernetes, takich jak pod, deployment i service, co ułatwia zarządzanie infrastrukturą. Projekt finalizuje się automatyzacją procesu wdrażania za pomocą plików YAML oraz przeprowadzaniem deklaratywnych wdrożeń, co umożliwia efektywne zarządzanie zasobami i utrzymanie stabilności środowiska Kubernetes.
+Projekt rozpoczyna się od skonfigurowania lokalnego środowiska Kubernetes przy użyciu minikube i narzędzia kubectl, umożliwiającego zarządzanie klastrem. Po instalacji minikube oraz skonfigurowaniu kubectl, wdrażamy aplikacje kontenerowe, tworzymy obrazy Docker i uruchamiamy je w klastrze Kubernetes, monitorując ich działanie, zapewniając dostęp do usług poprzez eksponowanie portów. Kolejnym krokiem jest uruchomienie Kubernetes Dashboard, który pozwala na wizualne monitorowanie stanu klastra oraz zarządzanie zasobami. Zrozumienie koncepcji podstawowych zasobów Kubernetes, takich jak pod, deployment i service, co ułatwia zarządzanie infrastrukturą. Projekt finalizuje się automatyzacją procesu wdrażania za pomocą plików YAML oraz przeprowadzaniem deklaratywnych wdrożeń, co umożliwia efektywne zarządzanie zasobami i utrzymanie stabilności środowiska Kubernetes.
 
 ## Zadania do wykonania
 
