@@ -4,10 +4,10 @@
 ### Kubernetes - konfiguracja wstępna
 Pierwszym krokiem laboratorium było przygotowanie oprogramowania minikube odpowiadające za utrzymanie klastrów i podów oraz menagera kubectl (w wariancie uproszczonym lub regularnym). Śledząc dokumentację w sekcji getting started można krok po kroku przeprowadzić instalację roziwązania na maszynie wirtualnej.
 
-'''BASH
+```BASH
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
 sudo rpm -Uvh minikube-latest.x86_64.rpm
-'''
+```
 By uzyskać listing powyższych poleceń wystarczy przeklikać opcje instalację w kroku 1 **Installation** i w ostatnim kroku wybrać **RPM Package**
 
 Trzeba upewnić się by maszyna posiadała odpowiednio duże zasoby by utrzymała wszystkie pody.
@@ -19,32 +19,32 @@ Wymagania:
 Zaleceniem w kwestii bezpieczeństwa jest praca z podami przy pomocy konta z grupy wheel, ale nie **ROOT** jeżeli jednak przeżyliście laby z dockera na root i nie czujecie się zagrożeni przez dockera z uprawnieniami root-a, możecie zmusić kubernetesy do pracy z rootem flagą --force, która ominie testy bezpieczeństwa.
 
 Uruchamiamy usługę minikube:
-'''BASH
+```BASH
 minikube start
-'''
+```
 ![alt text](kubernetesstart.png)
 #### Pobieramy kubectl
 Zaciągamy sobie paczkę do instalacji za pomocą poniższej komendy.
-'''BASH
+```BASH
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-'''
+```
 Instalujemy:
-'''BASH
+```BASH
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-'''
+```
 (Wszystkie powyższe polecenia pochodzą z dokumentacji kubectl)
 
 Dodajmy sobie alias dla kubectl by ułatwić sobie pracę:
-'''BASH
+```BASH
 alias kubectl="minikube kubectl --"
-'''
+```
 Gdy jesteśmy gotowi, możemy spróbować uruchomić **dashboard** Przy jego pomocy będziemy mogli obserwować zachowanie naszych podów i wykryć błędy, które wystąpiły przy wdrożeniu poszczególnych podów.
 
 (Dashboard zablokuje terminal dlatego polecam dodać nową instancję terminala do VS-a i tam wywołać polecenie)
-'''BASH
+```BASH
 minikube dashboard
-'''
-Po przejsciu inicjalizacji która może zająć kilka dsekund powinniśmy zostać zaskoczeni wyskakujacym oknem przeglądarki z naszym świeżym dashboardem.
+```
+Po przejsciu inicjalizacji, która może zająć kilka sekund, powinniśmy zostać zaskoczeni wyskakujacym oknem przeglądarki z naszym świeżym dashboardem.
 ![alt text](<Dashboard working.png&gt;)
 Jeżeli to nie nastąpi możemy kliknąć/skopiować link, który wyświetli się w terminalu.
 
@@ -63,15 +63,15 @@ Ostatni obraz miał w swoim endpoint-cie polecenie **exit 1** zamiast start.
 Ten obraz został wykorzystany by pokazac fail deploya na podach.
 ### Pierwszy pod.
 Gdy już mamy wszystkie komponenty potrzebne do wykonania wdrożenia naszego kontenera. możemy ręcznie wdrożyć pod poleceniem:
-'''BASH
+```BASH
 kubectl run <nameForDeploy&gt; --image=<repo&gt;/<image&gt; --port=<appPort&gt; --labels app=<labelName&gt;
-'''
+```
 
 **nameForDeploy** - będzie nazwą, którą zostanie otagowany nasz pod i przez którą będziemy się z nim komunikować.
 
 **appPort** - to port, z którego korzysta aplikacja i na której będziemy chcieli ją usłyszeć.
 
-**labelName** - etykietka, którą otrzyma dane wdrożenie; Dzieki nim możemy grupować pody i odwoływać się do całych zbiorów po nazwie etykiety. W tym przypadku jest to nazwa pracującej na niej aplikacji.
+**labelName** - etykietka, którą otrzyma dane wdrożenie; Dzięki nim możemy grupować pody i odwoływać się do całych zbiorów po nazwie etykiety. W tym przypadku jest to nazwa pracującej na niej aplikacji.
 
 W dashboardzie powinniśmy zobaczyć działający pod:
 
@@ -84,9 +84,9 @@ W VS Codzie:
 Dodajac nową zasadę przekierowania dla localhosta. Mapujemy port aplikacji na dowolny port po stronie hosta.
 
 W kubernetesie:
-'''BASH
+```BASH
 kubectl port-forward pod/<podName&gt; <port&gt;:<port&gt;
-'''
+```
 (Ponownie blokuje terminal)
 Jeżeli wszystko poszło po naszje myśli. I wszystie przekierowania nie mają błędów w przeglądarce powinniśmy zobaczyć naszą aplikację:
 ![alt text](tdwadziała.png)
@@ -96,7 +96,7 @@ Odwołujemy się do niej na utworzonym w VS Codzie przekierowanym porcie.
 Gdy wiemy, że nasza aplikacja działa i pody można wdrożyć bez większych komplikacji czas zautomatyzować proces i przygotować wdrożenie deklaratywne.
 
 W tym celu przygotowujemy plik wdrożenia o rozszerzeniu ***.yaml**.
-'''yml
+```yml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -118,11 +118,11 @@ containers:
 image: pangoo404/tdwadeploy:1.0
 ports:
 - containerPort: 3000
-'''
+```
 Powyższe wdrożenie zakłada utworzenie 4 podów o takich samych parametrach jak w przypadku wywołania ręcznego polecenia.
-'''BASH
+```BASH
 kubectl apply -f <name&gt;.yaml
-'''
+```
 Powyższe poleceni posłuży nam jak uruchomieni nowej deklaracji wdrożenia, ale również pozwoli zaktualizować obecnie istniejące wdrożenie.
 
 ![alt text](<4Pods Deployed.png&gt;)
@@ -133,9 +133,9 @@ W dashboardzie widzimy utworzone pody oraz liczbę deploymentów w których są 
 
 #### Liczba podów:
 W ramach poniższych modyfikacji jedyną zmianą była modyfikacja pliku deploymentu w poniższej linii na pożądaną liczbę podów.
-'''yml
+```yml
 replicas: 4
-'''
+```
 #### 8 Podów w ramach wdrożenia
 ![alt text](8xpods.png)
 #### 1 Pod w ramach wdrożenia
@@ -152,30 +152,30 @@ Gdybyśmy wykonali takie wdrożenie w strategi canary wdrożenie pozostawiło by
 ### Historia wersji
 By pokazac działanie funkcji wersjonowania deploymentów dokonałem kilkukrotnie deployów z różnymi wersjami obrazów by pojawiły się one w historii.
 W pliku deploymentu:
-'''yml
+```yml
 image: pangoo404/tdwadeploy:1.0
-'''
+```
 By wykonać wdrożenie w innej wersji zmodyfikowałem wersję obrazu do której odwołuje się deployment.
 By wyświetlić historię możemy wywołać polecenie
-'''BASH
+```BASH
 kubectl rollout history deployment/<deployName&gt;
 #W moim przypadku
 kubectl rollout history deployment/tdwa
-'''
+```
 Gdy chcemy wycofać się z ostatniej zmiany wersji wystarczy wykonać polecenie:
-'''BASH
+```BASH
 kubectl rollout undo deployment/tdwa
-'''
+```
 Efekt w historii powinien przypominać coś takiego:
 ![alt text](undodeployment.png)
 
 Trzeba pamiętać, że wycofa to nie tylko wersje programu a całego wdrożenia to oznacza że jeżlei wprowadziliśmy zmianę w liczbie podów lub strategii również zostanie ona wycofana.
 
 ### Skrypt timeout dla wdrożenia:
-Ten punkt na etapie pisania ostatniego labu mnie pokonał. Nigdy nie potrafiłem płynnie pisac skryptów powłoki i choć potrafię skleić coś pracując z dokumentacją i internetem nie wiedziałem jak zabrac się do tego problemu.
+Ten punkt na etapie pisania ostatniego labu mnie pokonał. Nigdy nie potrafiłem płynnie pisać skryptów powłoki i choć potrafię skleić coś pracując z dokumentacją i internetem nie wiedziałem jak zabrać się do tego problemu.
 
 Poprosiłem o pomoc Copilota i repo znajomego i udało mi się wyczarować coś takiego:
-'''sh
+```sh
 #!/bin/bash
 
 DEPLOYMENT_FILE="tdwapod.yaml"
@@ -200,23 +200,23 @@ done
 
 echo "Timeout ($TIMEOUT_SECONDS s) pending for deploy $DEPLOYMENT_NAME."
 exit 1
-'''
-By móc uruchomić skrypt nalezy nadać mu uprawnienia wykonania:
-'''sh
+```
+By móc uruchomić skrypt należy nadać mu uprawnienia wykonania:
+```sh
 chmod +x deploy.sh
-'''
-Problemem jest jednak fakt, że przy próbie wywołania kontenera który powinien się nie wdrożyć. Tzn wariant z exit 1 nadal kończy się z komunikatem o poprawnym wdrożeniu.
+```
+Problemem jest jednak fakt, że przy próbie wywołania kontenera, który powinien się nie wdrożyć. Tzn. wariant z exit 1 nadal kończy się z komunikatem o poprawnym wdrożeniu.
 
-Na tym etapie chciałem już oddać ostatnie sprawozdanie by nie obrywać po ocenie dlatego poprzestałem na tej wersji.
+Na tym etapie chciałem już oddać ostatnie sprawozdanie, by nie obrywać po ocenie dlatego poprzestałem na tej wersji.
 
 ### Strategie wdrożeń
-Gdy przeprowadzamy aktualizację na klastrze oczywistym jest, że równoczesna praca i wprowadzanie zmian w oprogramowaniu nie jest możliwa. Pody udostępniające usługę muszą być wyłączone na czas aktualizacji. Usługa staje się w tedy nie dostępna dla użytkownika co w roziwązaniach produkcyjnych w tej branży jest praktycznie niedopuszczalne. W celu ograniczenia wpływu aktualizacji na świadczone usługi ustandaryzowano różne systemy przeprowadzania aktualizacji ograniczające downtime usługi co nie oznacza, że dane rozwiązanie jest adekwatne dla każdego usecase-a.
+Gdy przeprowadzamy aktualizację na klastrze, oczywistym jest, że równoczesna praca i wprowadzanie zmian w oprogramowaniu nie jest możliwa. Pody udostępniające usługę muszą być wyłączone na czas aktualizacji. Usługa staje się w tedy nie dostępna dla użytkownika, co w roziwązaniach produkcyjnych w tej branży jest praktycznie niedopuszczalne. W celu ograniczenia wpływu aktualizacji na świadczone usługi ustandaryzowano różne systemy przeprowadzania aktualizacji ograniczające downtime usługi co nie oznacza, że dane rozwiązanie jest adekwatne dla każdego usecase-a.
 
 Nie udało mi się naocznie zaobserwować różnic we wdrożeniach ze względu na czas wykonania.
 
 #### Recreate - delete create
 W tej strategii wszystkie pody zostają usunięte przed wdrożeniem nowych. Oznacza to że przez pewien czas nie będzie żadnego działajacego poda.
-'''yml
+```yml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -240,11 +240,11 @@ containers:
 image: pangoo404/tdwadeploy:1.1
 ports:
 - containerPort: 3000
-'''
+```
 
 #### Canary - jeden na ofiarę
 W tej strategii zanim nastąpi wprowadzenie kontenerów jedne z kontenerów "kanarek" wprowadza deployment w pojedynkę jeżeli mu się nie powiedzie deployment zostaje wstrzymany.
-'''yml
+```yml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -269,10 +269,10 @@ containers:
 image: pangoo404/tdwadeploy:1.1
 ports:
 - containerPort: 3000
-'''
+```
 #### RollingUpdate - round and around
 Strategia zakąłda wprowadzanie aktualizacji stopniowo umożliwiając zakłądaną dopuszczalną liczbę niedostępnych instancji. Dopiero gdy dana liczba pod-ów ponownie wstanie, mogą się wyłączyć kolejne instancje. Gwarantuje to pewną stabilność dostępności usługi bez gwarancji, jednolitej usługi dla wszystkich.
-'''yml
+```yml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -299,10 +299,10 @@ containers:
 image: pangoo404/tdwadeploy:1.1
 ports:
 - containerPort: 3000
-'''
+```
 ### Service
 By ubrać wdrożenie w serwis który pokieruje ruchem musimy przygotowac dodatkowy plik servisu o roższerzeniu ***yml**
-'''yml
+```yml
 apiVersion: v1
 kind: Service
 metadata:
@@ -314,7 +314,7 @@ ports:
 - protocol: TCP
 port: 80
 targetPort: 3030
-'''
+```
 Teraz wystarczy użyć pliku serwisu zamiast wdrożenia wraz z wywołaniem **apply**.
 
 Usługa powinna być słyszalna na zadanym porcie w przeglądarce na hoście.
@@ -329,4 +329,4 @@ Narzędzie daje dużą swobodę i kontrolę nad tworzonymi podami.
 
 Nadal nie potrafię zrozumieć pisania skryptów dla powłoki.
 
-Było to jedno z przyjemnijeszych laboratoriów ze wzgledu na możliwość obserwacji działania kolejnych implementacji i działania usługi w przeglądarce jak w przypadku implementacji na produkcji.
+Było to jedno z przyjemniejszych laboratoriów ze względu na możliwość obserwacji działania kolejnych implementacji i działania usługi w przeglądarce jak w przypadku implementacji na produkcji.
