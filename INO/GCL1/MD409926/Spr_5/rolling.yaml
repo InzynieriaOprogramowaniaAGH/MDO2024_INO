@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rolling
+  labels:
+    app: zegar
+    version: v1.2
+spec:
+  replicas: 5
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 3
+      maxSurge: 50%
+  selector:
+    matchLabels:
+      app: zegar
+  template:
+    metadata:
+      labels:
+        app: zegar
+    spec:
+      containers:
+      - name: zegar
+        image: dmaciej/zegar:1.2
+        ports:
+        - containerPort: 80
