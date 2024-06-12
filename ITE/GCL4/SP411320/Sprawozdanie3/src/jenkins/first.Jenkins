@@ -62,7 +62,7 @@ pipeline {
         sh 'echo ===[Publish]==='
         sh "docker login -u $USER -p $DOCKER_TOKEN"
         sh "docker tag irssi-build $USER/irssi:$VERSION"
-        sh "docker push $USER/irssi:$(cat .version) 2>&1 > $LOG_DIR/docker_push-${BUILD_NUMBER}.log"
+        sh "docker push $USER/irssi:`cat .version` 2>&1 > $LOG_DIR/docker_push-${BUILD_NUMBER}.log"
         dir("$LOG_DIR") {
           archiveArtifacts artifacts: "docker_push-${BUILD_NUMBER}.log"
         }
