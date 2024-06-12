@@ -212,6 +212,10 @@ Sekcja %packages określa pakiety, które mają zostać zainstalowane. Instaluje
 
 Sekcja %post zawiera polecenia, które zostaną wykonane po zainstalowaniu pakietów, ale przed zakończeniem instalacji systemu. Dodaje użytkownika root do grupy docker.
 Włączam usługę docker. Tworzę nową usługę systemową docker-java-deploy.service, która pobiera obraz kontenera radeckimaciej/deploy:1.1.1 i uruchamia go na porcie 8080. Uruchamiamy usługę docker-java-deploy.service.
+Cały plik anaconda-ks.cfg wyglądał następująco:
+
+![](../Screeny/4.1.5.55.png)
+
 Następnie plik ten został umieszczony na githubie. Uruchomiono instalator w visualBox i za pomocą `e` zaraz po odpaleniu wpisano odpowiednią linikę, w okienku które się pojawiło:
 ```
 inst.ks=https://raw.githubusercontent.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/MR410206/INO/GCL2/MR410206/Sprawozdanie4/anaconda-ks.cfg
