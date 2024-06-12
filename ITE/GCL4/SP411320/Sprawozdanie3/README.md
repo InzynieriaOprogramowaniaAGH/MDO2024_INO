@@ -217,3 +217,11 @@ stage('Cleanup') {
   }
 }
 ```
+
+#### Opublikowany obraz użytkowy
+![](img/5/docker-publish.png)
+![](img/5/docker-publish-details.png)
+
+#### Uruchomienie opublikowanego obrazu
+![](img/5/docker-publish-run-cmd.png)
+![](img/5/docker-publish-run-run.png)
