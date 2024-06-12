@@ -46,7 +46,7 @@ pipeline {
         sh 'docker create --name irssi irssi-build'
         sh "docker exec irssi sh -c 'irssi --version' > $LOG_DIR/irssi_version-${BUILD_NUMBER}.log"
         sh "docker logs irssi > $LOG_DIR/docker_ps-${BUILD_NUMBER}.log 2>&1"
-        sh "cat $LOG_DIR/irssi_version-${BUILD_NUMBER}.log | cut -d\  -f2 > .version"
+        sh "cat $LOG_DIR/irssi_version-${BUILD_NUMBER}.log | cut -d' '  -f2 > .version"
         dir("$LOG_DIR") {
           archiveArtifacts artifacts: "irssi_version-${BUILD_NUMBER}.log"
           archiveArtifacts artifacts: "docker_ps-${BUILD_NUMBER}.log"
