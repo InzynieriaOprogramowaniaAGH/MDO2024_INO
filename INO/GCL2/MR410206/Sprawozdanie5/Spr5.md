@@ -186,8 +186,6 @@ Utworzono następujący plik o nazwie pet-recreate.yaml.
 Dzięki temu otrzymaliśmy w Dashboard następujące wyniki.
 
 ![](../Screeny/5.1.6.2.png)
-
-Strategia Recreate pasuje do sytuacji, w których aplikacja nie musi być nieprzerwanie dostępna podczas aktualizacji, lub gdy wprowadzane są duże zmiany mogące wywołać problemy kompatybilności podczas inkrementacyjnej aktualizacji.
 ### RollingUpdate
 Następnie utworzono kolejny plik pet-roll.yaml
 
