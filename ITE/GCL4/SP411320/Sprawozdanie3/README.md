@@ -46,7 +46,36 @@ flowchart TD
 
 ```
 
-### Diagram wdrożeniowy [WIP]
+### Diagram wdrożeniowy
+```mermaid
+flowchart LR
+  subgraph github[GitHub]
+    repo(InzynieriaOprogramowaniaAGH/MDO2024_INO#SP411320)
+    irssi(irssi/irssi#master)
+  end
+  irssi --Source code--> pipeline
+  subgraph dockerhub[DockerHub]
+    image(pixel48/irssi)
+  end
+  repo --Jenkinsfile & Dockerfiles--> pipeline
+  pipeline --> dockerhub
+  subgraph host[System Gospodarza]
+    subgraph vm["vFedora (VM)"]
+      subgraph docker[Docker]
+        subgraph jnks[Jenkins]
+          subgraph pipeline[Pipeline]
+            workspace(Workspace)
+          end
+        end
+        subgraph dind[Docker-in-Docker]
+          app(irssi)
+        end
+      end
+    end
+  end
+  dind --Wyniki działania--> workspace
+  pipeline --Polecenia--> dind
+```
 
 ## Przygotowanie
 - Uruchomienie kontenerów Jenkins
