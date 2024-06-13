@@ -1,5 +1,5 @@
 ## Sprawozdanie 1
-Zajęcia 005
+Zajęcia 005 + 006
 # Uruchomienie
 1) Konfiguracja wstępna i pierwsze uruchomienie
 - Utworzenie pierwszego prostego projektu, który wyświetla uname
@@ -18,7 +18,7 @@ fi
 a) uruchomienie o godzinie 19
 ![ ](./images/2.png)
 
-uruchomienie o godzinie 20
+b) uruchomienie o godzinie 20
 ![ ](./images/nieparzysta_godzina.png)
 
 2) Utworzenie prawdziwego projektu, który:
@@ -159,7 +159,7 @@ Podczas uruchomienia pipline napotkałam na kilka błędów:
 ![ ](./images/plugin.png)
 ![ ](./images/plugin1.png)
 
-Powtarzający się błąd:
+2. Powtarzający się błąd ```bash Failed to initialize: unable to resolve docker endpoint: open /certs/client/ca.pem: no such file or directory ``` :
 
 ![ ](./images/blad.png)
 
@@ -171,6 +171,134 @@ Po znalezieniu jego lokalizacji czyli /etc/docker znalazłam, że tylko użytkow
 
 ![ ](./images/uzytkownik.png)
 
-Jednak błąd się nadal powtarzał spróbowałam znaleźć pomocy na forach internetowych. Próbowałam użyć polecenia ```bash until docker info; do sleep 1; done ``` który zapewnia, że skrypt będzie czekać na gotowość Dockera, jednak to również nie pomogło. Zauważyłam, że problme polegał w woluminach, dlatego usunęłam Jenkinsa i ponownie go zainstalowałam i uruchomiłam. Był to prawidłowy krok jednak ponownie zabrakło pamięci na dysku. Po zwolnieniu miejsca kolejne kroki zostały wykonane bez większych błędów.
+Jednak błąd się nadal powtarzał spróbowałam znaleźć pomocy na forach internetowych. Próbowałam użyć polecenia ```bash until docker info; do sleep 1; done ``` który zapewnia, że skrypt będzie czekać na gotowość Dockera, jednak to również nie pomogło. Zauważyłam, że problem polegał w woluminach, dlatego usunęłam Jenkinsa i ponownie go zainstalowałam i uruchomiłam. Był to prawidłowy krok jednak ponownie zabrakło pamięci na dysku. Po zwolnieniu miejsca kolejne kroki zostały wykonane bez większych błędów.
 
+4) Stworzenie diagramu UML
+5) Modyfikacja kroków
+   - modyfikacja istniejącego już pipline: Build, Test
+     - dodanie zapisywania logów
+     - dodanie wyciągnięcia z kontenera folderu 'build' powstałego w wyniku budowania programu
+    # Build i Test
+```bash
+stage('Build') {
+    steps {
+        echo 'Build'
+        sh '''
+        docker build -t app_builder -f ./CI/Build/Dockerfile .
+        docker run --name build_container app_builder
+        docker cp build_container:/ReactHotCold/build ./build_artifacts
+        docker logs build_container > build_log.txt
+        '''
+    }
+}
 
+stage('Test') {
+    steps {
+        echo 'Unit tests'
+        sh '''
+        docker build -t app_tester -f ./CI/Test/Dockerfile .
+        docker run --name test_container app_tester
+        docker logs test_container > test_log.txt
+        '''
+    }
+}
+```
+# Deploy
+- Stworzenie i dodanie do repozytorium pliku Dockerfile, który umożliwia zbudowanie obrazu dla kontenera przeznaczonego do działania aplikacji. Obraz korzysta z plików wygenerowanych na etapie budowania
+```bash
+FROM node:latest
+WORKDIR /app
+COPY ./build_artifacts .
+RUN npm install -g serve
+CMD serve -s build
+```
+- Dodanie budowania obrazu na podstawie pliku Dockerfile
+```bash
+  stage('Deploy') {
+    steps {
+        echo 'Deploy'
+        sh '''
+        docker build -t app_deployer -f ./CI/Deploy/Dockerfile .
+        '''
+    }
+}
+```
+# Smoke Test - czy aplikacja działa poprawnie
+- Dodanie do pipeline etapu 'smokeTest', który sprawdza czy aplikacja działa
+```bash
+stage('Smoke Test') {
+    steps {
+        echo 'Smoke test'
+        sh '''
+        docker run -p 3000:3000 -d --rm --name deploy_container app_deployer
+        '''
+    }
+}
+```
+# Publish
+1) Wygenerowanie nowego tokenu w Dockerhub
+Profile -> Account settings -> Security -> New Access Token
+![ ](./images/dockerhub_1.png)
+![ ](./images/dockerhub_2.png)
+Wpisanie nazwy tokenu
+![ ](./images/dockerhub_3.png)
+- Dodanie tokenu do Jenkinsa
+Tablica -> Zarządzaj Jenkinsem -> Credentials -> System -> Global Credentials -> +Add Credential
+![ ](./images/dockerhub_token.png)
+2) Pipline -> stage('Publish')
+  ```bash
+  stage('Publish') {
+    steps {
+        echo 'Publishing'
+        sh '''
+        echo $DOCKERHUB_TOKEN_PSW | docker login -u $DOCKERHUB_TOKEN_USR --password-stdin
+        NUMBER='''+ env.BUILD_NUMBER +'''
+        docker tag app_deployer alexssandrr/react-hot-cold:latest
+        docker push alexssandrr/react-hot-cold:latest
+        docker logout
+        '''
+    }
+}
+
+# Artefakty
+Artefakty:
+- folder 'build' powstały jako efekt budowania apliakcji,
+- logi do budowania
+- logi z unit testów
+W sekcji 'post' zatrzymuję i usuwam stworzone kontenery
+ ```bash
+  post{
+      always{
+          sh '''
+          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+          tar -czf Artifact_$TIMESTAMP.tar.gz build_artifacts build_log.txt test_log.txt
+          ls -l
+          '''
+          archiveArtifacts artifacts: 'Artifact_*.tar.gz', fingerprint: true
+          sh '''
+          if [ "$(docker ps -a -q)" ]; then
+            docker container stop $(docker ps -a -q)
+            docker container rm $(docker ps -a -q)
+          fi
+          '''
+      }
+  }
+ ```
+
+# Weryfikacja
+![ ](./images/weryfikacja.png)
+
+- pobranie i uruchomienie obrazu
+``` bash
+docker pull alekxssandrr/react-hot-cold
+```
+![ ](./images/spr_weryfikacja.png)
+``` bash
+docker run -p 3000:3000 alexssandrr/react-hot-cold:latest
+```
+![ ](./images/weryfikacja_2.png)
+
+- Ręcznie przetestowanie działania aplikacji na porcie 3000 localhosta
+![ ](./images/testowanie.png)
+# Cel podjętych kroków
+Dzięki temu pipeline'owi, po każdym nowym commicie możemy automatycznie tworzyć i publikować obraz aplikacji. Mamy przy tym pewność, że każda aktualizacja obrazu jest poprzedzona dokładną weryfikacją poprawności działania aplikacji.
