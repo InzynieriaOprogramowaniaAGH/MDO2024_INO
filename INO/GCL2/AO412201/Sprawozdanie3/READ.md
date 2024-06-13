@@ -173,6 +173,7 @@ Po znalezieniu jego lokalizacji czyli /etc/docker znalazłam, że tylko użytkow
 
 Jednak błąd się nadal powtarzał spróbowałam znaleźć pomocy na forach internetowych. Próbowałam użyć polecenia ```bash until docker info; do sleep 1; done ``` który zapewnia, że skrypt będzie czekać na gotowość Dockera, jednak to również nie pomogło. Zauważyłam, że problem polegał w woluminach, dlatego usunęłam Jenkinsa i ponownie go zainstalowałam i uruchomiłam. Był to prawidłowy krok jednak ponownie zabrakło pamięci na dysku. Po zwolnieniu miejsca kolejne kroki zostały wykonane bez większych błędów.
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 4) Stworzenie diagramu UML
 5) Modyfikacja kroków
    - modyfikacja istniejącego już pipline: Build, Test
@@ -203,7 +204,7 @@ stage('Test') {
     }
 }
 ```
-# Deploy
+## Deploy
 - Stworzenie i dodanie do repozytorium pliku Dockerfile, który umożliwia zbudowanie obrazu dla kontenera przeznaczonego do działania aplikacji. Obraz korzysta z plików wygenerowanych na etapie budowania
 ```bash
 FROM node:latest
@@ -223,7 +224,7 @@ CMD serve -s build
     }
 }
 ```
-# Smoke Test - czy aplikacja działa poprawnie
+## Smoke Test - czy aplikacja działa poprawnie
 - Dodanie do pipeline etapu 'smokeTest', który sprawdza czy aplikacja działa
 ```bash
 stage('Smoke Test') {
@@ -235,7 +236,7 @@ stage('Smoke Test') {
     }
 }
 ```
-# Publish
+## Publish
 1) Wygenerowanie nowego tokenu w Dockerhub
 Profile -> Account settings -> Security -> New Access Token
 ![ ](./images/dockerhub_1.png)
@@ -259,8 +260,8 @@ Tablica -> Zarządzaj Jenkinsem -> Credentials -> System -> Global Credentials -
         '''
     }
 }
-
-# Artefakty
+```
+## Artefakty
 Artefakty:
 - folder 'build' powstały jako efekt budowania apliakcji,
 - logi do budowania
@@ -285,7 +286,7 @@ W sekcji 'post' zatrzymuję i usuwam stworzone kontenery
   }
  ```
 
-# Weryfikacja
+## Weryfikacja
 ![ ](./images/weryfikacja.png)
 
 - pobranie i uruchomienie obrazu
