@@ -22,6 +22,7 @@ b) uruchomienie o godzinie 20
 ![ ](./images/nieparzysta_godzina.png)
 
 2) Utworzenie prawdziwego projektu, który:
+   
 a) klonuje repozytorium
 - wygenerowanie tokenu, jeżeli nie istnieje:
   Github -> Settings -> Developer settings -> Personal access tokens -> Generate new token -> skopiowanie tokenu
@@ -196,7 +197,7 @@ stage('Build') {
         sh '''
         docker build -t app_builder -f ./CI/Build/Dockerfile .
         docker run --name build_container app_builder
-        docker cp build_container:/ReactHotCold/build ./build_artifacts
+        docker cp build_container:/react-hot-cold/build ./build_artifacts
         docker logs build_container > build_log.txt
         '''
     }
@@ -300,7 +301,7 @@ W sekcji 'post' zatrzymuję i usuwam stworzone kontenery
 
 - pobranie i uruchomienie obrazu
 ``` bash
-docker pull alekxssandrr/react-hot-cold
+docker pull alexssandrr/react-hot-cold
 ```
 ![ ](./images/spr_weryfikacja.png)
 ``` bash
