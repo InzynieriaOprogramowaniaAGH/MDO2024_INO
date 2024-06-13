@@ -1,4 +1,4 @@
-# Sprawozdanie 1
+# Sprawozdanie 3
 Zajęcia 005 + 006
 ## Uruchomienie
 1) Konfiguracja wstępna i pierwsze uruchomienie
