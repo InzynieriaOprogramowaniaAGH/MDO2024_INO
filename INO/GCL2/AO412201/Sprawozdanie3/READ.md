@@ -53,8 +53,10 @@ Przeprowadzenie forka repozytorium z kodem, który jest wykorzystywany w poprzed
 - należy wejść do repozytorium klonowanego repozytorium : https://github.com/anamika8/react-hot-cold
 - w prawym górym rogu nacisnąć na przycisk 'fork' -> create a new fork -> create fork
 ![ ](./images/fork_1.png)
+
 ->
 ![ ](./images/fork_2.png)
+
 W tym przypadku stworzenie obrazu zawierającego dependecję nie jest konieczne, ponieważ program zawiera tylko dwie zależności: Node.js oraz npm.
 - Stworzenie pliku Dockerfile do budowy programu (folder Build/Dockerfile)
 ```bash
@@ -175,7 +177,13 @@ Jednak błąd się nadal powtarzał spróbowałam znaleźć pomocy na forach int
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 4) Stworzenie diagramu UML
-5) Modyfikacja kroków
+Diagram sekwencji
+![ ](./images/sekwencji.png)
+
+Diagram wdrożenia
+![ ](./images/wdrożenia.png)
+
+6) Modyfikacja kroków
    - modyfikacja istniejącego już pipline: Build, Test
      - dodanie zapisywania logów
      - dodanie wyciągnięcia z kontenera folderu 'build' powstałego w wyniku budowania programu
