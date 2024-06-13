@@ -2,6 +2,7 @@
 Krystian Gliwa, IO.
 
 ## Cel projektu
+Celem projektu jest wdrożenie aplikacji opartej na kontenerach na platformie Kubernetes przy użyciu narzędzia Minikube. Projekt obejmuje instalację klastra Kubernetes, uruchomienie kontenerów z wykorzystaniem różnych strategii wdrożenia oraz zarządzanie nimi za pomocą YAML.
 
 ## Wdrażanie na zarządzalne kontenery: Kubernetes
 
