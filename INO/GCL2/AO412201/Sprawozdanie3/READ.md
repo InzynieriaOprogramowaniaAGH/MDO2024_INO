@@ -54,7 +54,7 @@ Przeprowadzenie forka repozytorium z kodem, który jest wykorzystywany w poprzed
 - w prawym górym rogu nacisnąć na przycisk 'fork' -> create a new fork -> create fork
 ![ ](./images/fork_1.png)
 
-->
+
 ![ ](./images/fork_2.png)
 
 W tym przypadku stworzenie obrazu zawierającego dependecję nie jest konieczne, ponieważ program zawiera tylko dwie zależności: Node.js oraz npm.
