@@ -1,0 +1,84 @@
+pipeline {
+    agent any
+    environment {
+        GIT_REPO = 'https://github.com/alexssandrr/react-hot-cold.git'
+        GIT_BRANCH = 'main'
+        DOCKERHUB_TOKEN = credentials('dockerhub-token')
+    }
+    triggers {
+        pollSCM('* * * * *')
+    }
+    stages {
+        stage('Collect') {
+            steps {
+                echo 'Cloning repository'
+                git branch: "${GIT_BRANCH}", url: "${GIT_REPO}"
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Build'
+                sh '''
+                docker build -t app_builder -f ./CI/Build/Dockerfile .
+                docker run --name build_container app_builder
+                docker cp build_container:/react-hot-cold/build ./build_artifacts
+                docker logs build_container > build_log.txt
+                '''
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Unit tests'
+                sh '''
+                docker build -t app_tester -f ./CI/Test/Dockerfile .
+                docker run --name test_container app_tester
+                docker logs test_container > test_log.txt
+                '''
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploy'
+                sh '''
+                docker build -t app_deployer -f ./CI/Deploy/Dockerfile .
+                '''
+            }
+        }
+        stage('Smoke Test') {
+            steps {
+                echo 'Smoke test'
+                sh '''
+                docker run -p 3000:3000 -d --rm --name deploy_container app_deployer
+                '''
+            }
+        }
+        stage('Publish') {
+            steps {
+                echo 'Publishing'
+                sh '''
+                echo $DOCKERHUB_TOKEN_PSW | docker login -u $DOCKERHUB_TOKEN_USR --password-stdin
+                NUMBER='''+ env.BUILD_NUMBER +'''
+                docker tag app_deployer alexssandrr/react-hot-cold:latest
+                docker push alexssandrr/react-hot-cold:latest
+                docker logout
+                '''
+            }
+        }
+    }
+    post{
+        always{
+            sh '''
+            TIMESTAMP=$(date +%Y%m%d%H%M%S)
+            tar -czf Artifact_$TIMESTAMP.tar.gz build_artifacts build_log.txt test_log.txt
+            ls -l
+            '''
+            archiveArtifacts artifacts: 'Artifact_*.tar.gz', fingerprint: true
+            sh '''
+            if [ "$(docker ps -a -q)" ]; then
+              docker container stop $(docker ps -a -q)
+              docker container rm $(docker ps -a -q)
+            fi
+            '''
+        }
+    }
+}
