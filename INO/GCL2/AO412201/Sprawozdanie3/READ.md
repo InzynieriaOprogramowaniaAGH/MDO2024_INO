@@ -177,17 +177,18 @@ Jednak błąd się nadal powtarzał spróbowałam znaleźć pomocy na forach int
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 4) Stworzenie diagramu UML
-Diagram sekwencji
+   
+a) Diagram sekwencji
 ![ ](./images/sekwencji.png)
 
-Diagram wdrożenia
+b) Diagram wdrożenia
 ![ ](./images/wdrożenia.png)
 
 6) Modyfikacja kroków
    - modyfikacja istniejącego już pipline: Build, Test
      - dodanie zapisywania logów
      - dodanie wyciągnięcia z kontenera folderu 'build' powstałego w wyniku budowania programu
-    # Build i Test
+    ## Build i Test
 ```bash
 stage('Build') {
     steps {
