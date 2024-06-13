@@ -16,7 +16,7 @@ fi
 a) uruchomienie o godzinie 19
 ![ ](./images/2.png)
 uruchomienie o godzinie 20
-![ ](./images/nieparzysta.png)
+![ ](./images/nieparzysta_godzina.png)
 2) Utworzenie prawdziwego projektu, który
 a) klonuje repozytorium
 - wygenerowanie tokenu, jeżeli nie istnieje:
