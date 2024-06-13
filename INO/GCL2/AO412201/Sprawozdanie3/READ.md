@@ -53,9 +53,7 @@ Przeprowadzenie forka repozytorium z kodem, który jest wykorzystywany w poprzed
 - należy wejść do repozytorium klonowanego repozytorium : https://github.com/anamika8/react-hot-cold
 - w prawym górym rogu nacisnąć na przycisk 'fork' -> create a new fork -> create fork
 ![ ](./images/fork_1.png)
-
 ->
-
 ![ ](./images/fork_2.png)
 W tym przypadku stworzenie obrazu zawierającego dependecję nie jest konieczne, ponieważ program zawiera tylko dwie zależności: Node.js oraz npm.
 - Stworzenie pliku Dockerfile do budowy programu (folder Build/Dockerfile)
@@ -155,17 +153,21 @@ pipeline {
 ![ ](./images/pipline.png)
 ![ ](./images/fork_project.png)
 
-##Błędy
+## Błędy
 Podczas uruchomienia pipline napotkałam na kilka błędów:
 1) Aktualizacja wtyczek build pipline
 ![ ](./images/plugin.png)
 ![ ](./images/plugin1.png)
+
 Powtarzający się błąd:
 ![ ](./images/blad.png)
+
 Początkowo podejrzewałam, że może mieć problem ze znaleziem pliku ca.pem dlatego znalazłam jego lokalizację 
 ![ ](./images/ca_pem.png)
+
 Po znalezieniu jego lokalizacji czyli /etc/docker znalazłam, że tylko użytkownik root ma prawo do odczytu i zapisu dlatego ustawiłam prawo odczytu dla użytkownika Jenkins
 ![ ](./images/uzytkownik.png)
+
 Jednak błąd się nadal powtarzał spróbowałam znaleźć pomocy na forach internetowych. Próbowałam użyć polecenia ```bash until docker info; do sleep 1; done ``` który zapewnia, że skrypt będzie czekać na gotowość Dockera, jednak to również nie pomogło. Zauważyłam, że problme polegał w woluminach, dlatego usunęłam Jenkinsa i ponownie go zainstalowałam i uruchomiłam. Był to prawidłowy krok jednak ponownie zabrakło pamięci na dysku. Po zwolnieniu miejsca kolejne kroki zostały wykonane bez większych błędów.
 
 
