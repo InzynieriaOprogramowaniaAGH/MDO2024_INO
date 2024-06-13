@@ -1,6 +1,6 @@
-## Sprawozdanie 1
+# Sprawozdanie 1
 Zajęcia 005 + 006
-# Uruchomienie
+## Uruchomienie
 1) Konfiguracja wstępna i pierwsze uruchomienie
 - Utworzenie pierwszego prostego projektu, który wyświetla uname
 ![ ](./images/1.png)
