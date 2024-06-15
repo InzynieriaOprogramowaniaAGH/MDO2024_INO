@@ -56,53 +56,53 @@ Ansible jest narzędziem wykorzystywanym do automatyzacji procesów administracy
   - Ponowienie dwóch poprzednich kroków, jednak z inną nazwą użytkownika oraz IP
     9.png
 
-    ## Inwentaryzacja
-    1. Zmiana haseł na przewidywane nazwy, jeżeli są one inne niż powinny
+## Inwentaryzacja
+1. Zmiana haseł na przewidywane nazwy, jeżeli są one inne niż powinny
       ``` bash hostnamectl set-hostname nazwa-hosta ```
       10.png
-    2. Wprowadzenie nazwy DNS tak aby było możliwe wywoływaniie maszyn za pomocą nazw, a nie tylko adresów IP
+2. Wprowadzenie nazwy DNS tak aby było możliwe wywoływaniie maszyn za pomocą nazw, a nie tylko adresów IP
         - Wejście do folderu /etc/hosts
         - ustawienie nazwy maszyny dla danego adresu IP
       11.png
-    3. Sprawdzenie czy maszyny łączą się po nazwie
+3. Sprawdzenie czy maszyny łączą się po nazwie
       12.png
        - można również użyć polecenie ```bash ping ``` co również pokazuje prawidłowe połączenie
        13.png
-    4. Stworzenie pliku inwentaryzacji
-       - Stworzenie pliku inwentaryzacji na podstawie dokumentacji https://docs.ansible.com/ansible/latest/getting_started/get_started_inventory.html
-         - stworzenie folderu ansible_quickstart ```bash mkdir ansible_quickstart```
-         - w stworzonym folderze stworzenie pliku inventory.ini
-           ```bash
-           cd ansible_quickstart
-           touch inventory.ini
-           nano inventory.ini
-            ```
-          - dodanie nowej grupy hostów [myhosts]
+4. Stworzenie pliku inwentaryzacji
+   - Stworzenie pliku inwentaryzacji na podstawie dokumentacji https://docs.ansible.com/ansible/latest/getting_started/get_started_inventory.html
+     - stworzenie folderu ansible_quickstart ```bash mkdir ansible_quickstart```
+      - w stworzonym folderze stworzenie pliku inventory.ini
+        ```bash
+        cd ansible_quickstart
+        touch inventory.ini
+        nano inventory.ini
+        ```
+      - dodanie nowej grupy hostów [myhosts]
          14.png
-         - wyświetlenie maszyn zdefioniowanych w pliku (sprawdzenie)
-           ```bash
-           ansible-inventory -i inventory.ini --list
-           ```
+      - wyświetlenie maszyn zdefioniowanych w pliku (sprawdzenie)
+        ```bash
+        ansible-inventory -i inventory.ini --list
+        ```
          15.png
-         - weryfikacja
-           ```bash
-           ansible MaszynyDocelowe -m ping inventory.ini
-           ```
+      - weryfikacja
+        ```bash
+        ansible MaszynyDocelowe -m ping inventory.ini
+        ```
         16.png
-      5. Umieszczenie w pliku inwentaryzacji sekcji Orchestrators oraz Endpoints
-         - treść pliku
-           ```bash
-           [Orchestrators]
-           orchestrator ansible_host=127.0.0.1 ansible_user=aleksandra_o ansible_ssh_private_key_file=/home/aleksandra_o/.ssh/id_rsa
+5. Umieszczenie w pliku inwentaryzacji sekcji Orchestrators oraz Endpoints
+   - treść pliku
+     ```bash
+     [Orchestrators]
+     orchestrator ansible_host=127.0.0.1 ansible_user=aleksandra_o ansible_ssh_private_key_file=/home/aleksandra_o/.ssh/id_rsa
 
-           [Endpoints]
-           01 ansible_host=10.0.2.2 ansible_user=ansible ansible_ssh_private_key_file=/home/aleksandra_o/.ssh/id_rsa
+     [Endpoints]
+     01 ansible_host=10.0.2.2 ansible_user=ansible ansible_ssh_private_key_file=/home/aleksandra_o/.ssh/id_rsa
 
-           [all:children]
-           Orchestrators
-           Endpoints
-           ```
-      6. Wysłanie żądania ```bash ping``` do wszytskich maszyn
+     [all:children]
+     Orchestrators
+     Endpoints
+     ```
+6. Wysłanie żądania ```bash ping``` do wszytskich maszyn
     17.png
 
 # Zdalne wywołanie procedur
