@@ -1,7 +1,7 @@
-## Sprawozdanie 4
+# Sprawozdanie 4
 # Cel sprawozdania: Automatyzacja i zdalne wykonywanie poleceń za pomocą Ansible
 
-# Instalacja zarządcy Ansible
+## Instalacja zarządcy Ansible
 Ansible jest narzędziem wykorzystywanym do automatyzacji procesów administracyjnych, orkiestracji oraz zarządzania konfiguracją. 
 1. Utowrzenie nowej maszyny wirtualnej o takim samym systemie operacyjnym jak maszyna, na której do tej pory pracowano - Ubuntu 22.04
    - zgodnie z instrukcją nadanie nazwy użytkownika ```bash ansible``` oraz hostname na ``` bash ansible-target```
@@ -56,7 +56,7 @@ Ansible jest narzędziem wykorzystywanym do automatyzacji procesów administracy
   - Ponowienie dwóch poprzednich kroków, jednak z inną nazwą użytkownika oraz IP
     9.png
 
-    # Inwentaryzacja
+    ## Inwentaryzacja
     1. Zmiana haseł na przewidywane nazwy, jeżeli są one inne niż powinny
       ``` bash hostnamectl set-hostname nazwa-hosta ```
       10.png
