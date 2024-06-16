@@ -1,0 +1,3 @@
+From pierwszy
+
+RUN cd LastCalc && mvn test

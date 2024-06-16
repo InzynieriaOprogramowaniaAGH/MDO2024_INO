@@ -1,0 +1,31 @@
+- name: Install Docker
+  apt:
+    name: docker.io
+    state: latest
+  become: true
+
+- name: Start 
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+  become: true
+
+- name: Pull image
+  docker_image:
+    name: radeckimaciej/deploy:1.1.1
+    source: pull
+  become: true
+
+- name: Run
+  docker_container:
+    name: deploy
+    image: radeckimaciej/deploy:1.1.1
+    state: started
+  become: true
+
+- name: Stop and remove
+  community.docker.docker_container:
+    name: deploy
+    state: absent
+  become: true

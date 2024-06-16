@@ -1,0 +1,10 @@
+- name: Update 
+  hosts: Endpoints
+  vars:
+    ansible_become_pass: hdzzd123
+  become: yes
+  tasks:
+    - name: Update packages
+      apt:
+        update_cache: yes
+        upgrade: dist

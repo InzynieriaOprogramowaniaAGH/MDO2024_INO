@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pet-deployment-canary
+  labels:
+    app: pet-app
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: pet-app
+      strategy: canary
+  template:
+    metadata:
+      labels:
+        app: pet-app
+        strategy: canary
+        version: v1
+    spec:
+      containers:
+      - name: pet-app
+        image: radeckimaciej/deploy:1.1.1
+        ports:
+        - containerPort: 8080

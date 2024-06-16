@@ -1,0 +1,7 @@
+- name: Copy ibook
+  hosts: Endpoints
+  tasks:
+    - name: Copy
+      copy:
+        src: ~/lab/MDO2024_INO/INO/GCL2/MR410206/Sprawozdanie4/ibook.ini
+        dest: ~/ibook.ini

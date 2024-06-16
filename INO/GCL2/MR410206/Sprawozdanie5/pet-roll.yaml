@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pet-deployment-roll
+  labels:
+    app: pet-app
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 20%
+  selector:
+    matchLabels:
+      app: pet-app
+      strategy: rolling
+  template:
+    metadata:
+      labels:
+        app: pet-app
+        strategy: rolling
+    spec:
+      containers:
+      - name: pet-app
+        image: radeckimaciej/deploy:1.1.1
+        ports:
+        - containerPort: 8080
