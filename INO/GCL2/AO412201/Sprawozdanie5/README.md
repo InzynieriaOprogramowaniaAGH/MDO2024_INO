@@ -56,9 +56,13 @@ Możemy w nim uruchomić różne obiekty, takie jak pods (uruchamia 1 lub więce
    - przygotowanie obrazu Dockera z aplikacją, na jego podstawie uruchomienie kontenera i sprawdzenie, czy pracuje w trybie ciągłym i nie kończy swojej pracy natychmiast po wykonaniu
      ![ ](./images/10.png)
      gdzie:
+     
      ```bash --name my-node-app ``` : nazwa kontenera
+     
      ```bash -d ``` : kontener będzie uruchomiony w tle
+     
      ```bash -p 3000:3000 ```: określa przekierowanie portów
+     
      ```node-deploy```: nazwa obrazu Docker, na podstawie którego ma zostać uruchomiony kontener
 
    - uruchomienie kontenera na klastrze Kubernetes
