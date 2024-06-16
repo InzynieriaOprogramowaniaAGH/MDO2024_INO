@@ -60,15 +60,19 @@ Ansible jest narzędziem wykorzystywanym do automatyzacji procesów administracy
 1. Zmiana haseł na przewidywane nazwy, jeżeli są one inne niż powinny
       ``` bash hostnamectl set-hostname nazwa-hosta ```
       ![img](images/10.png)
-2. Wprowadzenie nazwy DNS tak aby było możliwe wywoływaniie maszyn za pomocą nazw, a nie tylko adresów IP
+   
+3. Wprowadzenie nazwy DNS tak aby było możliwe wywoływaniie maszyn za pomocą nazw, a nie tylko adresów IP
         - Wejście do folderu /etc/hosts
         - ustawienie nazwy maszyny dla danego adresu IP
+   
       ![img](images/11.png)
-3. Sprawdzenie czy maszyny łączą się po nazwie
+4. Sprawdzenie czy maszyny łączą się po nazwie
       ![img](images/12.png)
+   
        - można również użyć polecenie ```bash ping ``` co również pokazuje prawidłowe połączenie
+   
       ![img](images/13.png)
-4. Stworzenie pliku inwentaryzacji
+6. Stworzenie pliku inwentaryzacji
    - Stworzenie pliku inwentaryzacji na podstawie dokumentacji https://docs.ansible.com/ansible/latest/getting_started/get_started_inventory.html
      - stworzenie folderu ansible_quickstart ```bash mkdir ansible_quickstart```
       - w stworzonym folderze stworzenie pliku inventory.ini
@@ -78,7 +82,9 @@ Ansible jest narzędziem wykorzystywanym do automatyzacji procesów administracy
         nano inventory.ini
         ```
       - dodanie nowej grupy hostów [myhosts]
+        
         ![img](images/14.png)
+        
       - wyświetlenie maszyn zdefioniowanych w pliku (sprawdzenie)
         ```bash
         ansible-inventory -i inventory.ini --list
@@ -89,7 +95,7 @@ Ansible jest narzędziem wykorzystywanym do automatyzacji procesów administracy
         ansible MaszynyDocelowe -m ping inventory.ini
         ```
         ![img](images/16.png)
-5. Umieszczenie w pliku inwentaryzacji sekcji Orchestrators oraz Endpoints
+7. Umieszczenie w pliku inwentaryzacji sekcji Orchestrators oraz Endpoints
    - treść pliku
      ```bash
      [Orchestrators]
@@ -102,7 +108,7 @@ Ansible jest narzędziem wykorzystywanym do automatyzacji procesów administracy
      Orchestrators
      Endpoints
      ```
-6. Wysłanie żądania ```bash ping``` do wszytskich maszyn
+8. Wysłanie żądania ```bash ping``` do wszytskich maszyn
     ![img](images/17.png)
 
 # Zdalne wywołanie procedur
@@ -143,7 +149,7 @@ Stworzenie playbooka Ansible na podstawie dokumentacji https://docs.ansible.com/
    ```
       - skopiowanie pliku 'inventory.ini' do ścieżki '/home/ansible/inventory_first.ini' z maszyny Orchestratora na maszynę Endpoint
       - skopiowanie pliku inwentaryzacji, nadanie nazwy inventory_second.ini i porównanie poleceniem ```bash diff ``` , ```bash || true``` zapewnia, że playbook nie zakończy się niepowodzeniem, jeśli zostaną znalezione różnice, wynik z diff przechowywany         w zmiennej 'diff_output'
-   3. Aktualizacja pakietów w systemie
+3. Aktualizacja pakietów w systemie
       ```bash
       - name: Update packages and restart services
         hosts: Endpoints
@@ -160,7 +166,7 @@ Stworzenie playbooka Ansible na podstawie dokumentacji https://docs.ansible.com/
       ```
       - aktualizacja lokalnej bazy pakietów: 'bash update_cache:yes'
         
-   4. Zrestartowanie usług sshd i rngd
+4. Zrestartowanie usług sshd i rngd
       ```bash
       - name: Restart sshd service using systemd
          systemd:
@@ -172,11 +178,12 @@ Stworzenie playbooka Ansible na podstawie dokumentacji https://docs.ansible.com/
            name: rng-tools
            state: restarted
       ```
-      Wykonanie playbook'a poleceniem:
+   Wykonanie playbook'a poleceniem:
       ```bash
       ansible-playbook -i inventory.ini --ask-become-pass playbook.yml
       ```
-      BŁĘDY
+      
+   BŁĘDY
       Podczas wykonania polecenia wyskoczył błąd ```bash Could not find the requested servce rng-tools: host ```
       ![img](images/18.png)
       Rozwiązaniem było zainstalowanie rngd. Należy użyć poleceń:
@@ -197,10 +204,14 @@ Stworzenie playbooka Ansible na podstawie dokumentacji https://docs.ansible.com/
      
    5. Wyłączenie sshd
       - wyłączenie sshd za pomocą polecenia: ```bash sudo systemctl stop shd```
+        
       Otrzymanie błędu:
+      
       ![img](images/20.png)
+      
       - włączenie sshd i wyłączenie kabla sieciowego
       ![img](images/21.png)
+
       Otrzymane błędy
       ![img](images/22.png)
 
@@ -233,3 +244,59 @@ Stworzenie playbooka Ansible na podstawie dokumentacji https://docs.ansible.com/
   - Zatrzymanie i usunięcie kontenera
     ![img](images/25.png)
   
+## Pliki odpowiedzi dla wdrożeń nienadzorowanych
+CEL: Celem labolatoriów jest utworzenie źródła instalacji nienadzorowanej dla systemu operacyjnego hostującego nasze oprogramowanie oraz przeprowadzenie instalacji systemu, który po uruchomieniu rozpocznie hostowanie naszego programu.
+
+1. Zainstalowanie programu Fedora stosując instalator sieciowy netinst ze strony: https://mirroronet.pl/pub/mirrors/fedora/linux/releases/  Wybrałam Fedora 39.
+![img](images/26.png)
+- instalacja maszyny (krok po kroku pokazane w Sprawozdaniu1) oraz podstawowe informacje
+  ![img](images/27.png)
+2. Znalezienie pliku anaconda-ks.cfg
+  ```bash
+  sudo cat /root/anaconda-ks.cfg
+  ```
+3. Edycja pliku
+   ```bash nano /root/anaconda-ks.cfg ```
+   - Dodanie wzmianek na temat potrzebnych repozytoriów
+     ```bash
+     url --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-39&arch=x86_64
+     repo --name=update --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f39&arch=x86_64
+     ```
+     - Ustawienie hostname na alekandra_o
+      ```bash
+      network --hostname=aleksandra_o
+      ```
+      - zapewnienie formatowania całości dysku
+        ```bash
+        #Format
+        clearpart --all
+        ```
+      - W sekcji '%packages' dodanie 'docker-ce' co zapewni, że od razu po instalacji system Fedora był gotowy do użycia z Docker CE bez konieczności ręcznej instalacji po pierwszym uruchomieniu systemu
+        ```bash
+        %packages
+        @^server-product-environment
+        docker-ce
+        %end
+        ```
+      - Stworzenie w sekcji '%post' mechanizmu umożliwiającego pobranie i uruchomienie kontenera. Dodanie użytkowników 'root' oraz 'aleksandra_o' do grupy 'docker'
+     ```bash
+     %post
+     usermod -aG docker root
+     usermod -aG docker aleksandra_o
+     sudo -u aleksandra_o systemctl enable docker
+     sudo -u aleksandra_o systemctl start docker
+     sudo -u aleksandra_o docker pull alexsssandrr/react-hot-cold:latest
+     sudo -u aleksandra_o docker run -p 3000:3000 alexssandrr/react-hot-cold:latest
+     %end
+     ```
+     - Dodanie reboot (ponowne uruchomienie)
+       ```bash
+       reboot
+       ```
+      ![img](images/28.png)
+   - Wyeksportowanie folderu z plikiem kickstart na lokalnego hosta
+     ``` bash
+     python -m http.server
+     ```
+      ![img](images/29.png)
+
