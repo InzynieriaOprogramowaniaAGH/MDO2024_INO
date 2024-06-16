@@ -1,0 +1,3 @@
+FROM sqlite_builder
+
+CMD ["./sqlite3"]
