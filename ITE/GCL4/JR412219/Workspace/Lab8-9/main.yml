@@ -1,0 +1,20 @@
+---
+  # tasks file for my_role
+- name: Zainstaluj Docker
+  ansible.builtin.dnf:
+    name: docker
+    state: latest
+    
+- name: Uruchom demona dockerowego
+  ansible.builtin.service:
+    name: docker
+    state: started
+      
+- name: Ukradnij obraz od kolegi bo nie chcesz walczyc ze swoim repozytorium node-a
+  command: docker pull lukaszsawina/take_note_pipeline
+      
+- name: Run detached obraz aplikacji
+  command: docker run --rm -d -p 5000:5000 --name=app lukaszsawina/take_note_pipeline
+      #Wiemy ze działa wiec ubijamy kontenera na końcu by kontener nie wisiał
+- name: Stop container
+  command: docker stop app

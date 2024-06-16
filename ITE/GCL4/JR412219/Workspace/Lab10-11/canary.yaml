@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tdwa
+  labels:
+    app: tdwa
+    track: canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tdwa
+      track: canary
+  template:
+    metadata:
+      labels:
+        app: tdwa
+        track: canary
+    spec:
+      containers:
+      - name: tdwa
+        image: pangoo404/tdwadeploy:1.1
+        ports:
+        - containerPort: 3000

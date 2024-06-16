@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  tdwa
+  labels:
+    app: tdwa
+spec:
+  replicas: 4
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 25%
+  selector:
+    matchLabels:
+      app: tdwa
+  template:
+    metadata:
+      labels:
+        app: tdwa
+    spec:
+      containers:
+      - name: tdwa
+        image: pangoo404/tdwadeploy:1.1
+        ports:
+        - containerPort: 3000
