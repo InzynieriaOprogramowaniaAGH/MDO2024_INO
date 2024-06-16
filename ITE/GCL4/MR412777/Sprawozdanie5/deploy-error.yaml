@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: error-deploy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: error-deploy
+  template:
+    metadata:
+      labels:
+        app: error-deploy
+    spec:
+      containers:
+      - name: error-deploy
+        image: error_image:1.0.0
+        ports:
+        - containerPort: 80
