@@ -1,0 +1,52 @@
+---
+- name: Ping all hosts
+  hosts: all
+  become: false
+  tasks:
+    - name: Ping all hosts
+      ping:
+
+- name: Copy inventory file to endpoints and compare
+  hosts: Endpoints
+  become: false
+  tasks:
+    - name: Copy inventory file to endpoints - first run
+      copy:
+        src: inventory.ini
+        dest: /home/ansible/inventory_first.ini
+
+    - name: Copy inventory file to endpoints - second run
+      copy:
+        src: inventory.ini
+        dest: /home/ansible/inventory_second.ini
+
+    - name: Check differences after second copy
+      shell: diff /home/ansible/inventory_first.ini /home/ansible/inventory_second.ini || true
+      register: diff_output
+
+    - name: Display diff output
+      debug:
+        var: diff_output.stdout_lines
+
+- name: Update packages and restart services
+  hosts: Endpoints
+  become: true
+  tasks:
+    - name: Update package repositories
+      apt:
+        update_cache: yes
+      register: update_output
+
+    - name: Display update output
+      debug:
+        msg: "{{ update_output }}"
+
+    - name: Restart sshd service using systemd
+      systemd:
+        name: sshd
+        state: restarted
+
+    - name: Restart rngd service
+      service:
+        name: rng-tools
+        state: restarted

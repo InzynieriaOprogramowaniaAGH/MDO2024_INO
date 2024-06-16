@@ -1,0 +1,53 @@
+pipeline {
+    agent any
+    environment {
+        GIT_REPO = 'https://github.com/alexssandrr/react-hot-cold.git'
+        GIT_BRANCH = 'main'
+    }
+    triggers {
+        pollSCM('* * * * *')
+    }
+    stages {
+        stage('Collect') {
+            steps {
+                git branch: "${GIT_BRANCH}", url: "${GIT_REPO}"
+            }
+        }
+        stage('Build') {
+            steps {
+                sh '''
+                cd CI/Build
+                docker build -t app_builder .
+                '''
+            }
+        }
+        stage('Test') {
+            steps {
+                sh '''
+                cd CI/Test
+                docker build -t app_tester .
+                '''
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh '''
+                cd CI
+                docker compose build
+                docker compose logs builder > log.txt
+                docker compose logs tester >> log.txt
+                '''
+            }
+        }
+        stage('Publish') {
+            steps {
+                sh '''
+                TIMESTAMP=$(date +%Y%m%d%H%M%S)
+                tar -czf Artifact_$TIMESTAMP.tar.gz CI/docker-compose.yml CI/Test CI/Build CI/log.txt
+                ls -l
+                '''
+                archiveArtifacts artifacts: 'Artifact_*.tar.gz', fingerprint: true
+            }
+        }
+    }
+}

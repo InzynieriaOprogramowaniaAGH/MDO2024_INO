@@ -1,0 +1,15 @@
+- name: Run 'Hot and Cold' game
+  hosts: Endpoints
+  become: no
+  tasks:
+    - name: Download game image from DockerHub
+      docker_image:
+        name: alexssandrr/react-hot-cold:latest
+        source: pull
+    - name: Run the game
+      docker_container:
+        name: react-hot-cold
+        image: alexssandrr/react-hot-cold:latest
+        ports:
+          - "3000:3000"
+        state: started
