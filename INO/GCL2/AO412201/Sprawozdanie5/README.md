@@ -97,7 +97,8 @@ Możemy w nim uruchomić różne obiekty, takie jak pods (uruchamia 1 lub więce
         - containerPort: 3000
     ```
     gdzie:
-    **apps/v1** co oznacza, że korzystamy z API dla zasobów aplikacyjnych w Kubernetes
+    **apps/v1** oznacza, że korzystamy z API dla zasobów aplikacyjnych w Kubernetes
+    
     **spec** co oznacza, liczbę replik aplikacji, które mają być uruchomione ( w tym przypadku 5)
 
     - Stworzenie serwisu aplikacji w pliku service.yaml
@@ -117,10 +118,10 @@ Możemy w nim uruchomić różne obiekty, takie jak pods (uruchamia 1 lub więce
           targetPort: 3000
       ```
       gdzie:
-      **kind: Service ** oznacza typ zasobu
-      **spec: NodePort ** oznacza, że Kubernetes przydzieli losowy port na każdym węźle klastra i przekieruje ruch na określony port wewnątrz serwisu
-      **ports: nodePort ** oznacza, które porty mają być wystawione w tym przypadku konkretny port (32410), na którym serwis będzie dostępny na węzłach klastra
-      **ports: port ** oznacza port(3000), pod którym serwis będzie dostępny wewnątrz klastra Kubernetes
+      **kind: Service** oznacza typ zasobu
+      **spec: NodePort** oznacza, że Kubernetes przydzieli losowy port na każdym węźle klastra i przekieruje ruch na określony port wewnątrz serwisu
+      **ports: nodePort** oznacza, które porty mają być wystawione w tym przypadku konkretny port (32410), na którym serwis będzie dostępny na węzłach klastra
+      **ports: port** oznacza port(3000), pod którym serwis będzie dostępny wewnątrz klastra Kubernetes
 
     - Uruchomienie wdrożenia i serwis
       ```bash
