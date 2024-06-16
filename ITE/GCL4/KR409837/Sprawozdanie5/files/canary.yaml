@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-hot-cold-canary
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: react
+      version: canary
+  template:
+    metadata:
+      labels:
+        app: react
+        version: canary
+    spec:
+      containers:
+      - name: react
+        image: krezler21/react-hot-cold:0.3.0

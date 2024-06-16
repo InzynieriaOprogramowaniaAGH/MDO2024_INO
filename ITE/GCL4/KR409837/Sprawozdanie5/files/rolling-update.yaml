@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-hot-cold
+  labels:
+    app: react
+spec:
+  replicas: 15
+  strategy:
+    type : RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 8
+      maxSurge: 30%
+  selector:
+    matchLabels:
+      app: react
+  template:
+    metadata:
+      labels:
+        app: react
+    spec:
+      containers:
+      - name: react
+        image: krezler21/react-hot-cold:0.3.0
+        ports:
+        - containerPort: 3000

@@ -1,0 +1,26 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: react
+spec:
+  hosts:
+  - "localhost"
+  http:
+  - match:
+    - headers:
+        x-canary:
+          exact: "true"
+    route:
+    - destination:
+        host: react
+        subset: canary
+      weight: 100
+  - route:
+    - destination:
+        host: react
+        subset: stable
+      weight: 90
+    - destination:
+        host: react
+        subset: canary
+      weight: 10
