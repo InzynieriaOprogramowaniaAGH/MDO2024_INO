@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-clock-deployment
+  labels:
+    app: nginx-clock
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: nginx-clock
+  template:
+    metadata:
+      labels:
+        app: nginx-clock
+    spec:
+      containers:
+      - name: nginx-clock
+        image: krystian3243/nginx-clock:1.2
+        ports:
+        - containerPort: 80
