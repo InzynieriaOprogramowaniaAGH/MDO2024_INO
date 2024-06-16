@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mynode-deployment
+  labels:
+    app: mynode
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: mynode
+  template:
+    metadata:
+      labels:
+        app: mynode
+    spec:
+      containers:
+      - name: mynode
+        image: jladz/node-deploy:2.0
+        ports:
+        - containerPort: 80
