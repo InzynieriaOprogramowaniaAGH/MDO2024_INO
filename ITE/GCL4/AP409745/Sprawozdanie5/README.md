@@ -50,5 +50,21 @@ docker push [repozytorium]
 
 Następnie testuję czy uda się uruchomić obraz ściągająć z DockerHub'a. Kontener się uruchamia i nie zamyka i można odwiedzić witrynę.
 `docker run -d --rm -p 80:80 --name nginx-dockerhub apiotrow/nginx-img:0.1`
-![alt text](image.png)
-![alt text](image-1.png)
+![alt text](images/image9.png)
+![alt text](images/image10.png)
+
+## Uruchamianie oprogramowania
+
+Następnie należało uruchomić kontener na stosie k8s. W tym celu użyłem wcześniej zamieszczonych danych z DockerHub'u.
+
+W tym celu uruchomiłem pod z obrazem, wyeksponowałem jego port 80, a nastepnie zforwardowałem go na port 2133 maszyny. Dzięki temu możliwy był dostęp do strony zawartej w podzie.
+
+```
+kubectl run kube-nginx-01 --image=apiotrow/nginx-img:0.1 --port=80 --labels app=kube-nginx-01
+kubectl expose pod kube-nginx-01 --port=80 --target-port=80 --name=kube-nginx-01
+kubectl port-forward pod/kube-nginx-01 2133:80
+```
+![alt text](images/image11.png)
+![alt text](images/image14.png)
+![alt text](images/image13.png)
+![alt text](images/image12.png)
