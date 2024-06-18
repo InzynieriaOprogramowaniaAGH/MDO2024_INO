@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h1>Welcome to my Website!</h1>
+  <h2>This is version 2 of the website!</h2>
+  <p>This is a simple web app running in an Nginx container.</p>
+  <p>The current date and time is: <span id="datetime"></span></p>
+
+  <script>
+    function updateDateTime() {
+      const now = new Date();
+      
+      const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const dayOfWeek = daysOfWeek[now.getDay()];
+      
+      const date = now.toLocaleDateString();
+      const time = now.toLocaleTimeString();
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      
+      document.getElementById('datetime').textContent = `${dayOfWeek}, ${date}, ${time} (${timeZone})`;
+    }
+
+    updateDateTime();
+    setInterval(updateDateTime, 1000); // Update the time every second
+  </script>
+</body>
+</html>
