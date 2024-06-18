@@ -618,21 +618,12 @@ spec:
 ![](screeny/60.png)
 
 Obserwacje i różnice
-Recreate:
 
-Wszystkie stare pody są usuwane przed utworzeniem nowych.
-Możliwe przestoje, ale proste w implementacji.
-Użyteczne, gdy stara i nowa wersja aplikacji nie mogą działać jednocześnie.
-Rolling Update:
+Strategia wdrożenia Recreate ma kilka zalet i wad. Zaletą jest prosta implementacja oraz brak problemów z kompatybilnością między starą a nową wersją, ponieważ nie są uruchomione jednocześnie. Jednak ta strategia ma również wady, takie jak przestój w czasie wdrożenia oraz niekorzystność dla aplikacji wymagających wysokiej dostępności.
 
-Nowe pody są stopniowo dodawane, a stare są usuwane.
-Minimalne przestoje, bardziej złożona kontrola nad aktualizacją.
-Parametry maxUnavailable i maxSurge umożliwiają precyzyjne sterowanie procesem aktualizacji.
-Canary Deployment:
+Rolling Update to strategia, która minimalizuje przestoje i zapewnia ciągłość działania aplikacji podczas wdrożenia. Umożliwia testowanie nowej wersji bez całkowitego wyłączenia starej, a także szybkie wycofanie się w przypadku problemów. Wadą tej strategii jest dłuższy czas wdrożenia w porównaniu do Recreate oraz złożoność w zarządzaniu wersjami i potencjalne problemy z kompatybilnością.
 
-Nowa wersja jest wdrażana tylko na część instancji.
-Możliwość testowania nowej wersji z mniejszym ryzykiem.
-Większa złożoność w zarządzaniu, wymaga więcej zasobów (oddzielne Deploymenty i Service'y).
+Canary Deployment zmniejsza ryzyko wprowadzenia błędnej wersji do wszystkich użytkowników, pozwala testować nową wersję w rzeczywistym środowisku z minimalnym wpływem na użytkowników oraz umożliwia szybkie wykrycie problemów i wycofanie nowej wersji przed pełnym wdrożeniem. Jednak ta strategia jest bardziej złożona w implementacji, wymaga dokładnego monitorowania i automatyzacji, a także może wymagać utrzymania równoległych ścieżek dostępu dla różnych wersji.
 
 Używanie etykiet
 Wszystkie powyższe strategie używają etykiet do selekcji odpowiednich podów. To pozwala na bardziej precyzyjne zarządzanie wdrożeniami i serwisami. W przypadku wieloma replikami, serwisy mogą kierować ruch do odpowiednich podów na podstawie etykiet.
