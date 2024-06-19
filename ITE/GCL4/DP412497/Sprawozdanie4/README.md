@@ -12,8 +12,6 @@ Celem tych ćwiczeń było zapoznanie się ze zdalnym zarządzaniem korzystając
 ## Wykonane zadanie - Lab 008
 ---
 
-![ss](./ss/ss01.png)
-
 
 ### Instalacja zarządcy Ansible
 * Utwórz drugą maszynę wirtualną o **jak najmniejszym** zbiorze zainstalowanego oprogramowania
@@ -26,32 +24,86 @@ Instalujemy wszystko komendą:
 sudo dnf install -y tar openssh-server
 ```
 
+![ss](./ss/ss01.png)
+
   * Nadaj maszynie *hostname* `ansible-target`
 ```
 sudo hostnamectl set-hostname ansible-target
 ```
+Ustawiamy maszynie ustalony hostname. Sprawdzamy go przez wywołanie
+```
+hostname
+```
+
+![ss](./ss/ss02.png)
 
   * Utwórz w systemie użytkownika `ansible`
-> Użytkownika `ansible` utworzyliśmy w trakcie instalacji systemu.
+> Użytkownika `ansible` utworzyliśmy już w trakcie instalacji systemu, więc profil jest gotowy do działania.
 
   * Zrób migawkę maszyny (i/lub przeprowadź jej eksport)
 Korzystając z funkcjonalności VirtualBoxa, robimy migawkę naszej maszyny.
+
+![ss](./ss/ss03.png)
 
 * Na głównej maszynie wirtualnej (nie na tej nowej!), zainstaluj [oprogramowanie Ansible](https://docs.ansible.com/ansible/latest/installation_guide/index.html), najlepiej z repozytorium dystrybucji
 Na głównej maszynie instalujemy oprogramowanie Ansible zgodnie z powyższą instrukcją.
 
 * Wymień klucze SSH między użytkownikiem w głównej maszynie wirtualnej, a użytkownikiem `ansible` z nowej tak, by logowanie `ssh ansible@ansible-target` nie wymagało podania hasła
+Najpierw w pliku `etc/hosts` dodajemy nazwę dla ip naszej nowej maszyny
 
+![ss](./ss/ss04.png)
 
+Następnie tworzymy i wymieniamy klucze.
+```
+ssh-keygen -t rsa -b 4096
+ssh-copy-id -i ~/.ssh/id_rsa ansible@ansible-target
+ssh-copy-id -i ~/.ssh/id_rsa DanPer@fedora
+```
+> Wymieniamy klucze ze swoją maszyną z powodu zaistniałego problemu z korzystaniem z później tworzonego pliku `.ini`
+
+![ss](./ss/ss05.png)
+
+Jak widać wszystko wykonano prawidłowo. Po wywołaniu ssh na nową maszynę nie została wyświetlona prośba o hasło.
 
 ### Inwentaryzacja
 * Dokonaj inwentaryzacji systemów
   * Ustal przewidywalne nazwy komputerów stosując `hostnamectl`
+  ```
+  # Dla głownej maszyny
+  sudo hostnamectl set-hostname fedora
+
+  # Dla nowej maszyny
+  sudo hostnamectl set-hostname ansible-target
+  ```
+
   * Wprowadź nazwy DNS dla maszyn wirtualnych, stosując `systemd-resolved` lub `resolv.conf` i `/etc/hosts` - tak, aby możliwe było wywoływanie komputerów za pomocą nazw, a nie tylko adresów IP
+> Stosowanie nazw zostało wprowadzone powyżej przy wymianie kluczy.
+
   * Zweryfikuj łączność
+
+![ss](./ss/ss06.png)
+
   * Stwórz [plik inwentaryzacji](https://docs.ansible.com/ansible/latest/getting_started/get_started_inventory.html)
+Tworzymy nowy plik `inventory.ini`
+
   * Umieść w nim sekcje `Orchestrators` oraz `Endpoints`. Umieść nazwy maszyn wirtualnych w odpowiednich sekcjach
+Uzupełniamy plik inwentaryzacji wedle instrukcji.
+```
+[Orchestrators]
+fedora ansible_user=DanPer
+
+[Endpoints]
+ansible-target ansible_user=ansible
+```
+> Dodaliśmy też nazwy użytkowników których ma dotyczyć na maszynach
+
   * Wyślij żądanie `ping` do wszystkich maszyn
+```
+ansible -i inventory.ini all -m ping
+```
+
+![ss](./ss/ss07.png)
+
 * Zapewnij łączność między maszynami
   * Użyj co najmniej dwóch maszyn wirtualnych (optymalnie: trzech)
   * Dokonaj wymiany kluczy między maszyną-dyrygentem, a końcówkami (`ssh-copy-id`)
@@ -105,7 +157,7 @@ Pobieramy nasz plik odpowiedzi `/root/anaconda-ks.cfg`, który lekko zmodyfikuje
   * `repo --name=update --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f38&arch=x86_64`
 * Plik odpowiedzi może zakładać pusty dysk. Zapewnij, że zawsze będzie formatować całość, stosując `clearpart --all`
 
-Ustawiamy formatowanie całego dysku korzystając z `clearpart --all`, oraz dodajemy wzmianki na temat repo dla naszego systemu. W naszym przypadku:
+Ustawiamy formatowanie całego dysku korzystając z `clearpart --all`, oraz dodajemy wzmianki na temat repo dla naszego systemu. W naszym przypadku z fedorą 39:
   * `url --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-39&arch=x86_64`
   * `repo --name=update --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f39&arch=x86_64`
 
