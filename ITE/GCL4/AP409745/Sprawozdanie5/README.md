@@ -199,7 +199,7 @@ spec:
 ```
 - Recreate
 
-Strategia Recreate polega na usunięciu wszystkich istniejących podów, zanim zaczniemy tworzyć nowe. Pozwala nam to upenić się, że nie pozostanie żaden pod z poprzedniej wersji. Jest to przydatne w pozbyciu się pewnego zjawiska które zaobserwowałem - otóz podczas próby redukcji ilości podów, jeśli nowe zacznązwracać błędy, to Kubernetes skupi się na ich ciągłym restartowaniu, pozwalając pod'ow z poprzedniego deploymentu nadal pracować.
+Strategia Recreate polega na usunięciu wszystkich istniejących podów, zanim zaczniemy tworzyć nowe. Pozwala nam to upenić się, że nie pozostanie żaden pod z poprzedniej wersji. Jest to przydatne w pozbyciu się pewnego zjawiska które zaobserwowałem - otóz podczas próby redukcji ilości podów, jeśli nowe zacznązwracać błędy, to Kubernetes skupi się na ich ciągłym restartowaniu, pozwalając pod'ow z poprzedniego deploymentu nadal pracować, co widać na poniższym zdjęciu.
 ![alt text](images/image30.png)
 ![alt text](images/image33.png)
 - Rolling Update (z parametrami `maxUnavailable` > 1, `maxSurge` > 20%)
@@ -208,3 +208,5 @@ Ten typ wdrożenia dokonuje się powoli, wymieniając pody starej generacji na n
 ![alt text](images/image32.png)
 ![alt text](images/image31.png)
 
+- Canary Deployment 
+Ten typ wdrożenia polega na wdrożeniu nowej wersji dla pewnego pewnego zbioru użytkowników, a nie dla ich całości. Pozwala to przetestować jej funkcjonalność na mniejszej liczbie urządzeń, zamiast powodować całkowity rollout zmian.
