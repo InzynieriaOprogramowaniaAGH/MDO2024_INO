@@ -104,10 +104,6 @@ ansible -i inventory.ini all -m ping
 
 ![ss](./ss/ss07.png)
 
-* Zapewnij łączność między maszynami
-  * Użyj co najmniej dwóch maszyn wirtualnych (optymalnie: trzech)
-  * Dokonaj wymiany kluczy między maszyną-dyrygentem, a końcówkami (`ssh-copy-id`)
-  * Upewnij się, że łączność SSH między maszynami jest możliwa i nie potrzebuje haseł
   
 ### Zdalne wywoływanie procedur
 Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started/get_started_playbook.html) Ansible:
@@ -117,7 +113,68 @@ Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started
   * Zaktualizuj pakiety w systemie
   * Zrestartuj usługi `sshd` i `rngd`
   * Przeprowadź operacje względem maszyny z wyłączonym serwerem SSH, odpiętą kartą sieciową
+
+Z pomocą instrukcji przygotowujemy plik `playbook.yaml` :
+
+```
+- name: Ping all
+  hosts: all
+  tasks:
+   - name: Ping my hosts
+     ansible.builtin.ping:
+
+- name: Copying
+  hosts: Endpoints
+  remote_user: ansible
+  tasks:
+   - name: Copy ini
+     copy:
+      src: ./inventory.ini
+      dest: /home/ansible/
+
+- name: Update packages
+  hosts: Endpoints
+  remote_user: ansible
+  tasks:
+   - name: update
+     ansible.builtin.dnf:
+      name: "*"
+      state: latest
+     become: true
+
+- name: Restart ssh deamon
+  hosts: Endpoints
+  become: true
+  tasks:
+  - name: Use systemd to restart running sshd deamon
+    systemd:
+      name: sshd
+      state: restarted
+```
+
+`Playbook` składa się z listy `play'i` czyli zadań do wykonania, dla określonych hostów.
+> Zadanie aktualizacji pakietów potrzebowało uprawnień root'a. \
+Do wykonania tego użyliśmy `become: true`, oraz do uzyskania hasła dla wykonywanego polecenia z rootem do komendy wywołania playbooka dodajemy `--ask-become-pass`
+
+```
+ansible-playbook -i inventory.ini playbook.yaml --ask-become-pass
+```
+
+![ss](./ss/ss08.png)
+
+Następnie uruchamiamy playbook ponownie.
+
+![ss](./ss/ss09.png)
+
+Po ponownym uruchomieniu w wyjściu jest "ok" zamiast "changed", wynika to z faktu że plik który kopiujemy już znajduje się na miejscu. Oznacza to że można korzystać z pliku wielokrotnie bez przejmowania się o błąd związany z wielokrotnym kopiowaniem tych samych plików.
+
+Po sprawdzeniu wszystkiego ostatnie czego nam brakuje to testu przy wyłączonej usłudze ssh.
+
+![ss](./ss/ss10.png)
+
+Jak widać wyjściem jest status 'unreachable', czyli maszyna jest nieosiągalna.
   
+
 ### Zarządzanie kontenerem
 Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started/get_started_playbook.html) Ansible:
 * Wykonaj, w zależności od dostępności obrazów:
@@ -132,7 +189,6 @@ Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started
   * Zatrzymaj i usuń kontener
 * Ubierz powyższe kroki w [*rolę*](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html), za pomocą szkieletowania `ansible-galaxy`
   
-
 
 
 
