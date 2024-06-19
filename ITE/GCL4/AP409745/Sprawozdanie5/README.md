@@ -102,3 +102,109 @@ Wdrażanie deploymentu odbyło się przy pomocy komendy `kubectl apply -f [plik.
 ![alt text](images/image16.png)
 
 ## Budowa nowego obrazu
+
+Przygotowałem również dwa kolejne obrazy - jeden, zawierający domyślną konfiguracją NGINX (nginx-alt) oraz taki, który zwraca błąd (nginx-alt-negative). Otagowałem je odpowienio jako 'alt' oraz 'neg' i wstawiłem na DockerHub'a.
+![alt text](images/image17.png)
+
+## Zmiany w Deploymencie
+Następnie zaczęłem pracę nad monitorowaniem zachowania przy zmianach w deploymencie, zmiany polegały na zmianach liczby replik oraz wersji używanych obrazów.
+
+- 8 replik
+![alt text](images/image18.png)
+
+- redukcja do 1 repliki
+![alt text](images/image19.png)
+
+- redukcja do 0 replik - deployment nadal istnieje, ale nie zawiera żadnych podów
+![alt text](images/image20.png)
+![alt text](images/image25.png)
+
+- zmiana na nowszy obraz
+![alt text](images/image22.png)
+![alt text](images/image23.png)
+
+- zmiana na fałszywy obraz - część się zmieniła swój obraz ale wystąpił error (CrashLoopBackOff), część nie zmieniła. W przypadku uruchomienia deploymentu od zera wszystkie niepomyślnie zakończyły działanie z powodu błędu. Kubernetes próbuje je restartować, aż uda się im pomyśłnie uruchomić.
+![alt text](images/image24.png)
+![alt text](images/image26.png)
+
+- powrót do starego deploymentu - przy użyciu `kubectl rollout history` możemy sprawdzić historię poprzednich deploymentów, oraz powód ich zmiany. Wrócenie do poprzedniego rollout'u dokonujemy przez `kubectl rollout undo deployment/[deployment-name]` w przypadku braku specyfikacji deploymentu i pojedyńczego deploymentu, cofnięty zostanie istniejący deployment. Możliwa jest też specyfikacja dokładnie do której rewizji chcemy się wrócić poprzez `kubectl rollout undo deployment/[deployment-name] --to-revision=[numer]`
+![alt text](images/image21.png)
+![alt text](images/image27.png)
+![alt text](images/image28.png)
+
+## Kontrola wdrożenia
+Najpierw napisałem skrypt bash, który pozwalał uruchomić określone wdrożenie z podanego pliku oraz podawał aktualny stan. W przypadku gdy skrypt wykonywał się ponad minutę, podawał on błąd. W celu testowym wykonałem go na dwóch wdrożeniach - błędnym i tym z 8 replikami.
+
+```bash
+#!/bin/bash
+
+DEPLOYMENT_NAME="nginx-deployment"
+TIMEOUT=60
+INTERVAL=10
+
+# alias
+kubectl() {
+  minikube kubectl -- "$@"
+}
+
+# IF no arugment - EXIT
+if [ -z "$1" ]; then
+  echo "ERR: $0 skrypt powinnien miec arugment"
+  exit 1
+fi
+
+DEPLOYMENT_FILE=$1
+
+# Apply deployment
+kubectl apply -f $DEPLOYMENT_FILE
+
+start_time=$(date +%s)
+
+for (( i=0; i<TIMEOUT; i+=INTERVAL )); do
+  current_time=$(date +%s)
+  elapsed_time=$((current_time - start_time))
+  elapsed_formatted=$(date -u -d @$elapsed_time +%H:%M:%S)
+
+  echo "In Progress - Time Passed: $elapsed_formatted"
+  
+  READY_PODS=$(kubectl get deployment $DEPLOYMENT_NAME -o jsonpath='{.status.readyReplicas}')
+  TOTAL_PODS=$(kubectl get deployment $DEPLOYMENT_NAME -o jsonpath='{.status.replicas}')
+  
+  if [[ "$READY_PODS" -eq "$TOTAL_PODS" ]]; then
+    echo "Wdrożenie SUCCESSFUL"
+    echo "Time spent: $elapsed_formatted"
+    exit 0
+  fi
+  
+  sleep $INTERVAL
+done
+
+elapsed_time=$(( $(date +%s) - start_time ))
+elapsed_formatted=$(date -u -d @$elapsed_time +%H:%M:%S)
+
+echo "ERR: spent to much time: $elapsed_formatted."
+exit 1
+
+```
+![alt text](images/image29.png)
+
+Jak widać, wdrożenie "z błędem" spowodowało, że skrypt zakończył się zwracając informację o przekroczeniu limitu czasowego, jest to spowodowane tym, że pod'y cały czas kończyły się w stanie 'FAILED', a następnie się resetowały i nigdy nie ilość gotowych nie osiagała ilości docelowej. W przypadku wdrożenia z 8 replikami, skrpyt monitorujący zakończył się pomyślnie, gdyż nie napotkał żadnych problemów.
+
+## Strategie
+Strategie Tworzymy poprzez ich specyfikację w części spec pliku yaml. Przykładowo
+```
+spec:
+  strategy:
+    type: [typ strategii]
+```
+- Recreate
+
+Strategia Recreate polega na usunięciu wszystkich istniejących podów, zanim zaczniemy tworzyć nowe. Pozwala nam to upenić się, że nie pozostanie żaden pod z poprzedniej wersji. Jest to przydatne w pozbyciu się pewnego zjawiska które zaobserwowałem - otóz podczas próby redukcji ilości podów, jeśli nowe zacznązwracać błędy, to Kubernetes skupi się na ich ciągłym restartowaniu, pozwalając pod'ow z poprzedniego deploymentu nadal pracować.
+![alt text](images/image30.png)
+![alt text](images/image33.png)
+- Rolling Update (z parametrami `maxUnavailable` > 1, `maxSurge` > 20%)
+
+Ten typ wdrożenia dokonuje się powoli, wymieniając pody starej generacji na nowe. Pozwala to zminimalizować problem z nagłą redukcją działających serwisów. Dzięki parametrom `maxUnaviable` i `maxSurge` możemy kontrolować tempo tej wymiany
+![alt text](images/image32.png)
+![alt text](images/image31.png)
+

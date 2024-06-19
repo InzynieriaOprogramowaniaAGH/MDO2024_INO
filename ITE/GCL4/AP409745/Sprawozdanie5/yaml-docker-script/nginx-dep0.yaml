@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: kube-nginx
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: kube-nginx
+  template:
+    metadata:
+      labels:
+        app: kube-nginx
+    spec:
+      containers:
+      - name: nginx-img
+        image: apiotrow/nginx-img:0.1
+        ports:
+        - containerPort: 80
+          protocol: TCP
