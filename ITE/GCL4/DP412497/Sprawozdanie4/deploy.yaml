@@ -3,13 +3,13 @@
   tasks:
     - name: Pull image
       docker_image:
-        name: my-nginx
+        name: kogucik1519/my-nginx:0.1
         source: pull
     
     - name: Run
       docker_container:
         name: node
-        image: my-nginx
+        image: kogucik1519/my-nginx:0.1
         state: started
         interactive: yes
         tty: yes
