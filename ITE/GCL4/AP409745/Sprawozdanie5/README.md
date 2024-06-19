@@ -210,3 +210,4 @@ Ten typ wdrożenia dokonuje się powoli, wymieniając pody starej generacji na n
 
 - Canary Deployment 
 Ten typ wdrożenia polega na wdrożeniu nowej wersji dla pewnego pewnego zbioru użytkowników, a nie dla ich całości. Pozwala to przetestować jej funkcjonalność na mniejszej liczbie urządzeń, zamiast powodować całkowity rollout zmian.
+![alt text](images/image33.png)
