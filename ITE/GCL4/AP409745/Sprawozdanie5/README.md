@@ -57,7 +57,7 @@ Następnie testuję czy uda się uruchomić obraz ściągająć z DockerHub'a. K
 
 Następnie należało uruchomić kontener na stosie k8s. W tym celu użyłem wcześniej zamieszczonych danych z DockerHub'u.
 
-W tym celu uruchomiłem pod z obrazem, wyeksponowałem jego port 80, a nastepnie zforwardowałem go na port 2133 maszyny. Dzięki temu możliwy był dostęp do strony zawartej w podzie.
+W tym celu uruchomiłem pod z obrazem, wyeksponowałem jego port 80, a nastepnie zforwardowałem go na port 2133 maszyny. Dzięki temu możliwy był dostęp do strony zawartej w podzie z poziomu zewnętrznej przeglądarki.
 
 ```
 kubectl run kube-nginx-01 --image=apiotrow/nginx-img:0.1 --port=80 --labels app=kube-nginx-01
@@ -68,3 +68,37 @@ kubectl port-forward pod/kube-nginx-01 2133:80
 ![alt text](images/image14.png)
 ![alt text](images/image13.png)
 ![alt text](images/image12.png)
+
+## Automatyzacja wdrożenia przy pomocy plików YAML
+
+W celu automatyzacji wdrożenia, stworzyłem plik YAML zawierający specyfikację wdrożenia. Tworzył on cztery repliki z otwartym portem 80.
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: kube-nginx
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: kube-nginx
+  template:
+    metadata:
+      labels:
+        app: kube-nginx
+    spec:
+      containers:
+      - name: nginx-img
+        image: apiotrow/nginx-img:0.1
+        ports:
+        - containerPort: 80
+          protocol: TCP
+```
+Wdrażanie deploymentu odbyło się przy pomocy komendy `kubectl apply -f [plik.yaml]`, a następnie sprawdzenia statusu przez `kubectl rollout status`
+![alt text](images/image15.png)
+![alt text](images/image16.png)
+
+## Budowa nowego obrazu
