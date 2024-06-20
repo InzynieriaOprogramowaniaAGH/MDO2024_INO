@@ -365,3 +365,4 @@ Instalator posiadając wszystkie potrzebne odpowiedzi dotyczących instalacji ro
 
 ![ss](./ss/ss16.png)
 
+Po zakończonej instalacji logujemy się i sprawdzamy czy nasz kontener jest uruchomiony.
