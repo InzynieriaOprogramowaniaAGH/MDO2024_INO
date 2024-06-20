@@ -1,8 +1,8 @@
-#CEL LABORATOIRUM
+# CEL LABORATOIRUM
 
 Celem laboratorium było stworzenie „rurociągu” wybranego repo w Jenkinsie by na jego końcu powstał artefakt gotowy do wdrożenia.
 
-#PRZYGOTOWANIE
+# PRZYGOTOWANIE
 
 By móc stworzyć rurociąg musiałam na początku przygotować swoje środowisko do pracy. Pierwszym elementem było pobranie Jenkinsa. Jest jednym z narzędzi CI/CD. To otwarty serwer automatyzujący, umożliwiający wykonania serii działań takich jak budowanie, testowanie i wdrożenie oprogramowania by osiągnąć proces ciągłej integracji. Serwer posiada interfejs graficzny więc jest niezwykle prosty w obsłudze. 
 By mieć pewność że odpowiednio konfiguruję serwer, który w tym przypadku ma działać w kontenerze Dockera, wykonywałam krok po kroku instrukcję z oficjalnej strony Jenkinsa.
@@ -45,7 +45,7 @@ Skonfigurowany Jenkins ma bardzo prosty i czytelny interfejs graficzny po który
  ![image](https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/assets/95193381/8ceb1485-0dad-43e6-ac5e-e5ca03055b1e)
 
 
-#URUCHOMIENIE
+# URUCHOMIENIE
 
 Po uruchomieniu serwera i pomyślnym zalogowaniu się przystąpiłam do sprawdzenia poprawności jego działania. Do tego celu stworzyłam trzy bardzo proste projekty.
 1.	Uname
@@ -106,7 +106,7 @@ Większość przebiegła prawidłowo build jednak nie przebiegł prawidłowo. Kl
 Wygląda jednak na to, że Docker bez problemu dogaduje się z Jenkinsem co jest ważne w kontekście wykonania kolejnego, głównego pipeline.
 
 
-#PIPELINE
+# PIPELINE
 
 Pipeline, zwany również potokiem jest zestawem automatycznych procesów umożliwiających wykonanie określonego zestawu zadań. Jest stosowany do opisywania procesu budowania, testowania i wdrażania projektu. Zautomatyzowanie pracy pipelinem prowadzi do między innymi szybszych cykli wydawniczych, lepszej jakości kodu i ułatwienia zarządzania projektem.
 W tej części sprawozdania należało stworzyć Pipeline dla wybranego repozytorium przechodzący przez etapy: build, test, deploy i publish.
