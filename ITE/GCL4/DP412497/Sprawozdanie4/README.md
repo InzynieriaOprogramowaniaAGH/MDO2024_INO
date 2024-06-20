@@ -200,7 +200,7 @@ Następnie przygotowujemy nowy playbook, który posłuży nam do pobrania i uruc
 
 Gotowy playbook uruchamiamy
 ```
-ansible-playbook -i inventory.ini playbook.yaml
+ansible-playbook -i inventory.ini deploy.yaml
 ```
 
 ![ss](./ss/ss11.png)
@@ -213,6 +213,38 @@ pip3 install requests
 ```
 
 I próbujemy ponownie
+
+![ss](./ss/ss12.png)
+
+Sprawdzamy czy wszystko działa poprawnie na naszej maszynie, czyli czy obrał się obraz i uruchomił z niego kontener z aplikacją
+```
+docker ps
+```
+
+![ss](./ss/ss13.png)
+
+Ostatnim punktem jest przypisanie naszych kroków w *roli*
+```
+ansible-galaxy init nginx_role
+```
+
+Dzięki tej komendzie stworzyła nam się cała struktura roli.
+Do pliku `tasks/main.yml` wklejamy zadania z naszego playbook'a.
+
+Aby wykorzystać naszą rolę, korzystamy z prostego playbook'a korzystającego z roli
+```
+- name: Apply roles
+  hosts: Endpoints
+  roles:
+    - nginx_role
+```
+
+I uruchamiamy go dla testu
+```
+ansible-playbook -i inventory.ini n_role.yml
+```
+
+Jak widać wszystko działa.
 
 
 ## Wykonane zadanie - Lab 009
