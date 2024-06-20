@@ -1,6 +1,7 @@
 - name: Deploy
   hosts: Endpoints
   tasks:
+
     - name: Pull image
       docker_image:
         name: kogucik1519/my-nginx:0.1

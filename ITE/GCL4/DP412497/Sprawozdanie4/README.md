@@ -189,8 +189,30 @@ Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started
   * Zatrzymaj i usuń kontener
 * Ubierz powyższe kroki w [*rolę*](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html), za pomocą szkieletowania `ansible-galaxy`
   
+Jako pierwszy krok zainstalujemy Docker'a na naszej nowej maszynie
+```
+sudo dnf install -y docker
+```
 
+Następnie przygotowujemy nowy playbook, który posłuży nam do pobrania i uruchomienia naszej aplikacji.
+```
+```
 
+Gotowy playbook uruchamiamy
+```
+ansible-playbook -i inventory.ini playbook.yaml
+```
+
+![ss](./ss/ss11.png)
+
+Jak widzimy wyskoczy nam błąd powiązany z brakiem modułu requests na naszej maszynie.
+Naprawiamy to instalując potrzebny moduł.
+```
+sudo dnf install python3-pip -y
+pip3 install requests
+```
+
+I próbujemy ponownie
 
 
 ## Wykonane zadanie - Lab 009
