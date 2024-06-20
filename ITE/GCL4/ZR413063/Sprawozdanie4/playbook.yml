@@ -1,0 +1,34 @@
+---
+- hosts: all
+  tasks:
+    - name: Wyślij żądanie ping do wszystkich maszyn
+      ping:
+
+    - name: Skopiuj plik inwentaryzacji na maszyny/ę Endpoints
+      copy:
+        src: /home/zuza/lab8/inventory.yml
+        dest: /home/ansible/nowy
+
+    - name: Ponów operację, porównaj różnice w wyjściu
+      command: diff /home/ansible/nowy /home/zuza/lab8/inventory.yml
+      register: diff_output
+      changed_when: diff_output.stdout != ""
+
+    - name: Wyświetl różnice
+      debug:
+        var: diff_output.stdout_lines
+
+    - name: Zaktualizuj pakiety w systemie
+      apt:
+        upgrade: yes
+        update_cache: yes
+      become: yes
+
+    - name: Zrestartuj usługi sshd i rngd
+      service:
+        name: "{{ item }}"
+        state: restarted
+      with_items:
+        - sshd
+      become: yes
+...

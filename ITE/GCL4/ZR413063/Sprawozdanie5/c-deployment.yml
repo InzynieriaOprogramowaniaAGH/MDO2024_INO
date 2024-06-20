@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-canary
+spec:
+  replicas: 8
+  selector:
+    matchLabels:
+      app: nginx
+  strategy:
+    type: Canary
+    canary:
+      maxSurge: 20%
+      steps:
+      - setWeight: 10
+        pause: { duration: 60s }
+      - setWeight: 40
+        pause: { duration: 60s }
+      - setWeight: 100
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
