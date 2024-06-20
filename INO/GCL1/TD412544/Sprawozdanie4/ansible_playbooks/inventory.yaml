@@ -1,0 +1,13 @@
+all:
+  children:
+    Orchestrators:
+        hosts:
+            ubuntu-server:
+              ansible_host: ubuntu-server.lan
+              ansible_user: ullei
+
+    Endpoints:
+        hosts:
+            ansible-target:
+              ansible_host: ansible-target.lan
+              ansible_user: ansible

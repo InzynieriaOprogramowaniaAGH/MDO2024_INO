@@ -1,0 +1,5 @@
+- name: Run Roles
+  hosts: Endpoints
+  roles:
+    - docker_setup
+    - container_shenaningans

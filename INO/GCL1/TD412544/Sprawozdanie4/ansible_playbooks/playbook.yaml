@@ -1,0 +1,42 @@
+- name: All machines
+  hosts: all
+  tasks:
+    - name: Ping all machines
+      ansible.builtin.ping:
+
+
+- name: Endpoints
+  hosts: Endpoints  
+  tasks:
+    - name: Create inventory folder
+      file:
+        path: ~/inventory
+        state: directory
+
+    - name: Initial inventory copy
+      copy:
+        src: ~/MDO2024_INO/INO/GCL1/TD412544/Sprawozdanie4/ansible_test/inventory.yaml
+        dest: ~/inventory/inventory.yaml
+
+    - name: Second inventory copy
+      copy:
+        src: ~/MDO2024_INO/INO/GCL1/TD412544/Sprawozdanie4/ansible_test/inventory.yaml
+        dest: ~/inventory/inventory.yaml
+
+    - name: Update packages
+      become: true         # become skutkuje przyjęciem uprawnień roota (wywołaniem polecenia przez sudo)
+      ansible.builtin.apt: # builtin apt pozwala na prace z zainstalowanymi pakietami
+          name: "*"        # wskazuje pakiety
+          state: latest    # latest gwaratuje ze stan wskazanych pakietów to najnowsza wersja 
+
+    - name: Restart ssh
+      become: true
+      ansible.builtin.service: # builtin service pozwala na pracę z uruchomionymi usługami
+          name: ssh
+          state: restarted     # oczekujemy na stan restarted - wymuszamy wyłączenie i włączenie
+
+    - name: Restart rng-tools
+      become: true
+      ansible.builtin.service:
+          name: rng-tools
+          state: restarted 
