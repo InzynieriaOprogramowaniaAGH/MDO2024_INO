@@ -224,10 +224,10 @@ Kubectl rollout history deployment/nginx-deployment-new
 Komendy te świetnie działają w przypadku próby podglądu jak radziły sobie wcześniejsze wersje obrazu lub gdy chcemy się cofnąć z nowo deployowanego obrazu gdyż na przykład posiad błędy.
 
 # KONTROLA WDROŻENIA
-By skontrlować czy wdrożenie jest się w satnie wykonać w mnij niż minutę napisałam skrypt w Bashu:
- 
+By skontrolować czy wdrożenie jest się w satnie wykonać w mniej niż minutę napisałam skrypt w Bashu:
+(Od tego momentu niestety nie wiem czemu nie byłam w stanie wstawić reszty przygotowanych screenów) 
 
-By go uruchomić najpierw musiała usunąć plik blokady:
+By go uruchomić najpierw musiałam usunąć plik blokady:
 ```
 Rm file_lock
 ```
@@ -251,4 +251,4 @@ Skrypty i ich wyniki dla różnych wdrożeń:
  
  
 Strategia Canary nie jest obsługiwana bezpośrednio w elemencie Deployment. Wdrożenie tego typu można uzyskać tworząc wiele wdrożeń z różnymi wagami dla dystrybucji ruchu.
-Wymienione wyżej strategie wdrażania oprogramowania różnią się od siebie przede wszystkim tym jak i ile podów na raz jest włączonych/wyłączonych. Każda ze strategii znajdzie swoje rmiejsce w zależności od tego do czego dążymy z wdrożeniem naszej aplikacji.
+Wymienione wyżej strategie wdrażania oprogramowania różnią się od siebie przede wszystkim tym jak i ile podów na raz jest włączonych/wyłączonych. Każda ze strategii znajdzie swoje zastosowanie w zależności od tego do czego dążymy z wdrożeniem naszej aplikacji.
