@@ -1,0 +1,21 @@
+services:
+  builder:
+    build:
+      context: .
+      dockerfile: builder.Dockerfile
+    image: builder:0.1
+    container_name: builder
+
+    restart: 'no'
+
+  tester:
+    build:
+      context: .
+      dockerfile: tester.Dockerfile
+    image: tester:0.1
+    container_name: tester
+
+    depends_on:
+      - builder
+    
+    restart: 'no'

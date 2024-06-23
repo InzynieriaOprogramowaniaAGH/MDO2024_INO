@@ -1,0 +1,37 @@
+services:
+  jenkins:
+    container_name: jenkins
+    image: jenkins/jenkins
+    ports:
+      - "8080:8080"
+    volumes:
+      - jenkins_data:/var/jenkins_home
+    networks:
+      - jenkins
+    command: bash -c "apt-get update && apt-get install -y docker.io docker-compose && /sbin/tini -- /usr/local/bin/jenkins.sh"
+
+  docker:
+    container_name: docker
+    image: docker:stable-dind
+    volumes:
+      - jenkins_data:/var/jenkins_home
+    networks:
+      - jenkins
+    depends_on:
+      - jenkins
+
+  blueocean:
+    container_name: blueocean
+    image: myjenkins-blueocean
+    ports:
+      - "8081:8080"
+    networks:
+      - jenkins
+    depends_on:
+      - jenkins
+
+networks:
+  jenkins:
+
+volumes:
+  jenkins_data:
