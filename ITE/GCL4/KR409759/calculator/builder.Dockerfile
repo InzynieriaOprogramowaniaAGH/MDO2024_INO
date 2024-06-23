@@ -1,8 +1,7 @@
 FROM ubuntu
 
-RUN apt-get update && apt-get install -y gnupg
-
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 871920D1991BC93C
+RUN apt-get update && apt-get install -y gnupg wget && \
+    wget -qO - http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x871920D1991BC93C | apt-key add -
 
 RUN apt-get update && \
     apt-get install -y \
