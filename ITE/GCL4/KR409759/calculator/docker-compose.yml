@@ -3,8 +3,7 @@ services:
     build:
       context: .
       dockerfile: builder.Dockerfile
-    image: builder:0.1
-    container_name: builder
+    image: builder
 
     restart: 'no'
 
@@ -12,8 +11,7 @@ services:
     build:
       context: .
       dockerfile: tester.Dockerfile
-    image: tester:0.1
-    container_name: tester
+    image: tester
 
     depends_on:
       - builder
