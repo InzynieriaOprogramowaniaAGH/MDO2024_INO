@@ -1,0 +1,4 @@
+- name: ApplyRoles
+  hosts: Endpoints
+  roles:
+    - nginx-role

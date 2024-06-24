@@ -1,0 +1,20 @@
+- name: Download NGINX
+  community.docker.docker_image:
+    name: apiotrow/nginx-img
+    tag: "0.1"
+    source: pull
+
+- name: Create Volume
+  community.docker.docker_volume:
+    name: nginx_data
+    state: present
+
+- name: Run NGINX
+  community.docker.docker_container:
+    name: nginx
+    image: apiotrow/nginx-img:0.1
+    state: started
+    ports:
+      - "80:80"
+    volumes:
+      - nginx_data:/usr/share/nginx/html

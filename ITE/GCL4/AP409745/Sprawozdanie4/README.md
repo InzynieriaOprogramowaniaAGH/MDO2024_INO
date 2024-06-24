@@ -47,7 +47,7 @@ Następnie komendą `ansible -i inventory.ini all -m ping` wymusiłem wykonanie 
 
 ![alt text](images/12.png)
 
-# Zdalne Wykonywanie Procedur
+## Zdalne Wykonywanie Procedur
 
 W celu zdalnego wywoływania procedur stowrzyłem playbook Ansible, który: 
 - zpinguje wszystkie maszyny (wykorzystałem do tego wbudowany ping Ansible)
@@ -107,5 +107,91 @@ Po wkonaniu playbook'u zmieniłem go tak, by zawierał tylko operację kopiowani
 
 ![alt text](images/14.png)
 
-Następnie próbowałem uruchomić playbook względem maszyny z wyłączonym serwerem SSH i odpietą kartą sieciową. W tym celu zmieniłem ustawienia maszyny wirutalnej, a następnie wyłączyłem usługę komendą `systemctl disable sshd`.
+Następnie próbowałem uruchomić playbook względem maszyny z wyłączonym serwerem SSH i odpietą kartą sieciową. W tym celu zmieniłem ustawienia maszyny wirutalnej, a następnie wyłączyłem usługę komendą `systemctl disable sshd`. 
 ![alt text](images/15.png)
+![alt text](images/16.png)
+
+W tym wypadku maszyna ansible-target była `unreachable` tj. niemożliwe było połączenie się z nią, a wszystkie zadania jakie miała wykonać zostały pominięte.
+
+## Zarządzanie Kontenerem
+
+Ta część labolatoriów polegała na uruchomieniu kontenera pobranego z DockerHub, podłączeniu storage oraz wyprowadzeniu portu za pomocą playbook'a Ansible. Jako, że artefakt z poprzednich zajęć przyjął formę pakietu RPM, za obraz wybrałem obraz NGINX opracowany w ramach kolejnych labolatoriów (więcej o nim w sprawozdaniu 5).
+
+W tym celu zainstalowałem na maszynie docelowej (ansible-target) Dockera `sudo dnf install docker` i przygotowałem playbook służący do pobrania i uruchomienia aplikacji NGINX `nginx.yaml`
+
+```yaml
+- name: Download and Run Image
+  hosts: Endpoints
+  tasks:
+    - name: Download NGINX
+      community.docker.docker_image:
+        name: apiotrow/nginx-img
+        tag: "0.1"
+        source: pull
+    
+    - name: Run NGINX
+      community.docker.docker_container:
+        name: nginx-img
+        image: apiotrow/nginx-img
+        state: started
+        interactive: yes
+        tty: yes
+```
+
+Pierwsza próba pobrania zakończyła się niepowodzeniem, było to spowodowane faktem, że demon Dockera nie został uruchomiony (załączono go komendą `systemctl start docker`), co uniemożliwiało wykonanie playbook'a. Pobieranie obrazu jest wykonywane właśnie przez Dockera, więc jeśli nie działa to niemożliwym jest pobranie w ten sposób obrazów z DockerHub'a. 
+![alt text](images/17.png)
+
+Po włączeniu go, pojawił się kolejny błąd - brak permisji. Domyślnie Docker potrzebuje poprzedzenia swoich komend przez `sudo` w celu ich wykonania, można ten fakt ominąć poprzez utworzenie nowej grupy `docker` i dodanie do użytkownika. Dzięki temu dostęp do demona jest możliwy bez uprawnień.
+![alt text](images/18.png)
+
+Tym razem udało się pobrać obraz, ale przez brak specyfikacji tagu obrazu, nie udało się pomyślnie uruchomić obrazu. Po małej zmianie, jednak się udało. Warto tutaj zaznaczyć, że status pobrania to `ok` zamiast changed - z faktu że już istnieje pobrany obraz, nie zachodzi potrzeba pobierania go kolejny raz.
+![alt text](images/19.png)
+![alt text](images/20.png)
+
+Teraz gdy miałem pewność, że obraz się pobiera i uruchamia, zmodyfikowałem playbook tak żeby dodatkowo tworzył i podłączał wolumin oraz eksponował port.
+```yaml
+- name: Deploy Nginx Docker Container
+  hosts: Endpoints
+  tasks:
+    - name: Download NGINX
+      community.docker.docker_image:
+        name: apiotrow/nginx-img
+        tag: "0.1"
+        source: pull
+
+    - name: Create Volume
+      community.docker.docker_volume:
+        name: nginx_data
+        state: present
+
+    - name: Run NGINX
+      community.docker.docker_container:
+        name: nginx
+        image: apiotrow/nginx-img:0.1
+        state: started
+        ports:
+          - "80:80"
+        volumes:
+          - nginx_data:/usr/share/nginx/html
+```
+Jak widać, kontener z aplikacją działał z wyeksponowanym portem, a po odpowiednim zforwardowaniu portów, możliwe było nawet połączenie się ze stroną i wyświetlenie przepisu na nachosy. Kontener jak i obraz następnie usunąłem. 
+
+![alt text](images/21.png)
+![alt text](images/22.png)
+
+Ostatnim krokiem było ubranie powyższych kroków w role za pomocą szkieletowania ansible-galaxy. W tym celu komendą `ansible-galaxy init [nazwa]` utworzyliśmy rolę, którą nazwałem nginx-role. Spwodowało to też utworzenie folderu o tej samej nazwie w strukturze folderu w którym się znajdowałem.
+
+![alt text](images/23.png)
+![alt text](images/24.png)
+
+Wewnątrz folderu roli, wewnątrz folderu `tasks` znalazłem plik `main.yaml`, który ma zawierać zadanai do wykonania, przekleiłem tylko zadania zawarte w `nginx.yaml`. 
+W celu skorzystania z tej roli, stworzyłem trzeci playbook `rolebook.yaml`, w którym zdefiniowałem hosty (endpoints) oraz role jakie mają przyjąć (nginx-role).
+```yaml
+- name: ApplyRoles
+  hosts: Endpoints
+  roles:
+    - nginx-role
+```
+Następnie uruchomiłem ten playbook. 
+
+![alt text](images/25.png)
