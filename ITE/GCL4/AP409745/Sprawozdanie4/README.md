@@ -13,14 +13,14 @@ Następnie próbowałem zainstalować OpenSSH oraz program archiwizacyjny TAR, a
 ![alt text](images/2.png)
 ![alt text](images/3.png)
 
-Następnie utworzyłem nowego użytkownika zwanego ansible komendą `adduser [nazwa]`, opatrzyłem go hasłem i przełączyłem się na niego i ztworzyłem migawkę
+Następnie utworzyłem nowego użytkownika zwanego ansible komendą `adduser [nazwa]`, opatrzyłem go hasłem i przełączyłem się na niego i stworzyłem migawkę
 ![alt text](images/4.png)
 ![alt text](images/5.png)
 
 W międzyczasie na głównej maszynie, zainstalowałem oprogramowanie ansible.
 ![alt text](images/6.png)
 
-Następnie wymieniłem klucze SSH pomiędzy użytkownikami obudwu maszyn, tak żeby dalsze logowanei przez SSH nie wymagało podawania haseł.
+Następnie wymieniłem klucze SSH pomiędzy użytkownikami obydwu maszyn, tak żeby dalsze logowanei przez SSH nie wymagało podawania haseł.
 ```
 ssh-keygen -t rsa -b 4096                            # na obydwu maszynach
 ssh-copy-id -i ~/.ssh/id_rsa ansible@ansible-target  # na głównej
@@ -52,9 +52,9 @@ Następnie komendą `ansible -i inventory.ini all -m ping` wymusiłem wykonanie 
 W celu zdalnego wywoływania procedur stowrzyłem playbook Ansible, który: 
 - zpinguje wszystkie maszyny (wykorzystałem do tego wbudowany ping Ansible)
 - skopiuje plik inwentaryzacyjny `inventory.ini` do maszyn endpointowych
-- ponowi operację porónując różnice na wyjściu
+- ponowi operację porównując różnice na wyjściu
 - zaktualizuje pakiety systemowe
-- zrestartuje usługi `sshd` oraz `rngd`
+- zrestartuje usługę `sshd`
 
 ```yaml
 - name: Ping
@@ -100,14 +100,14 @@ Pozostałe możliwe stany to:
 - failed - zadanie z jakiegoś powodu nie powiodło się
 - unreachable - Ansible nie mógł połączyć się z maszyną docelową
 - skipped - zadanie zostało pominięte, ponieważ nie spełniało określonych założeń. Ansible pozwala zdefiniować w swoich playbookach warunek `when`, określający w jakich warunkach przejść do wykonywania tasku. Przykładowo ` when: ansible_facts['os_family'] == "Debian"` spowoduje, że task wykona się tylko na maszynach z systemem Debian.
-- rescue - Ansible pozwala na definiwanie bloków rescure, które wykonają się w przypadku gdy poprzedni blok zakończy się niepowodzeniem
+- rescue - Ansible pozwala na definiowanie bloków rescue, które wykonają się w przypadku gdy poprzedni blok zakończy się niepowodzeniem
 - ignored - Ansible daje użytkownikom do dyspozycji dyrektywę `ignore_errors` która pozwala na zignorowanie niepowodzenia zadania i wykonanie reszty zadań w ramach tasku.
 
-Po wkonaniu playbook'u zmieniłem go tak, by zawierał tylko operację kopiowania i wykonałem playbook jeszcze raz. Status `ok` spowodowany był faktem, że plik został już wcześniej skopiowany i istniał na maszynie ansible-target. Oznacza to, że nie doszło do żadnych zmian (status `changed`).
+Po wykonaniu playbook'u zmieniłem go tak, by zawierał tylko operację kopiowania i wykonałem playbook jeszcze raz. Status `ok` spowodowany był faktem, że plik został już wcześniej skopiowany i istniał na maszynie ansible-target. Oznacza to, że nie doszło do żadnych zmian (status `changed`).
 
 ![alt text](images/14.png)
 
-Następnie próbowałem uruchomić playbook względem maszyny z wyłączonym serwerem SSH i odpietą kartą sieciową. W tym celu zmieniłem ustawienia maszyny wirutalnej, a następnie wyłączyłem usługę komendą `systemctl disable sshd`. 
+Następnie próbowałem uruchomić playbook względem maszyny z wyłączonym serwerem SSH i odpiętą kartą sieciową. W tym celu zmieniłem ustawienia maszyny wirtualnej, a następnie wyłączyłem usługę komendą `systemctl disable sshd`. 
 ![alt text](images/15.png)
 ![alt text](images/16.png)
 
@@ -115,7 +115,7 @@ W tym wypadku maszyna ansible-target była `unreachable` tj. niemożliwe było p
 
 ## Zarządzanie Kontenerem
 
-Ta część labolatoriów polegała na uruchomieniu kontenera pobranego z DockerHub, podłączeniu storage oraz wyprowadzeniu portu za pomocą playbook'a Ansible. Jako, że artefakt z poprzednich zajęć przyjął formę pakietu RPM, za obraz wybrałem obraz NGINX opracowany w ramach kolejnych labolatoriów (więcej o nim w sprawozdaniu 5).
+Ta część laboratoriów polegała na uruchomieniu kontenera pobranego z DockerHub, podłączeniu storage oraz wyprowadzeniu portu za pomocą playbook'a Ansible. Jako, że artefakt z poprzednich zajęć przyjął formę pakietu RPM, za obraz wybrałem obraz NGINX opracowany w ramach kolejnych laboratoriów (więcej o nim w sprawozdaniu 5).
 
 W tym celu zainstalowałem na maszynie docelowej (ansible-target) Dockera `sudo dnf install docker` i przygotowałem playbook służący do pobrania i uruchomienia aplikacji NGINX `nginx.yaml`
 
@@ -184,7 +184,7 @@ Ostatnim krokiem było ubranie powyższych kroków w role za pomocą szkieletowa
 ![alt text](images/23.png)
 ![alt text](images/24.png)
 
-Wewnątrz folderu roli, wewnątrz folderu `tasks` znalazłem plik `main.yaml`, który ma zawierać zadanai do wykonania, przekleiłem tylko zadania zawarte w `nginx.yaml`. 
+Wewnątrz folderu roli, wewnątrz folderu `tasks` znalazłem plik `main.yaml`, który ma zawierać zadania do wykonania, przekleiłem tylko zadania zawarte w `nginx.yaml`. 
 W celu skorzystania z tej roli, stworzyłem trzeci playbook `rolebook.yaml`, w którym zdefiniowałem hosty (endpoints) oraz role jakie mają przyjąć (nginx-role).
 ```yaml
 - name: ApplyRoles
@@ -192,6 +192,15 @@ W celu skorzystania z tej roli, stworzyłem trzeci playbook `rolebook.yaml`, w k
   roles:
     - nginx-role
 ```
-Następnie uruchomiłem ten playbook. 
+Następnie uruchomiłem ten playbook - kontener został pomyślnie stworzony i uruchomiony.
 
 ![alt text](images/25.png)
+![alt text](images/26.png)
+
+## Pliki odpowiedzi dla wdrożeń nienadzorowanych
+
+Ta część laboratoriów polegała na instalacji systemu Fedora z użyciem odpowiednio skonfigurowanego pliku odpowiedzi, tak by mógł od razu uruchomić wybraną aplikację. W dalszej części postanowiłem działać z dockerowym obrazem NGINX.
+
+W tym celu pobrałem plik ISO systemu Fedora 40 (Network Install) i przeszedłem podstawową instalację systemu. 
+![alt text](images/27.png)
+Następnie wyciągnęłem zawartość pliku odpowiedzi anaconda-ks.cfg oraz zmodyfikowałem go o potrzebne wymagania - m.in ustawiłem hostname jako `fedorafedora` oraz zestaw komend które zainstalują docker'a, pobiorze obraz aplikacji i ją uruchomi.
