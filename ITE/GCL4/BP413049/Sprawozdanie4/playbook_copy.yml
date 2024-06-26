@@ -1,0 +1,7 @@
+- name: Copy inventory file to Endpoints
+  hosts: Endpoints
+  tasks:
+    - name: Copy inventory.ini to Endpoints
+      copy:
+        src: /home/benish/MDO2024_INO/ITE/GCL4/BP413049/Sprawozdanie4/inventory.ini
+        dest: /home/ansible/

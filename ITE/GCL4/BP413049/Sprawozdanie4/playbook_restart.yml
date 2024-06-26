@@ -1,0 +1,19 @@
+- name: Restart sshd and rngd services
+  hosts: Endpoints
+  become: true
+  tasks:
+    - name: Install rng-tools
+      ansible.builtin.apt:
+        name: rng-tools
+        state: present
+
+    - name: Restart sshd service
+      ansible.builtin.service:
+        name: sshd
+        state: restarted
+
+    - name: Restart rngd service
+      ansible.builtin.service:
+        name: rng-tools
+        state: restarted
+        
