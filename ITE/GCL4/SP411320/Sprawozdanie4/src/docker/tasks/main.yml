@@ -1,0 +1,37 @@
+- name: install docker
+  dnf:
+    name: 'docker'
+    state: present
+- name: join docker group
+  user:
+    name: ansible
+    groups: docker
+    append: yes
+- name: start docker
+  service:
+    name: docker
+    state: started
+
+- name: copy build
+  copy:
+    src: ../../Sprawozdanie3/src/irssi/build.Dockerfile
+    dest: ~/
+- name: copy deploy
+  copy:
+    src: ../../Sprawozdanie3/src/irssi/deploy.Dockerfile
+    dest: ~/
+- name: build images
+  command: docker build -t {{ item.name }} -f {{ item.path }} .
+  with_items:
+    - { name: 'irssi-build', path: '~/build.Dockerfile' }
+    - { name: 'irssi-deploy', path: '~/deploy.Dockerfile' }
+- name: run deploy
+  command: docker run -d --name irssi-deploy -p 6667:6667 irssi-deploy
+
+- name: pull image
+  command: docker pull pixel48/irssi:1.5.1
+- name: run irssi
+  command: docker run -d --name irssi -p 6667:6667 pixel48/irssi:1.5.1
+
+- name: prune docker
+  command: docker system prune -f

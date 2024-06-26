@@ -1,0 +1,9 @@
+all:
+  children:
+    entreprenurs:
+      hosts:
+        vfedora:
+    wageworkers:
+      hosts:
+        ansible-wageworker:
+        ansible-middlemanager:

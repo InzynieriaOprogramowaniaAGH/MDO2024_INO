@@ -1,0 +1,40 @@
+- name: ping
+  hosts: all
+  tasks:
+    - name: ping
+      ping:
+
+- name: send
+  hosts: wageworkers
+  tasks:
+    - name: copy
+      copy:
+        src: inv.yml
+        dest: ~/
+
+- name: update
+  hosts: wageworkers
+  vars:
+    ansible_become_pass: qweQWE123!@#
+  tasks:
+    - name: update
+      become: yes
+      dnf:
+        name: '*'
+        state: latest
+
+- name: restart
+  hosts: wageworkers
+  vars:
+    ansible_become_pass: qweQWE123!@#
+  tasks:
+    - name: restart sshd
+      become: yes
+      service:
+        name: sshd
+        state: restarted
+    - name: restart rngd
+      become: yes
+      service:
+        name: rngd
+        state: restarted

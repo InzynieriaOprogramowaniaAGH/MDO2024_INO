@@ -1,0 +1,7 @@
+- name: Use docker role
+  hosts: wageworkers
+  vars:
+    ansible_become_pass: qweQWE123!@#
+  become: yes
+  roles:
+    - docker

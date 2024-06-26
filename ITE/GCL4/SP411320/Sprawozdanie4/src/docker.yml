@@ -1,0 +1,54 @@
+- name: setup docker
+  hosts: wageworkers
+  vars:
+    ansible_become_pass: qweQWE123!@#
+  tasks:
+    - name: install docker
+      become: yes
+      dnf:
+        name: 'docker'
+        state: present
+    - name: join docker group
+      become: yes
+      user:
+        name: ansible
+        groups: docker
+        append: yes
+    - name: start docker
+      become: yes
+      service:
+        name: docker
+        state: started
+
+- name: build docker images
+  hosts: wageworkers
+  tasks:
+    - name: copy build
+      copy:
+        src: ../../Sprawozdanie3/src/irssi/build.Dockerfile
+        dest: ~/
+    - name: copy deploy
+      copy:
+        src: ../../Sprawozdanie3/src/irssi/deploy.Dockerfile
+        dest: ~/
+    - name: build images
+      command: docker build -t {{ item.name }} -f {{ item.path }} .
+      with_items:
+        - { name: 'irssi-build', path: '~/build.Dockerfile' }
+        - { name: 'irssi-deploy', path: '~/deploy.Dockerfile' }
+    - name: run deploy
+      command: docker run -d --name irssi-deploy -p 6667:6667 irssi-deploy
+
+- name: pull&build docker image
+  hosts: wageworkers
+  tasks:
+    - name: pull image
+      command: docker pull pixel48/irssi
+    - name: run irssi
+      command: docker run -d --name irssi -p 6667:6667 pixel48/irssi
+
+- name: prune docker
+  hosts: wageworkers
+  tasks:
+    - name: prune docker
+      command: docker system prune -f
