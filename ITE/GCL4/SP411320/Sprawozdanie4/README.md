@@ -326,3 +326,17 @@ Do pliku `tasks/main.yml` dodajemy wszystkie kroki związane z zarządzaniem kon
 
 ### Weryfikacja działania *Playbooka*
 ![](img/8/ansible-docker-role.png)
+
+# Pliki odpowiedzi dla wdrożeń nienadzorowanych
+## Instalacja systemu Fedora Server (netinstall)
+### Utworzenie maszyny wirtualnej
+> Same as [before](#utworzenie-maszyny-wirtualnej), but ✨**netinstall**✨
+## Pobranie pliku odpowiedzi
+```
+scp <user>@<ip>:/root/anaconda-ks.cfg .
+```
+[`src/anaconda-ks.cfg`](src/anaconda-ks.cfg)
+
+## Instalacja systemu Fedora Server (kickstart)
+### Utworzenie maszyny wirtualnej
+> Same as [before](#utworzenie-maszyny-wirtualnej), but with ✨✨**kickstart**✨✨
