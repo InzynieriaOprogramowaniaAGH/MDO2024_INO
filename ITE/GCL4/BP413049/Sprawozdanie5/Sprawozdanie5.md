@@ -491,6 +491,72 @@ spec:
 
 Taka strategia pozwala na izolowanie potencjalnych problemów wprowadzanych z nowymi wersjami, minimalizując wpływ na resztę systemu i użytkowników, a także umożliwia szybką reakcję w przypadku wykrycia błędów. 
 
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-stable
+  labels:
+    app: spring
+    track: stable
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: spring
+      track: stable
+  template:
+    metadata:
+      labels:
+        app: spring
+        track: stable
+    spec:
+      containers:
+      - name: spring
+        image: benishhh/spring:deploy
+        ports:
+        - containerPort: 8080
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-canary
+  labels:
+    app: spring
+    track: canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring
+      track: canary
+  template:
+    metadata:
+      labels:
+        app: spring
+        track: canary
+    spec:
+      containers:
+      - name: spring
+        image: benishhh/spring:error  
+        ports:
+        - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+  selector:
+    app: spring
+    
+```
+
 Nowa wersja obrazu Docker (benishhh/spring:error), która miała prowadzić do awarii, została wdrożona jako osobne wdrożenie (Canary) obok stabilnego wdrożenia (benishhh/spring:deploy).
 
 ![alt text](image-49.png)
