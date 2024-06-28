@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memeginx-deployment-canary
+  labels:
+    app: memeginx
+    track: canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: memeginx
+      track: canary
+  template:
+    metadata:
+      labels:
+        app: memeginx
+        track: canary
+    spec:
+      containers:
+      - name: memeginx
+        image: ullei/memeginx:1.0.1
+        ports:
+        - containerPort: 80
