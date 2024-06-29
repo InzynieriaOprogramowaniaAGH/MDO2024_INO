@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginxdeploy
+spec:
+  containers:
+  - name: 
+    image: nginx2
+    ports:
+    - containerPort: 80

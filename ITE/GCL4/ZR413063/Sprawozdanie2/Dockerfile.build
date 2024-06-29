@@ -1,7 +1,7 @@
-FROM ubuntu:latest
+FROM ubuntu:jammy
 
 #pobranie wszystkich wstepnych zaleznonsci
-RUN apt-get update && apt-get upgrade -y && apt-get install -y wget gnupg git ninja-build cmake libc++-dev libc++abi-dev mesa-common-dev libglu1-mesa-dev freeglut3-dev libopenal1 libopenal-dev clang
+RUN apt-get update && apt-get upgrade -y && apt-get install -y wget gnupg git ninja-build cmake libc++-dev libc++abi-dev mesa-common-dev libglu1-mesa-dev freeglut3-dev libopenal1 libopenal-dev clang g++
 
 #klonowanie repozytorium
 RUN git clone https://github.com/mogemimi/pomdog.git
@@ -12,8 +12,16 @@ Workdir /pomdog
 #aktualizacja submodulow
 RUN  git submodule update --init --recursive
 
+RUN env
+
+RUN update-alternatives --set c++ /usr/bin/g++
+RUN update-alternatives --set cc /usr/bin/gcc
+
 #generowanie plikow ninja
 RUN cmake -Bbuild/linux -H. -G Ninja
 
-#przejscie do katalogu builda i zbudowanie programu
-RUN cd build/linux && ninja
+#przejscie do katalogu builda
+WORKDIR build/linux
+
+#zbudowanie programu
+RUN ninja

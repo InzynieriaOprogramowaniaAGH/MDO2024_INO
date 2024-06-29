@@ -1,0 +1,5 @@
+[Orchestrators]
+ubuntuserver ansible_host=172.24.9.181
+
+[Endpoints]
+ansible-target ansible_user=ansible ansible_host=172.24.11.114
