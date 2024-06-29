@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recreate
+  labels:
+    app: zegar
+    version: v1.2
+spec:
+  replicas: 5
+  strategy: 
+    type: Recreate
+  selector:
+    matchLabels:
+      app: zegar
+  template:
+    metadata:
+      labels:
+        app: zegar
+    spec:
+      containers:
+      - name: zegar
+        image: dmaciej/zegar:1.2
+        ports:
+        - containerPort: 80

@@ -1,0 +1,26 @@
+    - name: Aktualizacja repozytoriów
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Remove conflicting packages
+      ansible.builtin.apt:
+        name: containerd.io
+        state: absent
+        update_cache: yes
+
+    - name: Instalacja Docker
+      ansible.builtin.apt:
+        name: docker.io
+        state: latest
+        update_cache: yes
+
+    - name: Umożliwienie działania Docker bez reboota
+      ansible.builtin.systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Pobieranie obrazu do zbudowania/do deployu programu
+      copy:
+        src: /home/maciek/MDO2024_INO/INO/GCL1/MD409926/Spr_4/Deploy.Dockerfile
+        dest: /home/maciek/app/Dockerfile

@@ -1,0 +1,17 @@
+    - name: Budowanie obrazu Docker
+      community.docker.docker_image:
+        name: deploy
+        build:
+          path: /home/maciek/app/
+        source: build
+
+    - name: Uruchomienie kontenera Docker
+      community.docker.docker_container:
+        name: app
+        image: deploy
+
+    - name: Remove container
+      become: true
+      community.docker.docker_container:
+        name: app
+        state: absent

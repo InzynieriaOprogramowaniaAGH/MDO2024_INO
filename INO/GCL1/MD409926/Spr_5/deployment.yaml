@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment
+  labels:
+    app: zegar
+spec:
+  replicas: 5 # ilość replik po wdrożeniu
+  selector:
+    matchLabels:
+      app: zegar
+  template:
+    metadata:
+      labels:
+        app: zegar
+    spec:
+      containers:
+      - name: zegar
+        image: dmaciej/zegar:1.1
+        ports:
+        - containerPort: 80

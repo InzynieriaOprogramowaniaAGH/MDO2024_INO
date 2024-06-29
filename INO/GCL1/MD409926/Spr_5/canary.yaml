@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: canary
+  labels:
+    app: zegar
+    version: v1.2
+    track: canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zegar
+      version: v1.2
+      track: canary
+  template:
+    metadata:
+      labels:
+        app: zegar
+        version: v1.2
+        track: canary
+    spec:
+      containers:
+      - name: zegar
+        image: dmaciej/zegar:1.2
+        ports:
+        - containerPort: 80
