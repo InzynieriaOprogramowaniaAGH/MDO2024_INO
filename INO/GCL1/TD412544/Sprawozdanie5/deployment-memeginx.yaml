@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memeginx-deployment
+  labels:
+    app: memeginx
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: memeginx
+  template:
+    metadata:
+      labels:
+        app: memeginx
+    spec:
+      containers:
+      - name: memeginx
+        image: ullei/memeginx:1.0.1_err
+        ports:
+        - containerPort: 80

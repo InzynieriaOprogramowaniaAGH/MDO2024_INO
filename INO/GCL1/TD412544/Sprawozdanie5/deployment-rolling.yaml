@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memeginx-deployment
+  labels:
+    app: memeginx
+    track: stable
+spec:
+  replicas: 4
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 50%
+  selector:
+    matchLabels:
+      app: memeginx
+      track: stable
+  template:
+    metadata:
+      labels:
+        app: memeginx
+        track: stable
+    spec:
+      containers:
+      - name: memeginx
+        image: ullei/memeginx:1.0.0
+        ports:
+        - containerPort: 80
