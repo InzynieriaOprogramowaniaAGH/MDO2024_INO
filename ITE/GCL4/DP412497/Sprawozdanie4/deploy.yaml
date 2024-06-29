@@ -1,0 +1,16 @@
+- name: Deploy
+  hosts: Endpoints
+  tasks:
+    - name: Pull image
+      community.docker.docker_image:
+        name: kogucik1519/my-nginx
+        tag: "0.1"
+        source: pull
+    
+    - name: Run
+      community.docker.docker_container:
+        name: nginx
+        image: kogucik1519/my-nginx:0.1
+        state: started
+        interactive: yes
+        tty: yes
