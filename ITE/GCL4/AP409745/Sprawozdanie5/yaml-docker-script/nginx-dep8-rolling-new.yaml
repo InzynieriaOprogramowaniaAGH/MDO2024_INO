@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: kube-nginx
+spec:
+  replicas: 8
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 3
+      maxSurge: 20%
+  selector:
+    matchLabels:
+      app: kube-nginx
+  template:
+    metadata:
+      labels:
+        app: kube-nginx
+    spec:
+      containers:
+      - name: nginx-img
+        image: apiotrow/nginx-img:alt
+        ports:
+        - containerPort: 80
+          protocol: TCP

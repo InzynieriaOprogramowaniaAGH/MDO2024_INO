@@ -1,0 +1,33 @@
+- name: Ping
+  hosts: all
+  tasks:
+   - name: Pingowanie hostow
+     ansible.builtin.ping:
+
+- name: Copy
+  hosts: Endpoints
+  remote_user: ansible
+  tasks:
+   - name: kopiowanie inventory.ini
+     copy:
+      src: ./inventory.ini
+      dest: /home/ansible/
+
+- name: Update
+  hosts: Endpoints
+  remote_user: ansible
+  tasks:
+   - name: aktualizacja pakietow
+     ansible.builtin.dnf:
+      name: "*"
+      state: latest
+     become: true
+
+- name: Restart SSH
+  hosts: Endpoints
+  become: true
+  tasks:
+  - name: restar demona przez systemd
+    systemd:
+      name: sshd
+      state: restarted
