@@ -1,3 +1,0 @@
-FROM my-app:latest
-
-RUN npm test
