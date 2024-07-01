@@ -1,0 +1,31 @@
+- name: Pull Docker image and run container
+  hosts: Endpoints
+  become: yes
+  tasks:
+    - name: Pull the image
+      community.docker.docker_image:
+        name: benishhh/spring
+        tag: "deploy"
+        source: pull
+
+    - name: Run the container 
+      community.docker.docker_container:
+        name: spring
+        image: benishhh/spring:deploy
+        state: started
+        interactive: yes
+        tty: yes
+        published_ports:
+          - "8080:80"
+        volumes:
+          - "/path/on/host:/path/in/container"
+
+    - name: Stop Docker container
+      community.docker.docker_container:
+        name: spring
+        state: stopped
+
+    - name: Remove Docker container
+      community.docker.docker_container:
+        name: spring
+        state: absent

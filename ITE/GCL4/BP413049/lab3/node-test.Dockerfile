@@ -1,4 +1,5 @@
 FROM node-builder
 
-RUN npm test
+WORKDIR /node-js-dummy-test
+RUN npm run test
 
