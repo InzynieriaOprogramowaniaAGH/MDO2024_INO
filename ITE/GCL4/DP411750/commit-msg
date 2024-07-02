@@ -1,0 +1,6 @@
+#!/bin/bash/sh
+msg=$(cut -d " " -f1 $1)
+if [ $msg != "[DP411750]" ]; then
+	echo "Komunikat ma sie zaczynac od [DP411750]"
+	exit 1
+fi
