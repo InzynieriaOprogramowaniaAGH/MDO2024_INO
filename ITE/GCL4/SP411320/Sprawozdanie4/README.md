@@ -337,6 +337,16 @@ scp <user>@<ip>:/root/anaconda-ks.cfg .
 ```
 [`src/anaconda-ks.cfg`](src/anaconda-ks.cfg)
 
+### Modifikacja pliku odpowiedzi
+Uzyskany plik jest zapisem konfiguracji wykorzystanej podczas instalacji. Możemy ją rozszerzyć o dodatkowe opcje, takie jak instalacja pakietów, konfiguracja sieci, etc. Możemy również wyznaczyć sekcję `%post`, w której umieścimy skrypty, które zostaną wykonane po zakończeniu instalacji systemu operacyjnego. Sekcje zamykamy odpowiednimi dyrektywami `%end`. W naszym przypadku jest to instalacja pakietów, zaciągnięcie plików z repozytorium oraz konfiguracja kontenera Docker.
+
 ## Instalacja systemu Fedora Server (kickstart)
 ### Utworzenie maszyny wirtualnej
 > Same as [before](#utworzenie-maszyny-wirtualnej), but with ✨✨**kickstart**✨✨
+
+### Przeprowadzenie instalacji systemu
+![](img/9/fedora-kickstart.png)
+
+Po uruchomieniu maszyny wirtualnej z obrazem instalacyjnym, wciskamy klawisz `e`, a następnie dodajemy parametr `inst.ks=https://raw.github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO/SP411320/ITE/GCL4/SP411320/Sprawozdanie4/src/anaconda-ks.cfg` do linii zaczynającej się od `linuxefi`.
+
+Po wywołaniu kombinaacji klawiszy `Ctrl+X`, instalator systemu Fedora Server rozpocznie instalację systemu zgodnie z plikiem odpowiedzi. Ze względu na pierwsze polecenie, `graphical`, uruchamia się interfejs graficzny instalatora, jednak wszystkie krok instalacji są automatyczne. Po zakończeniu ustawiania parametrów instalacji instalator automatycznie uruchamia instalacje systemu operacyjnego.
