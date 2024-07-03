@@ -121,12 +121,12 @@ fi
    ```
 cp ~/MDO2024_INO/READMEs/001-Task.md ~/MDO2024_INO/ITE/GCL4/DP411750/Sprawozdanie1/README.md
 ```
-   - Dodaj zrzuty ekranu (jako inline)
-   ```
+
+
    - Dodaj zrzuty ekranu (jako inline)
 Dokonano tego przy użyciu:
 ```
-![dow_tekst](ścieżka_pliku)
+![tytuł](ścieżka_pliku)
 ```
    - Wyślij zmiany do zdalnego źródła
    ```
