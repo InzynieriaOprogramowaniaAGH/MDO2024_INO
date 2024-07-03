@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: &h hackerman
+  labels:
+    app: *h
+spec:
+  replicas: 12
+  selector:
+    matchLabels:
+      app: *h
+  template:
+    metadata:
+      labels:
+        app: *h
+    spec:
+      containers:
+        - name: hackerman-image
+          image: pixel48/hackerman
+          ports:
+            - containerPort: 80
+              protocol: TCP
