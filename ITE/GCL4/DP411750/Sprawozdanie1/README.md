@@ -141,3 +141,71 @@ git checkout GCL4
 git merge DP411750
 git push
 ```
+
+# Git, Docker
+
+
+
+## Zadania wykonane
+
+## Zestawienie środowiska
+
+1. Zainstaluj Docker w systemie linuksowym
+W celu instalacji Docker w systemie linuksowym (ubuntu) zastosowano komendy:
+```
+apt-get update
+apt-get install docker.io 
+```
+2. Zarejestruj się w [Docker Hub](https://hub.docker.com/) i zapoznaj z sugerowanymi obrazami
+3. Pobierz obrazy `hello-world`, `busybox`, `ubuntu` lub `fedora`, `mysql`
+Każdy z obrazów pobrano używając komendy:
+```
+sudo docker pull [nazwa danego obrazu]
+```
+Z uwagi na brak uprawnień użytkownika do stosowania komendy `docker`, zastosowano sudo - polecenia z uprawnieniami roota.
+![przykład sudo](./zdj/sudorozwiazalosprawe.png)
+Pobrane obrazy: 
+![obrazy](./zdj/dockerimages.png)
+4. Uruchom kontener z obrazu `busybox`
+   - Pokaż efekt uruchomienia kontenera
+   Kontener uruchomiono używając:
+   ```
+   sudo docker run [nazwa]
+   ```
+   ![uruchomiony busybox](./zdj/dzialabusybox.png)
+   - Podłącz się do kontenera **interaktywnie** i wywołaj numer wersji
+   Do interaktywnego połączenia wykorzysuje się flagę --interactive w docker run
+   ![wywołanie numeru wersji](./zdj/interbusybox.png)
+5. Uruchom "system w kontenerze" (czyli kontener z obrazu `fedora` lub `ubuntu`)
+   - Zaprezentuj `PID1` w kontenerze i procesy dockera na hoście
+   ![PID1 i procesy](./zdj/pdi1dlaubuntu.png)
+   - Zaktualizuj pakiety
+   Wykorzystano tu komendy `apt-get update` oraz `apt-get upgrade`.
+   - Wyjdź
+   W celu wyjścia należało użyć `exit`.
+6. Stwórz własnoręcznie, zbuduj i uruchom prosty plik `Dockerfile` bazujący na wybranym systemie i sklonuj nasze repo.
+   - Kieruj się [dobrymi praktykami](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
+   - Upewnij się że obraz będzie miał `git`-a
+   - Uruchom w trybie interaktywnym i zweryfikuj że jest tam ściągnięte nasze repozytorium
+   ![Dockerfile](./zdj/newdockerfile.png)
+   Znaczenie poszczególnych linijek w Dockerfile:
+   `FROM` - używa najnowszej wersji obrazu Ubuntu jako podstawy dla nowego obrazu Docker
+   `RUN apt-get update && apt-get install -y git` - aktualizuje listę pakietów dostępnych do instalacji z repozytoriów Ubuntu; instaluje pakiet git w kontenerze
+   `RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git /repos` - klonuje repozytorium z GitHub do katalogu /repos w kontenerze
+   `WORKDIR /repos` - ustawia katalog roboczy kontenera na /repos.
+
+   ![Repozytorium w obrazie](./zdj/repowobrazie.png)
+7. Pokaż uruchomione kontenery
+`sudo docker ps -a` pozwala na pokazanie uruchomionych kontenerów.
+![Kontenery](./zdj/kontenery.png)
+Zatrzymanie i usunięcie kontenerów zostało wykonane dzięki:
+```
+sudo docker stop $(sudo docker ps -aq)
+sudo docker rm $(sudo docker ps -aq)
+```
+8. Wyczyść obrazy
+Obrazy z kolei zostały wyczyszczone z wykorzystaniem komendy
+```
+sudo docker rmi $(sudo docker images -q)
+```
+9. Dodaj stworzone pliki `Dockefile` do folderu swojego `Sprawozdanie1` w repozytorium.
