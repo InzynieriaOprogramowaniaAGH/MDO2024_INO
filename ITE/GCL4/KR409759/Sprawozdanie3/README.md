@@ -1,5 +1,7 @@
-# Zajęcia 05
+# Katarzyna Rura - sprawozdanie z laboratoriów 5, 6 i 7
+
 ---
+
 ## Pipeline, Jenkins, izolacja etapów
 
 ### Przygotowanie
@@ -141,5 +143,7 @@ Gdzie:
 * Tests - wykonuje to samo, co w poprzednim etapie, ale dla testów aplikacji.
 * Deploy - w tym etapie obraz Dockera jest wdrażany i uruchamiany w kontenerze, tworzy Dockerową sieć, buduje obraz `node-deployer.Dockerfile`, usuwa kontener `rurapp` (podobnie jak w katalogu MDO2024_INO, na wypadek jego wcześniejszego istnienia), a także uruchamia kontener o nazwie `rurapp` z obrazem `node-deployer:0.1` na porcie 3000 w uprzednio stworzonej sieci.
 * Publish - archiwizuje artefakty, co pozwala na przechowanie wyników np. budowy, które mogą być przydatne między innymi do przeglądania efektów builda. Wykonuje również czyszczenie systemu Docker, usuwając wszystkie nieużywanie kontenery, sieci, czy obrazy.
+
+Efekt uruchomienia:
 
 ![rurapp](./pics/5/pipeline/pipeline.jpg)

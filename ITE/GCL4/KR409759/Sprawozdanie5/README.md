@@ -217,7 +217,8 @@ rurapp-deployment-v1.yaml:
 
 ![yaml1](./pics/strategie/canary/v1.png)
 
-rurapp-deployment-v2.yampl:
+rurapp-deployment-v2.yaml:
+
 ![yaml2](./pics/strategie/canary/v2.png)
 
 ![dash](./pics/strategie/canary/dash.png)
