@@ -9,11 +9,14 @@
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_arm64.deb
 sudo dpkg -i minikube_latest_arm64.deb
 ```
-* Zainstalowano polecenie `kubectl` w wariancie minikube, może być alias `minikubctl`, jeżeli masz już "prawdziwy" `kubectl`
-* Uruchom Kubernetes, pokaż działający kontener/worker
-* Zmityguj problemy wynikające z wymagań sprzętowych lub odnieś się do nich (względem dokumentacji)
-* Uruchom Dashboard, otwórz w przeglądarce, przedstaw łączność
-* Zapoznaj się z koncepcjami funkcji wyprowadzanych przez Kubernetesa (*pod*, *deployment* itp)
+* Zainstalowano `kubectl`:
+```bash
+sudo snap install kubectl --classic
+```
+![kubectl](./pics/klaster/kubectl.png)
+* Uruchomiono `minikube` oraz `Dashboarda`:
+
+![dash](./pics/klaster/dashboard.png)
  
 ### Analiza posiadanego kontenera
 Ze względu na specyfikę projektu z poprzednich sprawozdań, wybrano przeprowadzenie poniższych kroków na `Nginx`:
