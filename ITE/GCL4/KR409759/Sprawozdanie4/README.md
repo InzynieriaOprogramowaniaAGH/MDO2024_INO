@@ -34,23 +34,35 @@ sudo apt install ansible
   ![wymiana](./pics/8/instalacja/wymiana%20kluczy.png)
   W celu sprawdzenia czy klucz został skopiowany poprawnie użyto na "targecie" komendy `cat ~/.ssh/authorized_keys`.
   ![sprawdzenie](./pics/8/instalacja/sprawdzenie%20kopiowania.png)
+
   Następnie podjęto próbę połączenia się z targetem bez podawania hasła za pomocą komendy `ssh [username]@[ip targetu]`.
   ![ssh](./pics/8/instalacja/ssh.png)
+ 
   Po zakończeniu wymiany w jedną stronę, powtórzono powyższe czynności zamieniając maszyny rolami.
 
 ### Inwentaryzacja
 * Dokonano inwentaryzacji systemów
   * Obie maszyny posiadają przewidywalne nazwy komputerów:
+  
   ![rura](./pics/8/inwentaryzacja/hostname%20rura.png)
+  
   ![target](./pics/8/inwentaryzacja/hostname%20target.png)
+  
   * Wprowadzono nazwy DNS dla maszyn wirtualnych za pomocą edycji plików `/etc/hosts`:
+  
   ![dns rura](./pics/8/inwentaryzacja/dns%20rura.png)
+  
   ![dns target](./pics/8/inwentaryzacja/dns%20target.png)
+  
   * Aby zweryfikować łączność można: 
     * Podjąć próbę połączenia się po nazwach:
+    
     ![ssh](./pics/8/inwentaryzacja/ssh.png)
+    
     * Użyć komendy 'ping'
+    
     ![ping](./pics/8/inwentaryzacja/ping.png)
+  
   * Stworzono [plik inwentaryzacji](https://docs.ansible.com/ansible/latest/getting_started/get_started_inventory.html), umieszczono w nim sekcje `Orchestrators` oraz `Endpoints`, a także nazwy maszyn wirtualnych w odpowiednich sekcjach:
   ```yaml
   all:
@@ -68,12 +80,15 @@ sudo apt install ansible
           ansible_user: ansible
   ```
   * Wysłano żądanie `ping` do wszystkich maszyn, jednak za pierwszym razem pojawił się błąd:
+  
   ![blad](./pics/8/inwentaryzacja/blad.png)
+  
   Rozwiązaniem okazało się być dodanie klucza publicznego do `authorized_keys` na `rura`:
   ```bash
   ssh-copy-id -i ~/.ssh/id_rsa.pub kasia@rura
   ```
   Pozwoliło to Ansible na uwierzytelnianie się automatycznie za pomocą klucza prywatnego użytkownika maszyny `rura`. Po rozwiązaniu powyższego problemu efekt był następujący: 
+  
   ![poprawne](./pics/8/inwentaryzacja/poprawne.png)
   
 ### Zdalne wywoływanie procedur
@@ -93,6 +108,7 @@ Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started
   ansible-playbook -i inventory.yaml playbook.yaml 
   ```
   ![ping](./pics/8/zdalne/ping.png)
+  
   * Skopiowano plik inwentaryzacji na maszynę `Endpoints`:
   
     Zmodyfikowano plik playbook.yaml:
@@ -116,6 +132,7 @@ Za pomocą [*playbooka*](https://docs.ansible.com/ansible/latest/getting_started
   * Ponowiono operację:
 
   ![copy2](./pics/8/zdalne/copy%202.png)
+  
   W przeciwieństwie do pierwszego podejścia, tym razem nie pojawiła się żadna zmiana (`changed=0`), jest to spowodowane tym, że plik `inventory.yaml` został podczas wcześniejszego wykonania playbooka skopiowany, przez co podczas kolejnych wykonań nie ma potrzeby ponownie przesyłać go do Endpointa.
   * Zaktualizowano pakiety w systemie, zrestartowano usługi `sshd` i `rngd`:
   Uzupełniono plik `playbook.yaml`:
