@@ -1,11 +1,5 @@
 # Katarzyna Rura - sprawozdanie z laboratoriów 8 i 9
 
-Poniższe sprawozdanie dotyczy wykorzystania narzędzi:
-
-- `Docker`, `Dockerfile` - umożliwiającego konteneryzację
-
-- `Jenkins` - pozwalającego na automatyzację procesów wytwarzania oprogramowania (takich jak kompilacja czy testowanie)
-
 ---
 # Automatyzacja i zdalne wykonywanie poleceń za pomocą Ansible
 
