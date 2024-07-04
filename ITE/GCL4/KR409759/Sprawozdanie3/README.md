@@ -7,7 +7,7 @@
 ### Przygotowanie
 * Upewniono się, że kontenery budujące i testujące stworzone na poprzednich zajęciach działają:
   
-![sprawdzenie kontenerow](/MDO2024_INO/ITE/GCL4/KR409759/Sprawozdanie2/pics/Poprawnosc.png)
+![sprawdzenie kontenerow](/MDO2024_INO/ITE/GCL4/KR409759/Sprawozdanie3/pics/5/Poprawnosc.png)
 
 * Zgodnie z instrukcją instalacji Jenkinsa: https://www.jenkins.io/doc/book/installing/docker/ uruchomiono obraz Dockera eksponujący środowisko zagnieżdżone oraz Blueocean:
 
