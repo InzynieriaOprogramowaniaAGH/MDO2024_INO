@@ -65,7 +65,7 @@ Ze względu na potrzebę przygotowania aplikacji działającej w trybie ciągły
 
 </html>
 ```
-> `src/index.html`
+> [`index.html`](src/index.html)
 
 ```dockerfile
 FROM nginx
@@ -164,10 +164,234 @@ spec:
             - containerPort: 80
               protocol: TCP
 ```
-> `src/hackerman-12.yml`
+> [`hackerman-12.yml`](src/hackerman-12.yml)
 
 Zdefiniowany w ten sposób deployment można nastepnie uruchomić za pomocą polecenia `kubectl apply -f <filename>.y[a]ml`
 
 ![](img/10/hackermans.png)
 
 ![](img/10/dashboard-hackermans.png)
+
+# Wdrażanie na zarządzalne kontenery: Kubernetes (2)
+## Weryfikacja statusu wdrożenia
+Status wdrożenia sprawdzamy poleceniem `kubectl rollout`
+
+![](img/11/tldr-kubectl-rollout.png)
+
+![](img/11/kubectl-rollout.png)
+
+## Przygotowanie dateego obrazu
+### Przygotowanie 2 datey wersji obrazu
+#### Hackerman2
+Zmiana polega na zmianie adresu url:
+```diff
+@@ -7,7 +7,7 @@
+   <title>The most powerfull hacker in the world...</title>
+   <style>
+     body {
+-      background-image: url('https://steamuserimages-a.akamaihd.net/ugc/94981434109308086/C48931A89D64785945BD0D364A481DA5BAB2B323/?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true');
++      background-image: url('https://i.kym-cdn.com/entries/icons/facebook/000/021/807/ig9OoyenpxqdCQyABmOQBZDI0duHk2QZZmWg2Hxd4ro.jpg');
+       background-size: cover;
+       background-repeat: no-repeat;
+       background-color: black;
+```
+
+datey obraz nosi nazwę `hackerman2`
+
+![](img/11/dockerimage-hackerman2.png)
+
+#### Kiddie
+Jedynym celem obrazu `kiddie` jest natychmiastowe zakończenie swojej pracy kodem błędu. Najprostszym sposobem na utworzenie takiego obrazu jest wywołanie polecenia `false`, które zwróci kod błedu
+
+```dockerfile
+FROM scratch
+CMD ["false"]
+```
+> [`kiddie.Dockerfile`](src/kiddie.Dockerfile)
+
+![](img/11/dockerimage-kiddie.png)
+
+### Zmiany we wdrożeniu
+#### 8 replik
+```diff
+@@ -5,7 +5,7 @@ metadata:
+   labels:
+     app: *h
+ spec:
+-  replicas: 12
++  replicas: 8
+   selector:
+     matchLabels:
+       app: *h
+```
+
+![](img/11/hackerman-8.png)
+
+![](img/11/hackerman-8-dash.png)
+
+#### 1 replika
+```diff
+@@ -5,7 +5,7 @@ metadata:
+   labels:
+     app: *h
+ spec:
+-  replicas: 12
++  replicas: 1
+   selector:
+     matchLabels:
+       app: *h
+```
+
+![](img/11/hackeman-1.png)
+
+![](img/11/hackerman-1-dash.png)
+
+#### 0 replik
+```diff
+@@ -5,7 +5,7 @@ metadata:
+   labels:
+     app: *h
+ spec:
+-  replicas: 12
++  replicas: 0
+   selector:
+     matchLabels:
+       app: *h
+```
+
+![](img/11/hackerman-0.png)
+
+![](img/11/hackerman-0-dash.png)
+
+#### Zastosowanie dateej wersji obrazu
+```diff
+@@ -5,7 +5,7 @@ metadata:
+   labels:
+     app: *h
+ spec:
+-  replicas: 12
++  replicas: 8
+   selector:
+     matchLabels:
+       app: *h
+@@ -16,7 +16,7 @@ spec:
+     spec:
+       containers:
+         - name: hackerman-image
+-          image: pixel48/hackerman
++          image: pixel48/hackerman2
+           ports:
+             - containerPort: 80
+               protocol: TCP
+```
+
+![](img/11/hackerman2-8.png)
+
+![](img/11/hackerman2-8-dash.png)
+
+#### Zastosowanie starszej wersji obrazu
+```diff
+@@ -5,7 +5,7 @@ metadata:
+   labels:
+     app: *h
+ spec:
+-  replicas: 12
++  replicas: 2
+   selector:
+     matchLabels:
+       app: *h
+@@ -16,7 +16,9 @@ spec:
+     spec:
+       containers:
+         - name: hackerman-image
+-          image: pixel48/hackerman
++          image: pixel48/hackerman2
+           ports:
+             - containerPort: 80
+               protocol: TCP
++        - name: kiddie-image
++          image: pixel48/kiddie
+```
+
+![](img/11/kiddie-2.png)
+
+![](img/11/kiddie-2-dash.png)
+
+### Przywrócenie poprzednich wersji wdrożenia
+#### `kubectl rollout history`
+![](img/11/kubectl-rollout-undo.png)
+
+![](img/11/kubectl-rollout-undo-dash.png)
+
+## Kontola wdrożenia
+### Skrypt weryfikujący wdrożenie wdrożenia
+```bash
+#!/bin/bash
+if [[ $# == 0 ]]; then
+  echo "usage: $0 <thing>.yml"
+  exit 0
+fi
+
+limit=60
+stime=$(date +%s)
+kubectl apply -f $1
+dname=$(kubectl get deployment -o jsonpath='{.items[*].metadata.name}')
+ltime=$(date +%s)
+dtime=0
+
+
+working=0
+until [ $dtime -gt $limit ]; do
+  _rdy=$(kubectl get deployment $dname -o jsonpath='{.status.readyReplicas}')
+  if [ -z "$_rdy" ]; then
+    _rdy=0
+  fi
+  _ttl=$(kubectl get deployment $dname -o jsonpath='{.status.replicas}')
+  echo -ne "\rDeploying... $_rdy/$_ttl -- ${dtime}/60s"
+  ltime=$(date +%s)
+  dtime=$(( $ltime - $stime ))
+  if [ "$_rdy" -eq "$_ttl" ]; then
+    echo
+    echo "DONE!"
+    exit 0
+  fi
+done
+
+echo
+echo Timeout!
+exit 1
+```
+> [`deploy.sh`](src/deploy.sh)
+
+![](img/11/deploy-start.png)
+
+![](img/11/deploy-bad-ending.png)
+
+![](img/11/deploy-good-ending.png)
+
+## Strategie wdroenia wdrażania wdrożeń
+Stategie wdrażania definiujemy w pliku wdrożenia, w pozycji `spec/strategy/type`
+### Recreate
+**Recreate** - ponowne utworzenie wszystkich istniejących podów (*rekreacja*)
+
+![](img/11/deploy-recreate.png)
+
+![](img/11/deploy-recreate-dash.png)
+
+### Rolling Update
+> [!note]
+> Parametry:
+> - `maxUnavailable` > 1
+> - `maxSurge` > 20%
+
+**Rolling Update** sekwencyjnie wymienia stare pody na nowe. W ten sposób możliwa jest *płynna* wymiana podów na nowe przy utrzymaniu ciągłości dostarczania usługi.
+
+`maxUnavailable` kontroluje, ile podów jest jednocześnie wymieniane, `maxSurge` kontroluje, ile podów zostanie dodatkowo utworzone podczas wdrażania nowego wdrożenia
+
+Oba parametry definiujemy jako pola pod `spec/strategy/rollingUpdate` w pliku wdrożenia
+
+### Canary
+**Canary Deployment** opiera się o częściową wymianę serwisu przy jednoczesnym testowaniu nowo wdrożonej wersji. Nazwa pochodzi od kanarków używanych w kopalniach do wykrywania metanu. Aby wdrożyć nowe wdrożenie tą strategią wdrożenia, należy ręcznie stopniowo wymieniać kolejne pody. Możemy wykorzystać do tego kontekst `scale` polecenia `kubectl`
+```bash
+kubectl scale deployment <deployment_name> --replicas=<new_count>
+```

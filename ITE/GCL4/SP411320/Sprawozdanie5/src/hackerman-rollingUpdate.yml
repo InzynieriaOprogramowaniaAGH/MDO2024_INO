@@ -5,7 +5,12 @@ metadata:
   labels:
     app: *h
 spec:
-  replicas: 12
+  replicas: 4
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 20%
   selector:
     matchLabels:
       app: *h
