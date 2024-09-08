@@ -2,12 +2,10 @@ FROM python:3.9-slim
 
 RUN apt-get update && apt-get install -y git
 
-RUN git clone https://github.com/pallets/flask ./app
+RUN git clone https://github.com/InzynieriaOprogramowaniaAGH/MDO2024_INO.git
 
-WORKDIR ./app
+RUN cd MDO2024_INO && git checkout DP411750
 
-RUN pip install -r ./requirements/build.txt && pip install flask  
+WORKDIR MDO2024_INO/ITE/GCL4/DP411750
 
-EXPOSE 5001
-
-CMD ["python", "app.py"]
+RUN pip install --upgrade pip && pip install -r requirements.txt   
