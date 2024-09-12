@@ -1,0 +1,35 @@
+- name: Test Docker image on a fresh machine
+  hosts: all
+  become: yes
+  tasks:
+    - name: Ensure Docker is installed
+      package:
+        name: docker
+        state: present
+
+    - name: Ensure Docker service is running
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Pull Docker image from Docker Hub
+      docker_image:
+        name: dawidpac1a/flask-app:2.0  
+        source: pull
+
+    - name: Run Docker container
+      docker_container:
+        name: test_container
+        image: dawidpac1a/flask-app:2.0  
+        state: started
+        detach: yes
+        published_ports: 5001:5001
+
+    - name: Check app
+      command: curl localhost:5001
+      register: curl_output
+
+    - name: Print curl status
+      debug:
+        msg: "{{ curl_output.stdout }}"

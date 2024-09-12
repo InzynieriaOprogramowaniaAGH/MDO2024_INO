@@ -1,0 +1,7 @@
+all:
+  children:
+    Endpoints:
+      hosts:
+        test:
+          ansible_host: target
+          ansible_user: ansible
