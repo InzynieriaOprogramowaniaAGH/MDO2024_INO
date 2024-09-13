@@ -34,22 +34,28 @@ Zestawiono instalację jenkinsa DIND, w tym celu również dodano użytkownika j
 - Etap Build tworzy obraz, który instaluje wszystkie potrzebne zależności, a następnie przeprowadza testy.
 
 ![](budowa.png)
+![](budowa-testy.png)
+![](pipeline-build.png)
 
 Dockerfile obrazu budującego został załączony razem ze sprawozdaniem.
 
 - Etap Test korzysta z utworzonego wcześniej obrazu i buduje kontener do testowania.
 
 ![](testy-jenkins.png)
+![](pipeline-test.png)
 
 - Etap deploy buduje obraz wdrożeniowy.
 
 Treść dockerfile do obrazu wdrożeniowego:
 
 ![](deploy.png)
+![](pipeline-deploy.png)
 
 Dockerfile obrazu wdrożeniowego został załączony razem ze sprawozdaniem.
 
 -Etap publish wysyła obraz wdrożeniowy na repozytorium dockerhub.
+
+![](pipeline-publish.png)
 
 Gotowy obraz nie wymaga pobieranbia dodatkowych dependencji:
 
