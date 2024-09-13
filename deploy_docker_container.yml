@@ -1,0 +1,37 @@
+---
+- name: Deploy Docker Container
+  hosts: staging
+  become: yes
+  tasks:
+    - name: Ensure Docker is installed
+      apt:
+        name: docker.io
+        state: present
+      when: ansible_os_family == "Debian"
+    
+    - name: Ensure Docker is installed
+      yum:
+        name: docker
+        state: present
+      when: ansible_os_family == "RedHat"
+    
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+    
+    - name: Pull deployable image from Docker Hub
+      docker_image:
+        name: bartekkep/deployable
+        tag: latest
+        source: pull
+    
+    - name: Run Docker container
+      docker_container:
+        name: my_app_container
+        image: bartekkep/deployable:latest
+        state: started
+        restart_policy: always
+        ports:
+          - "6379:6379"  # Adjust ports as needed
