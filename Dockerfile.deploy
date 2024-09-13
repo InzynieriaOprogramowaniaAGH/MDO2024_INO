@@ -1,0 +1,17 @@
+# Etap budowy: budowanie i kompilacja Redis
+FROM buildpack-deps:buster AS build
+
+# Instalacja zależności do kompilacji Redis
+RUN apt-get update && apt-get install -y \
+    tcl \
+    build-essential \
+    autoconf \
+    libjemalloc-dev \
+    git \
+    lua5.3 \
+    liblua5.3-dev
+
+# Pobranie i kompilacja Redis
+RUN git clone https://github.com/redis/redis.git /app/redis
+WORKDIR /app/redis
+RUN make
