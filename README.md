@@ -57,6 +57,6 @@ Dockerfile obrazu wdrożeniowego został załączony razem ze sprawozdaniem.
 
 ![](pipeline-publish.png)
 
-Gotowy obraz nie wymaga pobieranbia dodatkowych dependencji:
+Gotowy obraz nie wymaga pobierania dodatkowych dependencji:
 
 ![](obraz.png)
