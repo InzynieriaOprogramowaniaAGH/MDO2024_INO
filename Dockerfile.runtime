@@ -1,0 +1,17 @@
+# Etap produkcyjny: uruchamianie Redis
+FROM debian:bullseye-slim
+
+# Instalacja zależności do uruchamiania Redis
+RUN apt-get update && apt-get install -y \
+    libjemalloc2 \
+    liblua5.3 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Kopiowanie skompilowanego artefaktu z fazy builda
+COPY --from=build /app/redis /app/redis
+
+# Ustawienie katalogu pracy
+WORKDIR /app/redis
+
+# Uruchomienie aplikacji
+CMD ["./src/redis-server"]
